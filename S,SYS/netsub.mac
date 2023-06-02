@@ -1,0 +1,1787 @@
+COMMENT ⊗   VALID 00029 PAGES
+C REC  PAGE   DESCRIPTION
+C00001 00001
+C00005 00002		title	NetSub - common subroutines for universal network  VNetSb  NetSub
+C00006 00003	\
+C00007 00004		subttl	NxtByt  NxtBuf NxtByt
+C00010 00005		subttl	NxtFls  NxtFls FlusLp
+C00012 00006		subttl	OptFls  OptFls
+C00014 00007		subttl	NxtWrd  NxtWrd NWrdLp NWdOut
+C00016 00008		subttl	RplWrd  RplWrd RWrdLp RWdOut
+C00019 00009		subttl	SkpByt  SkpByt SkpBy1
+C00021 00010		subttl	MilTim  MilTim
+C00023 00011		SUBTTL IMPBUF	...	BUFFER ALLOCATION AND RELEASE ROUTINES  BUFGET BUFGT1 BUFGT3 BUFGT2 BUFGT4 BFCLR BUFGEI BUFGI1 BUFGI3 BUFGI2
+C00032 00012	SUBROUTINE TO RELEASE ALL BUFFERS IN A STREAM.  ENTER WITH  RELBUF RELBF1
+C00033 00013	SUBROUTINE TO RELEASE A BUFFER.  BUFREL BUFRL1
+C00037 00014		subttl	CSmByt  CSmByt
+C00040 00015		subttl	CSmHWd  CSmHWd
+C00043 00016		subttl	CSmWrd  CSmWrd
+C00046 00017		subttl	CSmWds  CSmWds CSmLp
+C00049 00018		subttl	GetLed - get leader  GetLed GetLe0
+C00052 00019		subttl	GetMes  GetMes GetMe1 GetMe2 GetMe3
+C00057 00020	NOWAITS< Replaced by code in IMPSER  DDBGET DDBGT1 DDBGT2 DDBGT3 DDBGT4
+C00060 00021		subttl	DDBFls  DDBFls
+C00064 00022	 DDBDea DDBRel DDBRe1 CLRIMP DDBCLR
+C00067 00023		subttl	MakBIB  MakBIB MakBi1
+C00072 00024		subttl	FlsBIB  FlsBIB FLSBI0 FlsBI1 FlsBix
+C00075 00025		subttl	RelBIB  RelBIB ARlBib ARlBi1 IMPMRL ETHMRL
+C00080 00026		subttl	BIB consistency check  BIBChk BIBCH0 BIBChk
+C00083 00027		subttl	FndDDB  FndDDB FndLp FndNxt
+C00086 00028	NOWAITS< Data is in CACDAT
+C00098 00029		$lit
+C00099 ENDMK
+C⊗;
+	title	NetSub - common subroutines for universal network ; VNetSb ;⊗ NetSub
+	subttl	provan - 1982
+
+	search	f,s
+NOWAITS<search	NetDef>			; get network definition
+IFWAITS<SEARCH NETMAC>
+	search	MacTen			; make coding convenient
+
+	$reloc
+	$high
+
+
+XP	VNetSb,1002			; version
+
+
+NetSub:	ENTRY	NetSub			;TO LOAD ON LIB SEARCH
+comment	\
+
+	common subroutines which will be needed by most everybody
+to support ip/tcp and other protocols
+
+\
+	subttl	NxtByt ;⊗ NxtBuf NxtByt
+
+;++
+; Functional description:
+;
+;	subroutine to read the next byte form a data stream.  a lot
+;	like InByte in function, except the stream is discribed in
+;	p1, p2, and p3, instead of in the DDB, and the buffers are
+;	not discarded after being emptied.
+;
+;
+; Calling sequence:
+;
+;		move	p1,<next buffer>
+;		move	p2,<buffer pointer to next data>
+;		move	p3,<count of bytes left in this buffer>
+;		pushj	p,NxtByt
+;		  <returns here if buffers are exhausted>
+;		<returns here with next byte in T1>
+;
+; Input parameters:
+;
+;	P1 - the pointer to the next buffer in the stream.
+;	P2 - ILDB pointer to next byte in current buffer.
+;	P3 - count of bytes left in this buffer
+;
+;	to start a buffer stream, put a pointer to the first buffer in
+;		P1 and zero P3.  then leave P1, P2 and P3 alone between
+;		calls.
+;
+; Output parameters:
+;
+;	T1 - next byte in stream.
+;
+; Implicit inputs:
+;
+;	none.
+;
+; Implicit outputs:
+;
+;	none.
+;
+; Routine value:
+;
+;	returns non-skip if there are no more data in the stream.
+;
+; Side effects:
+;
+;	none.
+;
+;--
+
+
+NxtBuf:
+	pjumpe	p1,cpopj##		; non-skip return if no next buffer.
+	hrrzi	p2,NBHLen(p1)		; this is now the current buffer:
+					;  point at first data word.
+	hrli	p2,(point 8,)		; ILDB pointer to first byte of
+					;  this word
+	load.	p3,NBHCnt,(p1)		; load up count of byte in this buffer
+	load.	p1,NBHNxt,(p1)		; remember next buffer in stream
+
+NxtByt::
+	sojl	p3,NxtBuf		; move on to the next buffer
+	ildb	t1,p2			; get next byte in this buffer
+	pjrst	cpopj1##		; skip return
+	subttl	NxtFls ;⊗ NxtFls FlusLp
+
+;++
+; Functional description:
+;
+;	skip over bytes in the data stream described by P1, P2, and P3.
+;
+;
+; Calling sequence:
+;
+;		move	P1,<next buffer in stream>
+;		move	P2,<ILDB pointer to next byte in stream>
+;		move	P3,<count of bytes left in this buffer>
+;		move	t1,<number of byte to skip>
+;		pushj	p,NxtFls
+;		  <not that many bytes in stream>
+;		<all flushed>
+;
+; Input parameters:
+;
+;	see NxtByt for P1, P2 and P3
+;	T1 - number of bytes to skip over.
+;
+; Output parameters:
+;
+;	none.
+;
+; Implicit inputs:
+;
+;	none.
+;
+; Implicit outputs:
+;
+;	none.
+;
+; Routine value:
+;
+;	returns non-skip if there are not enough bytes in the stream.
+;
+; Side effects:
+;
+;	none.
+;--
+
+
+NxtFls::
+	push	p,t2			; save t2 for counting
+	move	t2,t1			; get count in a safe place
+FlusLp:
+	sojl	t2,t2poj1##		; no more to flush.  skip return.
+	pushj	p,NxtByt		; read and discard next byte
+	  pjrst	t2popj##		; restore T2 and return non-skip.
+	jrst	FlusLp			; continue flushing option
+	subttl	OptFls ;⊗ OptFls
+
+;++
+; Functional description:
+;
+;	flush an option (ip or tcp, for example) from the data stream
+;	described by P1, P2, and P3.  this routine assumes that the
+;	caller has just read the type field and wants to throw out
+;	the rest of the option.  this routine read the next byte, which
+;	should be the length field, and skips over that many bytes in the
+;	stream.
+;
+;
+; Calling sequence:
+;
+;		move	P1,<next buffer in stream>
+;		move	P2,<ILDB pointer to next byte in stream>
+;		move	P3,<count of bytes left in this buffer>
+;		pushj	p,NxtFls
+;		  <end of stream encountered>
+;		<all flushed>
+;
+; Input parameters:
+;
+;	see NxtByt for P1, P2 and P3
+;
+; Output parameters:
+;
+;	none.
+;
+; Implicit inputs:
+;
+;	none.
+;
+; Implicit outputs:
+;
+;	none.
+;
+; Routine value:
+;
+;	returns non-skip if end of stream was encounter either during
+;	the read of the length or during the skipping of the length.
+;
+; Side effects:
+;
+;	none.
+;--
+
+
+OptFls::
+	pushj	p,NxtByt		; try for a length field
+	  popj	p,			; can't get it.  end of stream
+	subi	t1,2			; remember we've read the type
+					;  and the length bytes.
+	pjrst	NxtFls			; skip that many bytes and return
+	subttl	NxtWrd ;⊗ NxtWrd NWrdLp NWdOut
+
+;++
+; Functional description:
+;
+;	read in a full 32-bit word from the data stream described by
+;	P1, P2, and P3.
+;
+;
+; Calling sequence:
+;
+;		move	P1,<next buffer in stream>
+;		move	P2,<ILDB pointer to next byte in stream>
+;		move	P3,<count of bytes left in this buffer>
+;		pushj	p,NxtWrd
+;		  <not enough bytes for this word>
+;		<word in T1, right justified>
+;
+; Input parameters:
+;
+;	see NxtByt
+;
+; Output parameters:
+;
+;	T1 - next 4 bytes from data stream as a 32-bit word, right
+;		justified.
+;
+; Implicit inputs:
+;
+;	none.
+;
+; Implicit outputs:
+;
+;	none.
+;
+; Routine value:
+;
+;	returns non-skip if there are not enough bytes in the stream.
+;
+; Side effects:
+;
+;	none.
+;--
+
+
+NxtWrd::
+	push	p,t2			; save a scratch
+	push	p,t3			; and another
+	movei	t3,4			; number of bytes in a word
+	setz	t2,			; start with word empty
+NWrdLp:	pushj	p,NxtByt		; get next byte into T1
+	  jrst	NWdOut			; bad return
+	lshc	t1,-8			; shift byte into word builder
+	sojg	t3,NWrdLp		; loop if not done.
+	move	t1,t2			; get word left justified
+	lsh	t1,-4			; right justify it
+	aos	-2(p)			; set skip return
+NWdOut:	pop	p,t3			; restore
+	pjrst	t2popj##		; restore T2 and return as set
+	subttl	RplWrd ;⊗ RplWrd RWrdLp RWdOut
+
+;++
+; Functional description:
+;
+;	replacethe next full 32-bit word from the data stream described by
+;	P1, P2, and P3 by the value passed in in T1.
+;
+;
+; Calling sequence:
+;
+;		move	P1,<next buffer in stream>
+;		move	P2,<ILDB pointer to next byte in stream>
+;		move	P3,<count of bytes left in this buffer>
+;		move	t1,<value to be inserted>
+;		pushj	p,NxtWrd
+;		  <not enough bytes for this word>
+;		<word before replacement in T1, right justified>
+;
+; Input parameters:
+;
+;	see NxtByt for P1, P2, and P3.
+;	T1 - right justified 32 bit word to be placed in the next 4 bytes
+;		of the stream.
+;
+; Output parameters:
+;
+;	T1 - next 4 bytes from data stream as a 32-bit word, right
+;		justified.  these are the four bytes which were just
+;		written over.
+;
+; Implicit inputs:
+;
+;	none.
+;
+; Implicit outputs:
+;
+;	none.
+;
+; Routine value:
+;
+;	returns non-skip if there are not enough bytes in the stream.
+;
+; Side effects:
+;
+;	none.
+;--
+
+
+RplWrd::
+	push	p,t2			; save scratch
+	push	p,t3			; and more
+	push	p,t4			; etc.
+	move	t4,t1			; get word to be written
+	lsh	t4,4			; left justify it.
+	movei	t3,4			; number of bytes in a word
+	setz	t2,			; start with word empty
+RWrdLp:	pushj	p,NxtByt		; get next byte into T1
+	  jrst	RWdOut			; bad return
+	lshc	t1,-8			; shift byte into word builder
+	exch	t2,t4			; get word to write in correct place
+	lshc	t1,8			; shift next byte of it up
+	dpb	t1,p2			; put that byte where we just read.
+	exch	t2,t4			; put word builder back in
+					;  correct place.
+	sojg	t3,RWrdLp		; loop if not done.
+	move	t1,t2			; get word left justified
+	lsh	t1,-4			; right justify it
+	aos	-3(p)			; set skip return
+RWdOut:	pop	p,t4			; restore
+	pop	p,t3			; restore
+	pjrst	t2popj##		; restore T2 and return correctly.
+	subttl	SkpByt ;⊗ SkpByt SkpBy1
+
+;++
+; Functional description:
+;
+;	find the location of the Nth byte in a buffer stream.
+;
+;
+; Calling sequence:
+;
+;		move	t1,<byte number>
+;		move	t2,<pointer to a buffer stream>
+;		pushj	p,SkpByt
+;		<normal return>
+;
+; Input parameters:
+;
+;	T1 - the number of bytes to be skipped.
+;	T2 - pointer to the first buffer of a buffer stream.
+;
+; Output parameters:
+;
+;	T1 - number of bytes in the buffer pointed at by T2 before
+;		the byte to be found.
+;	T2 - pointer to the buffer containing the byte being looked for.
+;
+; Implicit inputs:
+;
+;	buffer stream.
+;
+; Implicit outputs:
+;
+;	none.
+;
+; Routine value:
+;
+;	none.
+;
+; Side effects:
+;
+;	none.
+;--
+
+SkpByt::
+	pushj	p,save1##		; get P1
+
+SkpBy1:	load.	p1,NBHCnt,(t2)		; get count of bytes in first buffer
+	camg	t1,p1			; does this finish the amount
+					;  we want?
+	  popj	p,			; yes.  return.
+	sub	t1,p1			; no.  count that much less we want
+	load.	t2,NBHNxt,(t2)		; point at next buffer
+	jumpn	t2,SkpBy1		; and loop if a next one
+
+	popj	p,			; return if end of stream.  let
+					;  caller decide if this is an error.
+	subttl	MilTim ;⊗ MilTim
+
+;++
+; Functional description:
+;
+;	return milliseconds since midnight
+;
+;
+; Calling sequence:
+;
+;		pushj	p,MilTim
+;		<always return here, time in T1>
+;
+; Input parameters:
+;
+;	none.
+;
+; Output parameters:
+;
+;	T1 - time since midnight today in milliseconds
+;
+; Implicit inputs:
+;
+;	Time## and TicSec##
+;
+; Implicit outputs:
+;
+;	none.
+;
+; Routine value:
+;
+;	none.
+;
+; Side effects:
+;
+;	none.
+;
+;--
+
+
+MilTim::
+NOWAITS<
+	move	t1,Time##		; get time in ticks
+	imuli	t1,↑d1000		; convert to milliticks
+	push	p,t2			; save T2
+	idiv	t1,TicSec##		; convert to milliseconds
+>;NOWAITS
+IFWAITS<
+	;JJW - Return msec since midnight UT (Greenwich Mean Time),
+	;not local time.  This is used for timestamps in IPSER.MAC.
+	MOVE T1,PSTIME##	;PST time in ticks
+	ADD T1,[↑D8*↑D60*↑D60*↑D60]	;Convert to UT
+	CAML T1,[↑D24*↑D60*↑D60*↑D60]	;Past midnight?
+	SUB T1,[↑D24*↑D60*↑D60*↑D60]	;Yes, subtract a day
+	IMULI T1,↑D1000		;Convert to milliticks
+	PUSH P,T2		;Save T2
+	IDIVI T1,JIFSEC##	;Convert to milliseconds
+>;IFWAITS
+	pjrst	t2popj##		; restore t2 and return
+	SUBTTL IMPBUF	...	BUFFER ALLOCATION AND RELEASE ROUTINES ;⊗ BUFGET BUFGT1 BUFGT3 BUFGT2 BUFGT4 BFCLR BUFGEI BUFGI1 BUFGI3 BUFGI2
+
+IFWAITS<
+;Call BUFGET when not at IMP interrupt level and interrupts not off.
+;Call BUFGEI if at IMP interrupt level or IMP interrupts already off.
+>;IFWAITS
+
+;SUBROUTINE TO ALLOCATE A BUFFER.  USES T1,T2,T3.
+;CALL:
+;	PUSHJ	P,BUFGET
+;	  ERROR RETURN	...NO MORE BUFFERS
+;	OK RETURN,  BUFFER ADDRESS IN T1
+BUFGET::
+	SOSGE	BUFNUM		;ANY FREE BUFFERS?
+	JRST	BUFGT3		;NO
+	MOVSI	T3,-IMPB36##	;-<# OF BUFFERS>/36
+IFWAITS<
+	;We're guaranteed to get a buffer if SOSGE skipped, but must mask
+	;off interrupts while finding a free bit in the table.
+	OFFIMP
+>;IFWAITS
+BUFGT1:	SETCM	T1,IMPBFT##(T3)	;GET COMPLEMENT OF BUSY BITS
+	JFFO	T1,BUFGT2	;FIND FIRST FREE BUFFER(NON-ZERO BIT)
+	AOBJN	T3,BUFGT1
+IFWAITS<ONIMP>
+	STOPCD	CPOPJ##,STOP,BBD, ;++BIT TABLE AND BUFNUM DISAGREE
+BUFGT3:	AOSLE	T2,BUFNUM	;NO FREE BUFFERS
+	JRST	BUFGET		;TRY AGAIN IF NOT EMPTY
+	AOS	BUFERR		;COUNT NUMBER OF TIMES BUFFERS RAN OUT
+	POPJ	P,
+
+BUFGT2:
+NOWAITS<
+	MOVNI	T2,(T2)		;SET THE BUSY BIT IN THE ALLOCATION TABLE
+	MOVSI	T1,(1B0)
+	LSH	T1,(T2)
+	IORM	T1,IMPBFT##(T3)
+	MOVN	T1,T2		;GET BACK BIT POSITION IN WORD
+>;NOWAITS
+IFWAITS<
+	MOVE T1,BITTAB##(T2)	;Get the right bit
+	IORM T1,IMPBFT##(T3)	;Set it in the table
+	;We've claimed the buffer, so interrupts are OK again.
+	ONIMP
+BUFGT4:				;Here from BUFGEI
+	MOVEI T1,(T2)		;Get bit position in word
+>;IFWAITS
+	IMULI	T3,↑D36		;COMPUTE BUFFER NUMBER (0 TO IMPBFN-1)
+	ADDI	T1,(T3)
+	IMULI	T1,IMPBFS##	;CONVERT TO ADDRESS OF BUFFER
+	ADD	T1,IMPBUF##
+IFN DEBUG,<
+	CAML	T1,IMPBFE##	;MAKE SURE WE GOT A LEGAL ADDRESS
+	STOPCD	CPOPJ,STOP,BAL,	;++BAD ADDRESS ALLOCATED
+>
+	AOS	(P)		;OK, PRESET SKIP RETURN
+
+;SUBROUTINE TO ZERO A BUFFER.   ADDRESS IN T1.
+BFCLR:	HRLI	T2,(T1)		;MAKE BLT POINTER
+	HRRI	T2,1(T1)
+	SETZM	(T1)		;CLEAR FIRST CELL
+	BLT	T2,IMPBFS##-1(T1) ;WIPE THE REST
+ifn debug,<	; help track bugs (not quite legal, but no one will notice)
+	move	t2,(p)			; get the return address for us
+	movem	t2,impbfs##-1(t1)	; save in the buffer
+	move	t2,-2(p)		; get NxtObf caller (in case
+					;  NxtOBf is our caller)
+					; (use -4 if we think GetMes is
+					;  our caller.)
+	movem	t2,impbfs##-2(t1)	; save that, too
+> ; end of ifn Debug
+	POPJ	P,
+
+IFWAITS<
+BUFGEI::SOSGE	BUFNUM		;ANY FREE BUFFERS?
+	JRST	BUFGI3		;NO
+	MOVSI	T3,-IMPB36##	;-<# OF BUFFERS>/36
+BUFGI1:	SETCM	T1,IMPBFT##(T3)	;GET COMPLEMENT OF BUSY BITS
+	JFFO	T1,BUFGI2	;FIND FIRST FREE BUFFER(NON-ZERO BIT)
+	AOBJN	T3,BUFGI1
+	STOPCD	CPOPJ##,STOP,BBI, ;++BIT TABLE AND BUFNUM DISAGREE
+BUFGI3:	AOS	BUFNUM		;NO FREE BUFFERS
+	;No point trying again since nothing can have changed.
+	AOS	BUFERR		;COUNT NUMBER OF TIMES BUFFERS RAN OUT
+	POPJ	P,
+
+BUFGI2:	MOVE T1,BITTAB##(T2)	;Get the right bit
+	IORM T1,IMPBFT##(T3)	;Set it in the table
+	JRST BUFGT4		;Rejoin BUFGET code
+>;IFWAITS
+;SUBROUTINE TO RELEASE ALL BUFFERS IN A STREAM.  ENTER WITH ;⊗ RELBUF RELBF1
+; FIRST BUFFER ADDRESS IN T1.
+;CALL:
+;	MOVE	T1, [ADDRESS OF FIRST BUFFER]
+;	PUSHJ	P,RELBUF
+;	ALWAYS RETURN HERE
+RELBUF::
+	ANDI	T1,-1		;MASK OUT ALL BUT ADDRESS
+RELBF1:	JUMPE	T1,CPOPJ##	;DONE IF ZERO ADDRESS
+	HRL	T1,(T1)		;GET NEXT BUFFER ADDRESS
+	HLLM	T1,(P)		;SAVE IT
+	PUSHJ	P,BUFREL	;RELEASE THIS ONE
+	HLRZ	T1,(P)		;GET NEXT BUFFER ADDRESS AGAIN
+	JRST	RELBF1		;LOOP
+;SUBROUTINE TO RELEASE A BUFFER. ;⊗ BUFREL BUFRL1
+;CALL:
+;	MOVE	T1,[APPROXIMATE ADDRESS(WITHIN LIMITS OF BUFFER)]
+;	PUSHJ	P,BUFREL
+;	ALWAYS RETURN HERE
+BUFREL::
+	ANDI	T1,777777	;ONLY RIGHT HALF
+
+	CAML	T1,IMPBUF##	;CHECK THAT IT'S A GOOD IMP BUFFER ADDRESS
+	 CAML	T1,IMPBFE##	;  ELSE WE TRASH FILSER CORE AND OTHER STUFF
+	  popj	p,			; must be a fixed buffer
+
+	SUB	T1,IMPBUF##	;GET BUFFER NUMBER
+	IDIVI	T1,IMPBFS##
+	SKIPE	IBFHLT##	;INPUT DESPERATE?
+	  JRST	BUFRL1		;YES
+	IDIVI	T1,↑D36		;NO,  CONVERT BUFFER NUMBER TO
+	MOVNS	T2		; ALLOCATION WORD AND BIT.  SET THE BIT
+	MOVSI	T3,(1B0)
+	LSH	T3,(T2)
+IFN DEBUG,<
+	TDNN	T3,IMPBFT##(T1)	;AVOID TRYING TO FREE A FREE BUFFER
+	STOPCD	CPOPJ,DEBUG,FFB,	;++FREEING A FREE BUFFER
+>
+	ANDCAM	T3,IMPBFT##(T1)	;CLEAR THE BUSY BIT
+	AOS	BUFNUM		;BUMP BUFFER COUNT
+	POPJ	P,
+
+;HERE TO GIVE BUFFER TO INPUT ROUTINE
+BUFRL1:	IMULI	T1,IMPBFS##	;GET BUFFER ADDRESS
+	ADD	T1,IMPBUF##
+	MOVE	T2,T1		;SET UP FOR BFCLR
+	PUSHJ	P,BFCLR		;WIPE THE BUFFER
+	JRST	INON##		;TELL impser we have something SECTION
+	subttl	CSmByt ;⊗ CSmByt
+
+;++
+; Functional description:
+;
+;	deal with a single byte for checksumming purposes.
+;	decides whether this is an even numbered byte or an
+;	odd number, and adds it appropriately into the 16 bit
+;	running checksum kept in P3.
+;
+;
+; Calling sequence:
+;
+;		move	t1,byte
+;		setz	p3,	; first call.  unmolested between calls.
+;		pushj	p,CSmByt
+;		<always returns here, running checksum in right half of P3>
+;
+; Input parameters:
+;
+;	T1 - byte to checksum
+;	P3 - should be set to zero before first call, left undisturbed
+;		between calls.
+;	   RH - checksum up until now in the right half.
+;	   LH - low bit in left half indicates even or oddness of byte number.
+;
+; Output parameters:
+;
+;	P3 - right half word: 16 bit ones compliment checksum to this point.
+;	     left half word: bit 17 is on if an odd number of byte were seen.
+;
+; Implicit inputs:
+;
+;	none.
+;
+; Implicit outputs:
+;
+;	none.
+;
+; Routine value:
+;
+;	none.
+;
+; Side effects:
+;
+;	none.
+;--
+
+
+CSmByt::
+
+ifn FtChck,<	; do this only if checksumming
+	tlcn	p3,1			; is the "second byte" bit on?
+	  lsh	t1,↑d8			; no.  move over to it's place.
+	add	p3,t1			; add this byte into running checksum.
+	trze	p3,<1←↑d16>		; overflow out of 16 bits?
+	  aos	p3			; yes.  end-around carry
+> ; end of IFN FtChck
+
+	popj	p,			; return
+	subttl	CSmHWd ;⊗ CSmHWd
+
+;++
+; Functional description:
+;
+;	deal with a 16 bit byte for checksumming purposes.
+;	adds it appropriately into the 16 bit running
+;	checksum kept in P3.  it is assumed that this half
+;	word is not being added to the end: left half of
+;	P3 (see CSmByt) is left undisturbed.
+;
+;
+; Calling sequence:
+;
+;		move	t1,<16 bit "half word">
+;		setz	p3,	; first call.  unmolested between calls.
+;		pushj	p,CSmHWd
+;		<always returns here, running checksum in right half of P3>
+;
+; Input parameters:
+;
+;	T1 - 16 bit byte to checksum, right justified.
+;	P3 - should be set to zero before first call to any of the
+;		checksuming routines, left undisturbed between calls.
+;	   RH - checksum up until now in the right half.
+;
+; Output parameters:
+;
+;	P3 - right half word: 16 bit ones compliment checksum to this point.
+;	     left half word: just as it was on entry.
+;
+; Implicit inputs:
+;
+;	none.
+;
+; Implicit outputs:
+;
+;	none.
+;
+; Routine value:
+;
+;	none.
+;
+; Side effects:
+;
+;	none.
+;--
+
+
+CSmHWd::
+
+ifn FtChck,<	; do this only if checksumming
+	add	p3,t1			; add this byte into running checksum.
+	trze	p3,<1←↑d16>		; overflow out of 16 bits?
+	  aos	p3			; yes.  end-around carry
+> ; end of IFN FtChck
+
+	popj	p,			; return
+	subttl	CSmWrd ;⊗ CSmWrd
+
+;++
+; Functional description:
+;
+;	deal with a 32 bit word for checksumming purposes.
+;	adds it appropriately into the 16 bit running
+;	checksum kept in P3.  it is assumed that this half
+;	word is not being added to the end: left half of
+;	P3 (see CSmByt) is left undisturbed.
+;
+;
+; Calling sequence:
+;
+;		move	t1,<32 bit word>
+;		setz	p3,	; first call.  unmolested between calls.
+;		pushj	p,CSmWrd
+;		<always returns here, running checksum in right half of P3>
+;
+; Input parameters:
+;
+;	T1 - 32 bit word to checksum, *right* justified.
+;	P3 - should be set to zero before first call to any of the
+;		checksuming routines, left undisturbed between calls.
+;	   RH - checksum up until now in the right half.
+;
+; Output parameters:
+;
+;	P3 - right half word: 16 bit ones compliment checksum to this point.
+;	     left half word: just as it was on entry.
+;
+; Implicit inputs:
+;
+;	none.
+;
+; Implicit outputs:
+;
+;	none.
+;
+; Routine value:
+;
+;	none.
+;
+; Side effects:
+;
+;	none.
+;--
+
+
+ifn FtChck,<	; do this only if checksumming
+CSmWrd::
+	pushj	p,save1##		; save p1
+	move	p1,t1			; put word somewhere else
+	move	t1,[point 16,p1,3]	; point at where it is
+	movei	t2,net.wd/net.by	; get number of bytes in a word
+	pjrst	CSmWds			; do the checksum
+>
+ife FtChck,<	CSmWrd==:cpopj##    >	; do nothing if not checksumming
+	subttl	CSmWds ;⊗ CSmWds CSmLp
+
+;++
+; Functional description:
+;
+;	deal with a 32 bit words for checksumming purposes.
+;	adds them appropriately into the 16 bit running
+;	checksum kept in P3.  it is assumed that this half
+;	word is not being added to the end: left half of
+;	P3 (see CSmByt) is left undisturbed.
+;
+;
+; Calling sequence:
+;
+;		move	t1,<ildb pointer to words>
+;		move	t2,<number of 8 bit bytes in the words>
+;		setz	p3,	; first call.  unmolested between calls.
+;		pushj	p,CSmWds
+;		<always returns here, running checksum in right half of P3>
+;
+; Input parameters:
+;
+;	T1 - ILDB pointer the the words to be checksummed.
+;	T2 - number of 8 bit bytes to be checksummed.  this
+;		value is truncated if odd.
+;	P3 - should be set to zero before first call to any of the
+;		checksuming routines, left undisturbed between calls.
+;	   RH - checksum up until now in the right half.
+;
+; Output parameters:
+;
+;	P3 - right half word: 16 bit ones compliment checksum to this point.
+;	     left half word: just as it was on entry.
+;
+; Implicit inputs:
+;
+;	none.
+;
+; Implicit outputs:
+;
+;	none.
+;
+; Routine value:
+;
+;	none.
+;
+; Side effects:
+;
+;	clobber t2.
+;--
+ifn FtChck,<	; do this only if checksumming
+CSmWds::
+	push	p,t1			; save the pointer
+	lsh	t2,-1			; convert from 8 bytes to 16 bit bytes.
+CSmLp:	ildb	t1,(p)			; get the next byte
+NOWAITS<
+	pushj	p,CSmHWd		; checksum that
+>;NOWAITS
+IFWAITS<	;Avoid PUSHJ/POPJ.  We want this to be efficient!
+	add	p3,t1			; add this byte into running checksum.
+	trze	p3,<1←↑d16>		; overflow out of 16 bits?
+	  aos	p3			; yes.  end-around carry
+>;IFWAITS
+	sojg	t2,CSmLp		; get next byte
+	jrst	tpopj##			; restore T1 and return.
+> ; end of IFN FtChck
+ife FtChck,<	CSmWds==:cpopj##   >	; do nothing if not checksumming
+
+	subttl	GetLed - get leader ;⊗ GetLed GetLe0
+
+;++
+; Functional description:
+;
+;	copies a leader into a preassigned storage location, keeping
+;	a 1's complement checksum of words read in P1.
+;
+;
+; Calling sequence:
+;
+;		move	f,PDDB
+;		move	p3,<running checksum>
+;		move	t1,<IDBP pointer to storage space, or 0>
+;		move	t2,<number of bytes in leader>
+;		pushj	p,GetLed
+;		  <not enough bytes in stream for this leader>
+;		<leader copied>
+;
+; Input parameters:
+;
+;	F  - PDDB
+;	P3 - checksum of message to this point.
+;	T1 - an ILDB pointer to the first byte of storage for the leader.
+;		or 0, if bytes should not be saved anywhere.
+;	T2 - a count of the number of bytes to be copied.
+;
+; Output parameters:
+;
+;	P3 - checksum updated
+;
+; Implicit inputs:
+;
+;	buffer stream.
+;
+; Implicit outputs:
+;
+;	BIB, storage location indicated in T1
+;
+; Routine value:
+;
+;	returns non-skip if there are not enough bytes in the indicated
+;	stream to satisfy the request.
+;
+; Side effects:
+;
+;	buffers may be deallocated if exhausted.
+;	T1 and T2 are destroyed.
+;--
+
+GetLed::
+	pushj	p,save2##		; save p1 and p2
+	move	p1,t1			; move pointer to p1
+	move	p2,t2			; move count to p2
+GetLe0:	jsp	p4,(p4)			; next byte from stream
+	  popj	p,			; not enough bytes
+	skipe	p1			; don't save if not wanted
+	  idpb	t1,p1			; put that byte where requested
+	pushj	p,CSmByt		; include this byte in the checksum
+	sojg	p2,GetLe0		; loop until copied as many as requested
+
+	pjrst	cpopj1##		; skip return.  found enough bytes.
+	subttl	GetMes ;⊗ GetMes GetMe1 GetMe2 GetMe3
+
+
+;++
+; Functional description:
+;
+;	pull in a message stream from IMP input, tacking it on to the
+;	end of a possibly nonexistent stream.  updates the 1's complement
+;	checksum of this message in P3.
+;
+;
+; Calling sequence:
+;
+;		move	p3,<running checksum for this message>
+;		move	t1,<bytes to copy>
+;		pushj	p,GetMes
+;		  <input ends before stream is full or no more buffers>
+;		<T1 contains data stream pointer for new data>
+;
+; Input parameters:
+;
+;	P3 - checksum of this message so far.
+;
+;	T1 - number of bytes to be copied into the stream.
+;
+; Output parameters:
+;
+;	P3 - checksum of the entire message after checksumming this
+;		part of it.
+;
+;	T1 - new stream pointer, <LH> first buffer, <RH> last buffer.
+;
+; Implicit inputs:
+;
+;	input stream of NxtByt.
+;
+; Implicit outputs:
+;
+;	none.
+;
+; Routine value:
+;
+;	returns <skip> if all went well.  returns <non-skip> if the
+;	input stream from the IMP ended before the given number of
+;	bytes was copied or if the network service runs out of
+;	buffer space during this copy.
+;
+; Side effects:
+;
+;	read (T1) bytes from the input stream.
+;	updates running checksum in P3.
+;--
+
+
+GetMes::
+	pushj	p,save2##		; get P1 and P2
+	skipn	p1,t1			; save the count
+	  pjrst	cpopj1##		; nothing to copy.  i'm hip.
+
+	setz	p2,			; nothing seen yet.
+
+GetMe1:	pushj	p,BufGet		; get a fresh buffer in T1
+	  jrst	GetMe3			; not enough.  flush buffers.
+	skipn	p2			; is this is first buffer?
+	  jrst	[			; yes.
+		 hrlz	p2,t1		; remember that it is the first.
+		 jrst	GetMe2		; and continue
+		]
+	stor.	t1,NBHNxt,(p2)		; no.  link it into buffer
+					;  which used to be the last.
+GetMe2:	hrr	p2,t1			; now make it the new last buffer.
+	add	t1,[point 8,NBHLen]	; convert to pointer to first
+					;  word after the header.
+	movei	t2,NBfByt		; set how many bytes of data there
+					;  are in a fresh buffer.
+
+	camge	p1,t2			; is the available space more
+					;  than we want to read?
+	  move	t2,p1			; yes.  back off to just what
+					;  we want.
+	stor.	t2,NBHCnt,(p2)		; save this count
+	sub	p1,t2			; remember we've gotten these bytes
+
+	pushj	p,GetLed		; read in a brace of data
+	  jrst	GetMe3			; ran out of data.  flush
+					;  buffers we've got.
+
+	jumpg	p1,GetMe1		; still more?  go get another
+					;  buffer and continue.
+
+	move	t1,p2			; return new pointer to stream.
+
+	pjrst	cpopj1##		; all done.
+
+; here to delete anything we've gotten and give an error return
+GetMe3:	hlrz	t1,p2			; load buffer pointer.
+	pjrst	RelBuf			; get rid of all buffers gotten
+					;  so far and give non-skip return.
+NOWAITS< ;Replaced by code in IMPSER ;⊗ DDBGET DDBGT1 DDBGT2 DDBGT3 DDBGT4
+	subttl	DDBGet
+
+;++
+; Functional description:
+;
+;	finds a DDB for this job.  if it finds an IMP DDB which this
+;	job owns but which is in the closed state (i.e., unused), it
+;	returns that DDB.  if it finds a DDB which is not in use, it
+;	returns that DDB.  it clears out the DDB and set the proper
+;	things to remember this DDB is now in use.
+;
+;
+; Calling sequence:
+;
+;		move	j,<job number or 0 if no job>
+;		scnoff
+;		pushj	p,DDBGet
+;		  <return here if no DDB is available>
+;		<return here with DDB in F>
+;
+; Input parameters:
+;
+;	J - job number of current job, or zero if there is no current
+;		job.
+;
+; Output parameters:
+;
+;	F - new DDB, all set up
+;
+; Implicit inputs:
+;
+;	DDB chain
+;
+; Implicit outputs:
+;
+;	none.
+;
+; Routine value:
+;
+;	returns non-skip if no DDB could be found.
+;
+; Side effects:
+;
+;	clobbers T1, T2, and T3
+;--
+
+
+DDBGET::
+	MOVEI	T2,IMPN		;MAXIMUM NUMBER TO CHECK
+	MOVEI	F,IMPDDB##	;START HERE
+	MOVEI	T1,ASSCON!ASSPRG ;FOR ASSIGNMENT TEST
+DDBGT1:	skipe	State(f)		; state closed?
+	  jrst	DDBGT2			;DONT USE IF NOT CLOSED
+	TDNN	T1,DEVMOD(F)	;ASSIGNED?
+	  JRST	DDBGT3		;NO
+	JUMPE	J,DDBGT2	;IF NO JOB NUMBER, CANT POSSIBLY OWN IT
+	LDB	T3,PJOBN##	;GET OWNER JOB NUMBER
+	CAMN	T3,J		;MINE?
+	  JRST	DDBGT4		;YES
+DDBGT2:	HLRZ	F,DEVSER(F)	;GET NEXT
+	SOJG	T2,DDBGT1	;LOOP IF MORE TO TEST
+	POPJ	P,		;NONE FREE.  ERROR RETURN
+
+;HERE WHEN FOUND A DDB
+DDBGT3:	DPB	J,PJOBN##	;DEPOSIT JOB NUMBER
+DDBGT4:	MOVEI	T1,ASSCON	;ASSIGNED BY CONSOLE BIT
+	IORM	T1,DEVMOD(F)	;ASSIGN IT
+	PUSHJ	P,CLRIMP	;CLEAR IT
+	SETZM	DEVLOG(F)	;ENSURE NO LOGICAL NAME YET
+	JRST	CPOPJ1##	;SKIP RETURN
+>;NOWAITS
+	subttl	DDBFls ;⊗ DDBFls
+
+;++
+; Functional description:
+;
+;	flush all data from a DDB.  does not release DDB.  assumes
+;	that it knows all about the DDB.  any field that should be
+;	ignored should be zero.
+;
+;
+; Calling sequence:
+;
+;		move	f,DDB
+;		pushj	p,DDBFls
+;		<always returns here>
+;
+; Input parameters:
+;
+;	F - DDB to be flushed
+;
+; Output parameters:
+;
+;	none.
+;
+; Implicit inputs:
+;
+;	DDB
+;
+; Implicit outputs:
+;
+;	none.
+;
+; Routine value:
+;
+;	none.
+;
+; Side effects:
+;
+;	throws out any buffers and BIBs this DDB may point to.
+;--
+
+
+DDBFls::
+	scnoff				; hold on the interrupts
+	hrrz	t1,IBfThs(f)		; get head of input queue
+	pushj	p,RelBuf		; release the entire queue
+	setzm	IBfThs(f)		; clear this pointer, too
+	setzm	IBfLst(f)		; make sure it's known empty
+NOWAITS<
+	hrrz	t1,OBfFst(f)		; get first buffer in output
+	pushj	p,RelBuf		; flush it as well
+	setzm	t1,OBfFst(f)		; don't release this again
+	setzm	t1,OBfLst(f)		; clear this pointer.
+>;NOWAITS
+IFWAITS<
+	PUSHJ P,OUTFLS##	;Flush output buffers and preallocated resources
+>;IFWAITS
+	skipe	t1,RetrnQ(f)		; get retransmission queue
+	  pushj	p,FlsBIB		; flush entire string of them
+	setzm	RetrnQ(f)		; make sure to zap buffer pointer
+	skipe	t1,Future(f)		; get futures queue, if any
+	  pushj	p,FlsFMB##		; release futures
+	setzm	Future(f)		; make sure no one looks at this.
+	setzm	State(f)		; make the state 0 (closed, i hope)
+	scnon				; interrupts are ok again.
+	pushj	p,ItyRel##		; ditch ITY, if any.
+NOWAITS<
+	pjrst	TTIDet##		; disconnect crosspatched IMP.
+>;NOWAITS
+IFWAITS<
+	PJRST IMSINT##		;Set up state-change interrupt
+>;IFWAITS
+;⊗ DDBDea DDBRel DDBRe1 CLRIMP DDBCLR
+
+NOWAITS< 	;See IMPSER for WAITS version
+
+;SUBROUTINE TO RELEASE A DDB.  SHOULD ONLY BE CALLED AFTER
+;  CLOSING BOTH SIDES.
+;CALL:
+;	MOVE	F, [ADDRESS OF DDB]
+;	PUSHJ	P,DDBDea
+;	ALWAYS RETURN HERE
+DDBDea::MOVEI	T2,ASSCON	;DEASSIGN DEVICE.
+	pjrst	RELEA6##		; let UUOCon do it
+
+;SUBROUTINE TO RELEASE A DDB.  SHOULD ONLY BE CALLED AFTER
+;  CLOSING BOTH SIDES.
+;CALL:
+;	MOVE	F, [ADDRESS OF DDB]
+;	PUSHJ	P,DDBREL
+;	ALWAYS RETURN HERE
+DDBRel::
+ifn Debug,<	; doing debugging?
+	skipn	RetrnQ(f)		; is there anything in the
+					;  retransmission queue?
+	  jrst	DDBRe1			; no.  ok to go on
+	stopcd	.+1,DEBUG,INF		;++ IMP not flushed
+	pushj	p,DDBFls		; flush it
+DDBRe1:
+>
+	pushj	p,DDBDea		; deassign it
+;	JRST	CLRIMP
+
+>;NOWAITS
+
+;SUBROUTINE TO WIPE A DDB
+CLRIMP::
+	PUSHJ	P,IMPWK1##	;CLEAR FLAGS
+	MOVE	T1,[IMPCLR,,IMPDDS-1] ;WIPE ALL IMP-SPECIFIC STUFF
+;	PJRST	DDBCLR
+
+
+;ROUTINE TO WIPE ARBITRARY PARTS OF AN IMP DDB
+;	MOVE	F,[DDB ADDRESS]
+;	MOVE	T1,[FIRST,,LAST]  ;RELATIVE WORDS TO BE ZEROED
+;	PUSHJ	P,DDBCLR
+;	ALWAYS RETURN HERE--USES T1 AND T2
+
+DDBCLR:	ADDI	T1,(F)		;MAKE FINAL ADDRESS ABSOLUTE
+	HLRZ	T2,T1		;GET RELATIVE FIRST ADDRESS
+	ADDI	T2,1(F)		;MAKE IT ABSOLUTE AND ADD ONE
+	HRLI	T2,-1(T2)	;MAKE ABSOLUTE FIRST,,FIRST+1
+	SETZM	-1(T2)		;CLEAR FIRST WORD
+	BLT	T2,(T1)		;CLEAR REST
+	POPJ	P,
+	subttl	MakBIB ;⊗ MakBIB MakBi1
+
+;++
+; Functional description:
+;
+;	make a buffer information block for the current output buffer.
+;	also puts it on the retransmission queue, etc.
+;
+IFWAITS<
+;	Sets up BIB that should have been pre-allocated, so there
+;	should be no way for this routine to lose.
+>;IFWAITS
+;
+; Calling sequence:
+;
+;		move	f,DDB
+;		move	p1,message to be output
+;		pushj	p,MakBIB
+;		  <returns here if can't get enough monitor free core
+;					for BIB>	
+;		<returns here if ok, T1 has leading buffer>
+;
+; Input parameters:
+;
+;	f - DDB
+;	p1 - pointer to the first buffer in the stream to be output
+;
+; Output parameters:
+;
+;	T1 - BIB pointer
+;
+; Implicit inputs:
+;
+;	DDB
+;
+; Implicit outputs:
+;
+;	DDB
+;
+; Routine value:
+;
+;	returns non-skip if request for monitor free core to build
+;	BIB failed, else returns skip.
+;
+; Side effects:
+;
+;	adds message to retransmission queue.
+;--
+
+
+MakBIB::
+NOWAITS<
+	movei	t2,BIBLen/4		; how many 4 word blocks?
+	syspif				; watch it
+	pushj	p,Get4Wd##		; get it from free core
+	  pjrst	onpopj##		; can't get it.  error return
+	syspin				; interrupts are safe again.
+
+	aos	BIBCnt			; one more BIB in use
+>;NOWAITS
+IFWAITS<
+	SKIPN T1,OUTBIB(F)	;Get the BIB we preallocated
+	PUSHJ P,IMPBUG##	;It has to be there
+	SETZM OUTBIB(F)		;Indicate we got it
+	STOR. W,BIBNET,(T1)	;Set network interface
+>;IFWAITS
+
+	ones.	t2,BIBTim,(t1)		; assume that this message must
+					;  be discarded after being
+					;  sent by setting timer to -1.
+	stor.	p1,BIBMes,(t1)		; put message pointer in place
+	zero.	t2,BIBTQ,(t1)		; zero transmission queue pointers
+	zero.	t2,BIBRTQ,(t1)		; make sure we end the retran queue
+	move	t2,SndNxt(f)		; next sequence number (after
+					;  this message).
+	stor.	t2,BIBSeq,(t1)		; save it
+	camg	t2,SndLst(f)		; was there anything real here
+					;  (is this sequence number
+					;  after the last we sent?)
+	  pjrst	cpopj1##		; no.  don't retransmit zero
+					;  length messages.  (note that
+					;  this will also be true for
+					;  sends for protocols which
+					;  leave SndNxt and SndLst set to 0.)
+	movem	t2,SndLst(f)		; remember next time that this
+					;  is the last seqnence sent.
+	setzm	GTimer(f)		; make sure not to send spontaneous
+					;  ACKs while we have something in the
+					;  retransmit queue.
+	move	t2,UpTime##		; get current uptime
+	stor.	t2,BIBTim,(t1)		; set timer so IMPSER knows
+					;  not to delete because it's
+					;  in the retransmission queue.
+	skipn	t2,RetrnQ(f)		; anything in retransmission queue?
+	  jrst	MakBi1			; nope.  make this the whole thing
+	hlrzs	t2			; get end of queue
+	stor.	t1,BIBRTQ,(t2)		; make it point to this new one.
+	hrlm	t1,RetrnQ(f)		; save new end of retrans queue.
+	pjrst	cpopj1##		; return happy
+
+MakBi1:	hrrzm	t1,RetrnQ(f)		; make it both first...
+	hrlm	t1,RetrnQ(f)		; ...and last
+	pjrst	cpopj1##		; and return
+	subttl	FlsBIB ;⊗ FlsBIB FLSBI0 FlsBI1 FlsBix
+
+;++
+; Functional description:
+;
+;	flush a stream of BIBs link through their retransmission
+;	queue links.
+;
+;
+; Calling sequence:
+;
+;		move	t1,<first BIB>
+;		pushj	p,FlsBIB
+;		<always returns here>
+;
+; Input parameters:
+;
+;	t1 - first BIB of BIB chains
+;
+; Output parameters:
+;
+;	none.
+;
+; Implicit inputs:
+;
+;	none.
+;
+; Implicit outputs:
+;
+;	none.
+;
+; Routine value:
+;
+;	none.
+;
+; Side effects:
+;
+;	release all BIBs in the chain and all the buffers attached to
+;	the BIBs.
+;--
+
+
+FlsBIB::
+IFN FTAIP,<
+	OFFIMP			;Interrupts off while we muck with BIBs
+>;IFN FTAIP
+	pushj	p,save1##		; get p1
+	hrrzs	t1			; make sure we just have the
+					;  BIB pointer.
+FlsBI1:	load.	p1,BIBRTQ,(t1)		; get next BIB in retransmission queue.
+ifn debug,<	; buggy code
+	came	p1,t1			; linked in a circle?
+	  jrst	FlsBix			; no.  go on
+	stopcd	.+1,DEBUG,CLB		;++ circularly linked BIBs
+	setz	p1,			; don't loop
+FlsBix:
+>
+	pushj	p,RelBIB		; release last one
+IFE FTAIP,<
+	jumpe	p1,cpopj##		; return is end of the chain
+>;IFE FTAIP
+IFN FTAIP,<
+	JUMPE P1,IMPONJ##
+>;IFN FTAIP
+	move	t1,p1			; position for next loop
+	jrst	FlsBI1			; and loop
+	subttl	RelBIB ;⊗ RelBIB ARlBib ARlBi1 IMPMRL ETHMRL
+
+;++
+; Functional description:
+;
+;	flush a BIB and everything that has anything to do with it.
+;
+;
+; Calling sequence:
+;
+;		move	t1,BIB
+IFWAITS<
+;		OFFIMP		;or call at IMP interrupt level
+;				;(not needed for Ethernet BIBs)
+>;IFWAITS
+;		pushj	p,RelBIB	or	pushj	p,ARlBIB
+;		<always return here>
+;
+; Input parameters:
+;
+;	T1 - BIB to delete
+;
+; Output parameters:
+;
+;	none.
+;
+; Implicit inputs:
+;
+;	BIB data
+;
+; Implicit outputs:
+;
+;	transmission queue.
+;
+; Routine value:
+;
+;	none
+;
+; Side effects:
+;
+;	will remove this BIB from the transmission queue if it finds
+;	that it is there.  if it isn't currently being transmitted,
+;	it will throw out all it's buffers.  if it is being transmitted,
+;	it will tell IMPSER that this BIB is dead, then it will delete
+;	it for it when it is done transmitting it.
+;
+;	call at ARlBIB doesn't check for transmission in progress.
+;--
+
+
+RelBIB::
+ifn debug,<	; debugging?
+	pushj	p,BIBChk		; yes.  try to find the error here
+>
+	skip.	,BIBTim,(t1),e		; timer set to zero?
+	  jrst	ARlBIB			; no.  nothing special here.
+					; yes.  this is now being sent.
+	decr.	t1,BIBTim,(t1)		; set to negative one (-1) to
+					;  tell transmission (at DataNB
+					;  in IMPSER) to flush when done.
+	popj	p,			; and return
+
+; start here to delete without checking for currently begin transmitted
+ARlBib::
+	pushj	p,savt##		; protect all T regs.
+ifn debug,<	; debugging?
+	pushj	p,BIBChk		; yes.  try to find the error here
+>
+	push	p,t1			; move pointer out of the way.
+	skip.	t2,BIBTQ,(t1),n		; hooked into the transmission queue?
+	  jrst	ARlBi1			; nope.  don't try to close up link
+	load.	t2,BIBNTQ,(t1)		; get next BIB in tran queue
+	load.	t3,BIBLTQ,(t1)		; and last BIB in tran queue
+	stor.	t2,BIBNTQ,(t3)		; make our next previous's next.
+	stor.	t3,BIBLTQ,(t2)		; make our previous next's previous.
+ARlBi1:
+NOWAITS<
+	load.	t1,BIBMes,(t1)		; get the message pointer
+	pushj	p,RelBuf		; release the entire message
+	sos	BIBCnt			; one less BIB in use
+	pop	p,t2			; get back BIB address.
+	movei	t1,BIBLen/4		; how many 4 word blocks?
+	pjrst	Giv4Wd##		; release the BIB.
+>;NOWAITS
+IFWAITS<
+	LOAD. W,BIBNET,(T1)	;Get network interface
+	LOAD. T1,BIBMES,(T1)	;Get message pointer
+	PUSHJ P,@NI.MRL##(W)	;Release the message
+	POP P,T2		;Get back BIB address
+	JRST GIVBIB##		;Return the BIB FS to spares list
+
+;In CACDAT, NETARP+NI.MRL is RELBUF.  NETETH+NI.MRL is ETHMRL.
+
+IFN FTEIP,<			;Release Ethernet message (packet)
+ETHMRL::EXCH T1,AC1		;Put packet in right AC
+	PUSHJ P,FSGIVE##	;Return to system free storage
+	EXCH T1,AC1
+	POPJ P,
+>;IFN FTEIP
+>;IFWAITS
+	subttl	BIB consistency check ;⊗ BIBChk BIBCH0 BIBChk
+
+ifn debug,<	; if debugging only.
+
+; call with a BIB pointer in T1.  if there are any inconsistencies in
+;	the BIB or the situation (i.e., interrupts enabled), stopcds.
+BIBChk::
+	pushj	p,save1##		; get p1 and p2
+NOWAITS<
+	consz	pi,scnpif##&177		; firt make sure interrupts are out
+	 stopcd	.+1,DEBUG,INO		;++ interrupts not off
+>;NOWAITS
+IFWAITS<
+IFN FTAIP,<			;Only need this for Arpanet
+	;We allow getting here with interrupts on, but need them off to
+	;get consistent data for our tests.
+	PUSH P,[IMPONJ##]	;Turn interrupts on when done
+	OFFIMP			;But off while we examine BIBs
+>;IFN FTAIP
+>;IFWAITS
+
+	skip.	p1,BIBTQ,(t1),n		; in the transmission queue?
+	  popj	p,			; no.  should be ok.
+
+	load.	p1,BIBNTQ,(t1)		; get pointer to next
+	load.	p1,BIBLTQ,(p1)		; get next's pointer to last
+	caie	p1,(t1)			; is this one the theoretical
+					;  next one's last one?
+	 stopcd	.+1,DEBUG,LNA		;++ last does not agree
+	load.	p1,BIBLTQ,(t1)		; point at our last
+	load.	p1,BIBNTQ,(p1)		; get last's pointer to next
+	caie	p1,(t1)			; does the last claim us as the next?
+	 stopcd	.+1,DEBUG,NNT		;++ next not this
+	popj	p,			; all done
+
+> ; end of debug only code
+
+ife debug,<	; cover if someone was compiled with debugging on.
+	BIBChk==:cpopj##		; no-op
+>
+	subttl	FndDDB ;⊗ FndDDB FndLp FndNxt
+
+;++
+; Functional description:
+;
+;	scan through all the IMP DDBs to find one that matches
+;	the given values.  a zero field in the foreign
+;	host or foreign port will always match.
+;
+;
+; Calling sequence:
+;
+;		move	t1,<his address>
+;		move	t2,<his port>
+;		move	t3,<our port>
+;		move	t4,<protocol>
+;		pushj	p,FndDDB
+;		  <no matching DDB>
+;		<F set to DDB>
+;
+; Input parameters:
+;
+;	(all four of these are (and must be) preserved)
+;	T1 - address of foriegn host (source)
+;	T2 - his port number.
+;	T3 - our port number.
+;	T4 - protocol (according to IP)
+;
+; Output parameters:
+;
+;	F - DDB that matches.
+;
+; Implicit inputs:
+;
+;	DDB chain
+;
+; Implicit outputs:
+;
+;	none.
+;
+; Routine value:
+;
+;	returns non-skip if no such DDB is found
+;
+; Side effects:
+;
+;	none.
+;--
+
+
+FndDDB::pushj	p,save2##		; get P1 and P2
+NOWAITS<
+	movei	p1,ImpN##		; load up number of imp DDBs
+>;NOWAITS
+	movei	f,ImpDDB##		; point at first one.
+
+FndLp:	skipg	State(f)		; does it seem open at all?
+	  jrst	FndNxt			; nope.  try next.
+	skipe	p2,RmtAdr(f)		; is there a source?
+	 camn	t1,p2			; and is it the right source?
+	  skipa				; yes to one.  it's ok.
+	   jrst	FndNxt			; not ok
+	camn	t3,LclPrt(f)		; right port for us?
+	 came	t4,Protcl(f)		; and right protocol
+	  jrst	FndNxt			; no to one or the t'other.
+	skipe	p2,RmtPrt(f)		; is there a remote port?
+	 camn	t2,p2			; the correct one?
+	  pjrst	cpopj1##		; good return, DDB in F
+
+FndNxt:	hlrz	f,DevSer(f)		; get link
+NOWAITS<
+	sojg	p1,FndLp		; loop
+>;NOWAITS
+IFWAITS<
+	CAIE F,IMP.NX##
+	 JRST FNDLP
+>;IFWAITS
+
+	popj	p,			; never found it: no such DDB
+NOWAITS< ;Data is in CACDAT
+	SUBTTL	IMP SYSTEM STATISTICS
+
+;IMP SYSTEM STATISTICS -- GETTAB TABLE -1 (WITH SUBTABLES)
+
+
+DEFINE SUBTBL(USR,SYS) <
+	<.NT'USR-1>B8 + SYS-IMPGTT
+>
+
+	$LOW
+
+IMPGTT::
+	SUBTBL	IHM,MESTYP	; 0  %ISIHM  IMP-HOST MESSAGES, BY TYPE
+	subtbl	epl,EPLcnt	; 1  %isepl  error in previous leader
+				;	messages recieved, by error type
+	subtbl	inc,INCcnt	; 2 %isinc incomplete transmission
+				;	Like a RFNM only error in
+				;	transmission.
+	SUBTBL	DMF,IMPFLT	; 3  %ISDMF  IMP DATA MESSAGE FAULTS
+	SUBTBL	BHS,IBFSTT	; 4  %ISBHS  IMP BUFFER HANDLING STATISTICS
+	SUBTBL	HMS,SIZHST	; 5  %ISHMS  HISTOGRAM OF REC'D DATA
+				;	      MESSAGE SIZES
+	subtbl	IPE,IpErrs	; 6  %isIPE  errors in IP leader
+	subtbl	IPD,IPData	; 7 %isICD  data about IP activities.
+	subtbl	ICE,ICMPEr	; 10  %isIPE  errors in IP leader
+	subtbl	ICM,ICMTyp	; 11 %isICM  count of recieved ICMP message
+				;		types.
+	subtbl	TCE,TCPErr	; 12 %isTCE  errors in TCP message
+	subtbl	TCI,TCPITy	; 13 %isTCI  count of input TCP message types
+	subtbl	TCO,TCPOTy	; 14 %isTCO  count of ouput TCP message types
+
+;*** ADD MORE GETTAB SUBTABLE POINTERS HERE ***
+;FOLLOWING ENTRIES ARE STILL IN THE IMP GETTAB TABLE BUT NOT AT
+;  FIXED POSITIONS.  THE USER MUST GET THE PROPER SUBTABLE POINTER
+;  FROM THE SET ABOVE, THEN ADD THE DESIRED INDEX INTO THE SUBTABLE.
+
+ImpDat::	; beginning of data area to be zeroed at init time.
+
+;SUBTABLE 0  %ISIHM  IMP-HOST MESSAGE COUNTS.  INDEX BY MESSAGE TYPE
+MESTYP::BLOCK	<.NTIHM==mesdln>
+
+; subtable 1 %isEPL	gives count of error in previous leader
+; messages (message type 1) received from IMP, broken into error codes.
+EPLcnt::block	1	; 0  %isec0	error flip-flop set
+	block	1	; 1  %isec1	message too small (less than 80 bits)
+	block	1	; 2  %isec2	message of illegal type.
+	block	1	; 3  %isec3	message in wrong format:
+	block	1	; 4  %isec4	illegal leader style
+	block	1	; 5  %isec5	wrong leader style
+	; expansions should go here.
+EPLmax==:.-EPLcnt	; the highest number we know about
+	block	1	; ?  %isecu	unknown error code
+.ntEPL==.-EPLcnt
+
+; subtable 2 %isINC	gives count of incomplete transmission
+; messages (message type 9 ) received from IMP, broken down into error codes.
+INCcnt::block	1	; 0 %isin0	Dest Host didn't accept quickly
+			;		enough
+	block	1	; 1 %isin1	Message too long
+	block	1	; 2 %isin2	Host took to long to transmit
+			;		message to IMP
+	block	1	; 3 %isin3	Message lost in network due to
+			;		IMP or circuit failures
+	block	1	; 4 %isin4	IMP couldn't accept the entire
+			;		message within 15 sec because of
+			;		unavailable resources
+	block	1	; 5 %isin5	Source IMP I/O failure
+	block	1	; 6 %isin6	connection setup delay
+	block	1	; 7 %isin7	end-to-end flow control
+	block	1	; 8 %isin8	destination IMP buffer space shortage
+	block	1	; 9 %isin9	congestion control
+	block	1	; 10 %isinA	local resource shortage
+INCmax==:.-INCcnt	; Max length of table
+	block	1	; Unknown error codes
+.ntINC==.-INCcnt
+
+
+;SUBTABLE 3  %ISDMF  DATA MESSAGE FAULTS.  INDEX BY ITEM NUMBER
+IMPFLT:
+BADIMP::BLOCK	1	; 0  %ISIHF  IMP INTERFACE HARDWARE FAULTS
+BDMLNK::BLOCK	1	; 1  %ISBDL  BAD DATA LINK NUMBERS
+BDMMES::BLOCK	1	; 2  %ISBMT  BAD MESSAGE TYPES
+BDMRFM::BLOCK	1	; 4  %ISDDR  DISCARDED DATA RFNMS
+NORFNM::BLOCK	1	; 4  %ISSDR  SIMULATED (TIMED OUT) DATA RFNMS
+SIZERR::BLOCK	1	; 5  %ISBMS  BAD MESSAGE SIZE ERRORS
+ImpHDC::block	1	; 6 %ishdc  number of times tops-10 told the IMP
+			;		service that an IMP was hung.
+HSTCNT::BLOCK	1	; 7 %ishst  COUNT OF HOSTS IN THE host TABLE
+	.NTDMF==.-IMPFLT
+
+;SUBTABLE 4  %ISBHS  IMP BUFFER HANDLING STATISTICS.  INDEX BY ITEM NUMBER
+IBFSTT:
+BUFERR::BLOCK	1	; 0  %ISIBO  IMP BUFFER OVERRUNS (RAN OUT OF BUFFERS)
+BUFNUM::BLOCK	1	; 1  %ISNFB  NUMBER OF FREE BUFFERS
+BUFAVG::BLOCK	1	; 2  %ISAFB  10↑4 * AVERAGE BUFFER UTILIZATION
+BIBCnt:	block	1	; 3  %isBIB  number of BIBs in use
+	.NTBHS==.-IBFSTT
+
+;SUBTABLE 5  %ISHMS  HISTOGRAM OF RECEIVED TCP MESSAGE SIZES.
+;		     INDEX BY POWER OF 2 bytes.
+SIZHST::BLOCK	<.NTHMS==↑D24>
+
+; subtable 6	%ISIPE	internet protocol errors
+IpErrs:
+IPELed::	block	1	; %isipl  byte stream shorter than IP leader
+IPEPrt::	block	1	; %isipp  IP protocol field contained a
+				;	  protocol we don't understand.
+IPEVer::	block	1	; %isipv  IP version was not the one we
+				;	  understand.
+IPEChk::	block	1	; %isipc  checksum of IP leader failed.
+IPEUOp::	block	1	; %isipu  unknown option seen
+	.ntIPE==.-IpErrs	; get length of table.
+
+; subtable 7	%isIPD	data collected about IP activities
+IPData:
+IPOpt::		block	1	; %isIPO  number of IP messages with options
+IPFrag::	block	1	; %isIPF  number of fragmented messages seen
+IPFDun::	block	1	; %isIFD  number of fragmented messages
+				;	  actually reassembled.
+.ntIPD==.-IPData	; count
+
+; subtable 10	%isICE	error counts for ICMP
+ICMPEr:
+ICMNLd::	block	1	; %isicn  not enough data for ICMP leader.
+ICMDEr::	block	1	; %isicd  not enough data in stream for
+				;		ICMP message.
+ICMChk::	block	1	; %isicc  checksum of ICMP message failed.
+ICMUnT::	block	1	; %isicu  ICMP message type unknown.
+.ntICE==.-ICMPEr	; count
+
+;SUBTABLE 11  %ISICM  count of ICMP message types.  INDEX BY MESSAGE TYPE
+ICMTyp::BLOCK	<.NTICM==ICMLen>
+
+; subtable 12	%ISTCE	transmission control protocol errors
+TCPErr:
+TCELed::	block	1	; %istcl  data ends before TCP leader
+TCEMes::	block	1	; %istcm  data ends before TCP message
+TCEChk::	block	1	; %istcc  checksum error in TCP leader
+				;	  and/or message.
+TCEPrt::	block	1	; %istcp  incoming connection attempted
+				;	  on a port which we don't service.
+TCEDDB::	block	1	; %istcd  no DDB when needed
+TCEITY::	block	1	; %istci  no ITY when needed
+TCEUOP::	block	1	; %istcu  unknown option in TCP leader
+TCPOpt::	block	1	; %istco  TCP leader with options seen
+TCENIT::	block	1	; %istcn  not in tranmission queue
+TCPPRT::	block	1	; %istcr  packet retransmitted due to time
+TCPZRT::	block	1	; %istcz  packet retransmitted due to zero
+				;		send window.
+TCPFTS::	block	1	; %istfs  future seen
+TCPFTU::	block	1	; %istfu  future used
+TCPMNW::	block	1	; %istmo  message out of window
+TCPWFT::	block	1	; %istmf  message front truncated
+TCPWET::	block	1	; %istme  message end truncated
+TCEIPC::	block	1	; %istip  sending IPCF packet failed for
+				;	  perpetual listen.
+TCPFMB::	block	1	; %istfm  future message blocks in use
+	.ntTCE==.-TCPErr	; get the length
+
+; subtable 13	%isTCI	TCP input message types.  each word is incremented
+;			whenever a TCP message comes in with the corresponding
+;			bit on.  note that any message can have several
+;			different bits on, all of which will be counted.
+TCPITy::	block	<.ntTCI==6>	; six different bits
+
+; subtable 14	%isTCO	TCP output message types.  each word is incremented
+;			whenever a TCP message is sent with the corresponding
+;			bit on.  note that any message can have several
+;			different bits on, all of which will be counted.
+TCPOTy::	block	<.ntTCO==6>	; six different bits
+
+
+
+	XP .ISMXL, <<.-IMPGTT-1>←9>	;LENGTH OF GETTAB TABLE, FOR UUOCON
+
+ImpDCn==:ImpDat-.	; negative word count for area to be zeroed on reinit.
+>;NOWAITS
+
+IFWAITS<
+;Our data is in CACDAT.  The following symbols are referenced in this file.
+	EXTERN	BUFERR,BUFNUM
+>;IFWAITS
+	$lit
+	end

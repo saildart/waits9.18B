@@ -1,0 +1,24 @@
+;FTSUAI FTCCRMA FTLLL FTF2 ;⊗ WATSIT
+
+;To automatically define these assembly switches at compile time, use
+;.INSERT WATSIT[S,SYS] (inserting this file).
+
+;Automatically sets assembly switches to compile for system we're compiling on!
+
+;To cross-compile, define WATSIT in advance.
+
+IFNDEF WATSIT,<
+↓WATSIT←←0	;ASSUME SUAI
+  IFDEF F2UUO,<
+    IFDEF LLLUUO,<↓WATSIT←←2;LLL> ↓WATSIT←←1;CCRMA
+  >;IFDEF F2UUO
+>;IFNDEF WATSIT
+IFE WATSIT-0,<↓FTSUAI←←-1 ↔ PRINTS/SAIL/;> ↓FTSUAI←←0
+IFE WATSIT-1,<↓FTCCRMA←←-1 ↔ PRINTS/CCRMA/;> ↓FTCCRMA←←0
+IFE WATSIT-2,<↓FTLLL←←-1 ↔ PRINTS/S1-A/;> ↓FTLLL←←0
+IFG WATSIT-2,<.FATAL The variable WATSIT is greater then 2 -- no such WAITS site exists.>
+IFL WATSIT,<.FATAL The variable WATSIT is negative -- no such WAITS site exists.>
+
+IFN FTSUAI,<↓FTF2←←0;> ↓FTF2←←-1	;Non-zero if compiling for the F2
+PRINTS/ version.
+/

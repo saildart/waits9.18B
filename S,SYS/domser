@@ -1,0 +1,303 @@
+COMMENT ⊗   VALID 00008 PAGES
+C REC  PAGE   DESCRIPTION
+C00001 00001
+C00002 00002	IFN FTDOM,<			Whole file
+C00004 00003	 DOMDSP
+C00005 00004	 DOMCLK DOMCL1 DOMFRE
+C00007 00005	 DOMSET DOMRET DOMRE1 DOMFLS
+C00009 00006	 DOMLKP LKLOOP LKLP1 LKDONE NAMEQL NAMEQ1 NAMEQ2
+C00013 00007	 DOMINP DOMIN1 DOMIN2
+C00016 00008	 DOMOUT DOMOU1 DOMOUR OUTCMP OCLOOP OCRET
+C00021 ENDMK
+C⊗;
+IFN FTDOM,<			;Whole file
+
+BEGIN DOMAIN ↔ SUBTTL Domain record cache - J. Weening, 1987.
+
+COMMENT \
+
+Device DOM is used to read or write the system's cache of domain resource
+records (RRs).  A job first does a LOOKUP to see if information that it
+wants is available.  If so, it uses INPUT to read the data (one RR per
+INPUT UUO).  If not, it communicates with domain servers to find out the
+information, and then uses OUTPUT to store it in the cache.
+
+Not much validity checking is currently done on the data received from
+jobs; we trust them not to be malicious.
+
+Duplicate checking is done, since there can be a race between several jobs
+trying to get the same data.  A convenient way to remove a record is to
+insert a duplicate with a TTL of 0.
+
+\
+;⊗ DOMDSP
+
+	JRST DOMRET		;Return a DDB
+	JRST DOMSET		;Make a DDB
+	POPJ P,			;Initialize
+	POPJ P,			;Hung timeout
+↑DOMDSP:JRST DOMFLS		;RELEASE
+	POPJ P,			;CLOSE output
+	JRST DOMOUT		;OUTPUT
+	JRST DOMINP		;INPUT
+	JRST CPOPJ1		;ENTER
+	JRST DOMLKP		;LOOKUP
+	POPJ P,			;Dump mode INPUT
+	POPJ P,			;Dump mode OUTPUT
+	POPJ P,			;USETO
+	POPJ P,			;USETI
+	POPJ P,			;UGETF
+	JRST CPOPJ1		;RENAME
+	JRST DOMFLS		;CLOSE input
+	POPJ P,			;UTPCLR
+	POPJ P,			;MTAPE
+;⊗ DOMCLK DOMCL1 DOMFRE
+
+;Once-a-second code.  Decrements TTL and frees timed-out records, unless
+;in use by a DDB.  (Last DDB to release record will then free it.)
+
+↑DOMCLK:MOVEI AC1,RRLIST	;Start at head of list
+DOMCL1:	HRRZ AC1,(AC1)		;Get next record
+	CAIN AC1,RRLIST		;Check if done
+	POPJ P,			;Yes, all done
+	SOSG RR.HDR+RRTTL(AC1)	;Decrement and test TTL
+	SKIPLE RRREFC(AC1)	;Timed out, check if free
+	JRST DOMCL1		;Still active, or in use
+	PUSHJ P,DOMFRE		;Unlink and free the record
+	JRST DOMCL1		;Continue checking
+
+;Unlink a resource record pointed to by AC1 and return it.
+DOMFRE:	HLRZ AC2,(AC1)		;Get predecessor record
+	HRRZ AC3,(AC1)		;And successor
+	HRRM AC3,(AC2)		;Take current record out of list
+	HRLM AC2,(AC3)
+	PUSHJ P,FSGIVE		;Return our record
+	POPJ P,
+;⊗ DOMSET DOMRET DOMRE1 DOMFLS
+
+;Create a domain DDB
+
+DOMSET:	MOVEI AC3,DOMDLN
+	PUSHJ P,FSGET
+	 JRST [	ADJSP P,-3 ↔ JRST DLYCM1]
+	HRRI DDB,DDBSKW(AC1)
+	HRLI AC1,DOMDDB-DDBSKW
+	BLT AC1,DOMDLN-DDBSKW-1(DDB)	;Copy prototype DDB
+	MOVEI AC1,DEVIOS(DDB)		;Set up pointer to IOS word
+	MOVEM AC1,DEVSPT(DDB)
+	HRLM DDB,DOMDDB+DEVSER
+	MOVEI AC1,DOMRRS(DDB)		;DOMFLS needs this set up
+	MOVEM AC1,DOMRRP(DDB)
+	POPJ P,
+
+;Return a domain DDB
+
+DOMRET:	SETZB IOS,DEVIOS(DDB)
+	MOVEI AC1,DOMDDB
+DOMRE1:	MOVE TAC1,AC1
+	HLRZ AC1,DEVSER(TAC1)
+	JUMPE AC1,BUGTRP
+	CAIE AC1,(DDB)
+	 JRST DOMRE1
+	MOVE DDB,DEVSER(AC1)
+	HLLM DDB,DEVSER(TAC1)
+	SUBI AC1,DDBSKW
+	JRST FSGIVE
+
+;Free unread records when a DDB is released
+
+DOMFLS:	SKIPN AC1,@DOMRRP(DDB)	;Get next RR
+	POPJ P,			;No more in list
+	AOS DOMRRP(DDB)		;Point to next one
+	SOSG RRREFC(AC1)	;Decrement and test ref count
+	SKIPLE RR.HDR+RRTTL(AC1);If zero, see if TTL expired
+	JRST DOMFLS		;Not time to free it yet
+	PUSHJ P,DOMFRE		;Free the record
+	JRST DOMFLS
+;⊗ DOMLKP LKLOOP LKLP1 LKDONE NAMEQL NAMEQ1 NAMEQ2
+
+;LOOKUP UUO - searches for domain information in system cache.
+
+;Argument to LOOKUP is an RR template with desired type, class
+;and name.  We find all records matching the query, store their
+;addresses in the DDB, and increment their reference counts.
+
+DOMLKP:	PUSHJ P,DOMFLS			;Flush any previous RRs
+	MOVEI AC3,DOMRRS(DDB)		;Addr of first result ptr
+	MOVEM AC3,DOMRRP(DDB)
+	HRLI AC3,-DOMRRL		;Max number of results to store
+	XCTR XR,[MOVE TEM,RRTYPE(UUO)]	;Get request type
+	XCTR XR,[MOVE DAT,RRCLAS(UUO)]	;And class
+	MOVEI PROG,RRLIST		;Start checking RRs in cache
+LKLOOP:	HRRZ PROG,(PROG)		;Get next RR
+	CAIN PROG,RRLIST		;Check for end of list
+	JRST LKDONE
+	SKIPG RR.HDR+RRTTL(PROG)	;Ignore timed-out records
+	JRST LKLOOP
+	CAME DAT,RR.HDR+RRCLAS(PROG)	;Compare user class with record
+	CAIN DAT,CL.ALL			;User wants all classes?
+	CAIA				;This record's class OK
+	JRST LKLOOP			;Not the desired class
+	MOVE AC1,RR.HDR+RRTYPE(PROG)	;Get RR's type
+	CAIE TEM,(AC1)			;Does query match record type?
+	CAIN TEM,TY.ALL			;Or is query for all types?
+	JRST LKLP1			;Yes to one of the above
+	CAIE AC1,TY.CNAME		;Always check CNAME records
+	JRST LKLOOP			;RR is not of desired type
+LKLP1:	PUSHJ P,NAMEQL			;Compare names, skip if equal
+	 JRST LKLOOP
+	MOVEM PROG,(AC3)		;Store addr of this record
+	AOS RRREFC(PROG)		;Increment reference count
+	AOBJN AC3,LKLOOP		;Continue unless filled DDB field
+LKDONE:	SETZM (AC3)			;Terminate list of RR addrs
+	TLZ AC3,-1			;Flush count in left half
+	CAIE AC3,DOMRRS(DDB)		;Did we find any records?
+	AOS (P)				;Yes, set skip return
+	POPJ P,
+
+;Compare domain names from RR and user query.  Skip return if equal.
+;(Also called from OUTCMP, which assumes AC1 and AC2 point to data in
+;records upon return.)
+NAMEQL:	MOVE AC2,[POINT 8,RRNAME(UUO)]	;Initialize byte ptrs
+	MOVE AC1,[POINT 8,RR.HDR+RRNAME(PROG)]
+NAMEQ1:	ILDB TAC,AC1			;Get count bytes
+	XCTR XLB,[ILDB TAC1,AC2]
+	CAIE TAC,(TAC1)
+	POPJ P,				;Counts differ
+	JUMPE TAC,CPOPJ1		;Return success if end of name
+NAMEQ2:	ILDB DSER,AC1			;Get data bytes
+	XCTR XLB,[ILDB TAC1,AC2]
+	CAIL DSER,"a"
+	CAILE DSER,"z"
+	CAIA
+	SUBI DSER,"a"-"A"
+	CAIL TAC1,"a"
+	CAILE TAC1,"z"
+	CAIA
+	SUBI TAC1,"a"-"A"
+	CAIE DSER,(TAC1)
+	POPJ P,				;Data differs
+	SOJG TAC,NAMEQ2			;Loop till done a name component
+	JRST NAMEQ1			;Do next component
+;⊗ DOMINP DOMIN1 DOMIN2
+
+;INPUT UUO - returns RRs after successful LOOKUP
+
+DOMINP:	HRRZ TAC1,DEVIAD(DDB)	;Address of user's buffer
+	XCTR XR,[HLRZ TAC,(TAC1)]	;TAC←buffer size
+	ANDCMI TAC,400000	;Ignore buffer use bit
+	MOVEI AC1,(TAC1)
+	ADDI AC1,(TAC)		;Address of last data word in buffer
+	XCTR XRW,[MOVES (AC1)]	;Address check
+	SUBI TAC,1		;Reduce buffer WC to skip 1 overhead word
+	ADDI TAC1,2		;Advance to point to first data word.
+	PUSHJ P,DOMIN1		;Copy a resource record
+	HRRZ AC2,DEVIAD(DDB)	;Buffer address
+	XCTR XW,[MOVEM TAC,1(AC2)]	;Store WC and LH of byte ptr
+	PUSHJ P,ADVBFF		;Advance the buffer
+	 POPJ P,
+	JRST DOMINP		;Try to do another one
+
+;Read one RR into buffer starting at addr in TAC1.  Return word count
+;and LH of byte ptr to last byte in TAC.
+DOMIN1:	SKIPN AC1,@DOMRRP(DDB)	;Next RR to give user
+	JRST DOMIN2		;No more in list
+	AOS DOMRRP(DDB)		;Point to next one
+	HRRZ AC2,RRLENG(AC1)	;Number of words to copy
+	ADDI AC2,-1(TAC1)	;Last destination addr
+	HRLI TAC1,RR.HDR(AC1)	;Source for BLT
+	XCTR XBLTW,[BLT TAC1,(AC2)]
+	MOVE TAC,RRLENG(AC1)	;Length and LH of ptr to last byte
+	SOSG RRREFC(AC1)	;Decrement and test ref count
+	SKIPLE RR.HDR+RRTTL(AC1);If zero, see if TTL expired
+	POPJ P,			;Not time to free it yet
+	PUSHJ P,DOMFRE		;Free the record
+	POPJ P,
+
+DOMIN2:	MOVEI IOS,IODEND	;Set EOF
+	IORB IOS,DEVIOS(DDB)
+	MOVEI TAC,0		;Zero WC
+	POPJ P,
+;⊗ DOMOUT DOMOU1 DOMOUR OUTCMP OCLOOP OCRET
+
+;OUTPUT UUO - stores RRs into system cache
+
+DOMOUT:	HRRZ TAC1,DEVOAD(DDB)	;Buffer address
+	XCTR XR,[SKIPL (TAC1)]	;Is this buffer in use?
+	 JRST DOMOU1		;No, try another
+	HLRZ AC2,DEVBUF(DDB)	;Get address of buffer header
+	XCTR XLB,[LDB AC2,[POINT 6,1(AC2),11]]	;User's byte size.
+	CAIE AC2,=8		;It better be 8
+	JRST ADRERR		;Error if not
+	XCTR XR,[MOVE J,1(TAC1)];Pick up word count and byte position
+	TRNN J,-1		;Check for 0 length
+	JRST DOMOU1
+	ADDI TAC1,2		;Move pointer to data area
+	PUSHJ P,DOMOUR		;Process a record
+DOMOU1:	PUSHJ P,ADVBFE		;Advance buffer
+	 POPJ P,
+	JRST DOMOUT		;Try for another one
+
+;Process one RR from buffer starting at address in TAC1, with word count
+;and byte position in J.
+
+DOMOUR:	PUSHJ P,OUTCMP		;Compare with cached records
+	MOVEI AC3,RR.HDR(J)	;Add size of RR header
+	PUSHJ P,FSGET		;Allocate a resource record
+	 POPJ P,		;No FS? (impossible at UUO level)
+	SETZM RRREFC(AC1)	;Zero reference count
+	MOVEM J,RRLENG(AC1)	;Store length and byte position
+	MOVEI TAC,RRLIST	;Pointer to list of RRs
+	HRRZ TEM,(TAC)		;Current head of list
+	HRRM AC1,RRLIST		;Make us the new head
+	HRLM TAC,(AC1)		;Set our back pointer
+	HRRM TEM,(AC1)		;And forward pointer
+	HRLM AC1,(TEM)		;Point previous head to us
+	MOVSI AC2,(TAC1)	;Source address for BLT
+	HRRI AC2,RR.HDR(AC1)	;Dest address
+	ADDI AC3,-1(AC1)	;End address
+	XCTR XBLTR,[BLT AC2,(AC3)]	;Copy RR from user to FS
+	POPJ P,
+
+;Try to find a record in the cache matching the new record.  If type,
+;class, domain name and data all match, flush the record in the cache.
+
+OUTCMP:	PUSH P,UUO			;Move buffer address to UUO in order
+	MOVE UUO,TAC1			;to share NAMEQL subroutine with LOOKUP
+	XCTR XR,[MOVE TEM,RRTYPE(UUO)]	;Get type of new record
+	XCTR XR,[MOVE DAT,RRCLAS(UUO)]	;And class
+	XCTR XR,[MOVE AC3,RRDLEN(UUO)]	;And data length
+	MOVEI PROG,RRLIST		;Start checking RRs in cache
+OCLOOP:	HRRZ PROG,(PROG)		;Get next RR
+	CAIN PROG,RRLIST		;Check for end of list
+	JRST OCRET			;No records match
+	SKIPLE RR.HDR+RRTTL(PROG)	;Ignore timed-out records
+	CAME TEM,RR.HDR+RRTYPE(PROG)	;Compare type
+	JRST OCLOOP
+	CAMN DAT,RR.HDR+RRCLAS(PROG)	;Compare class
+	CAME AC3,RR.HDR+RRDLEN(PROG)	;Compare data length
+	JRST OCLOOP
+	PUSHJ P,NAMEQL			;Compare names, skip if equal
+	 JRST OCLOOP
+	;NAMEQL has left byte ptrs to data in AC1 and AC2.
+	SKIPN DSER,AC3			;Number of data bytes to compare
+	JRST OCLP2			;Unlikely, but ...
+	;Note this is a case-sensitive comparison.  Without processing each
+	;type (and class) separately we don't know what parts of the data
+	;are domain names.  This shouldn't be a problem, though, since we
+	;expect duplicates from name servers to have consistent case.
+OCLP1:	ILDB TAC,AC1			;Get data bytes
+	XCTR XLB,[ILDB TAC1,AC2]
+	CAIE TAC,(TAC1)			;Compare
+	JRST OCLOOP			;Not equal
+	SOJG DSER,OCLP1
+	;This cache record matches ours, so flush it.
+OCLP2:	SETZM RR.HDR+RRTTL(PROG)	;Zero cache record's TTL
+	;No need to check further, since there should be no duplicates.
+OCRET:	MOVE TAC1,UUO			;Restore buffer address
+	POP P,UUO
+	POPJ P,
+
+BEND DOMAIN
+
+>;IFN FTDOM

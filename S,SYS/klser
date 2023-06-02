@@ -1,0 +1,3509 @@
+COMMENT ⊗   VALID 00025 PAGES
+C REC  PAGE   DESCRIPTION
+C00001 00001
+C00007 00002	IFKL10,< BEGIN KLSER ↔ SUBTTL KL10 INTERNAL DEVICE SERVICE ROUTINES    DEAD11 DONG11 CR11B SR11B DONG10 TO11ER TO11DN TO10DN TO10ER PIENB PI0ENB TO10IB DTEPAD DTDDTO DTRCDW DTCLKS DTSTTB DTRDTB DTSCLK DTRDSW DTDDTI DTMONO DTMONS DTMONC DTMONG DTMSGC MTRENB MTPIEN MTEXEN MTACEN MTTBOF MTTBON MTTBCL TIUPCL TIINON TIINCL
+C00011 00003	HERE AFTER THE EBR HAS BEEN SETUP.  SETS CONSOLE TTY TO TIMESHARING MODE.  DTEINI DTEIN2 DTEINT SVBELL DTXINT DTRINT DTETYP
+C00018 00004	 SETEBR KLCGET KLCPUT RSWITCH DTEXXW DTEXX DTEXX1 DTEXXX DTEXTO RTIMBS STIMBS YEARBS S11CLK S11CLW G11TIM G11TI1
+C00024 00005	 ARGLST DTELOD DTELD1 DTEERR DTELD2 DTELD3 DTELD4 DTLD4A DTLD4B DTLD4D DTLD4E DTLD4F DTLD4G DTLD4C DTELD5
+C00034 00006	 RMGRNK RMGRN1 RMGRN2
+C00038 00007	 LX11 LX11LN Loop ERROR DONG LD11 LDLP ST11 R0 R1 R2 R3 R4 R5 SP PC BIT15 BIT14 BIT13 BIT12 BIT11 BIT10 BIT9 BIT8 BIT7 BIT6 BIT5 BIT4 BIT3 BIT2 BIT1 BIT0 DTEORG DTESIZ DLYCNT DEXWD3 DEXWD2 DEXWD1 TENAD1 PRTOFF DEPOSI TENAD2 TO10BC TO11BC TO10AD TO11AD DIAG1 DIAG2 DRESET STATUS TO11DB TO10DB TO11DN DEXDON TO11ER DIAG3 EPT143 . STBOOT 1$ Loop LOOP DISP ERROR DONG LD11 9$ 1$ EXAM DEXGO DEXWAT DEPO ERCMD CMDLST ST11 . ST11 1$ 2$
+C00053 00008	DTEQ - Queued message protocol for 10/11 communications  T11QCM T10QCM T11HTO T10HTO HADTIM QMPINI T11INI QMPCLK TO11XX TO10XY TO10XX
+C00061 00009	 GTENHA CLRADM STPBRD EFSGET ENBCCO
+C00064 00010	 DTEQ DTEQY DTEQX DTEQ0 DTEQ1R DTEQF DTEQEM DTEQNI DTEQBD
+C00072 00011	 FNTO11 FN11BL FN11E4 FN11.A STRT11 TO11DQ TO11D2 TO11DF FNTE11 FN11E1 FN11ER QMAXTR FN11.B RLO11W FN11E2 FN11E3 TO11FU FN11ES TO11MA NO11ER BD11FS FSGV11 UGTO11 STR11C STR11D STR11E STR11F STR11G
+C00091 00012	 FNTE10 FNTO10 DTQERR DTQDSP DTDSPL F10ERR DT0INT DT0IN1 DT0IN2 QMPCKR DT0CLK DTQECR DTQECM DTQONE DTQEC0 DTQEC1 ENADRM ENINQ DTQDTM ENICLK ENICL1 ENICL2
+C00103 00013	QMPUUO	Queued Message Protocol UUO (QMPUUO)  QMPUUO QMPDSP QMPMAX QMPRED QMPRED QMPRD2 QMPRD3 QMPDTR QMPDT1 QMPQUE CHKIOW
+C00110 00014	 NCUBG3 EPDLV1 NOTME1 TRPUUO TRPDIS TRPPDL TRPPD1 TRPFOV
+C00114 00015	 ERRINT ERR.01 ERR.02 ERR.03 ERR.04 ERR.05 ERR.06 ERR.07 ERR.08 ERR.10 ERR.11 ERR.XT USRNXM ERR.09 SWEEPI KLLUUO
+C00123 00016	ILLTAB - SIMULATION OF OLD INSTRUCTIONS  - (CALLED FROM ILLINS IN COMCSS)  ILLTAB ILLTLN $DFN $FLGET $FLGT1 $FLGT2 $FAT3A $FAT3B $FAT3C $KAFIX $UFA $UFA1 $FADL $FSBL $FADL0 $FLNRM $FLNR2 $FLNR3 $FLN3A $FLNR4 $FLNR5 $FLNR6 $FLSTR STORA1 $FMPL $FDVL $FDVL1 $FDVL2 $FDVL3 $FDVL4 $FDVL6 $FDVL8 $FDVL9 $FDVL5 $FDVL7 $FDVLX
+C00137 00017	CACHE STRATEGY 
+C00140 00018	 CSHOFF SWEEPC SWEEPA SWEEPW VALCOR CSHOF1 CSHOFX CSHOF0 CSERR CSHRES CSHOK CSHXIT CSHSET CSHSEB CSHSTX CSHSEA CSHOF2 CSHSE0 T1POPJ CSHOFY CSHSE1 CSHSE2
+C00149 00019	ADDRESS BREAK SYSTEM.  KLADRB BRKPAT BRKXIT BRKERR ADRBCK
+C00152 00020	HANDLE SIMULATED APR ERRORS ON KL10  KLEINT KLEIN1 KLER1 KLER3 KLERV KLER3A KLEV2A KLEV2 KLER2 KLMPV NCUEN3
+C00161 00021	 MTRSET MTRSE1 MTRCLR SPRON SPROFF
+C00163 00022	MTRUUO    MTROPT NMTROP MTRUUO MTRACC MTRAC1 MTRAC2 MTROP5 MTROP0 MTROP0 MTRP0A MTRACS MTRAS1 MTRAS2 MTROP1 MTROP2 MTROP3 MTRP3A MTRHIT MTRZAP MTROP4 MTROP5 MTROP6 MTROP4 MTRP6A MTRJST MTRJS1
+C00176 00023	 MTRCVT MTRCVD MTRMSC MTRCVM
+C00178 00024	 WRBADP WRBADT
+C00180 00025	 DTXINI DTXCIN DTECLK DTECL2 DTEXX DTEOUT DTENXT DTEHIT DTTIMC DTEXXW DTEXX1 DTEXW2 DTEXW3 DTEXXS DTEXXN DTEON1 DTETO2 DTEXTO DTFLOC
+C00193 ENDMK
+C⊗;
+IFKL10,< BEGIN KLSER ↔ SUBTTL KL10 INTERNAL DEVICE SERVICE ROUTINES   ;⊗ DEAD11 DONG11 CR11B SR11B DONG10 TO11ER TO11DN TO10DN TO10ER PIENB PI0ENB TO10IB DTEPAD DTDDTO DTRCDW DTCLKS DTSTTB DTRDTB DTSCLK DTRDSW DTDDTI DTMONO DTMONS DTMONC DTMONG DTMSGC MTRENB MTPIEN MTEXEN MTACEN MTTBOF MTTBON MTTBCL TIUPCL TIINON TIINCL
+
+;REG/JBR  APRIL 29, 1976
+;REG April 1980
+
+;DTE20 CONI/CONO BITS
+DEAD11←←40000		;Coni: AC Low present in 11
+DONG11←←20000		;Cono: RING 11'S DOORBELL
+CR11B←←10000		;Cono: Clear 11 reboot button
+SR11B←←4000		;Cono: Set   11 reboot button
+DONG10←←1000		;Coni: 11 Requests Service;   Cono: Clear DONG10
+TO11ER←←400		;Coni: To-11 Error
+TO11DN←←100		;Coni: To-11 Done.  Cono: clear TO11DN and TO11ER
+TO10DN←←40		;Coni: To-10 Done.  Cono: clear TO10DN and TO10ER
+TO10ER←←20		;Coni: To-10 Error.  
+PIENB←←20		;Cono: Enable for CONO bits 32:35
+PI0ENB←←10		;Coni: PI 0 is enabled.  Cono: Enable for PI 0 interrupts
+;33:35	PIA
+
+;DATAO DTE0,  set TO-10 byte count.
+;	0:22 must be zero
+TO10IB←←1B23		;if set, interrupt -11 also when TO10 is done.
+;	24:35 two's complement of the To-10 byte count.
+
+DTEPAD←←DTEEXP*1000
+
+;COMMUNICATIONS CODES
+
+DTDDTO←←0		;DDT MODE OUTPUT
+↑DTRCDW←←405		;READ 11 CLOCK DEFAULT WORD
+DTCLKS←←1001		;REQUEST DTE CLOCK INTERRUPTS
+DTSTTB←←1004		;SET TIMEBASE
+DTRDTB←←1005		;READ TIMEBASE
+IFN FT11CLK,<
+DTSCLK←←1006		;START PDP11 STORING BATTERY CLK EVERY 4096 TICKS IN DTTIME
+>;IFN FT11CLK
+DTRDSW←←1400		;READ DATA SWITCHES
+DTDDTI←←3400		;DDT MODE INPUT
+DTMONO←←4000		;MONITOR MODE OUTPUT
+↑DTMONS←←4400		;SET MONITOR MODE
+↑DTMONC←←5000		;CLEAR MONITOR MODE
+↑DTMONG←←5400		;GET STATE OF MONITOR MODE
+DTMSGC←←6000		;TELL PDP-11 THE SIZE OF A TO11 XFER
+
+;CONO MTR,	Accounting and Timebase Control, Interval Timer PIA
+↑MTRENB←←400000		;Enable bits 21:23
+↑MTPIEN←←40000		;PI Acct Enable
+↑MTEXEN←←20000		;Exec Acct Enable
+↑MTACEN←←10000		;Acct On
+↑MTTBOF←←4000		;Turn off timebase
+↑MTTBON←←2000		;Turn on timebase
+↑MTTBCL←←1000		;Clear Timebase
+;Interval timer PIA is 33-35
+
+;CONO TIM,	Interval Timer control
+↑TIUPCL←←400000		;Clear Up Counter
+↑TIINON←←40000		;1=Turn on, 0=turn off interval timer
+↑TIINCL←←20000		;Clear Interval Done and Interval Overflow
+;BITS 24:35		Load Period Register
+;HERE AFTER THE EBR HAS BEEN SETUP.  SETS CONSOLE TTY TO TIMESHARING MODE. ;⊗ DTEINI DTEIN2 DTEINT SVBELL DTXINT DTRINT DTETYP
+
+↑DTEINI:
+	MOVE TAC,[110000,,0]	;bit 5 means clear error flags
+	BLKO PI,TAC		;clear SBUS error flags
+IFE FTNDTE,<
+	SETZM KLEPT+DTFLG
+>;IFE FTNDTE
+	SETZM KLEPT+DTCLK
+	SETZM KLEPT+DTT11
+	SETZM KLEPT+DTF11
+	SETZM KLEPT+DTCMD
+	SETZM KLEPT+DTMTD		;MONITOR TTY OUTPUT COMPLETE FLAG
+	SETZM KLEPT+DTMTI		;MONITOR TTY INPUT READY FLAG
+	SETZM KLEAR			;CLEAR REMEMBERED ERROR ADDR REGISTER
+IFN FTXADR,<
+	MOVE TAC,[XPCW DTEINX]
+>;IFN FTXADR
+IFE FTXADR,<
+	MOVE TAC,[JSR DTEINX]
+>;IFE FTXADR
+	MOVEM TAC,KLEPT+DTEVEC		;STORE VECTOR INTERRUPT
+IFN FTXADR,<
+	MOVE TAC,[XPCW KLTINX]		;INTERVAL TIMER INTIALIZATION
+>;IFN FTXADR
+IFE FTXADR,<
+	MOVE TAC,[JSR KLTINX]		;INTERVAL TIMER INTIALIZATION
+>;IFE FTXADR
+	MOVEM TAC,KLEPT+KLITVC
+	SETZM KLITCN			;TICK COUNTER
+	SETZM KLEPT+EPTTB		;CLEAR TIMEBASE
+	SETZM KLEPT+EPTTB+1
+	PUSHJ P,QMPINI			;initialize queued message service
+	CONO TIM,TIUPCL!TIINON!TIINCL!1	;TURN ON INTERVAL TIMER. SHORT INTERVAL.
+	CONO MTR,MTTBON!MTTBCL!APRCHN	;CLEAR, TURN ON TIMEBASE.  MTR GETS APRCHN
+	PUSHJ P,MTRZAP
+	SETZM MTRPTR			;INITIALIZE PERFORMANCE METER SERVICE
+IFE FTMTRACT,<
+	SETZM MTRJOB
+	SETZM MTRCOD
+>;IFE FTMTRACT
+	CONO MTR,MTRENB!MTACEN!APRCHN	;ENABLE ACCOUNTING METERS
+IFN FTMTRACT,<
+	BLKO TIM,[001534,,777400]    ;COUNT EBOX TIME WAITING FOR MBOX IN USER MODE
+>;IFN FTMTRACT
+IFE FTKLB,<
+	SETU13
+>;IFE FTKLB
+IFE FTMTRACT,<
+	MOVEI TAC,1
+	MOVEM TAC,MTRBKG		;START OUT IN BACKGROUND MODE
+>;IFE FTMTRACT
+IFN FTMTRACT,<
+	SETOM MTRBKG			;START WITH ACCOUNTING MODE
+>;IFN FTMTRACT
+
+DTEIN2:	CONO DTE0,DONG10!20!DTECHN	;SET PIA, CLEAR DONG
+	SETZM RLOD11			;Clear 11 being reloaded flag
+	MOVEI TAC,DTMONS		;SET TTY MONITOR MODE 
+	PUSHJ P,DTEXX			;(WILL GET TRANSMITTER DONE INTERRUPT)
+;	MOVEI TAC,DTCLKS		;REQUEST CLOCK INTERRUPTS FROM THE 11.
+;	PUSHJ P,DTEXX	
+	POPJ P,
+
+↑DTEINT:EXCH	TAC,DTEINX		;SAVE TAC.  GET INTERRUPT PC.
+	MOVEM	TAC,DTECHL		;SAVE IN DTE'S CHANNEL'S LOCATION.
+	EXCH	TAC,DTEINX		;RESTORE TAC
+IFN FTXADR,<
+	EXCH	TAC,DTEINX+1		;SAVE TAC.  GET INTERRUPT PC.
+	MOVEM	TAC,DTECHL+1		;SAVE IN DTE'S CHANNEL'S LOCATION.
+	EXCH	TAC,DTEINX+1		;RESTORE TAC
+>;IFN FTXADR
+	CHKPIS	(0,\DTECHN)
+	JSR	DTESAV			;SAVE ACS (DISMISS VIA POPJ)
+	CONI	KLPAG,TAC1		;Compute the EBR address
+	ANDI	TAC1,777
+	LSH	TAC1,=9
+	CONI	DTE0,AC3			;Get the interrupt conditions
+;Each one had better do this, or else a race can occur.  TVR/Feb82
+;;;	CONO	DTE0,DONG10!TO11DN!TO10DN	;CLEAR INTERRUPT
+	PUSH	P,AC3				;original coni
+	PUSH	P,TAC1				;ept address
+	TRNE	AC3,TO11DN!TO11ER		;TO 11 service finished?
+	PUSHJ	P,FNTO11			;yes.  process it.
+	MOVE	AC3,-1(P)
+	MOVE	TAC1,0(P)
+	TRNE	AC3,TO10DN!TO10ER		;TO 10 service done
+	PUSHJ	P,FNTO10			;yes.  Process that
+	MOVE	AC3,-1(P)
+	MOVE	TAC1,0(P)
+	TRNE	AC3,DONG10			;TO10 Doorbell?
+	PUSHJ	P,SVBELL			;service doorbell
+	POP	P,TAC1
+	POP	P,AC3
+	POPJ	P,
+
+;TO10 Doorbell Service.    AC3 is the DTE CONI; TAC1 is the EPT address
+SVBELL:	PUSH	P,TAC1
+	CONO	DTE0,DONG10		;CLEAR INTERRUPT
+;	SKIPE	DTCLK(TAC1)
+;	PUSHJ	P,DCLKIN		;CLOCK INT FROM 11
+;	MOVE	TAC1,(P)		;get EBR address again
+	SKIPE	DTMTD(TAC1)
+	PUSHJ	P,DTXINT		;TRANSMITTER DONE
+	MOVE	TAC1,(P)		;EBR address
+	SKIPE	DTMTI(TAC1)
+	PUSHJ	P,DTRINT		;RECEIVER DONE
+	MOVE	TAC1,(P)
+	SKIPE	DTQMP(TAC1)		;TO-10 REQUEST?
+	PUSHJ	P,DT0INT		;Start To-10 transfer
+IFN FTT11BELL,<
+	MOVE	TAC1,(P)
+	SKIPE	DTQM2(TAC1)		;To-11 completion?
+	PUSHJ	P,FN11BL		;  Yes, get ready for next transfer
+>;IFN FTT11BELL
+IFE FTT11BELL,<
+IFN FTDTBG,<
+	MOVE	TAC1,(P)
+	SKIPGE	DTQM2(TAC1)		;To-11 overrun?
+	PUSHJ	P,TO11FU		;Print error, perhaps reset things
+>;IFN FTDTBG
+>;IFE FTT11BELL
+IFN FTNDTE,<
+	MOVE TAC1,(P)			;EBR address
+	PUSHJ P,DTENXT			;Maybe it's time to give 11 a new command
+>;IFN FTNDTE
+	POP	P,TAC1
+	POPJ	P,			;I DON'T KNOW WHAT IT WAS.
+
+;DCLKIN:SETOM KLCLKF			;FLAG A CLOCK INTERRUPT
+;	SETZM DTCLK(TAC1)		;CLEAR FLAG FROM DTE20
+;	CONO PI,4000+1⊗<7-APRCHN>
+;	POPJ P,
+
+DTXINT:	SETZM DTMTD(TAC1)
+	JRST DTXMT1			;IN TTYSER
+
+DTRINT:	SETZM DTMTI(TAC1)
+	MOVE TAC,DTF11(TAC1)		;GET CHARACTER
+	JRST DTRCV1			;IN TTYSER
+
+↑DTETYP:
+;	IORI TAC,DTMONO			;FROM TTYSER FOR MONITOR MODE TYO
+	MOVEI TAC,DTMONO(DAT)		;FROM CLOCK REQUEST FROM TTYSER
+	JRST DTEXX
+;⊗ SETEBR KLCGET KLCPUT RSWITCH DTEXXW DTEXX DTEXX1 DTEXXX DTEXTO RTIMBS STIMBS YEARBS S11CLK S11CLW G11TIM G11TI1
+
+SETEBR:	EXCH TAC1,(P)	;PUSH TAC1, SETUP EBR IN TAC1 AND RETURN
+	PUSH P,TAC1
+	CONI KLPAG,TAC1
+	ANDI TAC1,777
+	LSH TAC1,9
+	POPJ P,
+
+
+;KLCGET	 - GET ONE CHARACTER FROM CTY.  RETURNS IT IN TAC AND SKIPS.
+;		IF NOTHING WAS TYPED, THIS DOES NOT SKIP
+;		(DISASTER MODE)
+
+↑KLCGET:MOVEI TAC,DTDDTI		;ASK FOR DDT MODE INPUT
+	PUSHJ P,DTEXXW
+	ANDI TAC,177
+	JUMPE TAC,CPOPJ
+	JRST CPOPJ1
+
+;KLCPUT	 - TYPE CHARACTER FROM TAC TO CTY.  CLOBBERS TAC (DISASTER MODE)
+
+↑KLCPUT:ANDI TAC,177			;MASK ONLY THE CHARACTER
+	IORI TAC,DTDDTO
+	JRST DTEXXW
+
+;RSWITCH - READ DATA SWITCHES.  RETURNS RESULT IN TAC
+
+↑RSWITCH:
+	MOVEI TAC,DTRDSW		;READ DATA SWITCHES
+	JRST DTEXXW
+
+IFE FTNDTE,<
+↑DTEXXW:			;Enter here when need response value
+↑DTEXX:	PUSHJ P,SETEBR
+DTEXX1:	MOVEM TAC,DTCMD(TAC1)
+	SETZM DTFLG(TAC1)		;CLEAR 11'S RESPONSE FLAG
+	CONO DTE0,DONG11		;RING FOR 11
+	MOVSI TAC,10			;TIMEOUT AFTER ABOUT 6 SECONDS
+	SKIPN DTFLG(TAC1)		;WAIT FOR RESPONSE
+	SOJG TAC,.-1
+	JUMPLE TAC,DTEXTO		;JUMP IF TIMED OUT
+	SUB TAC,[10,,0]			;Get negative of count down used
+	ADDM TAC,DTEWAT			;Count total amount of waiting for DTE
+	AOS DTECNT			;Count number of cmds passed
+	SETZM DTFLG(TAC1)		;CATCH BUGS, DON'T LET OTHER CALLERS SEE IT
+	MOVE TAC,DTF11(TAC1)		;GET 11'S RESPONSE WORD
+DTEXXX:	POP P,TAC1
+	POPJ P,
+
+;HERE IF TIMED OUT WHILE IN ABOVE LOOP WAITING FOR 11'S RESPONSE
+DTEXTO:	AOS DTETMO	;Count timeouts
+	SKIPN RLOD11			;Skip if someone's reloading the 11
+	JFCL		;JRST 4,.+1	;CAN'T TYPE ERROR MSG IF DTE LOSING!
+	MOVEI TAC,0			;RETURN RANDOM ZERO RESPONSE WORD
+	JRST DTEXXX
+>;IFE FTNDTE
+
+↑RTIMBS:PUSHJ P,SETEBR			;READ TIMEBASE FROM PDP11
+	MOVEI TAC,KLTIME
+	MOVEM TAC,DTT11(TAC1)
+	MOVEI TAC,DTRDTB
+	JRST DTEXX1
+
+↑STIMBS:PUSHJ P,SETEBR			;SET TIMEBASE ON THE PDP11
+	MOVEI TAC,KLTIME
+	MOVEM TAC,DTT11(TAC1)
+	MOVEI TAC,DTSTTB
+	JRST DTEXX1
+
+IFN FT11CLK,<
+;FORMAT OF DTTIME PDP10 WORD IS:
+;BYTE (5)DAY (2)0 (5)HOUR (2)0 (6)MINUTE (4)MONTH,YEAR (2)0 (6)SECOND
+;THE YEAR FIELD IS YEARS SINCE 1976 (YEARBS)
+
+YEARBS←←=76	;CHANGE THIS TO CHANGE THE BASE OF YEAR IN THE PDP11 CLOCK
+		;(MUST BE DIVISIBLE BY 4)
+
+↑S11CLK:MOVEI TAC,DTSCLK		;START PDP11 CLOCK STORING
+	JRST DTEXX
+
+↑S11CLW:MOVEI TAC,DTSCLK		;START PDP11 CLOCK STORING
+	JRST DTEXXW			;WAIT FOR IT (HERE FROM SYSINI)
+
+↑G11TIM:SETOM CONALV			;TELL CLKSER THAT PDP11 IS ALIVE
+	MOVEI TAC,0
+	PUSHJ P,SETEBR			;PUSHES TAC1 AND SETS IT TO EBR
+	EXCH TAC,DTTIME(TAC1)		;GET TIME FROM PDP11 WHILE ZEROING TIME CELL
+	POP P,TAC1
+	LDB J,[POINT 5,TAC,11]		;HOURS
+	IMULI J,=60
+	LDB TAC1,[POINT 6,TAC,19]	;MINUTES
+	ADD J,TAC1
+	IMULI J,=60
+	LDB TAC1,[POINT 6,TAC,35]	;SECONDS
+	ADD J,TAC1
+	IMULI J,JIFSEC			;JIFFIES (60THS) SINCE MIDNIGHT
+	LDB DAT,[POINT 4,TAC,27]	;4 BIT YEAR
+	ADDI DAT,YEARBS-=64		;ADD IN BASE SUBTRACT OTHER BASE (64)
+	IMULI DAT,=12
+	LDB TAC1,[POINT 4,TAC,23]	;MONTH
+	ADDI DAT,-1(TAC1)
+	IMULI DAT,=31
+	LDB TAC1,[POINT 5,TAC,4]	;DAY
+	ADDI DAT,-1(TAC1)		;((YEAR-64)*12.+MONTH-1)*31.+DAY-1
+	MOVE DDB,J
+	MOVE DSER,DAT			;COPY PST TO DDB,DSER
+	MOVEM DDB,TIME11		;save time and date from 11 for 11TIME cmd
+	MOVEM DSER,DATE11
+	SKIPE DAYLIT
+	ADDI J,=60*=60*JIFSEC		;BUMP TIME BY ONE HOUR'S WORTH OF JIFFIES
+	MOVEI AC1,J			;ADDRESS OF TIME FOR MIDCHK
+	MOVEI AC2,DAT			;ADDRESS OF DATE
+	PUSHJ P,MIDCHK			;FIX UP LOCAL TIME
+	CAMGE DSER,PSDATE		;DON'T GO BACKWARDS
+	POPJ P,
+	CAME DSER,PSDATE		;USUALLY THE SAME DAY...
+	JRST G11TI1			;THIS IS DIFFERENT
+	CAMGE DDB,PSTIME		;DON'T GO BACKWARDS
+	POPJ P,				;LOSER.
+G11TI1:	CAML DDB,MIDNIT			;LESS THAN AN ENTIRE DAY'S WORTH OF TICKS?
+	POPJ P,				;NO, LOSER
+	JRST CPOPJ1
+>;IFN FT11CLK
+;⊗ ARGLST DTELOD DTELD1 DTEERR DTELD2 DTELD3 DTELD4 DTLD4A DTLD4B DTLD4D DTLD4E DTLD4F DTLD4G DTLD4C DTELD5
+
+
+Comment %
+	DTELOD		UUO to force the console front end to be reloaded.
+
+	MOVEI	AC,ARGLST
+	DTELOD	AC,
+	<Failure - Code in AC>
+	<Ok. Hopefully the 11 is running>
+
+ARGLST:	User Address of Data to Load
+	Load Descriptor
+	. . .
+	Load Descriptor
+	Starting Address
+	-1
+
+Each Load descriptor has the form:  BYTE(4)4(16)TO11BC,TO11AD
+The Starting Address command is:    Byte(4)2(16)0,STRTAD
+
+STRTAD and TO11AD are -11 addresses.
+TO11BC is the To-11 Byte Count.  Lower 12 bits contain the negative of
+the number of WORDs to load.   The high order bit is the flag INT10B,
+which should be set, to make the DTE interrupt the 10 on completion of
+a to-11 transfer.
+
+The data to load is consecutive PDP-11 words, right adjusted in 18-bit
+bytes (i.e., halfwords).
+
+The byte count of a load descriptor is not allowed to imply any crossing
+of a PDP-10 page boundary.
+
+See 11LOAD[KL,SYS], the B and αX GRONK commands for an example of
+how this works!
+
+%
+
+↑DTELOD:
+	MOVE	TAC,JBTPRV(J)
+	TLNN	TAC,DEVPRV
+	JRST	UUOERR
+	XCTR	XR,[MOVE TAC,(UCHN)]
+	XCTR	XR,[MOVE TAC1,(TAC)]	;the address of the data
+DTELD1:	XCTR	XR,[MOVE DAT,1(TAC)]	;a command word.
+	LDB	AC2,[POINT 4,DAT,3]	;record type
+	CAIN	AC2,2			; 2 is start address.
+	JRST	DTELD2			;accept this command list.
+	CAIE	AC2,4			; 4 is a load command
+	JSP	TAC,DTEERR		;Illegal fcn.
+	LDB	AC2,[POINT 12,DAT,19]	;this records's negative word count
+	TRNE	AC2,1			;word count must be even
+	JSP	TAC,DTEERR		;error if not
+	IOR	AC2,[777777,,770000]	;extend the sign
+	ASH	AC2,-1			;down shift to make it words.
+	XCTR	XR,[CAM (TAC1)]		;make sure we can touch user's page.
+	LDB	AC3,[POINT 9,TAC1,26]	;page number from start address.
+	SUB	TAC1,AC2		;count words.  TAC1←next xfer address
+	LDB	AC1,[POINT 9,TAC1,26]	;page number from ending address.
+	CAMG	AC1,AC3			;have we crossed a page boundary?
+	AOJA	TAC,DTELD1		;nope.  This is ok.
+	CAIN	AC1,1(AC3)		;is this precisely one page higher?
+	TRNE	TAC1,777		;yes.  Does count end with zeros?
+	JSP	TAC,DTEERR		;bad data.
+	AOJA	TAC,DTELD1
+
+DTEERR:	PUSHJ	P,STOTAC		;RETURN ERROR CODE TO USER.
+	PUSHJ	P,SETEBR
+	SETZM	TO11BP(TAC1)		;CLEAR BYTE POINTER TO PREVENT IOPGF
+	POP	P,TAC1
+	MOVEI	TAC1,DTEEXP
+	PUSHJ	P,DELEMP		;delete DTE page from Exec Page table
+	JRST	DTEIN2			;Give DTE a PIA again
+
+DTELD2:	SETOM	RLOD11			;mark we are futzing 11
+	PUSHJ	P,RMGRNK		;Gronk the 11's Rom.  Load first loader.
+	JRST	DTEERR			;didn't work.  return error code
+	SETO	DDB,			;page number of user page mapped to DTEEXP
+	XCTR	XR,[MOVE TAC,(UCHN)]
+	XCTR	XR,[MOVE TAC1,(TAC)]	;the address of the data
+DTELD3:	XCTR	XR,[MOVE DAT,1(TAC)]	;a command word.
+	LDB	AC2,[POINT 4,DAT,3]	;record type
+	CAIN	AC2,2			; 2 is start address.
+	JRST	DTELD5			;go start the 11.
+	CAIE	AC2,4			; 4 is a load command
+	JSP	TAC,DTEERR		;Illegal fcn.
+	LDB	AC2,[POINT 12,DAT,19]	;this records's word count
+	TRNE	AC2,1			;byte count must be even
+	JSP	TAC,DTEERR		;error if not
+	IOR	AC2,[777777,,770000]	;extend the sign
+	ASH	AC2,-1			;down shift to make it words.
+	XCTR	XR,[CAM (TAC1)]		;make sure we can touch user's page.
+	MOVE	DSER,TAC1		;remember start of this xfer.
+	LDB	AC3,[POINT 9,TAC1,26]	;page number from start address.
+	SUB	TAC1,AC2		;count words.  TAC1←next xfer address
+	LDB	AC1,[POINT 9,TAC1,26]	;page number from ending address.
+	CAMG	AC1,AC3			;have we crossed a page boundary?
+	JRST	DTELD4			;nope.  This is ok.
+	CAIN	AC1,1(AC3)		;is this precisely one page higher?
+	TRNE	TAC1,777		;yes.  Does count end with zeros?
+	JSP	TAC,DTEERR		;bad data.
+DTELD4:	PUSH	P,TAC			;This is popped at DTLD4E
+	MOVE	IOS,TAC			;copy in case of error.
+	CAMN	AC3,DDB			;Same user page as last time?
+	JRST	DTLD4B			;Yes.
+	PUSH	P,TAC1
+	JUMPL	DDB,DTLD4A		;jump if no old page to unmap.
+	MOVEI	TAC1,DTEEXP		;unmap the page from DTEEXP
+	PUSHJ	P,DELEMP		;delete DTE page from Exec Page table
+DTLD4A:	MOVE	DDB,AC3			;user's page to map
+
+IFE FTMPP2,<
+	.FATAL	/Write something here/
+>;IFE FTMPP2
+
+IFN FTMPP2,<
+	MOVE	J,JOB
+	MOVEI	AC1,DTEEXP		;EXEC VIRTUAL PAGE TO GET UPMP
+	PUSHJ	P,JOBEVP
+	 JFCL
+>;IFN FTMPP2
+
+	HRRZ	AC3,DTEPAD(DDB)		;physical page number of user's page
+	MOVEI	TAC1,DTEEXP
+	PUSHJ	P,DELEMP		;delete user's map from exec space
+	MOVE	TAC,AC3			;physical page to map
+	PUSHJ	P,ADDEMP
+	POP	P,TAC1
+
+DTLD4B:	MOVEI	AC3,DTEEXP		;set exec's page number
+	DPB	AC3,[POINT 9,DSER,26]	;in transfer address
+	HRLI	DSER,442200		;18-bit bytes.
+	PUSHJ	P,SETEBR		;pushes TAC1.
+	MOVEM	DSER,TO11BP(TAC1)
+	MOVEM	DAT,EPT143(TAC1)
+	MOVSI	AC1,10
+DTLD4D:	SKIPN	TAC,EPT143(TAC1)	;HAVE THEY Started YET?
+	JRST	DTLD4E			;YES!
+	CAMN	TAC,[BYTE(4)0(16)177777,177777]	;Is the 11 grumpy?
+	JSP	TAC,DTLD4C		;yes.  exit now.
+	CAME	DAT,TAC			;did the 11 change it somehow?
+	JSP	TAC,DTLD4C		;yes, but not to what we thought.
+	SOJGE	AC1,DTLD4D
+	JSP	TAC,DTLD4C		;timeout waiting for 11 response
+
+DTLD4E:	MOVSI	AC1,10
+DTLD4F:	SKIPE	TAC,EPT143(TAC1)	;is the 11 done yet
+	JRST	DTLD4G
+	SOJGE	AC1,DTLD4F
+	JSP	TAC,DTLD4C		;timeout waiting for transfer finish
+
+DTLD4G:	CAME	TAC,[177777]		;success code?
+	JSP	TAC,DTLD4C		;no. must be an error.
+	SETZM	TO11BP(TAC1)		;make sure no more bytes fly past
+	POP	P,TAC1
+	POP	P,TAC
+	AOJA	TAC,DTELD3
+
+DTLD4C:	SETZM	TO11BP(TAC1)
+	SUB	P,[2,,2]		;remove TAC, TAC1 from stack
+	HRL	TAC,IOS			;user index,,error pc to TAC
+	JRST	DTEERR
+
+;time now to start the 11.
+DTELD5:	MOVEI	TAC1,DTEEXP
+	PUSHJ	P,DELEMP		;delete DTE page from Exec Page table
+	PUSHJ	P,SETEBR		;pushes TAC1
+	SETZM	TO11BP(TAC1)
+	MOVEM	DAT,EPT143(TAC1)
+	MOVSI	AC1,10
+	SKIPL	EPT143(TAC1)		;wait for the -11 to store -1 here
+	SOJGE	AC1,.-1
+	POP	P,TAC1			;unpush from setebr
+	SKIPGE	AC1
+	JSP	TAC,DTEERR
+	PUSHJ	P,DTEIN2		;Give DTE a PIA again
+	JRST	CPOPJ1
+;⊗ RMGRNK RMGRN1 RMGRN2
+
+RMGRNK:	DATAO	DTE0,[0]		;clear TO-10 byte count.
+	CONO	DTE0,PIENB		;Turn off PI's and reset DTE.
+	PUSHJ	P,SETEBR		;TAC1←address of KL's EPT.
+	SUB	P,[1,,1]		;SETEBT pushes TAC1; flush it
+	SETZM	EPT143(TAC1)		;Set to idle before ROM Gronk
+	SETZM	TO10BP(TAC1)		;clear assorted byte pointers
+	SETZM	TO11BP(TAC1)
+	CONO	DTE0,SR11B!PIENB!PI0ENB	;Set reload and PI0 enable.
+	MOVSI	TAC,1
+	CONSO	DTE0,DEAD11
+	SOJGE	TAC,.-1
+	SKIPGE	TAC
+	JSP	TAC,[CONO DTE0,CR11B
+			POPJ P,]	;return.  error code in TAC
+	MOVEI	TAC,500000		;(for KL10A, 400000 was long enough)
+	SOJGE	TAC,.			;leave it dead for a while.
+	CONO	DTE0,CR11B		;release reload button
+	MOVSI	TAC,1
+	CONSZ	DTE0,DEAD11
+	SOJGE	TAC,.-1
+	SKIPGE	TAC
+	JSP	TAC,CPOPJ		;return.  error code in TAC
+	CONO	DTE0,DONG11!DONG10	;Clear To-10 Bell.  Set To-11 Bell.
+	DATAO	DTE0,[1365]		;a constant from the M873YD ROM
+	MOVSI	TAC,1
+	CONSZ	DTE0,DONG11		;wait for 11 to clear its bell
+	SOJGE	TAC,.-1
+	SKIPGE	TAC
+	JSP	TAC,CPOPJ		;return.  error code in TAC
+;At this point, the 11 is properly gronked.  The 11 is now willing to
+;barf up as much as 28K -11 words worth of crud in case you want some.
+;We must convince the 11 that we don't want any!
+;The DTE has been gronked via diagnostic reset.  Then the TO10AD was
+;set to zero.  All you need to do is setup a TO10BP and TO10BC and
+;you can have his carcase.
+;
+;	The 11 will wait until we ring the bell.
+;we must have a byte pointer, etc. setup when we ring.
+
+	MOVE	TAC,[POINT 18,LX11]	;
+	MOVEM	TAC,TO11BP(TAC1)	;store to-11 byte pointer.
+	MOVSI	TAC,1
+	SOJGE	TAC,.
+	CONO	DTE0,DONG11		;notify the 11 to swallow things.
+	MOVSI	TAC,10
+	CONSO	DTE0,TO11DN!TO11ER!DONG10
+	SOJGE	TAC,.-1
+	SKIPGE	TAC
+	JSP	TAC,CPOPJ		;return.  error code in TAC
+	CONO	DTE0,DONG11
+	MOVSI	TAC,1
+RMGRN1:	CONSO	DTE0,DONG11
+	JRST	RMGRN2			;DTE has had final reset.
+	CONSO	DTE0,DONG10
+	SOJGE	TAC,RMGRN1
+	JSP	TAC,CPOPJ		;set error code in TAC
+
+RMGRN2:	SETZM	TO11BP(TAC1)
+	JRST	CPOPJ1
+;⊗ LX11 LX11LN Loop ERROR DONG LD11 LDLP ST11 R0 R1 R2 R3 R4 R5 SP PC BIT15 BIT14 BIT13 BIT12 BIT11 BIT10 BIT9 BIT8 BIT7 BIT6 BIT5 BIT4 BIT3 BIT2 BIT1 BIT0 DTEORG DTESIZ DLYCNT DEXWD3 DEXWD2 DEXWD1 TENAD1 PRTOFF DEPOSI TENAD2 TO10BC TO11BC TO10AD TO11AD DIAG1 DIAG2 DRESET STATUS TO11DB TO10DB TO11DN DEXDON TO11ER DIAG3 EPT143 . STBOOT 1$ Loop LOOP DISP ERROR DONG LD11 9$ 1$ EXAM DEXGO DEXWAT DEPO ERCMD CMDLST ST11 . ST11 1$ 2$
+
+;The following is the second bootstrap loader for the 11.
+;The first bootstrap loader (the M873YD) is activated by the RELOAD11 button
+;in the DTE-20.
+;The first bootstrap allows the 400-byte second loader to be moved to
+;locations 0:377 in the -11, and started at zero.
+
+;To build a new second loader, edit the PALX program shown in the comment below.
+;extract that file into a PAL file.  Create a BIN file using PALX.
+;Use the 11LOAD[KL,SYS] program:
+;	N command to load the BIN file without symbols
+;	C command to write the result as halfword octal into a text file
+;Finally, move that text file to here.
+
+LX11:
+   240,,403   	;0
+    10,,340   	;4
+     0,,12700 	;10
+  1000,,5020  	;14
+ 22700,,160000	;20
+  1374,,12705 	;24
+174400,,12706 	;30
+   746,,12765 	;34
+ 37777,,0     	;40
+ 12702,,344   	;44
+ 12765,,100   	;50
+    32,,4467  	;54
+   204,,16500 	;60
+     6,,42700 	;64
+177760,,32700 	;70
+    11,,1006  	;74
+   170,,104   	;100
+    50,,746   	;104
+   162,,114   	;110
+ 10246,,12702 	;114
+   336,,16522 	;120
+     6,,16522 	;124
+     4,,16512 	;130
+     2,,12602 	;134
+  4467,,150   	;140
+     0,,177777	;144
+177777,,12765 	;150
+   400,,34    	;154
+   733,,16500 	;160
+     4,,16501 	;164
+     2,,10022 	;170
+ 10122,,22702 	;174
+   726,,101002	;200
+ 12702,,344   	;204
+  4467,,100   	;210
+     0,,0     	;214
+     0,,10165 	;220
+    22,,10065 	;224
+    16,,32765 	;230
+  4202,,34    	;234
+  1774,,32765 	;240
+   200,,34    	;244
+  1721,,4467  	;250
+    36,,0     	;254
+     0,,177777	;260
+   732,,12765 	;264
+  4000,,10    	;270
+ 12765,,143   	;274
+    12,,32765 	;300
+  4004,,34    	;304
+  1774,,204   	;310
+ 12703,,10    	;314
+ 60503,,12713 	;320
+ 14000,,12443 	;324
+ 12443,,12443 	;330
+   757,,0     	;334
+     0,,0     	;340
+     0,,0     	;344
+     0,,0     	;350
+     0,,0     	;354
+     0,,0     	;360
+     0,,0     	;364
+     0,,0     	;370
+     0,,0     	;374
+     0,,0     	;400
+     0,,0     	;404
+     0,,0     	;410
+     0,,0     	;414
+     0,,0     	;420
+     0,,0     	;424
+     0,,0     	;430
+     0,,0     	;434
+     0,,0     	;440
+     0,,0     	;444
+     0,,0     	;450
+     0,,0     	;454
+     0,,0     	;460
+     0,,0     	;464
+     0,,0     	;470
+     0,,0     	;474
+     0,,0     	;500
+     0,,0     	;504
+     0,,0     	;510
+     0,,0     	;514
+     0,,0     	;520
+     0,,0     	;524
+     0,,0     	;530
+     0,,0     	;534
+     0,,0     	;540
+     0,,0     	;544
+     0,,0     	;550
+     0,,0     	;554
+     0,,0     	;560
+     0,,0     	;564
+     0,,0     	;570
+     0,,0     	;574
+     0,,0     	;600
+     0,,0     	;604
+     0,,0     	;610
+     0,,0     	;614
+     0,,0     	;620
+     0,,0     	;624
+     0,,0     	;630
+     0,,0     	;634
+     0,,0     	;640
+     0,,0     	;644
+     0,,0     	;650
+     0,,0     	;654
+     0,,0     	;660
+     0,,0     	;664
+     0,,0     	;670
+     0,,0     	;674
+     0,,0     	;700
+     0,,0     	;704
+     0,,0     	;710
+     0,,0     	;714
+     0,,0     	;720
+     0,,0     	;724
+     0,,0     	;730
+     0,,0     	;734
+     0,,0     	;740
+     0,,16500 	;744
+     2,,4467  	;750
+177336,,17    	;754
+177777,,177777	;760
+  5001,,5021  	;764
+ 22701,,770   	;770
+  1374,,110   	;774
+LX11LN==.-LX11
+BLOCK	200-LX11LN			;MUST HAVE these zeros here.  Sorry.
+
+COMMENT π
+
+	.TITLE	DTBOOT
+
+Comment ⊗
+
+Here is the text of the DTBOOT program.
+
+This program is loaded into the first 1000 bytes of the -11 by the action
+of the KL10 and the M873YD loader.  The function of the DTBOOT program
+is to:
+	Clear -11 core from 1000 to 157777
+Loop:	Diagnostic Clear to DTE
+	Examine EPT location 143.
+	If DEXWD1 AND '17 is zero, go to loop.  These are bits 0:3 of EPT 143.
+	If DEXWD1 AND '17 are 2, go to ST11.
+	If DEXWD1 AND '17 are 4, go to LD11.
+	Otherwise, go to ERROR
+
+ERROR:	(save offending command in ERCMD)
+	deposit BYTE(4)0(32)-1 in EPT 143.
+DONG:	DONG 10.
+	Go to loop.
+
+LD11:	Set TO11BC from DEXWD2
+	Set TO11AD from DEXWD3
+	(Save DEXWD2 and DEXWD3 in the buffer at CMDLST)
+LDLP:	If NOT(TO11DN or TO11EE or TO11DB) then go to LDLP.
+	IF NOT TO11DN Then go to ERROR.
+	Deposit zero in EPT 143.
+	Go to DONG
+
+ST11:	Copy DEXWD3 to R0.
+	Deposit -1 in EPT 143.
+	Clear as much of the region from 0 to 1000 as we can.
+	DO JMP (R0).
+
+⊗
+
+R0=%0
+R1=%1
+R2=%2
+R3=%3
+R4=%4
+R5=%5
+SP=%6
+PC=%7
+
+BIT15=100000
+BIT14= 40000
+BIT13= 20000
+BIT12= 10000
+BIT11=  4000
+BIT10=  2000
+BIT9=   1000
+BIT8=    400
+BIT7=    200
+BIT6=    100
+BIT5=     40
+BIT4=     20
+BIT3=     10
+BIT2=      4
+BIT1=      2
+BIT0=      1
+
+;DTE REGISTERS
+DTEORG=174400		;origin of the four DTE's
+DTESIZ=40		;number of bytes associated with DTE registers
+
+DLYCNT=00		;offsets from DTEORG addresses
+DEXWD3=02		;Bits 20:35 of the KL10 word
+DEXWD2=04		;Bits  4:19 of the KL10 word
+DEXWD1=06		;Bits  0: 3 of the KL10 word
+TENAD1=10
+		PRTOFF=BIT11		;set for priviledged examine
+		DEPOSI=BIT12		;set for deposit
+TENAD2=12		;Bits 20:25 of the KL10 address
+TO10BC=14
+TO11BC=16
+TO10AD=20
+TO11AD=22
+DIAG1=30
+DIAG2=32
+		DRESET=BIT6		;diagnostic reset 
+STATUS=34
+		TO11DB=BIT11		;To-11 doorbell
+		TO10DB=BIT8		;to-10 doorbell
+		TO11DN=BIT7		;to-11 done
+		DEXDON=BIT2		;deposit/examine done
+		TO11ER=BIT1		;to-11 error
+DIAG3=36
+
+EPT143=143	;a magic location in the EPT, known to the DTBOOT loader.
+
+.=0
+STBOOT:	NOP				;M873YD insists we start with NOP at 0
+	BR	12			;
+	.WORD   10			;4:  BUS Timeout traps to 10
+	.WORD	340			;6:  PS for timeout
+	.WORD	0			;10: HALT
+;location 12				;Clear -11 core from 1000 to 157777
+	MOV	#1000,R0		;Clear 11-Memory.  Start at 1000.
+1$:	CLR	(R0)+			;Clear a word.  Incr R0.
+	CMP	#160000,R0		;Compare R0, next wd to zero, to +INF.
+	BNE	1$			;branch if more left to zero
+	MOV	#DTEORG,R5		;R5 is base address of relevant DTE.
+	MOV	#ST11,SP		;ST11 is the address above stack
+	MOV	#37777,DLYCNT(R5)	;Set the delay count in the DTE
+	MOV	#CMDLST,R2		;address to store commands
+
+Comment ⊗
+Loop:	Diagnostic Clear to DTE
+	Examine EPT location 143.
+	If DEXWD1 AND '17 is zero, go to loop.  These are bits 0:3 of EPT 143.
+	If DEXWD1 AND '17 are 2, go to ST11.
+	If DEXWD1 AND '17 are 4, go to LD11.
+	Otherwise, deposit BYTE(4)0(32)-1 in EPT 143. DONG 10.  Go to loop.
+⊗
+
+LOOP:	MOV	#DRESET,DIAG2(R5)	;Diagnostic reset.
+	JSR	R4,EXAM			;examine EPT 143.
+	MOV	DEXWD1(R5),R0		;get high order 4 bits of -10 word.
+	BIC	#177760,R0		;clear all but 4 bits.
+	BIT	#11,R0			;low-order bit is a badness.
+	BNE	ERROR			;lose if low order bit is set.
+	JMP	@DISP(R0)		;dispatch
+DISP:	.WORD	LOOP			;0 No operation
+	.WORD	ST11			;2 Start 11
+	.WORD	LD11			;4 Load 11
+	.WORD	ERROR			;6 Error - Undefined.
+
+ERROR:	MOV	R2,-(SP)		;stack R2, command buffer pointer
+	MOV	#ERCMD,R2		;buffer for erroneous command
+	MOV	DEXWD1(R5),(R2)+	;save erroneous command
+	MOV	DEXWD2(R5),(R2)+
+	MOV	DEXWD3(R5),(R2)
+	MOV	(SP)+,R2		;restore R2 from stack.
+	JSR	R4,DEPO			;deposit 4 bits of zero, and 32 ones
+	.word	0
+	.word	177777
+	.word	177777
+DONG:	MOV	#TO10DB,STATUS(R5)	;THUMP THUMP.
+	BR	LOOP
+
+LD11:	MOV	DEXWD2(R5),R0		;Copy DEXWD2 for the TO11 Byte Count
+	MOV	DEXWD3(R5),R1		;Copy DEXWD3 for the TO11 Address
+	MOV	R0,(R2)+		;store commands in command buffer
+	MOV	R1,(R2)+
+	CMP	#ST11-20,R2
+	BHI	9$			;branch unless cmd buffer ovflow
+	MOV	#CMDLST,R2
+9$:	JSR	R4,DEPO			;Deposit zero to ACK the -10.
+	.WORD	0			;We are starting the xfer
+	.WORD	0
+	.WORD	0
+	MOV	R1,TO11AD(R5)		;store the TO-11 address
+	MOV	R0,TO11BC(R5)		;store the byte count and GO!
+1$:	BIT	#TO11DN!TO11DB!TO11ER,STATUS(R5)	;wait for done or error
+	BEQ	1$					;or for the -10 to grump.
+	BIT	#TO11DN,STATUS(R5)	;was it normal termination?
+	BEQ	ERROR			;go grump at the -10
+	JSR	R4,DEPO			;Deposit code.  Transfer complete
+	.WORD	0
+	.WORD	0
+	.WORD	177777
+	BR	DONG
+
+;SUBRS for examine and deposit into EPT 143.  Call with JSR R4,
+
+EXAM:	MOV	#PRTOFF,TENAD1(R5)		;subr to examine EPT143.
+DEXGO:	MOV	#EPT143,TENAD2(R5)		;start examine.
+DEXWAT:	BIT	#TO11DB!DEXDON,STATUS(R5)	;wait for DEXDON or Bell.
+	BEQ	DEXWAT
+	RTS	R4
+
+DEPO:	MOV	#TENAD1,R3			;
+	ADD	R5,R3				;address of TENAD1
+	MOV	#PRTOFF!DEPOSI,(R3)		;deposit TENAD1
+	MOV	(R4)+,-(R3)			;deposit DEXWD1
+	MOV	(R4)+,-(R3)			;deposit DEXWD2
+	MOV	(R4)+,-(R3)			;deposit DEXWD3
+	BR	DEXGO
+
+ERCMD:	.WORD	0,0,0			;store erroneous from -10 command.
+CMDLST:	.WORD	0			;here begins the list of saved commands
+
+Comment ⊗
+;Here to start the -11 from the address given in DEXWD3
+ST11:	Copy DEXWD3 to R0.
+	Deposit -1 in EPT 143.
+	Clear as much of the region from 0 to 1000 as we can.
+	DO JMP (R0).
+⊗
+
+.=1000-<15*2>
+ST11:	MOV	DEXWD3(R5),R0		;R0 ← Starting address of 11 PGM.
+	JSR	R4,DEPO			;deposit -1 for the -10.
+	.word	17
+	.word	177777
+	.word	177777
+	CLR	R1			;try to vanish.  Start at zero
+1$:	CLR	(R1)+			;and clear until
+2$:	CMP	#2$,R1			;we clear the CLR instruction.
+	BNE	1$			;leaving 4 words untouched.
+	JMP	(R0)
+
+.END STBOOT
+
+π
+SUBTTL	DTEQ - Queued message protocol for 10/11 communications ;⊗ T11QCM T10QCM T11HTO T10HTO HADTIM QMPINI T11INI QMPCLK TO11XX TO10XY TO10XX
+
+;Note:  See ETHDES.[KL,SYS] for additional information
+
+T11QCM==40	;TO11Q won't be allowed longer than this
+T10QCM==40	;TO10Q won't be allowed longer than this
+T11HTO==3	;number of seconds before declaring to-11 link hung
+T10HTO==1	;same for to-10, but shorter as it's not buggy
+HADTIM==100	;number of seconds between attempts to get E/N address
+
+;message types. the real definitions are in CACDAT
+;%%NOP==0	;no-operation
+;%%ECHR==1	;echo response
+;%%ECHM==2	;EchoMe
+;%%ENMG==3	;ethernet message. next byte is the 11 word count of packet
+;%%ENAD==4	;ethernet address message
+;%%DTMG==5	;dectape message
+;%%ENBC==6	;specify broadcast handling (disable/enable broadcast packets)
+;%%DTMX==%%ENBC	;maximum valid message number (change KLDCP if you change this!)
+
+;called from DTEINI to initialize queued message service
+QMPINI:	PUSHJ P,T11INI			;initialize to-11 queue to empty
+
+	SETZM	QMP11E			;total to-11 errors
+	SETZM	QMP11M			;total count of TO11 messages queued
+;;	SETZM	QC11MA			;previous clock's TO11MA
+
+	SETZM	DTQECH			;no old echo response
+	SETZM	TO10MA			;address of current input message
+	SETZM	QMP10E			;total to-10 errors
+	SETZM	QMP10M			;total count of TO10 messages received
+;;	SETZM	QC10MA			;previous clock's TO10MA
+	SETOM	TO11HC			;hung count for 10->11
+	SETOM	TO10HC			;hung count for 11->10
+
+
+;ethernet initializations:
+	SETZM	ENHADR			;Our ethernet host address
+	SETZM	ENNADR
+
+;support for front-end dectapes (to-10 message queue)
+	SETZM	DTINQC			;dectape input queue count
+	SETZM	DTINQM			;total dectape input messge count
+	MOVEI	TAC,DTINQH-DTQ%LK
+	MOVEM	TAC,DTINQT
+	SETZM	DTQ%LK(TAC)
+
+;This is a hack to support QMPUUO until we flush it.
+IFE PUPNUM,<
+	SETZM	TO10QC			;TO10 EN QC
+	MOVEI	TAC,TO10QH-DTQ%LK
+	MOVEM	TAC,TO10QT
+	SETZM	DTQ%LK(TAC)
+>;IFE PUPNUM
+
+	POPJ	P,
+
+;Clear to-11 queue.  Sometimes here after to-11 bugtrap hit.
+;Note that if there's anything in the queue, we just throw it away!
+;For instance, real FS blocks in the queue at this point get lost forever.
+T11INI:	PUSH P,TAC
+	SETZM	HADREQ			;may need to request our E/N address
+	MOVEI	TAC,TO11QH-DTQ%LK	;Initial value for Queue tail
+	MOVEM	TAC,TO11QT		;queue tail points to queue head
+	SETZM	DTQ%LK(TAC)		;queue head is empty
+	SETZM	TO11QC			;queue count is zero too.
+	SETZM	TO11MA			;address of current message
+	POP P,TAC
+	POPJ P,
+
+;called from CLKSER every 1 second to test for DTE message time-outs and
+;to test for stale input messages.
+↑QMPCLK:PUSHJ	P,GTENHA		;get ethernet host address, if needed.
+;;	MOVE	TAC,NTO11		;current to11 message counter
+;;	EXCH	TAC,CNTO11		;save and see if same as a second ago
+;;	CAMN	TAC,NTO11		;if previous = same, we're stuck
+	SOSN	TO11HC			;look ma, an honest timeout!
+	SKIPN	TO11MA			;unless we're not running a xfer now
+	CAIA				;not busy, or new activity lately
+	PUSHJ	P,TO11XX		;stuck.  Kick the 11 some more.
+;;	MOVE	TAC,NTO10		;current to10 message counter
+;;	EXCH	TAC,CNTO10		;save and see if same as a second ago
+;;	CAMN	TAC,NTO10		;if previous = same, we're stuck
+	SOSN	TO10HC			;look ma, an honest timeout!
+	SKIPN	TO10MA			;unless we're not running a xfer now
+	POPJ	P,			;not busy, or new activity lately
+	PUSHJ	P,TO10XX		;message is stuck.  Kick -11 some more
+	POPJ	P,
+
+;here when an output message is stuck.  Restart the message
+TO11XX:	PUSHJ	P,SETEBR		;TAC1← EBR address. Push old TAC1
+	MOVEI	AC3,TO11ER		;set AC3 to make it look like an error
+	OFFSCN				;stop the DTE channel
+;;This check isn't needed with an real timeout
+;;	CAMN	TAC,NTO11		;are we still stuck at the same count?
+;;	SKIPN	TAC,TO11MA		;yes, skip if busy (i.e., stuck)
+;;	CAIA				;not busy, or new activity lately
+	SKIPE	TAC,TO11MA		;is there really a transfer going?
+	PUSHJ	P,FNTE11		;stuck.  Process a TO11ER interrupt
+	ONSCN				;restore PI enables
+	POP	P,TAC1			;restore TAC1, pushed by SETEBR
+	POPJ	P,
+
+;Get here when 11 wants to send a msg while we're awaiting previous one!
+;Flush the old xfer with an error bit so we can start the new one.
+TO10XY:
+;;	MOVE	TAC,NTO10		;Get current to10 count to force flush.
+;Here when an input message is stuck.  Discard it. Wait for the 11 to redo it.
+TO10XX:	PUSHJ	P,SETEBR		;TAC1← EBR address. Push old TAC1
+	MOVEI	AC3,TO10ER		;set AC3 to make it look like an error
+	OFFSCN				;stop the DTE
+;;This check isn't needed with an real timeout
+;;	CAMN	TAC,NTO10		;are we still stuck at the same place?
+;;	SKIPN	TAC,TO10MA		;yes, skip if busy (i.e., stuck)
+;;	CAIA				;not busy, or new activity lately
+	SKIPE	TO10MA			;Is there any activity?
+	PUSHJ	P,FNTE10		;yes.  Process a TO10ER interrupt
+	ONSCN				;restore PI level
+	POP	P,TAC1			;restore TAC1, pushed by SETEBR
+	POPJ	P,
+
+;⊗ GTENHA CLRADM STPBRD EFSGET ENBCCO
+
+;here from the 1-second clock to see if we have an e/n host address set yet.
+GTENHA:	SKIPL	HADREQ		;skip if we made a request for EN host addr
+	SKIPE	ENHADR		;no req. is the host address set yet?
+	POPJ	P,		;yes.
+	SOSL	HADREQ		;req blk is free. Is it counted down?
+	POPJ	P,		;not yet. don't make req too often
+	MOVEI	AC1,ENHADM	;send ethernet host address message
+	PUSHJ	P,DTEQ		;send it.
+	 SETZM	HADREQ		;can't send it.  clear msg blk busy
+	POPJ	P,
+
+
+↑CLRADM:MOVEI	TAC,HADTIM	;Set timer in this block
+	MOVEM	TAC,HADREQ	;block is free, re-usable after countdown
+	POPJ	P,
+
+;Here to tell the 11 to stop or start sending us broadcast packets.
+;AC2/0 mean quiet, 1 means give us broadcast packets
+↑STPBRD:MOVEI AC3,DTQ%XX	;Minimum size FS block for QMP command
+	PUSHJ P,EFSGET		;Get block to queue request in
+	 POPJ P,		;Lost, oh well, caller can try again later
+	MOVEI TAC,2
+	MOVEM TAC,DTQ%WC(AC1)	;Store length of shutup msg, 2 PDP-11 words
+	DPB AC2,[POINT 16,DTQ%MS(AC1),31] ;Set sense of command (shutup or not)
+	MOVEI TAC,%%ENBC	;Broadcast-handling command
+	PUSHJ P,DTQONE		;Queue the message, or plant clk req for later
+	JRST CPOPJ1		;Won, more or less (isn't really sent yet)
+
+;Special routine to get FS so that all FS in the to-11 queue is requested
+;from one location, whose return address will be in the left half of the FS hdr.
+;This enables to-11 bugtraps that make sure they dealing with valid FS blocks.
+↑EFSGET:PUSHJ P,FSGET		;get the FS, if possible
+	 POPJ P,		;failed
+	JRST CPOPJ1		;success
+
+ENBCCO:	LDB	TAC,[POINT 16,DTQ%MS(AC1),31]	;ether broadcast control reply
+	MOVEM	TAC,ENBCCF	;store old broadcast control word
+	PUSHJ	P,FSGIVE
+	POPJ	P,
+
+;⊗ DTEQ DTEQY DTEQX DTEQ0 DTEQ1R DTEQF DTEQEM DTEQNI DTEQBD
+
+;DTEQ.  Call with AC1=address of a message block, (usually free storage)
+;	of the correct format.  Message will be added to the queue of things
+;	to send to the 11.  This routine will skip-return immediately.
+;	The no-skip return indicates that the to-11 queue is too full, and
+;	it suggests that there's some problem in 10 to 11 communications.
+;
+;	After the message has been sent, the instruction DTQ%XC(AC1) will be
+;	executed.  This might be a call to FSGIVE, or some other routine
+;	to notify that the message has been sent.
+;
+;	Parameters that must be set up by caller:
+;
+;		DTQ%LK(AC1) will be stepped on by DTEQ.
+;		DTQ%WC(AC1) word containing the pdp-11 word count of the message
+;			    this count governs the 10 to 11 (or 11 to 10) transfer.
+;		DTQ%XC(AC1) instruction to XCT on completion of message
+;		DTQ%MS(AC1) and words following it are the message data.
+;			    two, left-justified 16-bit pdp-11 words per word.
+;
+;
+
+;Note: if an old version of KLDCP is being run, calling DTEQ will produce
+;?10 CMD ERR from KLDCP.    Either:
+;	1. patch out DTEQ
+;	2. reload the right version of KLDCP.  A wizard is needed because
+;	   				a. access protection of KL,SYS
+;					b. DTELOD UUO requires DEVPRV
+;	   RUN 11LOAD[KL,SYS]
+;	   AGRONK
+;	   KLDCP.L11[KL,SYS]
+;
+;	Anyone can reload the 11 by typing the cmd 11LOAD cmd on the WAITS CTY
+;	or a wizard with the DEV privilege can reload the 11 from any terminal
+;	by typing the 11LOAD command (which usually starts a phantom).
+
+
+↑DTEQ:	SKIPL NETETH+NI.UP	;Do we want it up?
+	POPJ P,			;No, return non-skip
+	PUSH	P,AC1			;AC1 must be preserved over this routine
+	PUSH	P,DAT			;Thank you, Mr. Gorin
+	PUSH	P,TAC			;In case someone wants it preserved
+	PUSHJ	P,DTEQ0			;Call worker routine
+	 CAIA				;Non-skip return
+DTEQY::	  AOS	.-DTEQX(P)		;label must be before first POP instruction
+	POP	P,TAC
+	POP	P,DAT
+DTEQX::	POP	P,AC1			;label must be on last POP instruction
+	POPJ	P,
+
+DTEQ0:	MOVE	DAT,TO11QC		;get the current to11 queue count
+	CAIL	DAT,T11QCM		;skip if "reasonable"
+	POPJ	P,			;failure return.
+	HLRZ	TAC1,-1(AC1)		;get LH of FS hdr word
+	CAIE	TAC1,400000!EFSGET	;is this one of OUR FS blocks??
+	CAIN	TAC1,-1			;(or already clobbered this way?)
+	CAIA
+	JRST	DTEQF			;no, error!!
+;Here are some more bugtraps for PUPSER
+	SKIPN	DTQ%XC(AC1)		;make sure there is an instruction here
+	JRST	DTEQNI			;ooops
+	CAME	AC1,TO11QH		;check against head and tail
+	CAMN	AC1,TO11QT
+	JRST	DTEQBD			;attempt to queue message already in queue!
+;End PUPSER bugtraps
+	LDB	TAC1,[POINT 16,DTQ%MS(AC1),15]	;get first byte of message
+	CAILE	TAC1,%%DTMX		;bounds check - don't send garbage
+	JRST	DTEQEM			;pounce on it!
+	SETZM	DTQ%LK(AC1)		;zero link out of this block
+	SETZM	DTQ%RT(AC1)		;no retries yet.
+	OFFSCN				;make sure the DTE isn't looking
+	MOVE	TAC1,TO11QT		;address of tail of queue
+	HRRZM	AC1,DTQ%LK(TAC1)	;store this message thru Q tail.
+	HRRZM	AC1,TO11QT		;store this message as the Q tail
+	AOS	TO11QC			;count a message on the queue now
+	AOS	QMP11M			;count a message queued to 11
+	SKIPE	TO11MA			;is there any message in progress?
+	JRST	DTEQ1R			;yes.  TO11 mechanism is already busy
+	PUSHJ	P,STRT11		;start a to-11 transfer
+DTEQ1R:	ONSCN				;restore DTE interrupts
+	JRST	CPOPJ1
+
+;Here if FS block doesn't have proper header!  Complain.
+DTEQF:	PUSHJ P,BD11FS		;Tell CTY we have a bad FS block
+	 [ASCIZ/DTEQ, won't queue this block./] ;special text to type
+	POPJ P,			;re-initialize the to-11 queue (clear it)
+
+DTEQEM:	PUSHACS
+	PUSH	P,TAC1
+	PUSH	P,AC1
+	PUSHJ P,DISGST		;PRINT TIME OF NEW MESSAGE ON CTY
+	PUSHJ	P,DISMES
+	ASCIZ	/Attempt to queue invalid msg type at DTEQ.  Blk addr = /
+	POP	P,TAC
+	PUSHJ	P,DISLOC
+	PUSHJ	P,DISMES
+	ASCIZ	/; Msg type = /
+	POP	P,TAC
+	PUSHJ	P,DISLOC
+	PUSHJ	P,DISCRLF
+	PUSHJ	P,DISFLU
+	POPACS
+	PUSHJ	P,WDDTCALL
+	POPJ	P,
+
+DTEQNI:	PUSHACS
+	PUSH	P,AC1
+	PUSHJ P,DISGST		;PRINT TIME OF NEW MESSAGE ON CTY
+	PUSHJ	P,DISMES
+	ASCIZ	/Attempt to queue msg with zero DTQ%XC.  Blk addr = /
+	POP	P,TAC
+	PUSHJ	P,DISLOC
+	PUSHJ	P,DISMES
+	ASCIZ	/; Caller = /
+	MOVE	TAC,DTEQY-DTEQX-20(P)	;Caller of DTEQ
+	PUSHJ	P,DISLOC
+	PUSHJ	P,DISCRLF
+	PUSHJ	P,DISFLU
+	POPACS
+	PUSHJ	P,WDDTCALL
+	POPJ	P,
+
+DTEQBD:	PUSHACS
+	PUSHJ P,DISGST		;PRINT TIME OF NEW MESSAGE ON CTY
+	PUSHJ P,DISERR
+	 [ASCIZ/Attempt to queue block already in head or tail of TO11Q.
+Active block (AC1) = /]
+	 DISARG OCH,<AC1-20(P)>
+	 [ASCIZ/   Queue head (TO11QH) = /]
+	 DISARG OCH,TO11QH
+	 [ASCIZ/   Queue tail (TO11QT) = /]
+	 DISARG OCH,TO11QT
+	 [ASCIZ/
+Callers = /]
+	 DISARG LOC,<-21(P)>
+	 [ASCIZ/,/]
+	 DISARG LOC,<-24(P)>
+	 [ASCIZ/,/]
+	 DISARG LOC,<-25(P)>
+	 [ASCIZ/,/]
+	 DISARG LOC,<-26(P)>
+	 [ASCIZ/,/]
+	 DISARG LOC,<-27(P)>
+	 [ASCIZ/
+Will ignore request.
+/]
+	 -1
+	PUSHJ	P,DISFLU
+	POPACS
+	PUSHJ	P,WDDTCALL
+	POPJ	P,
+
+;⊗ FNTO11 FN11BL FN11E4 FN11.A STRT11 TO11DQ TO11D2 TO11DF FNTE11 FN11E1 FN11ER QMAXTR FN11.B RLO11W FN11E2 FN11E3 TO11FU FN11ES TO11MA NO11ER BD11FS FSGV11 UGTO11 STR11C STR11D STR11E STR11F STR11G
+
+;Interrupt routines for DTE QMP service
+
+;TO11 Request Done or error.  Status in AC3, EBR in TAC1. Don't clobber either.
+FNTO11:	CONO	DTE0,TO11DN		;Clear TO11DN and TO11ER
+	MOVE	TAC,TO11BE		;get final byte pointer
+	CAME	TAC,TO11BP(TAC1)	;correct?
+	 JRST	FN11E1			;no, complain
+IFN FTT11BELL,<
+	TRNE	AC3,TO11ER		;Error?
+	 SETOM	TO11EF			;  Set error flag
+	POPJ P,				;that's all we until we hear the doorbell
+
+FN11BL:	MOVE	TAC,DTQM2(TAC1)		;Get ending status
+IFN FTT11BEEP,<
+	SETZM	DTQM2(TAC1)		;Clear flag
+>;IFN FTT11BEEP
+	CAIN	TAC,177777		;Did we send a command too soon?
+	 JRST	TO11FU			;  Yes, lose...
+>;IFN FTT11BELL
+FN11E4:	MOVEI	TAC,0
+	EXCH	TAC,TO11BP(TAC1)	;avoid unpleasantness, get final byte ptr
+	SKIPN	AC1,TO11MA		;is there a message block here?
+	POPJ	P,			;ignore this.
+	SETOM	TO11HC			;clear hung timeout
+	CAME	AC1,TO11QH		;this better be the first msg in queue
+	JSP	DAT,UGTO11		;something's rotten here
+	 JFCL	STRT11			;UGTO11 returns @ this cell
+IFN FTT11BELL,<	;recycle some old code and add new
+	XORM	TAC,TO11BE		;xor with expected final byte ptr
+	SKIPN	TO11EF			;skip if we saw an error earlier
+>;IFN FTT11BELL
+	TRNE	AC3,TO11ER		;error ending?
+	JRST	FN11ER			;process error
+IFN FTT11BELL,<	;recycle some old code
+	SKIPE	TO11BE			;skip if byte ptr matched expectations
+	JRST	FN11E1			;byte ptr screwup (maybe not done yet?)
+>;IFN FTT11BELL
+FN11.A:	PUSHJ	P,TO11DQ		;Dequeue the message
+	SKIPE	TO11MA			;Did DTQ%XC cause a message to get started?
+	 POPJ	P,			;  Yes, don't start another one!!!
+STRT11:
+IFN FTNDTE,<
+	SCPICK				;Make sure we've got the scanner off!
+	JRST	STR11C			;We can now call DTEXX anywhere.
+>;IFN FTNDTE
+IFE FTNDTE,<
+	MOVSI	AC1,STR11C		;make a clock request
+	SYSPIFF				;because we can't execute DTEXX
+	IDPB	AC1,CLKQ		;except from clock or UUO level.
+	SYSPIN
+	POPJ	P,
+>;IFE FTNDTE
+
+TO11DQ:	SCPICK				;Make damn sure we've turned off scanner
+	JUMPE	AC1,TO11D2		;zero is horrible block address
+	HLRZ	DAT,-1(AC1)		;get LH of FS hdr word
+	CAIE	DAT,400000!EFSGET	;is this one of OUR FS blocks??
+	CAIN	DAT,-1
+	CAIA
+	JRST	TO11DF			;no, error!!
+	CAMN	AC1,TO11QH		;this block should be at head of queue
+	CAME	AC1,TO11MA		;and should be listed here too
+TO11D2:	JSP	DAT,UGTO11		;something's rotten here!
+	 JFCL	T11INI			;UGTO11 returns @ this cell, clear queue
+	CAMN	AC1,(AC1)		;Looped?
+	JSP	DAT,UGTO11		;yes, some kind of PUPSER problem?
+	 JFCL	T11INI			;UGTO11 returns @ this cell, clear queue
+	SOS	TO11QC			;decrement to-11 queue count
+	MOVEI	DAT,TO11QH-DTQ%LK	;setup DAT in case of empty queue
+	SKIPN	TAC,DTQ%LK(AC1)		;get the link to the next message
+	MOVEM	DAT,TO11QT		;no next message. adjust queue tail
+	HRRZM	TAC,TO11QH		;store as head of new queue
+	SETZM	TO11MA
+	XCT	DTQ%XC(AC1)		;return FS block.
+	POPJ	P,
+
+;Here if FS block doesn't have proper header!  Complain.
+TO11DF:	PUSHJ P,BD11FS		;Tell CTY we have a bad FS block
+	 [ASCIZ/TO11DQ, will clear to-11 queue./] ;special text to type
+	JRST T11INI		;re-initialize the to-11 queue (clear it)
+
+;We come here when we timeout a to-11 transfer
+FNTE11:	AOS	N11TMO			;count number of timeouts for to-11 xfer
+	MOVE	TAC,TO11BE		;check final byte pointer
+	CAME	TAC,TO11BP(TAC1)
+	  JRST	FN11E2
+IFN FTDTBG,<
+IFE FTT11BELL,<
+	SKIPG	DTQM2(TAC1)		;Has 11 seen TO11DN?
+	 JRST	FN11E3			;  No, we're both hung
+>;IFE FTT11BELL
+	MOVEI	TAC,[ASCIZ/To-11 timeout - KL missed TO11DN. /]
+	PUSHJ	P,FN11ES		;Print relevant registers
+>;IFN FTDTBG
+	JRST	FN11E4			;Start new transfer
+
+;We get here when one to-11 transfer done but wrong byte pointer
+FN11E1:	AOS	N11BPE			;Count number of byte pointer mismatches
+IFN FTDTBG,<
+	MOVEI	TAC,[ASCIZ/To-11 byte pointer mismatch; will allow to timeout./]
+	PUSHJ P,FN11ES
+>;IFN FTDTBG
+repeat 1,<
+	MOVEI	TAC,1			;timeout soon (1 sec)
+	MOVEM	TAC,TO11HC
+	POPJ	P,			;Let us timeout
+
+>;repeat 1
+repeat 0,<
+	PUSHJ	P,BUGTRP		;Stop and tell someone
+>;repeat 0
+FN11ER:	AOS	QMP11E			;global count of to11 errors
+IFN FTT11BELL,<
+	SETZM	TO11EF			;Clear error flag
+>;IFN FTT11BELL
+	MOVEI	TAC,[ASCIZ/To-11 error./]
+	JFCL	FN11ES			;In case we want to log these
+	AOS	TAC,DTQ%RT(AC1)		;count a failure.
+QMAXTR←←4	;max number of tries, MUST be power of 2 (see next instr).
+	TRNN	TAC,QMAXTR-1		;time to reload the 11?
+	JRST	FN11.B			;yes
+	SETZM	TO11MA			;We no long have a transfer in progress
+	JRST	STRT11			;retry this message
+
+;The 11 doesn't seem to be working.  A message has lost repeatedly.
+FN11.B:	PUSHACS
+	MOVEI AC1,[ASCIZ /Will reload console-11.
+/]
+	SKIPE MAINTM		;skip unless fireup won't do anything
+	MOVEI AC1,[ASCIZ /Maybe you should reload the console-11.
+/]
+	PUSHJ P,DISSTR		;type appropriate msg for up or down system
+	MOVEI TAC,['11LOAD'↔'  1  2'↔<REAPRV!DEVPRV,,0>↔0]
+	JFCL		;patch here to make it conditional 11load
+	PUSHJ P,FIREUP		;patch this out to suppress reloading 11
+	 JFCL			;NO FIREUP SLOTS
+	DEBCHECK(POPACS)
+	CAIL TAC,2*QMAXTR	;flush packet after this many retries
+	JRST FN11.A		;flush packet
+;now we just wait for another timeout, by which time 11 should be reloaded
+RLO11W←←=20	;number of seconds to wait after reloading the 11
+	MOVEI TAC,RLO11W	;allow this many seconds before next timeout
+	MOVEM TAC,TO11HC	;retry same packet after reload
+	POPJ P,			;we will definitely see a timeout at that
+
+;We timed out, but the ending byte pointers were different.  If TO11BP is smaller
+;than TO11BE, then we probably hung in the middle of a transfer.  If not, ???
+FN11E2:	AOS	N11TMB		;Number of timeouts with bad byte pointers
+	MOVEI	TAC,[ASCIZ/To-11 timeout, pointer mismatch./]
+	PUSHJ	P,FN11ES	;Print terminating status
+	JRST	FN11E4		;Now, try to start a new transfer
+
+IFN FTDTBG,<
+
+;We timed out, but the -11 didn't seem to see TO11DN either.
+FN11E3:	MOVEI	TAC,[ASCIZ/To-11 timeout, both missed TO11DN. /]
+	PUSHJ	P,FN11ES	;Print terminating status
+	JRST	FN11E4		;Now, try to start a new transfer
+
+TO11FU:	MOVEI	TAC,[ASCIZ/PDP-11 got To-11 request with transfer in progress./]
+	PUSHJ	P,FN11ES
+IFN FTT11BEEP,<
+	MOVEI	TAC,1		;Clear the flag
+	SKIPL	TAC,DTQM2	;There is a fine, high quality race condition here!
+	  MOVEM	TAC,DTQM2(TAC1)	;  Good enough for the losing case!
+	POPJ P,
+>;IFN FTT11BEEP
+>;IFN FTDTBG
+
+;Print status at end of bad to-11 transfer
+FN11ES:	jfcl			;Put a POPJ here to suppress these messages
+	PUSHACS
+IFN FTDTBG,<
+	PUSH P,DTQM2(TAC1)
+>;IFN FTDTBG
+	PUSH P,TO11BP(TAC1)	;(I don't think TAC1 survives)
+	PUSH P,TAC
+	PUSHJ P,DISUSR		;Print time of new msg on CTY
+	 SIXBIT/KLSER/
+	PUSHJ P,DISERR
+	 @-1(P)			;Message
+	 -1
+	SKIPN DO11ER		;skip if want data typed out
+	JRST NO11ER		;no data
+	PUSHJ P,DISERR
+	 [ASCIZ/
+TO11MA=/]
+	 DISARG LOC,TO11MA
+	 [ASCIZ/ TO11BE=/]
+	 DISARG OCH,TO11BE
+	 [ASCIZ/ TO11BP=/]
+	 DISARG OCH,<-2(P)>
+IFN FTDTBG,<
+	 [ASCIZ/
+DTE CONI=/]
+	 DISARG LOC,AC3
+	 [ASCIZ/ DTQM2=/]
+	 DISARG LOC,<-3(P)>
+>;IFN FTDTBG
+IFE FTDTBG,<	;Cram on one line only if not debugging DTE
+	 [ASCIZ/ DTE CONI=/]
+	 DISARG LOC,AC3
+>;IFE FTDTBG
+	 -1
+NO11ER:
+IFN FTDTBG,<
+	ADJSP	P,-3
+>;IFN FNDTBG
+IFE FTDTBG,<
+	ADJSP	P,-2
+>;IFN FTDTBG
+	PUSHJ P,DISCRLF
+;	SKIPE MAINTM
+;	  PUSHJ P,DISFLU
+	POPACS
+;	SKIPE MAINTM
+;	  PUSHJ P,WDDTCAL
+	POPJ P,
+
+BD11FS:	SYSPIFF
+	PUSH P,@(P)		;put msg ptr on stack
+	PUSHACS
+	PUSHJ P,DISGST		;Print time of new msg on CTY
+	PUSHJ P,DISERR
+	 [ASCIZ/To-11 queue block doesn't belong to EFSGET.  Block = /]
+	 DISARG LOC,<AC1-20(P)>
+	 [ASCIZ/
+Detected at /]
+	 @-21(P)		;ptr to special msg
+	 [ASCIZ/
+TO11QH = /]
+	 DISARG LOC,TO11QH
+	 [ASCIZ/
+TO11QT = /]
+	 DISARG LOC,TO11QT
+	 -1
+	PUSHJ P,DISCRL
+	PUSHJ P,DISFLU
+	POPACS
+	ADJSP P,-1		;flush special msg ptr
+	AOS (P)			;skip over inline msg pointer
+	PUSHJ P,WDDTCALL
+	SYSPIN
+	POPJ P,
+
+;Here from FSGIVE in CORE upon attempt to free up FS block that is at
+;head or tail of to-11 queue.
+↑FSGV11:PUSH P,TAC
+	CONI PI,TAC		;save PI state
+	SYSPIFF			;and then stop PI system
+	ANDI TAC,PION		;just save stuff to restore PI state
+	EXCH TAC,(P)
+	PUSHACS
+	PUSHJ P,DISGST		;print time of new msg on CTY
+	PUSHJ P,DISERR
+	 [ASCIZ/At FSGIVE with AC1 matching TO11QH or TO11QT!
+AC1    = /]
+	 DISARG LOC,<AC1-20(P)>
+	 [ASCIZ/
+TO11QH = /]
+	 DISARG LOC,TO11QH
+	 [ASCIZ/
+TO11QT = /]
+	 DISARG LOC,TO11QT
+	 [ASCIZ/
+Callers = /]
+	 DISARG LOC,<-22(P)>
+	 [ASCIZ/,/]
+	 DISARG LOC,<-23(P)>
+	 [ASCIZ/,/]
+	 DISARG LOC,<-24(P)>
+	 [ASCIZ/,/]
+	 DISARG LOC,<-25(P)>
+	 [ASCIZ/,/]
+	 DISARG LOC,<-26(P)>
+	 -1
+	PUSHJ P,DISCRL
+	PUSHJ P,DISFLU
+	POPACS
+	PUSHJ P,WDDTCAL
+	CONO PI,@(P)		;maybe turn PI system back on
+	ADJSP P,-1
+	POPJ P,			;return from FSGIVE
+
+UGTO11:	SYSPIFF			;Stop everything
+	PUSHACS
+	PUSHJ P,DISGST		;Print time of new msg on CTY
+	PUSHJ P,DISERR
+	 [ASCIZ/Active To-11 queue block is looped or not at head of queue, at PC = /]
+	 DISARG LOC,<DAT-20(P)>
+	 [ASCIZ/
+Active block (AC1) = /]
+	 DISARG OCH,<AC1-20(P)>
+	 [ASCIZ/   Queue head (TO11QH) = /]
+	 DISARG OCH,TO11QH
+	 [ASCIZ/   Busy block (TO11MA) = /]
+	 DISARG OCH,TO11MA
+	 [ASCIZ/
+Callers = /]
+	 DISARG LOC,<-21(P)>
+	 [ASCIZ/,/]
+	 DISARG LOC,<-22(P)>
+	 [ASCIZ/,/]
+	 DISARG LOC,<-23(P)>
+	 [ASCIZ/,/]
+	 DISARG LOC,<-24(P)>
+	 [ASCIZ/,/]
+	 DISARG LOC,<-25(P)>
+	 [ASCIZ/
+Will ignore "Active" block and return @(DAT) after clearing TO11MA.
+/]
+	 -1
+	MOVEI TAC,['11LOAD'↔'  1  2'↔<REAPRV!DEVPRV,,0>↔0]
+	JFCL		;patch this to make it conditional
+JFCL;	PUSHJ P,FIREUP	;patch this in to cause this to reload 11
+	 JFCL			;NO FIREUP SLOTS
+	DEBCHECK(POPACS)
+	SETZM TO11MA		;Indicate no xfer in progress
+	SYSPIN
+	JRST @(DAT)		;Try to go back to work
+
+;Start the next to-11 transfer (if any)
+STR11C:	OFFSCN
+IFE FTNDTE,<
+	SKIPN	TO11MA
+>;IFE FTNDTE
+	PUSHJ	P,STR11D
+	ONSCN
+	POPJ	P,
+
+STR11D:	SKIPE	TO11MA			;Is there already a transfer going?
+	 JRST	STR11G			;  Yes, bug!
+	MOVE	AC1,TO11QH		;here to start next to-11 xfer
+	MOVEM	AC1,TO11MA		;address of current transfer block
+	JUMPE	AC1,CPOPJ		;TO11Q is empty
+	HLRZ	TAC,-1(AC1)		;get LH of FS hdr word
+	CAIE	TAC,400000!EFSGET	;is this one of OUR FS blocks??
+	CAIN	TAC,-1
+	CAIA
+	JRST	STR11F			;no, error!!
+	LDB	TAC,[POINT 16,DTQ%MS(AC1),15]	;get first byte of message
+	CAILE	TAC,%%DTMX		;bounds check - don't send garbage
+	JRST	STR11E			;error.  pounce
+	PUSHJ	P,SETEBR		;TAC1←ept address, old TAC1 is pushed
+	PUSH	P,DDB
+	MOVSI	DDB,442000		;16 bit bytes
+	HRRI	DDB,DTQ%MS(AC1)
+	MOVEM	DDB,TO11BP(TAC1)	;save as the to-11 byte pointer
+	LDB	TAC,[POINT 16,DTQ%WC(AC1),35]	;to 11 word count
+	ADJBP	TAC,DDB
+	POP	P,DDB
+	MOVEM	TAC,TO11BE		;save expected final byte pointer
+	AOS	NTO11			;count number of xfers to-11
+	MOVEI	TAC,T11HTO		;set hung timeout
+	MOVEM	TAC,TO11HC		;time out when this hits zero
+	LDB	TAC,[POINT 16,DTQ%WC(AC1),35]	;to 11 word count
+	LSH	TAC,20			;shift it
+	IORI	TAC,DTMSGC		;add command function to it
+	PUSHJ	P,DTEXX			;dong-11.
+	POP	P,TAC1			;stacked by SETEBR
+	POPJ	P,
+
+;this message implies that a good message was placed on the queue, but by the
+;the time we started to send it, it was bad!
+STR11E:	PUSHACS
+	PUSH	P,TAC			;save invalid msg type
+	PUSH	P,AC1
+	PUSHJ P,DISGST		;PRINT TIME OF NEW MESSAGE ON CTY
+	PUSHJ	P,DISMES
+	ASCIZ	/Attempt to send invalid msg type at STR11D.  Blk addr = /
+	POP	P,TAC
+	PUSHJ	P,DISLOC
+	PUSHJ	P,DISMES
+	ASCIZ	/; Msg type = /
+	POP	P,TAC
+	PUSHJ	P,DISLOC
+	PUSHJ	P,DISCRLF
+	PUSHJ	P,DISFLU
+	POPACS
+	PUSHJ	P,WDDTCALL
+	HLLOM	DTQ%RT(AC1)		;set retry  count to infinite
+	PUSHJ	P,TO11DQ		;de-queue this message
+	JRST	STR11D			;Process next message
+
+;Here if FS block doesn't have proper header!  Complain.
+STR11F:	PUSHJ P,BD11FS		;Tell CTY we have a bad FS block
+	 [ASCIZ/STR11D, will clear to-11 queue./] ;special text to type
+	JRST T11INI		;re-initialize the to-11 queue (clear it)
+
+STR11G:	MOVEI TAC,[ASCIZ/At STR11D with TO11MA non-zero!/]
+	PUSHJ P,FN11ES
+	POPJ P,
+;⊗ FNTE10 FNTO10 DTQERR DTQDSP DTDSPL F10ERR DT0INT DT0IN1 DT0IN2 QMPCKR DT0CLK DTQECR DTQECM DTQONE DTQEC0 DTQEC1 ENADRM ENINQ DTQDTM ENICLK ENICL1 ENICL2
+
+FNTE10:	AOS	N10TMO			;count number of timeouts for to-10 xfer
+;TO10 Request Done or error.  CONI in AC3.  EPT address in TAC1
+FNTO10:	CONO	DTE0,TO10DN		;Clear TO10DN and TO10ER
+	SETZM	TO10BP(TAC1)		;avoid extremly unpleasant things
+	SKIPN	AC1,TO10MA		;is there a TO10 message in progress?
+	POPJ	P,			;no. dismiss this.
+	SETZM	TO10MA			;no more message block
+	SETOM	TO10HC			;clear hung timeout
+	TRNE	AC3,TO10ER		;error ending?
+	JRST	F10ERR			;process error.
+	AOS	QMP10M			;count a TO-10 message received.
+	LDB	TAC,[POINT 16,DTQ%MS(AC1),15]	;get the QMP message type
+	CAIL	TAC,DTDSPL		;less than the dispatch length?
+	JRST	DTQERR			;no.  set it to an error
+	PUSHJ	P,@DTQDSP(TAC)
+	POPJ	P,
+
+DTQERR:	PUSH	P,AC1
+	PUSH	P,TAC
+	PUSHJ	P,DISGST		;PRINT TIME FOR NEW MESSAGE ON CTY
+	PUSHJ	P,DISMES
+	ASCIZ	/Unknown message type, /
+	POP	P,TAC
+	PUSHJ	P,DISLOC
+	PUSHJ	P,DISMES
+	ASCIZ	/, received from 11
+
+/
+	POP	P,AC1
+	PUSHJ	P,FSGIVE
+	POPJ	P,
+
+;Dispatch table for types of messages received from 11.
+DTQDSP:	FSGIVE		;type 0: No-operation
+	DTQECR		;I am an Echo
+	DTQECM		;EchoME
+	ENINQ		;ether net input queue
+	ENADRM		;ether net host address message
+	DTQDTM		;dectape data message
+	ENBCCO		;ether broadcast control reply, old control word
+DTDSPL==.-DTQDSP
+	CPOPJ		;patch space
+	CPOPJ		;patch space
+
+F10ERR:	PUSHJ	P,FSGIVE		;return this free stg block
+	AOS	QMP10E			;count a to-10 error
+	POPJ	P,			;11 will have to restart via DT0INT
+
+;11 requests a To-10 transfer.  Datum in DTQMP(TAC1)
+DT0INT:	SKIPE	TO10MA			;is there a message in progress?
+	PUSHJ	P,TO10XY		;yes, abort present message.
+DT0IN1:	MOVEI	AC1,0			;clear DTQMP
+	EXCH	AC1,DTQMP(TAC1)		;fetch size of TO-10 message
+	CAIG	AC1,2000		;limit size of incoming packets
+	JRST	DT0IN2
+	PUSH	P,AC1
+	PUSHJ	P,DISGST		;PRINT TIME FOR NEW MESSAGE ON CTY
+	PUSHJ	P,DISMES
+	ASCIZ	/Got a bad message length, /
+	POP	P,TAC
+	PUSHJ	P,DISLOC
+	PUSHJ	P,DISMES
+	ASCIZ	/, as size of TO10 xfer
+
+/
+
+	MOVEI	AC1,200			;to something reasonable
+DT0IN2:	MOVEM	AC1,QMPSIZ		;store message size in case of retry
+QMPCKR:	MOVE	AC3,QMPSIZ		;compute size of message in -10 words
+	LSH	AC3,-1
+	ADDI	AC3,DTQ%XX		;include fs block overhead
+;Here we call EFSGET because it is possible that this to-10 block may get
+;immediately changed into a to-11 block if the request is for an echo!
+;Since we don't want to hit the to-11 bugtraps, we mustn't call FSGET directly.
+	PUSHJ	P,EFSGET		;see if we can get an fs block
+	 JRST	DT0CLK			;must delay.  enter a clock request
+	MOVEM	AC1,TO10MA		;save as the to-10 message address
+	SETZM	DTQ%LK(AC1)		;no link word
+	MOVE	AC2,QMPSIZ
+	MOVEM	AC2,DTQ%WC(AC1)		;save PDP-11 word count here
+	LSH	AC2,-1			;number of PDP-10 words
+	ADDI	AC2,DTQ%MS-1(AC1)	;end of TO-10 xfer
+	SETZM	DTQ%MS(AC1)		;to-10 xfer will move only 32 bits/wd
+	MOVSI	DDB,DTQ%MS(AC1)		;make sure the other 4 bits are zero
+	HRRI	DDB,DTQ%MS+1(AC1)
+	BLT	DDB,(AC2)
+	MOVSI	DDB,442000
+	HRRI	DDB,DTQ%MS(AC1)		;initial TO10 byte pointer
+	PUSHJ	P,SETEBR		;TAC1← EBP address.  Original TAC1 pushed
+	OFFSCN				;note this runs at DTE PI lvl or clk lvl
+	MOVEM	DDB,TO10BP(TAC1)	;setup the to-10 byte pointer
+	MOVN	DDB,DTQ%WC(AC1)		;need the negative PDP-11 wc for
+	ANDI	DDB,7777		;this DATAO which starts the TO-10 xfer
+	IORI	DDB,TO10IB		;interrupt 11 on normal completion.
+	DATAO	DTE0,DDB		;start the TO-10 transfer
+	ONSCN
+	AOS	NTO10			;count to-10 xfers started
+	MOVEI	TAC1,T10HTO		;set hung timeout
+	MOVEM	TAC1,TO10HC		;(+1 because clock might tic immediately)
+	POP	P,TAC1			;(pushed by SETEBR)
+	POPJ	P,
+
+DT0CLK:	MOVSI	AC1,QMPCKR		;make a clock request
+	SYSPIFF		;because we failed to find an FS block
+	IDPB	AC1,CLKQ
+	SYSPIN
+	POPJ	P,
+
+DTQECR:	EXCH	AC1,DTQECH		;save the most recent echo response msg
+	SKIPE	AC1			;and if there is an older echo,
+	PUSHJ	P,FSGIVE		;return it to FS.
+	POPJ	P,
+
+DTQECM:	MOVEI	TAC,1			;EchoME.  Someone wants an echo.
+DTQONE:	DPB	TAC,[POINT 16,DTQ%MS(AC1),15]	;respond with I'mAnEcho
+	MOVE	TAC,[PUSHJ P,FSGIVE]
+	MOVEM	TAC,DTQ%XC(AC1)
+DTQEC0:	PUSHJ	P,DTEQ			;turn it back to the sender
+	 JRST	.+2			;can't send it now.  delay
+	POPJ	P,
+	HRLI	AC1,DTQEC1		;clock address
+	SYSPIFF
+	IDPB	AC1,CLKQ
+	SYSPIN
+	POPJ	P,
+
+;here as a clock request.  Echo a message.
+DTQEC1:	HRRZ	AC1,DAT			;get proper argument
+	JRST	DTQEC0
+
+printx This code probably should be moved to PUPSER
+ENADRM:	LDB	TAC,[POINT 16,DTQ%MS(AC1),31]	;ethernet host address message
+	MOVEM	TAC,ENHADR		;store OUR ethernet host address (RH)
+IFN FTEIP,<
+	DPB TAC,[IPEHSX!NETETH+NI.IPA]	;Store in Ethernet IP address
+>;IFN FTEIP
+	IORI	TAC,SUENNM⊗8		;our subnet number
+	MOVEM	TAC,ENNADR		;store Ethernet host/network address
+	DPB	TAC,[POINT 8,PUPHDW,15]
+	PUSHJ	P,FSGIVE
+	POPJ	P,
+
+;Add to dectape queue (in progress on DTEchannel)
+DTQDTM:	MOVE	TAC,DTINQC		;dectape data message
+	CAILE	TAC,10			;don't let Q get too bloated
+	JRST	FSGIVE			;throw message on the floor
+	AOS	DTINQC			;Bump queue count
+	AOS	DTINQM			;Count another dectape message received
+	HRRZ	TAC,DTINQT		;add msg to dectape input queue
+	MOVEM	AC1,DTQ%LK(TAC)		;add this to link field of last msg.
+	HRRZM	AC1,DTINQT		;update address of last msg.
+	POPJ	P,
+
+IFE PUPNUM,<
+;prototype clock process for ethernet.  Empties the ethernet input queue
+↑ENICLK:MOVEI	TAC1,ENINQH-DTQ%LK	;address of head of queue
+	OFFSCN				;avoid interference from the DTE
+	HRRZ	AC1,DTQ%LK(TAC1)	;get link to first message
+	JUMPE	AC1,ENICL1		;there is no first message?
+	SKIPN	TAC,DTQ%LK(AC1)		;get link out of first message
+	MOVEM	TAC1,ENINQT		;no second message: fix queue tail.
+	HRRZM	TAC,DTQ%LK(TAC1)	;update the queue head
+	SOS	ENINQC
+ENICL1:	ONSCN
+	JUMPE	AC1,ENICL2		;Leave this loop if there's no message
+;here, process the message with message block addr in AC1.  Return msg to FS.
+	HRRZ	TAC,TO10QT
+	HRRZM	AC1,DTQ%LK(TAC)
+	HRRZM	AC1,TO10QT
+	AOS	TO10QC
+	JRST	ENICLK
+
+ENICL2:	MOVE	TAC,TO10QC		;Length of TO10 Queue
+	CAIG	TAC,T10QCM		;Don't allow TO10 Q to be too large
+	POPJ	P,
+	MOVEI	TAC1,TO10QH-DTQ%LK	;address of head of queue
+	HRRZ	AC1,DTQ%LK(TAC1)	;get link to first message
+	JUMPE	AC1,CPOPJ		;there is no first message?
+	SKIPN	TAC,DTQ%LK(AC1)		;get link out of first message
+	MOVEM	TAC1,ENINQT		;no second message: fix queue tail.
+	HRRZM	TAC,DTQ%LK(TAC1)	;update the queue head
+	SOS	TO10QC
+	PUSHJ	P,FSGIVE		;give away
+	JRST	ENICL2
+>;IFE PUPNUM
+SUBTTL	QMPUUO	Queued Message Protocol UUO (QMPUUO) ;⊗ QMPUUO QMPDSP QMPMAX QMPRED QMPRED QMPRD2 QMPRD3 QMPDTR QMPDT1 QMPQUE CHKIOW
+
+Comment $
+;calli 400130
+
+	QMPUUO	AC,
+
+		AC contains a pointer to a three word block of data:
+			0/	function code
+			1/	IOWD for user space
+
+	Functions
+
+		0/	read & remove the first message from the ENinput queue.
+
+			If the queue is empty, this function returns
+			without skipping and without changing its arguments.
+
+			Message is placed in user memory according to the IOWD
+
+		1/	Send message.
+			argument 1 is the IOWD describing the message.
+			Skips, unless TO11 Queue is too full.
+
+		2/	Read & remove the message from the DC11 Queue
+
+$
+
+↑QMPUUO:XCTR	XR,[HRRZ AC1,(TAC)]	;contents of user's function word
+	XCTR	XR,[MOVE AC2,1(TAC)]	;user's IOWD
+	XCTR	XR,[HRRZ AC3,2(TAC)]	;user's message ID
+	CAIL	AC1,QMPMAX		;
+	JRST	UUOERR			;illegal function code
+	HRRZ	AC1,QMPDSP(AC1)
+	JRST	(AC1)
+
+QMPDSP:	QMPRED				;read block
+	QMPQUE				;write block
+	QMPDTR				;read block from Dectape queue
+QMPMAX==.-QMPDSP
+
+IFN PUPNUM,<
+QMPRED:	JRST	UUOERR
+>;IFN PUPNUM
+
+IFE PUPNUM,<
+QMPRED:	MOVE	TAC1,AC2		;iowd to TAC1
+	PUSHJ	P,CHKIOW		;address check user's IOWD
+	JUMPL	TAC1,UUOERR		;IOWD addresses write protected region
+	OFFSCN
+	SKIPN	AC1,TO10QH		;first thing from queue
+	JRST	QMPRD2
+	MOVEI	DAT,TO10QH-DTQ%LK	;prepare to remove message from queue.
+	SKIPN	UUO,DTQ%LK(AC1)		;get link out of this block
+	HRRZM	DAT,TO10QT		;null link: reset to-10 queue tail too.
+	HRRZM	UUO,DTQ%LK(DAT)		;set as link out of prev blk
+	SOS	TO10QC			;decrement count also.
+QMPRD2:	ONSCN
+>;IFE PUPNUM
+
+QMPRD3:	JUMPE	AC1,CPOPJ		;nothing to do.
+	MOVN	TAC,TAC			;+WC
+	MOVE	AC3,DTQ%WC(AC1)		;get the pdp-11 word count from blk
+	ADDI	AC3,1
+	LSH	AC3,-1			;convert to pdp-10 words
+	CAMLE	TAC,AC3			;skip if user WC is smaller
+	MOVE	TAC,AC3			;decrease user WC to FS block size.
+	ADDI	TAC,-1(TAC1)		;TAC←user virtual ending address of BLT
+	HRLI	TAC1,DTQ%MS(AC1)	;TAC1 ← fs addr,,user addr of BLT
+	XCTR	XBLTW,[BLT TAC1,(TAC)]	;perform movement monitor to user.
+	PUSHJ	P,FSGIVE		;release fs block
+	JRST	CPOPJ1			;skip return
+
+;read & delete a message from the DECTAPE input queue.
+QMPDTR:	MOVE	TAC1,AC2		;iowd to TAC1
+	PUSHJ	P,CHKIOW		;address check user's IOWD
+	JUMPL	TAC1,UUOERR		;IOWD addresses write protected region
+	OFFSCN
+	SKIPN	AC1,DTINQH		;first thing from queue
+	JRST	QMPDT1
+	MOVEI	DAT,DTINQH-DTQ%LK	;prepare to remove message from queue.
+	SKIPN	UUO,DTQ%LK(AC1)		;get link out of this block
+	HRRZM	DAT,DTINQT		;null link: reset to-10 queue tail too.
+	HRRZM	UUO,DTQ%LK(DAT)		;set as link out of prev blk
+	SOS	DTINQC			;decrement count also.
+QMPDT1:	ONSCN
+	JRST	QMPRD3			;return message to the user
+
+;Copy a message from -10 user core and add it to the to-11 queue:
+QMPQUE:	MOVE	TAC1,AC2		;iowd to TAC1
+	PUSHJ	P,CHKIOW		;address check user's IOWD
+	MOVN	AC3,TAC			;+WC
+	ADDI	AC3,DTQ%XX		;+overhead for queue
+	PUSHJ	P,EFSGET		;get appropriate FS chunk
+	 JSP	DAT,UUOERR
+	HRLZ	DAT,TAC1		;user address,,0
+	HRRI	DAT,DTQ%MS(AC1)		;FS starting address
+	MOVN	DDB,TAC			;+wc
+	ADDI	DDB,DTQ%MS-1(AC1)	;ending address
+	XCTR	XBLTR,[BLT DAT,(DDB)]	;copy data from user to system
+	MOVN	DDB,TAC			;+WC
+	LSH	DDB,1			;PDP-11 word count
+	MOVEM	DDB,DTQ%WC(AC1)		;store it.
+	MOVE	DDB,[PUSHJ P,FSGIVE]
+	MOVEM	DDB,DTQ%XC(AC1)
+IFN PUPNUM,<				;If PUP service exists, don't
+	LDB	DDB,[POINT 16,DTQ%MS,15]	;let a user send anything
+	CAIE	DDB,%%ENMG			;to the e/n
+>;IFN PUPNUM
+	PUSHJ	P,DTEQ
+	 JRST	FSGIVE			;can't be queued.  give it away.
+	JRST	CPOPJ1
+
+;Call with TAC1 = IOWD.  Clobbers AC1
+CHKIOW:	MOVEI	TAC,1(TAC1)		;USER-RELATIVE STARTING ADDRESS.
+	PUSH	P,TAC			;SAVE IT.
+	HLRO	TAC,TAC1		;TAC←-WC
+	HRRZ	TAC1,TAC1		;FIRST ADDRESS-1
+	SUB	TAC1,TAC		;TAC1←ENDING ADDRESS
+	TLNN	TAC1,-1			;SKIP IF ENDING ADDRESS .GT. 256K
+	PUSHJ	P,RELOCA
+	JSP	DAT,ADRERR		;ADDRESS ERROR
+	MOVE	TAC1,(P)		;GET RELATIVE STARTING ADDRESS
+	PUSHJ	P,RELOCB		;CHECK STARTING ADDRESS (MUST BE SAME SEG)
+	JSP	DAT,ADRERR		;LOSE.
+	HRR	TAC1,(P)		;KEEP WRITE PROTECT BIT AND GET
+	SUB	P,[1,,1]		;  STARTING ADDRESS.  
+	POPJ	P,			;RETURN.  TAC=-WC. TAC1=USER STARTING ADDR
+;⊗ NCUBG3 EPDLV1 NOTME1 TRPUUO TRPDIS TRPPDL TRPPD1 TRPFOV
+
+IFN FTNCU,<
+↑↑NCUBG3::		;beginning of special uncached section of code
+>;IFN FTNCU
+
+↑EPDLV1:SYSPIFF
+	MOVEM 17,ETRPAC+17
+	MOVEI 17,ETRPAC
+	BLT 17,ETRPAC+16
+	MOVE P,ETRPDL
+	PUSHJ P,DISGST		;PRINT TIME OF NEW MESSAGE ON CTY
+	PUSHJ P,DISMES
+	ASCIZ /EXEC MODE PDLOV.  PC = /
+	MOVE TAC,EPDLOV
+	PUSHJ P,DISOCH
+	PUSHJ P,DISMES
+	ASCIZ /  PI CONI = /
+	CONI PI,TAC
+	PUSHJ P,DISOCH
+	PUSHJ P,DISERR
+	 [ASCIZ /
+Old ACs stored at ETRPAC:/]
+FOR I←0,17<
+	 [ASCIZ\
+I/	\]
+	 DISARG OCH,<ETRPAC+I>
+>
+	 [ASCIZ/
+
+Type RN<cr> to continue (via DDT).
+/]
+	 -1
+	PUSHJ P,DISFLU
+	JRST 4,.+1		;stop.  these things are often recursive in DDT
+	PUSHJ P,WDDTCALL
+NOTME1:	MOVSI 17,ETRPAC
+	BLT 17,17
+	SYSPIN
+	JRST 2,@EPDLOV
+
+↑TRPUUO:DATAO KLPAG,[400100,,0]	;CURRENT AC BLOCK 0, PREVIOUS 1.
+IFN FTKLB,<
+	HRLZ 17,KLUPT+KLUUFG		;get uuo opcode
+	HRR 17,KLUPT+KLUUEA		;stick in eff adr, which should be zero
+>;IFN FTKLB
+IFE FTKLB,<
+	MOVE 17,KLUPT+KLUUOW		;GET UUO
+>;IFE FTKLB
+	CAMN 17,[.TRAP 2,]		;DOES THE TRAP INSTRUCTION LOOK OK?
+	JRST TRPPDL			;YES. 
+	CAMN 17,[.TRAP 1,]		;OR OVERFLOW?
+	JRST TRPFOV			;YES.
+	DATAO KLPAG,[401000,,0]
+	MOVEM 17,ETRPAC+17
+	MOVEI 17,ETRPAC
+	BLT 17,ETRPAC+16
+	MOVE 17,ETRPAC+17
+	DATAO KLPAG,[400100,,0]
+	MOVE P,ETRPDL
+	PUSHJ P,DISGST		;PRINT TIME OF NEW MESSAGE ON CTY
+	PUSHJ P,DISMES
+	ASCIZ /Illegal MUUO as a user trap instruction
+Old ACs stored at ETRPAC
+/
+	PUSHJ P,DISFLU
+	PUSHJ P,DDTCALL
+TRPDIS:	DATAO KLPAG,[401000,,0]
+IFN FTKLB,<
+	XJRSTF KLUPT+KLUUFG		;DISMISS TRAP, set flags/PC from double word
+>;IFN FTKLB
+IFE FTKLB,<
+	JRST 2,@KLUPT+KLUUPC		;DISMISS TRAP
+>;IFE FTKLB
+
+TRPPDL:	MOVEI 16,POV
+TRPPD1:	IORM 16,KLECON			;SIMULATE INTERRUPT.  PC FROM KLUPT+KLUUPC
+	DATAO KLPAG,[401000,,0]		;BACK TO USER'S ACS FOR TRAP
+	JRST KLEINT
+
+TRPFOV:
+IFN FTKLB,<
+	MOVE 15,KLUPT+KLUUFG		;GET OLD FLAGS
+>;IFN FTKLB
+IFE FTKLB,<
+	MOVE 15,KLUPT+KLUUPC		;GET OLD PC & FLAGS
+>;IFE FTKLB
+	MOVEI 16,0
+	TLNE 15,400000			;IS AROV SET?
+	MOVEI 16,INTOV			;YES
+	TLNE 15,040000			;SKIP IF FOV CLEAR
+	IORI 16,INTFOV
+	TDNE 16,APRIN1			;IS USER ENABLED FOR THIS TRAP
+	JRST TRPPD1			;YES.  LET APR CHANNEL DO IT.
+	MOVSI 17,(<CAI>)		;NO.  EITHER HE'S NOT ENABLED AT ALL, OR
+	MOVE 16,APRIN1			;FOR ONE OF AROV/FOV, WITH THIS TRAP DUE
+	TRNN 16,INTOV!INTFOV		;TO THE OTHER.  SKIP IF ENABLED AT ALL.
+	MOVEM 17,KLUPT+KLUOVT		;NOT ENABLED AT ALL. FLUSH TRAP INSTRUCTION
+	JRST TRPDIS
+;⊗ ERRINT ERR.01 ERR.02 ERR.03 ERR.04 ERR.05 ERR.06 ERR.07 ERR.08 ERR.10 ERR.11 ERR.XT USRNXM ERR.09 SWEEPI KLLUUO
+
+;GET HERE FROM CH3 CONSZ CHAIN WHEN APR ERROR BITS ARE ON
+↑ERRINT:EXCH PID,APRID		;KL10 ERROR CONI BITS
+	CAIE PID,P1PID
+	MOVEI PID,P1PID
+	EXCH P,APRPDL
+	PUSHACS
+	MOVE TAC,[100000,,0]	;controller 4 (bits 0:4) is DMA20
+	MOVEM TAC,KLUPT+KLSBDI	;set up for SBUS diagnostic function
+	BLKO PI,KLUPT+KLSBDI	;get SBUS error bits and address
+	MOVE TAC,[110000,,0]	;bit 5 means clear error flags
+	BLKO PI,TAC		;clear SBUS error flags
+	PUSHJ P,DISGST		;PRINT TIME OF NEW MESSAGE ON CTY
+	PUSHJ P,DISMES
+	ASCIZ /KL10 APR error bits: /
+	CONI APR,TAC
+	PUSHJ P,DISOCH
+	CONSO APR,4000
+	JRST ERR.01
+	PUSHJ P,DISMES
+	ASCIZ / SBUS error /
+ERR.01:	CONSO APR,2000
+	JRST ERR.02
+	PUSHJ P,DISMES
+	ASCIZ / NXM /
+ERR.02:	CONSO APR,1000
+	JRST ERR.03
+	PUSHJ P,DISMES
+	ASCIZ / I-O Page Fail /
+ERR.03:	CONSO APR,400
+	JRST ERR.04
+	PUSHJ P,DISMES
+	ASCIZ / MB Parity error /
+	DATAI KLPAG,TAC		;Get AC selection
+	TDZ TAC,[370077,,-1]	;Clear extraneous bits
+	TLO TAC,400000		;set good bit
+	MOVEM TAC,KLPDTO	;save for restoring AC selection
+	DATAO KLPAG,[407000,,0]	;Select microcode AC block
+	MOVEM 0,KLPDAT		;save parity error data from block 7, AC 0
+	DATAO KLPAG,KLPDTO	;restore AC selection
+	PUSHJ P,DISERR
+	[ASCIZ /(Data = /]
+	DISARG OCH,KLPDAT
+	[ASCIZ /) /]
+	-1
+ERR.04:	CONSO APR,200
+	JRST ERR.05
+	PUSHJ P,DISMES
+	ASCIZ / Cache Addr Parity error /
+ERR.05:	CONSO APR,100
+	JRST ERR.06
+	PUSHJ P,DISMES
+	ASCIZ / MBOX Address Parity error /
+ERR.06:	CONSO APR,40
+	JRST ERR.07
+	PUSHJ P,DISMES
+	ASCIZ / Power Fail /	;FAT CHANCE
+ERR.07:	PUSHJ P,DISCRLF
+	PUSHJ P,DISMES
+	ASCIZ /SBUS Diag = /
+	MOVE TAC,KLUPT+KLSBDI+1	;get result of SBUS diagnostic
+	PUSHJ P,DISOCH		;and print it (bit 3=read, 4=write, 5=adr error)
+	CONSO APR,6500		;IS THIS AN ERROR THAT HOLDS ERA?
+	JRST ERR.08		;NO.
+	PUSHJ P,DISMES
+	ASCIZ /   Err Addr Reg = /
+	BLKI PI,TAC
+	MOVEM TAC,KLEAR		;Save Error Address for zapping user
+	PUSHJ P,DISOCH		;Print it now
+ERR.08:	PUSHJ P,DISCRLF
+	CONI APR,TAC
+	ANDI TAC,7747
+	CONO APR,KLCLRF(TAC)	;Clear the error(s)
+IFN FTUNXM,<	 ;Give NXM via real NXM to user, don't stop system
+	CONSO PI,7400		;Not user if came from ch 4,5,6,7
+	TRNN TAC,2000		;NXM?
+	JRST ERR.10		;Not user mode NXM
+	MOVE TEM,APRCHL		;Get PC of error
+	TLNN TEM,USRMOD		;Come from user mode?
+	JRST ERR.10		;Nope
+IFN FTXADR,<
+	MOVE TEM,APRCHL+1	;get PC
+;	TLNE TEM,-1		;nonzero section?
+;	jfcl			;yes, what do we do
+	HLL TEM,APRCHL		;get flags
+>;IFN FTXADR
+	MOVEM TEM,NXMPC		;Store PC for error message
+	PUSH P,TAC
+	PUSHJ P,DISMES		;Print user mode PC
+	ASCIZ/PC = /]
+IFN FTXADR,<
+	MOVE TAC,APRCHL+1
+>;IFN FTXADR
+IFE FTXADR,<
+	MOVE TAC,APRCHL
+>;IFE FTXADR
+	PUSHJ P,DISOCH
+	PUSHJ P,DISCRLF
+	POP P,TAC
+	MOVE TEM,KLEAR		;Get physical address of error
+	LDB DSER,[POINT 13,TEM,26] ;Get physical page of error
+	CAIL DSER,GOODPG	;Bigger than this means definitely no mem there
+	JRST USRNXM		;Give user a NXM
+	LDB TEM,COREP		;Get core usage code
+	CAIN TEM,NXMCUS		;Does this core not exist?
+	JRST USRNXM		;Yes, give user a NXM
+>;IFN FTUNXM
+ERR.10:	PUSH P,TAC		;save error bits
+;;repeat 0,<	 ;don't stop for the momentary NXMs we're getting (no hung memory)
+	TRNN TAC,2000		;NXM?
+	JRST ERR.11		;no
+	PUSHJ P,DISMES		;yes
+	 ASCIZ/We have a NXM.  Check for hung memory, especially the ARM-10M.
+Fix it (reset it) and then type RN<cr>.
+/
+;;>;repeat 0
+ERR.11:	PUSHJ P,DISFLU		;TYPE WHAT WE GOT SO FAR
+	POP P,TAC
+;;repeat 0,<	 ;don't stop for the momentary NXMs we're getting (no hung memory)
+	TRNE TAC,2000		;NXM?
+	JRST 4,.+1		;YES, Halt to give wizard a chance to reset memory
+;;>;repeat 0
+	TRNE TAC,4400		;PARITY ERROR?
+	JRST ERR.09		;YES.  LET PAGE FAULT HANDLE IT
+repeat 1,<	 ;don't stop for the momentary NXMs we're getting (no hung memory)
+;;	TRNE TAC,1740		;don't stop if only NXM
+>;repeat 1
+	PUSHJ P,WDDTCAL
+	SETZM KLEAR		;Don't confuse PARINT next time
+ERR.XT:	POPACS
+	EXCH P,APRPDL
+	EXCH PID,APRID+P1PID
+
+	MTRCOF (CH3,P2NOCK)
+
+IFN FTXADR,<
+	XJEN APRCHL		;LET PAGE FAULT HANDLER DO IT.
+>;IFN FTXADR
+IFE FTXADR,<
+	JRST 12,@APRCHL		;LET PAGE FAULT HANDLER DO IT.
+>;IFE FTXADR
+
+USRNXM:	PUSHJ P,TELNXM		;Stop user (or give him NXM interrupt) (in PARSER)
+	JRST ERR.XT		;DISMISS CH3
+
+ERR.09:	LDB TAC1,[POINT 5,KLUPT+KLPFW,5] ;GET FAILURE TYPE
+IFN FTKLB,<
+	CAIN TAC1,25		;if page table parity error,
+	JRST ERR.XT		; then let page fault happen
+>;IFN FTKLB
+	CAIE TAC1,36		;IS IT AR PAR ERROR
+	CAIN TAC1,37		; OR ARX?
+	JRST ERR.XT		;PAGE FAULT WILL HANDLE IT
+	SKIPGE PFPARF
+	JRST ERR.XT		;PAGE FAULT HAS ALREADY HAPPENED
+	SETOM P1RFLG		;TELL PARSER WE FOUND ONE
+	POPACS
+	EXCH P,APRPDL
+	EXCH PID,APRID
+
+	MTRCOF (CH3,P2NOCK)
+
+	JRST PARINT		;DO IT OURSELVES
+
+↑SWEEPI:CONO APR,KLCLRF!SWEEPD!APRCHN	;CLEAR SWEEP DONE
+
+	MTRCOF (CH3,P2NOCK)
+
+IFN FTXADR,<
+	XJEN APRCHL
+>;IFN FTXADR
+IFE FTXADR,<
+	JRST 12,@APRCHL
+>;IFE FTXADR
+
+;41 CONTAINS JSR KLLUUT.  KLLUUT+1 CONTAINS JRST KLLUUO.
+;40 GETS THE LUUO.
+↑KLLUUO:EXCH P,ERRPDL		;KL10 LUUO FROM EXEC
+	PUSHACS
+	SOS KLLUUT		;Back up PC to losing instruction
+	PUSH P,KLLUUT		;PC
+	PUSH P,40		;INSTRUCTION
+	PUSHJ P,DISGST		;PRINT TIME OF NEW MESSAGE ON CTY
+	PUSHJ P,DISMES
+	ASCIZ /Illegal LUUO = /
+	POP P,TAC
+	PUSHJ P,DISOCH
+	PUSHJ P,DISMES
+	ASCIZ /, from EXEC PC = /
+	POP P,TAC
+	PUSHJ P,DISOCH
+	PUSHJ P,DISCRLF
+	PUSHJ P,DISFLU
+	POPACS
+	PUSHJ P,WDDTCALL
+	EXCH P,ERRPDL
+	JRST @KLLUUT		;Try again, maybe wizard patched it back
+;ILLTAB - SIMULATION OF OLD INSTRUCTIONS  - (CALLED FROM ILLINS IN COMCSS) ;⊗ ILLTAB ILLTLN $DFN $FLGET $FLGT1 $FLGT2 $FAT3A $FAT3B $FAT3C $KAFIX $UFA $UFA1 $FADL $FSBL $FADL0 $FLNRM $FLNR2 $FLNR3 $FLN3A $FLNR4 $FLNR5 $FLNR6 $FLSTR STORA1 $FMPL $FDVL $FDVL1 $FDVL2 $FDVL3 $FDVL4 $FDVL6 $FDVL8 $FDVL9 $FDVL5 $FDVL7 $FDVLX
+
+↑ILLTAB:KAFIX $KAFIX
+	FADL $FADL
+	FSBL $FSBL
+	FMPL $FMPL
+	FDVL $FDVL
+	UFA $UFA
+	DFN $DFN	
+↑ILLTLN←←.-ILLTAB
+
+$DFN:	XCTR XR,[MOVE AC2,(UUO)]	;FETCH SECOND ARGUMENT
+	LSHC AC1,9			;EXPONENT TO AC1 (ISN'T CHANGED)
+	XCTR XR,[MOVE TAC,(UCHN)]	;FETCH HIGH WORD FROM C(AC)
+	SETCM TAC,TAC			;ONE'S COMPLEMENT THE HIGH WORD
+	MOVN AC2,AC2			;TWO'S COMPLEMENT THE LOW WORD.
+	SKIPN AC2			;SKIP UNLESS LOW WORD IS ZERO
+	ADDI TAC,1			;TWO'S COMPLEMENT THE HIGH WORD
+	LSHC AC1,-9			;RESTORE OLD BITS 0-8
+	XCTR XW,[MOVEM AC2,(UUO)]	;STORE C(E)
+	XCTR XW,[MOVEM TAC,(UCHN)]	;STORE C(AC)
+	POPJ P,
+
+;SUBROUTINE FOR ARGUMENT FETCH AND PREPARATION (EXTRACT EXPONENT, SIGN EXTEND)
+$FLGET:	XCTR XR,[MOVE AC2,(UUO)]	;FETCH C(E).
+$FLGT1:	XCTR XR,[MOVE TAC1,(UCHN)]	;FETCH C(AC)
+$FLGT2:	LDB TAC,[POINT 9,TAC1,8]	;EXPONENT AND SIGN OF C(AC)
+	LDB AC1,[POINT 9,AC2,8]		;EXPONENT AND SIGN OF C(E)
+	TRNE TAC,400
+	XORI TAC,777			;ONES COMPLEMENT OF NEGATIVE EXPONENT
+	TRNE AC1,400
+	XORI AC1,777
+	SKIPL TAC1			;SKIP IF C(AC) ARE NEGATIVE
+	TLZA TAC1,777000		;POSITIVE. EXTEND SIGN BIT
+	TLO TAC1,777000			;NEGATIVE. EXTEND SIGN
+	SKIPL AC2			;SKIP IF C(E) ARE NEGATIVE
+	TLZA AC2,777000			;POSITIVE. EXTEND SIGN BIT
+	TLO AC2,777000			;NEGATIVE. EXTEND SIGN
+	POPJ P,
+
+;SUBROUTINE FOR ADD/SUBTRACT TYPE OPERATIONS.  DENORMALIZE SMALLER ARGUMENT
+$FAT3A:	CAML TAC,AC1			;DECIDE WHICH EXPONENT IS LARGER
+	JRST $FAT3B			;AND DO PRENORMALIZE (DENORMALIZE)
+	EXCH TAC,AC1			;INTERCHANGE OPERANDS
+	EXCH TAC1,AC2			;SMALLER OPERAND INTO AC1/AC2/AC3=0
+$FAT3B:	SUB AC1,TAC			;AC1←SHIFT FACTOR (0 OR NEGATIVE)
+	MOVEI AC3,0			;FOR PEOPLE WHO WANT DOUBLE LENGTH
+	CAMGE AC1,[-100]		;ARE WE GOING TO LOSE ALL SIGNIFIGANCE?
+	TDZA AC2,AC2			;YES.  AC2←0 SKIP THE SHIFT
+	ASHC AC2,(AC1)
+	TRZ AC3,177			;KA10 MAKES A 54 BIT RESULT
+	ADD AC2,TAC1			;DOUBLE LENGTH RESULT TO AC2/AC3
+	SKIPL AC2			;POSITIVE OR NEGATIVE RESULT
+	SKIPA TAC1,[TLNN AC2,1000]
+	MOVE TAC1,[TLNE AC2,1000]
+	XCT TAC1			;SKIP IF ADD OVERFLOWED
+	JRST $FAT3C			;NO OVERFLOW
+	ASHC AC2,-1			;ADD PRODUCED AN HIGH ORDER BIT.  
+	ADDI TAC,1			;SHIFT RESULT DOWN AND BUMP EXPONENT
+$FAT3C:	TLZ AC3,400000			;CLEAR SIGN BIT IN LOW WORD (SET BY ASHC)
+	POPJ P,
+
+;OPCODE 247 AT STANFORD IS "KAFIX", AN UNNORMALIZED FLOATING ADD IMMEDIATE
+;WHICH DOESN'T STORE AN EXPONENT.  TYPICALLY "KAFIX AC,233000" WILL FIX C(AC)
+;BUT OTHER POSSIBILITIES, INCLUDING SCALING AND ADDING SMALL CONSTANTS EXIST
+
+$KAFIX:	MOVSI AC2,(UUO)			;MEMORY ARGUMENT IS E,,0
+	PUSHJ P,$FLGT1			;FETCH C(AC) AND SETUP
+	PUSHJ P,$FAT3A			;PRENORMALIZE AND DO THE ADD
+	CAMN AC2,[777000,,0]		;ONE WIERD RESULT
+	TLO AC2,400			;DESERVES ANOTHER
+	XCTR XW,[MOVEM AC2,(UCHN)]	;RETURN RESULT IN USER'S AC
+	POPJ P,
+
+$UFA:	PUSHJ P,$FLGET			;FETCH AND SETUP ARGUMENTS
+	PUSHJ P,$FAT3A			;PRENORMALIZE AND DO THE ADD.
+	CAIG TAC,377			;DID EXPONENT OVERFLOW?
+	JRST $UFA1			;NO.
+	MOVSI TAC1,440200		;SET AROV, FOV, AND TRAP1
+	IORM TAC1,UUOPC(J)		;STORE WHERE THEY'LL BE RESTORED.
+$UFA1:	SKIPN AC2			;SKIP IF RESULT NON ZERO.
+	JUMPE AC3,STORA1		;HIGH PART IS 0.  RETURN 0 IF LOW PART IS 0
+	DPB TAC,[POINT 8,AC2,8]		;STORE EXPONENT
+	SKIPGE AC2			;SKIP IF RESULT IS POSITIVE
+	TLC AC2,377000			;ONES COMPLEMENT TO EXPONENT
+	MOVE AC3,AC2			;COPY RESULT TO AC3 FOR STORA1
+	JRST STORA1
+
+$FADL:	PUSHJ P,$FLGET			;FETCH AND PREPARE ARGUMENTS
+	JRST $FADL0
+
+$FSBL:	PUSHJ P,$FLGET			;FETCH AND PREPARE ARGUMENTS
+	MOVN AC2,AC2			;NEGATE C(E)
+$FADL0:	PUSHJ P,$FAT3A			;PRENORMALIZE AND DO ADD
+;POSTNORMALIZE.  TAC= EXPONENT, AC2--AC3 ARE FRACTION
+$FLNRM:	SKIPN AC2			;TAC=EXPONENT. AC2--AC3 ARE FRACTION
+	JUMPE AC3,$FLSTR		;JUMP IF RESULT IS ZERO.  STORE RESULT
+	SKIPL AC2			;POSTNORMALIZE BY SHIFTING LEFT
+	SKIPA AC1,[TLNE AC2,400]	;SKIP IF POSITIVE NUMBER IS UNNORMALIZED
+	MOVE AC1,[TLNN AC2,400]		;SKIP IF NEGATIVE NUMBER IS UNNORMALIZED
+$FLNR2:	XCT AC1				;SKIP IF UNNORMALIZED
+	JRST $FLNR3			;NORMALIZE COMPLETE
+	ASHC AC2,1			;SHIFT TO NORMALIZE
+	SOJA TAC,$FLNR2			;DECREMENT EXPONENT. LOOP UNTIL DONE
+
+$FLNR3:	JUMPGE AC2,$FLN3A		;JUMP IF POSITIVE
+	TDNE AC2,[777,,-1]		;NEGATIVE.  SKIP IF NO SIGNIFICANCE
+	JRST $FLN3A	
+	ASHC AC2,-1			;GET THAT BIT BACK HERE
+	ADDI TAC,1
+$FLN3A:	TLZ AC3,400000			;CLEAR SIGN BIT OF LOW WORD
+	LSH AC3,-10			;LEAVE ROOM IN LOW WORD FOR EXPONENT
+	CAIGE TAC,400			;SKIP IF OVERFLOW
+	JUMPGE TAC,$FLNR6		;JUMP UNLESS UNDERFLOW
+	MOVSI AC1,440200		;AROV, FOV, TRAP 1
+	CAIL TAC,433			;DOES EXPONENT EXCEED 128+27?
+	JRST $FLNR4			;YES.  STORE ZERO IN LOW WORD
+	JUMPG TAC,$FLNR5
+	TRNE TAC,200			;SOMETIMES THE KA10 FORGETS AN UNDERFLOW
+	TLO AC1,100			;SET FLOATING UNDERFLOW TOO.
+$FLNR4:	MOVEI AC3,0			;AND CLEAR LOW WORD.
+$FLNR5:	IORM AC1,UUOPC(J)		;STORE FLAGS FOR USER.
+$FLNR6:	HRREI TAC1,-33(TAC)		;COMPUTE EXPONENT OF LOW PART
+	SKIPGE TAC1
+	MOVEI AC3,0			;ZERO LOW PART, IF EXPONENT TOO SMALL
+	ANDI TAC,377			;TRUNCATE EXPONENT
+	SKIPE AC3			;SKIP IF LOW FRACTION IS ZERO
+	DPB TAC1,[POINT 9,AC3,8]	;STORE LOW EXPONENT. CLEAR SIGN BIT.
+	ROT TAC,-11			;SHIFT EXPONENT TO RIGHT PLACE
+	XOR AC2,TAC			;ONES COMPLEMENT OF EXP, IF NEGATIVE
+$FLSTR:	XCTR XW,[MOVEM AC2,(UCHN)]	;STORE DOUBLEWORD RESULT IN C(AC)
+STORA1:	ADDI UCHN,1			;AND IN C(AC+1 MOD 20)
+	ANDI UCHN,17
+	XCTR XW,[MOVEM AC3,(UCHN)]
+	POPJ P,
+
+$FMPL:	PUSHJ P,$FLGET			;FETCH AND PREPARE ARGUMENTS
+	MUL AC2,TAC1			;DOUBLE WORD PRODUCT TO AC2/AC3
+	ADD TAC,AC1			;TAC←EXPONENT OF RESULT
+	SUBI TAC,200			;ACCOUNT FOR EXCESS 200 IN EXPONENTS
+	ASHC AC2,10			;RESULT OF MULTIPLY IS TOO FAR RIGHT BY 8
+					;PLACES (NOT 9 SINCE BIT 0 OF AC3 IS SIGN)
+	TLZ AC3,400000			;FLUSH SIGNBIT
+	JRST $FLNRM			;DO POSTNORMALIZE
+
+$FDVL:	XCTR XR,[MOVE AC2,(UCHN)]	;FETCH C(AC)
+	MOVEI AC3,1(UCHN)
+	ANDI AC3,17
+	XCTR XR,[MOVE AC3,(AC3)]	;FETCH C(AC+1)
+	XCTR XR,[MOVE TAC1,(UUO)]	;FETCH C(E).
+	LSH AC3,8			;FLUSH EXPONENT FROM LOW WORD
+	TLZ AC3,400000			;FLUSH SIGNBIT FROM LOW WORD
+	SKIPN AC2
+	JUMPE AC3,$FLSTR		;ZERO DIVIDEND IS EASY
+	PUSHJ P,$FLGT2			;SETUP EXPONENTS, ETC
+$FDVL1:	MOVEI TEM,0			;ASSUME BOTH ARGUMENTS ARE POSITIVE
+	JUMPGE AC2,$FDVL2		;JUMP IF DIVIDEND IS POSITIVE
+	SETCA AC2,			;DIVIDEND IS NEGATIVE.  TAKE TWOS COMPLEMENT
+	MOVN AC3,AC3			;OF THE DOUBLE WORD (THIS SHOULD BE DMOVN
+	SKIPN AC3			;EXCEPT, WE HAVE TO RUN THIS ON THE KA10 TO
+	ADDI AC2,1			;VERIFY IT).
+	MOVSI TEM,600000		;QUOTIENT AND REMAINDER ARE NEGATIVE
+$FDVL2:	JUMPGE TAC1,$FDVL3		;JUMP IF DIVISOR IS POSITIVE
+	MOVN TAC1,TAC1
+	TLC TEM,400000			;COMPLEMENT SIGN OF QUOTIENT
+$FDVL3:	CAMGE AC2,TAC1			;IS QUOTIENT GREATER THAN 1.0?
+	JRST $FDVL4			;NO.
+	ASHC AC2,-1			;YES.  TRY A 1 BIT SHIFT
+	CAML AC2,TAC1			;DID THAT FIX IT?
+	JRST $FDVLX			;NO. WE HAVE A NO-DIVIDE CONDITION
+	ADDI AC1,1			;ADJUST EXPONENT OF DIVIDEND
+$FDVL4:	TLNN TAC1,1000			;ONLY CRETINS DIVIDE BY "SETZ"
+	JRST $FDVL6
+	LSH TAC1,-1			;BUT TO KEEP THEM HAPPY...
+	ADDI TAC,1
+$FDVL6:	SUBM AC1,TAC			;TAC←EXPONENT OF QUOTIENT
+	ADDI TAC,200			;MAKE EXPONENT INTO EXCESS 200.
+	LSH TAC1,8			;SCALE DIVISOR TO ALLOW ONLY 27 DIVIDE STEPS
+	DIV AC2,TAC1			;AC2←QUOTIENT, AC3←REMAINDER
+	JUMPE AC2,$FDVL9		;IF QUOTIENT IS ZERO, DON'T NORMALIZE
+$FDVL8:	TLNE AC2,400			;NOW, NORMALIZE THE QUOTIENT
+	JRST $FDVL9
+	LSH AC2,1			;BEFORE COMPUTING OVERFLOW CONDITION
+	SOJA TAC,$FDVL8
+
+$FDVL9:	CAIGE TAC,400			;OVERFLOW?
+	JUMPGE TAC,$FDVL7		;NO.  JUMP UNLESS UNDERFLOW
+	MOVSI DSER,440200		;AROV, FOV, TRAP 1
+	JUMPGE TAC,$FDVL5
+	TRNE TAC,200			;SOMETIMES THE KA10 FORGETS FXU
+	TLO DSER,100			;FXU
+$FDVL5:	IORM DSER,UUOPC(J)
+	ANDI TAC,377
+$FDVL7:	SKIPE AC2			;AVOID STORING EXPONENT IN A ZERO FRACTION
+	DPB TAC,[POINT 9,AC2,8]		;STUFF EXPONENT
+	TLNE TEM,400000			;SHOULD QUOTIENT BE NEGATIVE?
+	MOVN AC2,AC2			;YES.
+	SUBI AC1,33			;CALCULATE EXPONENT OF REMAINDER
+	SKIPGE AC1			;IF UNDERFLOW, SET REMAINDER TO ZERO
+	MOVEI AC3,0
+	JUMPE AC3,$FLSTR		;IF ZERO REMAINDER, STORE ZERO
+	LSH AC3,-10			;MAKE ROOM FOR EXPONENT
+	DPB AC1,[POINT 8,AC3,8]		;STUFF EXPONENT
+	TLNE TEM,200000			;SHOULD WE NEGATE REMAINDER?
+	MOVN AC3,AC3
+	JRST $FLSTR			;STORE AC, AC+1
+
+
+$FDVLX:	MOVSI AC3,440240		;AROV, FOV, NO DIVIDE, TRAP1
+	IORM AC3,UUOPC(J)
+	POPJ P,
+;CACHE STRATEGY ;⊗
+
+Comment ⊗
+
+For every job a cell, JBTCSH, is kept which contains bits describing this
+job's relation to the cache. 
+
+Reasons a job may not be cached include:
+	P2 spacewar		Val core, Inval cache
+	P2 Dump mode I/O	Val core, Inval cache
+	DD			Val core for all affected pages
+	DSK Dump I/O		O - Val core for all relevant pages
+				I - inval cache, no core write, for entire pages
+				I - Val core, inval cache for partial pages
+	TV 			(same as DSK I)
+	FastBand I/O		(same as DSK I/O)
+	Swap out		Val core, inval cache for all pages
+	Swap in			Inval cache for all pages
+
+As a temporary measure, all cache operations will sweep the entire cache, validating
+core and invalidating the cache.
+
+Segments may be affected by swapping, explicit disk I/O and explicit DD output.
+If a segment is uncached, that information should be spread to all lowers
+(see below!)
+
+When a job has a reason for not being cached, the job must be suspended until
+it becomes uncached. (Prior to suspension, it should mark all pages as
+uncached).
+
+Prior to running a job, if that job has become cacheable since last run,
+the cache bit should be spread in its map.  [Affects CIP8, INTRUN, P1 Spacewar].
+Prior to running a job that has a segment, if that segment has become
+cacheable since any of its lowers were last run, then the cache bit should
+be spread to all lowers of this upper.
+
+⊗
+;⊗ CSHOFF SWEEPC SWEEPA SWEEPW VALCOR CSHOF1 CSHOFX CSHOF0 CSERR CSHRES CSHOK CSHXIT CSHSET CSHSEB CSHSTX CSHSEA CSHOF2 CSHSE0 T1POPJ CSHOFY CSHSE1 CSHSE2
+
+;CSHOFF	 - TURN OFF THE CACHE FOR ALL PAGES OF A JOB.  P1 UUO OR CH7 ONLY!
+;CALLING:
+;	MOVE J,<JOB NUMBER>
+;	MOVE TAC,<REASON TO NOT CACHE THIS JOB>
+;	PUSHJ P,CSHOFF
+;	<RETURN HERE WHEN JOB IS NO LONGER CACHED.  CLOBBERS TAC>
+
+↑CSHOFF:TDNE TAC,JBTCSH(J)	;IS BIT ON ALREADY?
+	JRST CSERR		;YES. THIS IS AN ERROR
+	TLNE TAC,CSHDSK!CSHDD	;DISK AND DATA DISK MAY INVOLVE SEGMENTS
+	JRST CSHOF1
+	PUSHJ P,CSHOF0		;FLUSH CACHEABILITY FROM THIS JOB'S PAGES
+	POPJ P,			;CACHE IS ALREADY OFF FOR THIS JOB
+SWEEPC:	CONO KLPAG,@KLPCON	;CLEAR PAGE TABLE RAM (SINCE CHANGING CACHE BITS)
+↑SWEEPA:CONSO KLPAG,600000	;DON'T BOTHER UNLESS CACHE IS REALLY ON
+	POPJ P,
+	MTRON (MTRSWP)
+	DATAO CCA,		;SWEEP ALL. VALIDATE CORE, INVALIDATE CACHE
+SWEEPW:	CONSZ APR,SWEEPB
+	JRST .-1
+	MTROFF (MTRSWP)
+	POPJ P,
+
+↑VALCOR:CONSO KLPAG,600000
+	POPJ P,			;CACHE LOOK AND LOAD ARE OFF
+	MTRON (MTRSWP)
+	BLKO CCA,		;VALIDATE CORE
+	JRST SWEEPW
+
+CSHOF1:	PUSHJ P,CSHOF0		;TURN OFF CACHE FOR THIS JOB.
+	TDZA TAC,TAC		;CACHE IS ALREADY OFF FOR LOWER
+	MOVEI TAC,1		;NEED TO SWEEP.
+	PUSH P,TAC		;REMEMBER "NEED TO SWEEP" ON STACK
+	LDB TAC,PSEGN		;GET JOB NUMBER OF UPPER, IF ANY.
+	JUMPE TAC,CSHOFX	;IF NONE, ADJUST STACK AND RETURN.
+	SKIPL JBTCSH(TAC)	;SKIP IF UPPER IS NOW IN THE CACHE
+	JRST CSHOFX		;NO NEED TO DIDDLE UPPER'S MAP.
+	SETOM (P)		;WE NEED TO SWEEP.
+	PUSH P,J		;SAVE JOB NUMBER OF LOWER
+	MOVE J,TAC		;NUMBER OF THE UPPER
+	MOVEI TAC,0		;BITS TO OR INTO JBTCSH OF UPPER
+	PUSHJ P,CSHOF0		;FLUSH CACHEABILITY FROM UPPER'S MAP.
+	JFCL			;(SHOULD ALWAYS SKIP!)
+	PUSH P,AC1
+	PUSHJ P,UAPPLY
+	 PUSHJ P,CSHOFY		;FOR EACH LOWER, FLUSH UPPER'S CACHEABILITY
+	POP P,AC1
+	POP P,J			;RESTORE JOB NUMBER OF FIRST LOWER
+CSHOFX:	POP P,TAC
+	JUMPN TAC,SWEEPC	;JUMP IF WE NEED TO SWEEP
+	POPJ P,
+
+
+CSHOF0:	IORB TAC,JBTCSH(J)	;TURN ON BIT.
+	TLZN TAC,CSHON		;CLEAR CACHE ON.  SKIP IF IT WAS ON
+	JRST CSHXIT		;CACHE ISN'T ON FOR THIS JOB
+	MOVEM TAC,JBTCSH(J)
+	PUSH P,AC1
+	PUSHJ P,CSHOF2
+	POP P,AC1
+	JRST CPOPJ1
+
+CSERR:	PUSHACS
+	PUSHJ P,DISGST		;PRINT TIME OF NEW MESSAGE ON CTY
+	PUSHJ P,DISMES
+	ASCIZ /Attempt to set cache disable bit while already set.
+/
+	PUSHJ P,DISFLU
+	POPACS
+	PUSHJ P,WDDTCAL
+	JRST CSHXIT
+
+LOSYS
+
+;CSHOK - REMOVE A REASON WHY A JOB MAY NOT HAVE ITS PAGES CACHED.  P1 OR P2
+;SAME CALLING AS CSHOFF
+
+↑CSHRES:MOVE TAC,[¬<CSHON,,0>]	;FLUSH ALL CACHE DISABLE REASONS (RESET)
+↑CSHOK:	ANDCAM TAC,JBTCSH(J)	;REMOVE A REASON
+CSHXIT:	POPJ P,
+
+HISYS
+
+;CSHSET - HERE BEFORE RUNNING A JOB TO SEE IF IT'S CACHE IS TURNED ON. P1 ONLY
+;ALSO, HERE FROM DIDLE BECAUSE CORE ROUTINES DON'T UNDERSTAND ABOUT CACHE
+;AND HAVE TURNED OFF CACHE BITS IN JOB'S NEW CORE ASSIGNMENT
+
+;NOTE THAT THIS ROUTINE RUNS CH7/UUO ONLY
+↑CSHSET:CONSZ KLPAG,600000	;SKIP IF CACHE IS DISABLED ON P1
+	SKIPE JBTCSH(J)		;SKIP IF CSHON=0 AND THERE'S NO REASON TO
+	POPJ P,			;  KEEP THE CACHE OFF. 
+	MTRON (MTRCST)
+	MOVSI TAC,CSHON
+	MOVEM TAC,JBTCSH(J)
+	PUSH P,AC1
+	PUSHJ P,CSHSE0		;TURN ON CACHE BIT FOR ALL PAGES OF LOWER
+	POP P,AC1
+	LDB TAC,PSEGN		;DO WE HAVE A SEGMENT?
+	JUMPE TAC,CSHSTX	;NO.  WE'RE DONE NOW.
+	SKIPE JBTCSH(TAC)	;IS SEGMENT CACHEABLE BUT NOT CACHED?
+	JRST CSHSTX		;NO, EITHER CACHED ALREADY ELSE WE CAN'T
+	PUSH P,J
+	MOVE J,TAC		;SEGMENT'S NUMBER
+	PUSH P,AC1
+	MOVEI TAC,0		;ASSUME WE'RE OK
+	PUSHJ P,UAPPLY
+	 PUSHJ P,CSHSEA		;A LOWER MAY KEEP AN UPPER UNCACHED
+	JUMPN TAC,CSHSEB	;JUMP IF A LOWER IS KEEPING UPPER UNCACHED
+	MOVSI TAC,CSHON
+	MOVEM TAC,JBTCSH(J)
+	PUSHJ P,CSHSE0		;CACHE ENABLE ALL THE SEGMENT'S PAGES
+	PUSHJ P,UAPPLY
+	 PUSHJ P,CSHSE1		;CACHE ENABLE SEGMENT'S PAGES IN ALL LOWERS
+CSHSEB:	POP P,AC1
+	POP P,J
+CSHSTX:	MTROFF (MTRCST)
+	POPJ P,
+
+CSHSEA:	MOVE AC1,JBTCSH(J)
+	TLNN AC1,CSHDD!CSHDSK	;THESE ARE REASONS TO NOT CACHE AN UPPER
+	POPJ P,
+	AOJA TAC,CPOPJ1		;TERMINATE UAPPLY, RETURN TAC NON-ZERO
+
+CSHOF2:	SKIPA AC1,[ANDCAM TAC,(TAC1)]
+↑CSHSE0:MOVE AC1,[IORM TAC,(TAC1)]
+	PUSH P,TAC1
+IFE FTMPP2,<
+	MOVE TAC1,JBTMAP(J)
+>;IFE FTMPP2
+IFN FTMPP2,<
+	MOVE TAC1,AC1
+	PUSHJ P,JOBMAP		;EXEC VIRTUAL PG # OF UPMP
+	 JFCL			;MUST BE ONE
+	EXCH TAC1,AC1
+>;IFN FTMPP2
+	LSH TAC1,9
+	HLRZ TAC,JBTPAG(J)	;# OF PAGES IN JOB
+	MOVN TAC,TAC
+	HRL TAC1,TAC		;AOBJN POINTER TO USER'S PAGE TABLE
+	MOVSI TAC,P.CAC		;CACHE ENABLE BIT
+	XCT AC1
+	AOBJN TAC1,.-1
+T1POPJ:	POP P,TAC1
+	POPJ P,
+
+CSHOFY:	SKIPA AC1,[ANDCAM TAC,(TAC1)]	;TURN OFF CACHEABILITY OF UPPER IN A LOWER
+CSHSE1:	MOVE AC1,[IORM TAC,(TAC1)]	;TURN ON CACHEABILITY OF UPPER IN A LOWER
+	PUSH P,TAC1			;J=LOWER, DDB=UPPER
+IFE FTMPP2,<
+	SKIPN TAC1,JBTMAP(J)
+	JRST CSHSE2			;NO WORK IF LOWER'S NOT IN CORE
+>;IFE FTMPP2
+IFN FTMPP2,<
+	MOVE TAC1,AC1
+	PUSHJ P,JOBMAP			;EXEC VIRTUAL PG # OF UPMP
+	 JRST CSHSE2			;NO WORK IF LOWER'S NOT IN CORE
+	EXCH TAC1,AC1
+>;IFN FTMPP2
+	LSH TAC1,9
+	HLRZ TAC,JBTPAG(J)		;# OF PAGES IN JOB
+	CAIGE TAC,400			;MORE THAN 400?
+	MOVEI TAC,400			;NO. UPPER STARTS AT PAGE 400
+	ADDI TAC1,(TAC)			;FIRST PAGE # OF UPPER IN LOWER'S JBTMAP
+	HLRZ TAC,JBTPAG(DDB)		;# OF PAGES IN UPPER
+	MOVN TAC,TAC
+	HRL TAC1,TAC			;AOBJN POINTER TO USER'S PAGE TABLE
+	MOVSI TAC,P.CAC			;CACHE ENABLE BIT
+	XCT AC1				;EITHER IORM TAC,(TAC1) OR ANDCAM TAC,TAC1
+	AOBJN TAC1,.-1
+CSHSE2:	POP P,TAC1
+	POPJ P,
+;ADDRESS BREAK SYSTEM. ;⊗ KLADRB BRKPAT BRKXIT BRKERR ADRBCK
+
+;HERE FROM PAGE FAULT TRAP HANDLER, P IS PAGPDL AND TAC IS PUSHED
+
+↑KLADRB:PUSH P,AC1
+	MOVE TAC,KLUPT+KLPFPC		;GET PC
+BRKPAT:	JRST BRKERR			;PATCH THIS IF YOU REALLY WANT TO USE THIS
+	REPEAT 20,<JFCL>		;PATCH IN WHATEVER YOU WANT
+↑BRKXIT:POP P,AC1
+	MOVSI TAC,PCADFI		;SET ADDRESS FAIL INHIBIT IN RETURN PC
+IFN FTKLB,<
+	IORM TAC,KLUPT+KLPFFG
+>;IFN FTKLB
+IFE FTKLB,<
+	IORM TAC,KLUPT+KLPFPC
+>;IFE FTKLB
+	POP P,TAC
+	EXCH P,PAGPDL
+IFN FTKLB,<
+	XJRSTF KLUPT+KLPFFG	;restore flags and PC from double word
+>;IFN FTKLB
+IFE FTKLB,<
+	JRST 2,@KLUPT+KLPFPC
+>;IFE FTKLB
+
+↑BRKERR:PUSHACS
+	PUSHJ P,DISUSR		;PRINT TIME OF NEW MESSAGE ON CTY
+	 SIXBIT /ADRBRK/
+	PUSHJ P,DISMES
+	ASCIZ /Address Break.  PC = /
+	MOVE TAC,KLUPT+KLPFPC
+	PUSHJ P,DISOHS
+IFN FTKLB,<
+	PUSHJ P,DISMES
+	 ASCIZ/   Flags = /
+	HLRZ TAC,KLUPT+KLPFFG	;get PC flags
+	PUSHJ P,DISLOC
+	PUSHJ P,DISMES
+	 ASCIZ/,,x/
+>;IFN FTKLB
+	PUSHJ P,DISCRLF
+	PUSHJ P,DISFLU
+	POPACS
+	PUSHJ P,WDDTCALL
+	JRST BRKXIT
+
+↑ADRBCK:SETO TAC,
+	EXCH TAC,ADRBRA		;See if want any automatic addr brk set up
+	JUMPL TAC,CPOPJ		;-1 means no request to change addr brk
+	CAME TAC,ADRBRO		;Easy if already enabled for this data
+	TRNN TAC,777760		;Don't allow breaking in ACs
+	JUMPN TAC,CPOPJ		;Forget it, unless just clearing the addr brk
+	MOVEM TAC,ADRBRO	;Remember addr break data
+	DATAO APR,ADRBRO	;Enable addr break
+	POPJ P,
+;HANDLE SIMULATED APR ERRORS ON KL10 ;⊗ KLEINT KLEIN1 KLER1 KLER3 KLERV KLER3A KLEV2A KLEV2 KLER2 KLMPV NCUEN3
+
+;ENTER AT KLEINT WITH KLECON CONTAINING "ERROR" BITS FOR
+;ILM (USER, UUO, OR SPACEWAR)
+;PDLOV (USER OR SPACEWAR)
+;AROV OR FOV (USER LEVEL, ONLY IF ENABLED).
+; (IF EITHER AROV OR FOV IS ENABLED AT SPACEWAR LEVEL, IT WILL MAKE AN ERROR)
+;PCPUBL (USER OR SPACEWAR) INDICATING PROPRIETARY VIOLATION
+;MBPAR FOR PARITY ERROR FROM KLPFTR
+;pcpubl 2000,,0 PC
+;pov	0,,200000 APR int
+;ilm	0,,20000 APR int
+;mbpar	0,,400	KL APR
+;intfov	0,,100	APR int
+;intov	0,,10	APR int
+
+;ENTER FROM KLPFTR (IN PAGSER), TRPPDL (IN KLSER)
+
+↑KLEINT:EXCH P,KLPDL
+	CAMN P,[-100,,KLPD-1]
+	JRST KLEIN1
+	EXCH P,ERRPDL
+	PUSHACS
+	PUSHJ P,DISGST		;PRINT TIME OF NEW MESSAGE ON CTY
+	PUSHJ P,DISMES
+	ASCIZ /KLPDL CLOBBERED AT KLEINT TO /
+	MOVE TAC,ERRPDL
+	PUSHJ P,DISOCH
+	PUSHJ P,DISCRLF
+	PUSHJ P,DISFLU
+	PUSHJ P,WDDTCAL
+	POPACS
+	MOVEM P,ERRPDL
+	MOVE P,[-100,,KLPD-1]
+KLEIN1:	PUSH P,PID
+	PUSH P,TAC
+	MOVE PID,KLECON			;GET SIMULATED ERROR BITS
+IFN FTKLB,<
+	TDNE PID,[PCPUBL,,ILM!MBPAR]	;PAGE FAULT OR PUBLIC OR PARITY ERROR?
+	SKIPA TAC,[KLUPT+KLPFPC]	;YES.  GET ptr to PAGE FAULT PC
+	MOVEI TAC,KLUPT+KLUUPC		;NO. MUST BE A .TRAP UUO, get ptr
+	HLL TAC,(TAC)			;get section number from offending PC
+	HLLZM TAC,SCTERR		;store any section number as flag for PCP
+	HLL TAC,-1(TAC)			;get PC flags
+	HRR TAC,(TAC)			;get PC (less section number)
+>;IFN FTKLB
+IFE FTKLB,<
+	TDNE PID,[PCPUBL,,ILM!MBPAR]	;PAGE FAULT OR PUBLIC OR PARITY ERROR?
+	SKIPA TAC,KLUPT+KLPFPC		;YES.  GET THE PAGE FAULT PC WORD
+	MOVE TAC,KLUPT+KLUUPC		;NO. MUST BE A .TRAP UUO.
+>;IFE FTKLB
+	TRNE PID,ILM			;check for exec mode ILM at UUO
+	TLNE TAC,USRMOD			;skip if exec mode ilm
+	JRST KLER1			;not ilm, or user level error
+	HRRI TAC,UADERR			;THIS IS UUO LEVEL (OR SPACEWAR UUO LEVEL)
+	JRST KLER3A			;just return to UADERR to give user error
+
+;HERE ON TRAPS (PDLOV, AROV, FOV), TAC IS PC OF OFFENDING INSTRUCTION
+;AND ON PROPRIETARY VIOLATION
+KLER1:	SKIPE SPWUUF			;SPACEWAR?
+	JRST KLER3			;YES.  SET FLAG FOR SPACEWAR AND EXIT
+IFN FTKLB,<
+	SKIPE SCTERR			;error in nonzero section?
+	JRST KLER2			;yes, don't allow interrupt (must be ilm)
+>;IFN FTKLB
+	SKIPN INTACT			;KILL IF ALREADY AT USER INT. LEVEL.
+	TDNN PID,APRIN1			;IS USER ENABLED FOR THIS INTERRUPT?
+	JRST KLER2			;NOT ENABLED OR RECURSIVE INT. STOP JOB.
+	TDNN PID,APRIN2			;ENABLED VIA NEW USER INTERRUPT SYSTEM?
+	JRST KLERV			;NO. OLD STYLE.
+	MOVEM TAC,APRIN3		;SAVE PC FOR CLKINT
+	PUSH P,J
+	MOVE J,JOB
+	MOVE TAC,PID			;GET APR BITS
+	AND TAC,APRIN2			;SELECT ONLY THE ONES THE USER WANTS
+	ANDI TAC,CPUMSK			;ONLY REAL APR BITS!
+	IORM TAC,JBTIRQ(J)		;INCLUDE APR BITS IN THE INT REQUESTS
+	TDNE TAC,JBTMSK(J)		;ANY OF THESE BITS MASKED ON?
+	SETOM INTREQ			;YES, NOW REQUEST AN INTERRUPT
+	POP P,J
+	MOVE TAC,[JRST JOBTM5]
+	XCTR XW,[MOVEM TAC,JOBTM5]	;MAKE USER LOOP UNTIL CH7 GETS HIM.
+	MOVE TAC,[USRMOD,,JOBTM5]	;SETUP NEW PC TO DISMISS TO.
+	SETZM KLECON			;CLEAR SOFTWARE APR INTERRUPT BITS
+KLER3:	MOVEM TAC,KLTPC
+	POP P,TAC
+	POP P,PID
+	EXCH P,KLPDL
+	CONO PI,CLKOFF
+	SETOM KLTPCF			;force CH7 chain to go to KCLKIN
+	HLLOS CLKFLG			;FLAG CHANNEL 7 - WE NEED USER INT.
+	CONO PI,4000!CLKON		;TURN ON PI CHANNEL 7 AND GEN INT
+	SYSPIN
+	HALT .
+
+
+;ENABLED VIA OLD-STYLE INTERRUPTS.
+KLERV:	XCTR XW,[MOVEM TAC,JOBTPC]	;STORE INTERRUPT PC IN JOB DATA AREA
+	XCTR XW,[MOVEM PID,JOBCNI]	;STORE INTERRUPT CONDITIONS FOR USER.
+	MOVEI TAC,1B26			;FOR SANITY, PREVENT A CLOCK INT NOW.
+	ANDCAM TAC,APRIN1		;IN THE APR ENABLE
+	XCTR XRW,[ANDCAM TAC,JOBENB]	;AND IN USER'S ENABLE.
+	XCTR XR,[HRRZ TAC,JOBAPR]	;GET TRAP ROUTINE ADDRESS
+	CAIGE TAC,JOBPFI		;LEGAL TRAP ADDRESS? (NO TRAPS TO ACS)
+	JRST KLEV2			;NO.
+	PUSH P,TAC
+	XCTR XR,[HRRZ TAC,JOBTPC]	;GET INTERRUPT PC.
+	CAMN TAC,(P)
+	JRST KLEV2A			;INTERRUPT PC=TRAP PC.  LOSE.
+	ADDI TAC,1
+	CAMN TAC,(P)
+	JRST KLEV2A			;INTERRUPT PC=TRAP PC+1.  LOSE.
+	ADJSP P,-1
+	XCTR XR,[HLLZ TAC,JOBTPC]	;NOW PUT THE ENTIRE PC TOGETHER AGAIN
+	TLO TAC,USRMOD			;MPV MAY BE FROM EXEC. RUN THIS IN USER MODE
+	TLZ TAC,BISFLG			;CLEAR BIS FLAG FOR INT ROUTINE
+	XCTR XR,[HRR TAC,JOBAPR]
+KLER3A:	MOVEM TAC,KLTPC
+	POP P,TAC
+	POP P,PID
+	SETZM KLECON
+	EXCH P,KLPDL
+	JRST 2,@KLTPC
+
+;LOSER HAS INVALID TRAP ADDRESS.  CLEAR APRIN1 TO PREVENT FURTHER LOSSAGE.
+KLEV2A:	ADJSP P,-1
+KLEV2:	XCTR XR,[MOVE TAC,JOBTPC]	;RESTORE PC AND FLAGS
+	SETZM APRIN1
+	XCTR XW,[SETZM JOBENB]		;CLEAR HIS ENABLES.
+					; USER NOT ENABLED FOR INT.
+KLER2:	TDNN PID,[PCPUBL,,220000]	;DOES EXEC CARE? PDLOV,MPV,PUBLIC
+	JRST KLER3A			;NO. return to offending instruction
+	CONO PI,CLKOFF			;NON-TRIVIAL ERROR. SCREW USER.
+	TDNE PID,[PCPUBL,,ILM]		;ILL MEM REF OR PUBLIC?
+	MOVEM TAC,USAVPC		;SAVE ERROR PC FOR CLKINT
+	MOVEM TAC,APRPC			;STORE ERROR PC FOR CLK CHANNEL
+	MOVEM TAC,KLTPC
+	SETOM KLTPCF			;force CH7 chain to go to KCLKIN
+	MOVEM PID,APRERR		;STORE ERROR FLAGS - SEE CH7 CODE
+	POP P,TAC
+	POP P,PID
+	SETZM KLECON
+	EXCH P,KLPDL
+	HLLOS CLKFLG			;SET FLAG FOR CLK INTERRUPT
+	SETOM SCHEDF			;FLAG THAT RESCHEDULING IS NEEDED
+					;(EVEN THOUGH PC MAY BE IN EXEC MODE)
+	CONO PI,4000!CLKON		;TURN ON CLOCK CHANNEL AND REQ INT
+	SYSPIN
+	HALT .
+
+
+repeat 0,<	 ;this code is now inline above KLER1
+;PAGE FAULT HANDLER WON'T LET US GET HERE UNLESS USER MODE OR UUO LEVEL 
+KLMPV:	TLNE TAC,USRMOD			;USER MODE?
+	JRST KLER1			;YES.
+	HRRI TAC,UADERR			;THIS IS UUO LEVEL (OR SPACEWAR UUO LEVEL)
+	JRST KLER3A
+>;repeat 0
+
+IFN FTNCU,<
+↑↑NCUEN3::		;end of special uncached section of code
+>;IFN FTNCU
+;⊗ MTRSET MTRSE1 MTRCLR SPRON SPROFF
+
+LOSYS
+
+IFE FTKLB,<
+
+↑MTRSET:SKPNKL
+	SKIPG MTRBKG		;METER MUST BE IN BACKGROUND MODE
+	JRST CPOPJ1
+	PUSH P,TAC
+	HRRZ TAC,@-1(P)		;FETCH THE ARGUMENT
+	SYSPIFF		;AVOID TIMING ERROR SINCE METER CHANGES IN CH3
+	MOVEM TAC,MTRCNW	;THIS IS THE CURRENT METER EVENT IN PROGRESS
+	CAME TAC,MTRCNM		;IS THIS WHAT'S BEING METERED THIS TICK?
+	JRST MTRSE1
+	SETUS1			;YES, ENABLE METER
+	HRRZ TAC,MTRPTR
+	AOS MTRNUL(TAC)		;AND COUNT ANOTHER EVENT
+MTRSE1:	SYSPIN
+	JRST TPOPJ1
+
+↑MTRCLR:SKPNKL
+	SKIPG MTRBKG		;METER MUST BE IN BACKGROUND MODE
+	JRST CPOPJ1
+	PUSH P,TAC
+	HRRZ TAC,@-1(P)		;FETCH THE ARGUMENT
+	SYSPIFF
+	CAMN TAC,MTRCNM
+	CLRUS1			;DISABLE METER
+	SETOM MTRCNW		;NOTHING IS NOW BEING METERED
+	SYSPIN
+	JRST TPOPJ1
+
+↑SPRON:	JFCL			;PUSHJ TO HERE, PUT CLOBBERED INTR HERE
+	MTRON (MTRSPR)
+	POPJ P,
+
+↑SPROFF:JFCL			;PUSHJ TO HERE, PUT CLOBBERED INTR HERE
+	MTROFF (MTRSPR)
+	POPJ P,
+
+>;IFE FTKLB
+
+HISYS
+SUBTTL	MTRUUO   ;⊗ MTROPT NMTROP MTRUUO MTRACC MTRAC1 MTRAC2 MTROP5 MTROP0 MTROP0 MTRP0A MTRACS MTRAS1 MTRAS2 MTROP1 MTROP2 MTROP3 MTRP3A MTRHIT MTRZAP MTROP4 MTROP5 MTROP6 MTROP4 MTRP6A MTRJST MTRJS1
+
+;CALL WITH:
+;	MTRUUO AC,
+;	ERROR RETURN (SOMEONE ELSE IS ALREADY METERING)
+;	ERROR RETURN (BAD ARGUMENTS)
+;	NORMAL RETURN (YOUR METERING HAS BEGUN)
+;
+;AC BITS ARE DECODED AS FOLLOWS:
+;BITS 0-8 ARE A CODE INDICATING THE TYPE OF METERING DESIRED
+;BITS 18-35 ARE AN IMMEDIATE ARGUMENT.
+;THE OP CODES ARE AS FOLLOWS:
+;BITS 0-8		FUNCTION
+;IFE FTMTRACT,<
+;   0			RESTORE METER BACKGROUND MODE
+;   1			READ METERS INTO USER CORE AT ADDRESS POINTED TO
+;			 BY RH OF AC.  FOUR DOUBLE WORDS ARE READ:
+;			 0-1: TIMEBASE, 2-3: PERF COUNTER
+;			 4-5: EBOX COUNTER, 6-7: MBOX COUNTER
+;   2			METER SYSTEMWIDE CACHE HIT RATIO
+;   3			METER USER MODE CACHE HIT RATIO (ALL USERS)
+;   4			METER USER MODE CACHE HIT RATIO (ONE JOB ONLY)
+;			 LOW 9 BITS OF AC ARE JOB NUMBER.  THIS FUNCTION
+;			 ALSO CLEARS COUNT OF SCHEDULES KEPT IN MTRLST-12
+;   5			ENTER METER "CODE" MODE.  METER CACHE HIT RATE BETWEEN
+;			 ASSEMBLED IN MARKERS INSIDE THE SYSTEM.  LOW 3 BITS ARE
+;			 THE PI CHANNEL NUMBER TO METER.  NOT ALL CHANNELS ARE
+;			 IMPLEMENTED
+;   6			RESET CUMULATIVE VALUES FOR ALL METER BLOCKS
+;
+;OPERATIONS FROM 2 UP TAKE THE METER OUT OF BACKGROUND MODE
+;
+;>;IFE FTMTRACT
+;IFN FTMTRACT,<
+;   0			RESTORE ACCOUNTING MODE METERING
+;   1			READ METERS INTO USER CORE AT ADDRESS POINTED TO
+;			 BY RH OF AC.  FOUR DOUBLE WORDS ARE READ:
+;			 0-1: TIMEBASE, 2-3: PERF COUNTER
+;			 4-5: EBOX COUNTER, 6-7: MBOX COUNTER
+;   2			METER SYSTEMWIDE CACHE HIT RATIO
+;   3			METER USER MODE CACHE HIT RATIO (ALL USERS)
+;   4			RESET CUMULATIVE VALUES FOR ALL METER BLOCKS
+;   5			ENTER BACKGROUND MODE METERING
+;
+;OPERATIONS FROM 2 UP TAKE THE METER OUT OF ACCOUNTING MODE
+;
+;>;IFN FTMTRACT
+
+;MTRBKG INDICATES THE MODE:
+; NEGATIVE IS ACCOUNTING MODE
+; ZERO IS CACHE HIT METERING MODE
+; POSITIVE IS BACKGROUND MODE
+
+MTROPT:
+IFE FTMTRACT,<
+;SIGN BIT INDICATES TAKE METER OUT OF BACKGROUND MODE FIRST
+	MTROP0
+	MTROP1
+	400000,,MTROP2
+	400000,,MTROP3
+	400000,,MTROP4
+	400000,,MTROP5
+	400000,,MTROP6
+>;IFE FTMTRACT
+
+IFN FTMTRACT,<
+;SIGN BIT INDICATES TAKE METER OUT OF ACCOUNTING MODE FIRST
+	MTROP0
+	MTROP1
+	400000,,MTROP2
+	400000,,MTROP3
+	400000,,MTROP4
+	400000,,MTROP5
+>;IFN FTMTRACT
+NMTROP←←.-MTROPT
+
+↑MTRUUO:ERRSPW			;NOT FROM SPACEWAR PLEASE
+	AOS (P)
+	LDB AC3,[POINT 9,TAC,8]	;GET OPCODE
+	CAIL AC3,NMTROP		;WITHIN RANGE
+	POPJ P,			;BAD OPCODE
+	SKIPL MTROPT(AC3)
+	JRST @MTROPT(AC3)	;DON'T HAVE TO WORRY ABOUT THE MODE
+IFE FTMTRACT,<
+	SKIPLE MTRBKG
+	PUSHJ P,MTRACC		;CLEAR BACKGROUND MODE
+>;IFE FTMTRACT
+IFN FTMTRACT,<
+	SKIPGE MTRBKG
+	PUSHJ P,MTRACC		;CLEAR ACCOUNTING MODE
+>;IFN FTMTRACT
+	JRST @MTROPT(AC3)
+
+MTRACC:
+IFN FTMTRACT,<
+	MOVE AC1,JOBNM1
+	MOVE AC2,AC1
+	LSH AC1,1
+	MOVSI DSER,JNA!CMWB
+MTRAC1:	TDNN DSER,JBTSTS(AC2)
+	JRST MTRAC2
+	DMOVE TAC,MTRTTIME(AC1)
+	PUSHJ P,MTRCVT
+	MOVEM TAC,TTIME(AC2)
+	DMOVE TAC,MTRXTIME(AC1)
+	PUSHJ P,MTRCVT
+	MOVEM TAC,XTIME(AC2)
+	DMOVE TAC,MTRRNB(AC1)
+	PUSHJ P,MTRCVT
+	MOVEM TAC,JBTRNB(AC2)
+MTRAC2:	SUBI AC1,2
+	SOJGE AC2,MTRAC1
+>;IFN FTMTRACT
+	SETZM MTRBKG		;PUT METERING IN CACHE HIT MODE
+	POPJ P,
+
+IFN FTMTRACT,<
+MTROP5:	SKIPLE MTRBKG
+	POPJ P,			;ALREADY IN BACKGROUND MODE
+	PUSHJ P,MTRP0A
+	MOVEI TAC,1
+	MOVEM TAC,MTRBKG	;SET METER BACKGROUND MODE
+	POPJ P,
+>;IFN FTMTRACT
+
+IFE FTMTRACT,<
+MTROP0:	SKIPLE MTRBKG		;SKIP UNLESS ALREADY IN BACKGROUND MODE
+	POPJ P,
+	PUSHJ P,MTRP0A
+	PUSHJ P,MTRACS
+	MOVEI TAC,1
+	MOVEM TAC,MTRBKG	;RESTORE BACKGROUND MODE
+	POPJ P,
+>;IFE FTMTRACT
+
+IFN FTMTRACT,<
+MTROP0:	SKIPGE MTRBKG		;SKIP UNLESS ALREADY IN ACCOUNTING MODE
+	POPJ P,
+	SETZM MTRBKG		;STOP CH3 FROM DOING ANY BACKGROUND STUFF
+	PUSHJ P,MTRP0A
+	PUSHJ P,MTRACS
+	SETOM MTRBKG		;RESTORE ACCOUNTING MODE
+	POPJ P,
+>;IFN FTMTRACT
+
+MTRP0A:	SETZM MTRPTR
+IFE FTMTRACT,<
+	SETZM MTRJOB
+	SETZM MTRCOD
+	MOVEI TAC1,40		;RESET PERFORMANCE COUNTER
+>;IFE FTMTRACT
+IFN FTMTRACT,<
+	MOVE TAC1,[001534,,777400]    ;COUNT EBOX TIME WAITING FOR MBOX IN USER MODE
+>;IFN FTMTRACT
+	MOVEI TAC,MTRENB!MTACEN!APRCHN	;TURN ACCT METERS ON FOR USER MODE ONLY
+	PUSHJ P,MTRHIT
+	CAI
+	POPJ P,
+
+MTRACS:	MOVE AC1,JOBNM1		;SET ACCOUNTING MODE
+	MOVE AC2,AC1
+	LSH AC1,1
+	MOVSI DSER,JNA!CMWB
+MTRAS1:	TDNN DSER,JBTSTS(AC2)
+	JRST MTRAS2
+IFN FTMTRACT,<
+	MOVE TAC,TTIME(AC2)
+	PUSHJ P,MTRCVD
+	DSUB TAC,MTRETIME(AC1)
+	DMOVEM TAC,MTRMTIME(AC1)
+	MOVE TAC,XTIME(AC2)
+	PUSHJ P,MTRCVD
+	DMOVEM TAC,MTRXTIME(AC1)
+	MOVE TAC,JBTRNB(AC2)
+	PUSHJ P,MTRCVD
+	DMOVEM TAC,MTRRNB(AC1)
+>;IFN FTMTRACT
+IFN FTMTRTIME,<
+	SETZM MTRRTIME(AC1)
+	SETZM MTRRTIME+1(AC1)
+>;IFN FTMTRTIME
+MTRAS2:	SUBI AC1,2
+	SOJGE AC2,MTRAS1
+	POPJ P,
+
+;HERE TO READ BACK DOUBLE-WORD METER VALUES
+MTROP1:	DATAI TIM,AC1		;READ TIME BASE
+	XCTR XW,[DMOVEM AC1,(TAC)]
+	BLKI TIM,AC1		;READ PERFORMANCE COUNTER
+	XCTR XW,[DMOVEM AC1,2(TAC)]
+	DATAI MTR,AC1		;READ EBOX METER
+	XCTR XW,[DMOVEM AC1,4(TAC)]
+	BLKI MTR,AC1		;READ MBOX METER
+	XCTR XW,[DMOVEM AC1,6(TAC)]
+	JRST CPOPJ1
+
+;HERE FOR METERING SYSTEM-WIDE CACHE HIT RATIO
+MTROP2:
+IFE FTMTRACT,<
+	SETZM MTRCOD
+	SETZM MTRJOB
+>;IFE FTMTRACT
+	MOVE TAC1,[001554,,777300]	;BLKO PERF COUNTER FOR COUNTING ALL CSH MISS
+	MOVEI TAC,MTRENB!MTACEN!MTPIEN!MTEXEN!APRCHN	;ACCT ENABLED FOR EVERYTHING
+	JRST MTRHIT
+
+MTROP3:
+IFE FTMTRACT,<
+	SETZM MTRCOD
+	SETZM MTRJOB
+>;IFE FTMTRACT
+MTRP3A:	MOVE TAC1,[001554,,777500]	;CACHE MISS IN USER MODE
+	MOVEI TAC,MTRENB!MTACEN!APRCHN	;ACCT ENABLED IN USER MODE NOT PI IN PROG
+MTRHIT:	PUSHJ P,MTRZAP		;ZAP METERS OFF
+	CONO MTR,(TAC)		;THEN SET THEM UP THE WAY ...
+	BLKO TIM,TAC1		;... YOU WANT THEM
+	JRST CPOPJ1
+
+↑MTRZAP:CONO MTR,MTRENB!APRCHN	;TURN OFF ACCOUNTING METERS, KEEP INTERVAL PIA
+	BLKO TIM,[40]		;CLEAR AND DISABLE PERFORMANCE COUNTER
+	DATAI KLPAG,AC1
+	TRZ AC1,400000		;MAKE SURE WE STORE ACCOUNTING METERS
+	DATAO KLPAG,AC1		;STORE ACCT MTRS (ZEROS 16 BIT INTERNAL CTRS)
+	SETZM KLEPT+EPTPRF	;CLEAR PERFORMANCE COUNTER IN EPT
+	SETZM KLEPT+EPTPRF+1
+	SETZM KLUPT+UPTMBX
+	SETZM KLUPT+UPTMBX+1	;CLEAR MBOX COUNTERS IN UPT
+	SETZM KLUPT+UPTEBX
+	SETZM KLUPT+UPTEBX+1	;CLEAR EBOX COUNTERS IN EPT
+IFE FTKLB,<
+	SETU13			;MAKE SURE UCODE STATE 3 IS IN RIGHT STATE (OFF)
+	CLRUS1			;ALSO FIX UCODE STATE 1 (OFF)
+>;IFE FTKLB
+	POPJ P,
+
+IFE FTMTRACT,<
+MTROP4:	SETZM MTRCOD
+	ANDI TAC,777		;GET JOB NUMBER
+	CAMLE TAC,JOBNM1
+	POPJ P,			;OUT OF RANGE
+	JUMPE TAC,CPOPJ
+	SETZM MTRNSC		;ZERO OUT SCHEDULES COUNT
+	MOVEM TAC,MTRJOB
+	PUSHJ P,MTRP3A
+	 CAI
+	MOVEM TAC1,MTRJBP	;SAVE BLKO TO PERFORMANCE COUNTER
+	AOS (P)
+	JRST WSCHED		;FORCE A RESCHEDULE IN SO WE DON'T COUNT IN
+				; CALLING JOB
+
+MTROP5:	ANDI TAC,7		;GET CHANNEL NUMBER
+	MOVSI TAC1,400000
+	MOVN AC1,TAC
+	LSH TAC1,(AC1)		;SHIFT TO PLACE FOR CHECKING EXISTENCE
+	TDNN TAC1,MTCSHX	;DOES THIS ONE EXIST YET?
+	POPJ P,			;NOPE
+	CAIN TAC,2
+	MOVNI TAC,1		;CHANGE CHANNEL 2 INTO -1
+	MOVEM TAC,MTRCOD
+	SETZM MTRJOB
+	MOVE TAC1,[001154,,777300]	;BLKO PERF COUNTER FOR COUNTING ALL CSH MISS
+					; DURING UCODE STATE 1
+	MOVEI TAC,MTRENB!MTACEN!MTPIEN!MTEXEN!APRCHN	;ACCT ENABLED FOR EVERYTHING
+	JRST MTRHIT
+>;IFE FTMTRACT
+
+IFE FTMTRACT,<
+MTROP6:
+>;IFE FTMTRACT
+IFN FTMTRACT,<
+MTROP4:
+>;IFN FTMTRACT
+	MOVEI TAC,MTRLST
+MTRP6A:	SETZM MTRVAL(TAC)	;START ZEROING FROM MTRVAL
+	MOVSI TAC1,MTRVAL(TAC)
+	HRRI TAC1,MTRVAL+1(TAC)
+	BLT TAC1,MTRSIZ-1(TAC)	;AND CLEAR UNTIL THE LAST WORD
+	HRRZ TAC,(TAC)
+	JUMPN TAC,MTRP6A
+	JRST CPOPJ1
+
+IFE FTMTRACT,<
+LOSYS
+
+;CALL WITH J SET UP TO JOB NUMBER TO BE RUN.  CALLED FROM CLKSER, INTS AND SWR
+↑MTRJST:SKIPN TAC,MTRJOB
+	POPJ P,
+	CAIE TAC,(J)
+	JRST MTRJS1		;METERING DIFFERENT JOB THAN THIS ONE
+	CONO MTR,MTRENB!MTACEN!APRCHN	;TURN ACCT METERS ON FOR USER MODE
+	BLKO TIM,MTRJBP		;SET UP PERFORMANCE COUNTER APPROPRIATELY
+	POPJ P,
+
+HISYS
+
+MTRJS1:	CONO MTR,MTRENB!APRCHN	;TURN ACCT METERS OFF
+	BLKO TIM,[0]		;TURN OFF PERF COUNTER (BUT DON'T CLEAR IT)
+	POPJ P,
+>;IFE FTMTRACT
+;⊗ MTRCVT MTRCVD MTRMSC MTRCVM
+
+;CONVERT 80NS TIC COUNT TO MS, TAC,TAC1 CONTAIN DOUBLE WORD COUNTER
+
+↑MTRCVT:LSH TAC1,1
+	LSHC TAC,3-=12
+	LSH TAC1,-1		;I JUST MULTIPLIED BY 8 AND DIVIDED BY 2↑12
+	DIV TAC,[=1666667]
+	POPJ P,
+
+;CONVERT TIC COUNT IN TAC TO DOULE WORD 80NS TIC COUNT IN TAC,TAC1
+
+MTRCVD:	MUL TAC,[=1666667]
+	LSH TAC1,1
+	LSHC TAC,-3+=12
+	LSH TAC1,-1		;I JUST DIVIDED BY 8 AND MULTIPLIED BY 2↑12
+	POPJ P,
+
+;CONVERT 80NS TIC COUNT IN AC1,AC2 TO MILLISECONDS IN TAC
+↑MTRMSC:LSH AC2,1
+	LSHC AC1,1-=12
+	LSH AC2,-1		;I JUST MULTIPLIED BY 2 AND DIVIDED BY 2↑12
+	DIVI AC1,=25000
+	MOVE TAC,AC1
+	POPJ P,
+
+;CONVERT 80NS TIC COUNT IN TAC,TAC1 TO MILLISECONDS IN TAC
+↑MTRCVM:LSH TAC1,1
+	LSHC TAC,1-=12
+	LSH TAC1,-1		;I JUST MULTIPLIED BY 2 AND DIVIDED BY 2↑12
+	DIVI TAC,=25000
+	POPJ P,
+
+;⊗ WRBADP WRBADT
+
+;Here to write bad parity data into some physical location.
+;Call with TAC containing physical address at which to write bad parity.
+↑WRBADP:PUSH P,AC1
+	PUSH P,AC2
+	PUSH P,AC3
+	CONI PI,AC1
+	SYSPIFF
+	PUSH P,KLUPT+KLPFW
+	PUSH P,KLUPT+KLPFPC
+	PUSH P,KLUPT+KLPFNP
+IFN FTKLB,<
+	PUSH P,KLUPT+KLPFFG	;save page fail flags also
+	MOVEI AC3,WRBADT
+>;IFN FTKLB
+IFE FTKLB,<
+	MOVE AC3,[PCU,,WRBADT]
+>;IFE FTKLB
+	MOVEM AC3,KLUPT+KLPFNP
+	PUSH P,TAC1
+	PUSH P,TAC
+	MOVEI TAC1,PEKEXP
+	LSH TAC,-9
+	PUSHJ P,ADDEMP
+	BLKO KLPAG,PEKEXP⊗9	;Clear ARS for this page
+	POP P,TAC
+	LDB AC2,[POINT 9,TAC,35]
+	MOVE AC3,PEKEXP⊗9(AC2)	;Get old data
+	CONO PI,200000		;SET WRITE EVEN DATA PARITY
+	MOVEM AC3,PEKEXP⊗9(AC2)	;Write old data back, with bad parity
+	CONO PI,0		;CLEAR WRITE EVEN DATA PARITY
+	PUSHJ P,DELEMP
+	POP P,TAC1
+IFN FTKLB,<
+	POP P,KLUPT+KLPFFG	;restore page fail flags
+>;IFN FTKLB
+	POP P,KLUPT+KLPFNP
+	POP P,KLUPT+KLPFPC
+	POP P,KLUPT+KLPFW
+	CONI APR,AC3
+	ANDI AC3,7747
+	CONO APR,KLCLRF(AC3)
+	POP P,AC3
+	POP P,AC2
+	ANDI AC1,PION
+	CONO PI,(AC1)
+	POP P,AC1
+	POPJ P,
+
+WRBADT:
+IFN FTKLB,<
+	XJRSTF KLUPT+KLPFFG	;restore flags and PC from double word
+>;IFN FTKLB
+IFE FTKLB,<
+	JRST 2,@KLUPT+KLPFPC
+>;IFE FTKLB
+
+;⊗ DTXINI DTXCIN DTECLK DTECL2 DTEXX DTEOUT DTENXT DTEHIT DTTIMC DTEXXW DTEXX1 DTEXW2 DTEXW3 DTEXXS DTEXXN DTEON1 DTETO2 DTEXTO DTFLOC
+
+IFN FTNDTE,<
+;New queueing scheme for communicating with the DTE, avoids busy waiting
+;for the 11, most of the time.
+
+;DTEPTR is index of next word to be filled (putter pointer) with datum.
+;DTETKR is index of next word to be emptied (taker pointer).
+;DTEEND is index of word after last word in buffer.
+;DTEBEG is index of first word in buffer, and is the value to which
+;  both DTEPTR and DTETKR should be initialized (DTEBEG is zero).
+;The buffer is empty when DTEPTR = DTETKR and the buffer is full
+;  when DTEPTR+1 = DTETKR (modulo buffer).
+
+;Initialize the DTE buffer pointers and flags.
+↑DTXINI:SETZM DTEPTR		;Make DTE buffer look empty with
+	SETZM DTETKR		; putr and takr pointing to front of buffer
+	SETZM DTEBSY		;No one busy waiting for DTE yet
+	MOVEI TAC1,KLEPT	;For indirection in next instruction
+	SETOM @DTFLOC	;DTFLG(TAC1)	;Make it look like 11 is ready for cmd
+DTXCIN:	MOVEI TAC,2		;Number of seconds before we check for DTE timeout
+	MOVEM TAC,DTECCT	;Reset timer
+	POPJ P,
+
+;Here every second to make sure DTE doesn't hang forever if missed one cmd
+↑DTECLK:SOSLE DTECCT		;Time to check for hung timeout?
+	POPJ P,			;No, only check every n seconds
+	PUSHJ P,DTXCIN		;Yes, reset counter
+	OFFSCN			;Avoid having takr change under us
+	MOVE TAC,NDTHIT		;Get count of cmds sent to DTE so far
+	EXCH TAC,SDTHIT		;Remember for a while from now
+	CAME TAC,SDTHIT		;And has anything been sent out lately?
+	JRST SCNONJ		;Yes, not hung then
+	EXCH TAC,SD2HIT		;Have we already re-donged the 11?
+	CAME TAC,SD2HIT		;Skip if already re-donged
+	JRST DTECL2		;Re-dong 11 to give it one more chance
+	MOVE TAC,DTETKR		;Get takr
+	CAMN TAC,DTEPTR		;Same as putr
+	JRST SCNONJ		;Yes, buffer empty
+	ONSCN
+	PUSHJ P,SETEBR		;Get EBR address into TAC1, push old TAC1
+	AOS NDTHNG		;Count a time the 11 failed to respond to cmd
+	SETOM @DTFLOC	;DTFLG(TAC1)	;Make 11 look ready for a new cmd
+	JRST DTEXXS		;Start up DTE output for the 11 again
+
+DTECL2:	PUSHJ P,SETEBR		;Get EBR address into TAC1, push old TAC1
+	SKIPE @DTFLOC	;DTFLG(TAC1)	;Skip unless 11 has already said ready for cmd
+	JRST DTEXXN		;Try try to start output now, 11 says ready
+	CONO DTE0,DONG11	;Just ring for 11, maybe missed our last ring
+	AOS ND2HNG		;Count a re-ring
+	JRST DTEON1		;Restore scanner, pop TAC1
+
+;Routine to put datum into DTE buffer from TAC.  Preserves all ACs.
+;No indication given if buffer already full (doesn't do anything with datum).
+DTEXX:	PUSH P,AC1
+	CONSZ PI,PION		;Maybe here with PI system already off
+	SKIPA AC1,[CONO PI,PION]
+	MOVSI AC1,(<JFCL>)
+	PUSH P,AC1		;Save state of PI system
+	SYSPIFF		;Prevent other calls to DTEXX to interfere
+	MOVE AC1,DTEPTR		;Get putr pointer for DTE output buffer
+	MOVEM TAC,DTEBUF(AC1)	;Store datum into buffer (via unadvanced putr)
+	ADDI AC1,1		;Advance putr, to test running into takr (full)
+	CAIL AC1,DTEEND		;Reached end of buffer?
+	MOVEI AC1,DTEBEG	;Yes, wrap around to beginning
+	CAMN AC1,DTETKR		;Will advanced putr reach takr (buffer full)?
+	AOSA NDTFUL		;Yes, can't advance, just count discarded datum
+	MOVEM AC1,DTEPTR	;Store new putr pointer
+	POP P,AC1
+	XCT AC1			;Restore state of PI system
+	POP P,AC1
+	PUSHJ P,SETEBR		;Set up EBR in TAC1, pushing previous TAC1
+	JRST DTEXXS		;Start output to DTE, if not already going
+
+;Routine to load TAC with next datum from DTE buffer.
+;Skips if got datum from buffer, direct return if buffer already empty.
+DTEOUT:	PUSH P,AC1
+	MOVE AC1,DTETKR		;Get takr pointer
+	CAMN AC1,DTEPTR		;If same as putr, then buffer is empty
+	JRST POPAJ		;Empty buffer
+	MOVE TAC,DTEBUF(AC1)	;Get datum from buffer
+	ADDI AC1,1		;Advance takr pointer past datum just removed
+	CAIL AC1,DTEEND		;Reached end of buffer?
+	MOVEI AC1,DTEBEG	;Yes, wrap around to beginning
+	MOVEM AC1,DTETKR	;Store updated takr
+	POP P,AC1
+	JRST CPOPJ1		;Skip return upon success
+
+;Here (via DTEINT) when 11 has rung 10's doorbell,
+;or (via DTEXXS, with DTE channel off via OFFSCN) when 
+;starting output to 11 from the DTE command buffer (or after hung timeout).
+;If the 11 is ready for another command, and if we've got more in the DTE
+;buffer, then we give it the next one.  Here with EBR in TAC1.
+DTENXT:	SKIPE DTEBSY		;Skip unless someone is busy waiting for DTE
+	POPJ P,			;Don't interfere with busy waiter
+	SKIPE @DTFLOC	;DTFLG(TAC1)	;Skip if last command hasn't finished
+	PUSHJ P,DTEOUT		;Get command from DTE buffer
+	 POPJ P,		;Can't do anything
+DTEHIT:	MOVEM TAC,DTCMD(TAC1)	;Store command for 11
+	SETZM @DTFLOC	;DTFLG(TAC1)	;Clear 11's response flag from prev cmd
+	CONO DTE0,DONG11	;Ring for 11, but don't wait for response
+	AOS NDTHIT		;Count number of cmds we've given 11
+	POPJ P,
+
+;Routine to give cmd to 11 and wait for and return the 11's response.
+;Experiments suggest that this normally takes about 1 millisecond if
+;the 11 isn't already busy doing something (like a previous cmd).
+;THIS ROUTINE MUST NOT BE CALLED AT MULTIPLE PI LEVELS--should be here
+;only in CH7 and UUO level.  To prevent DTENXT from being run (at DTE
+;interrupt level) while we're busy waiting here, we set DTEBSY.  Since
+;only here in CH7 or UUO level, we can't accidentally interrupt DTENXT.
+;Call with cmd for 11 in TAC.  Returns response in TAC.  Other ACs preserved.
+DTTIMC:	10,,0		;COUNT FOR TIMEOUT AFTER ABOUT 6 SECONDS
+↑DTEXXW:SETOM DTEBSY		;Flag busy waiting, fend off DTENXT
+	CONSZ PI,77000		;Here at improper PI level (1-6)?
+	JRST [	CONSZ PI,200	;OK, allow this if PI system off (DISFLUSH, etc)
+		PUSHJ P,BUGTRP	;Yup!  Tell someone, hope not interrupting self!
+		JRST .+1]
+	PUSHJ P,SETEBR		;Get EBR into TAC1, pushing old TAC1
+DTEXX1:	PUSH P,TAC		;Save our cmd
+	MOVE TAC,DTTIMC		;Get timeout count
+	SKIPN @DTFLOC	;DTFLG(TAC1)	;Wait for response to any previous cmd
+	SOJG TAC,.-1
+	JUMPLE TAC,DTETO2	;Jump if timed out
+	SUB TAC,DTTIMC		;Figure negative of count down used
+	ADDM TAC,DTEWA2		;Count total amount of waiting for previous cmd
+	AOS DTECN2		;Count number of cmds passed this way
+DTEXW2:	POP P,TAC		;Get back our new command
+	PUSHJ P,DTEHIT		;Hit the DTE with this new cmd
+	MOVE TAC,DTTIMC		;Get timeout count
+	SKIPN @DTFLOC	;DTFLG(TAC1)	;Wait for response of interest
+	SOJG TAC,.-1
+	JUMPLE TAC,DTEXTO	;Jump if timed out on cmd of interest
+	SUB TAC,DTTIMC		;Figure negative of count down used
+	ADDM TAC,DTEWAT		;Count total amount of waiting for 11
+	AOS DTECNT		;Count number of cmds passed this way
+	MOVE TAC,DTF11(TAC1)	;Get 11's response word, and return it
+DTEXW3:	SETZM DTEBSY		;Resume allowing starting DTE
+DTEXXS:	OFFSCN			;Don't let DTE interrupt while we're starting it
+DTEXXN:	PUSHJ P,DTENXT		;Maybe start up DTE output from buffer
+DTEON1:	ONSCN			;OK to interrupt now
+	JRST T1POPJ		;Restore TAC1 pushed in SETEBR, return
+
+;Here if timed out waiting for 11 to finish previous cmd
+DTETO2:	AOS DTETM2		;Count timeouts of second kind
+	SKIPN RLOD11		;Skip if someone's reloading the 11
+	JFCL	;JRST 4,.+1	;Can't type error msg if DTE or 11 losing
+	JRST DTEXW2		;Go try to shove cmd of interest at DTE
+
+;Here if timed out waiting for 11's response to cmd of interest
+DTEXTO:	AOS DTETMO		;Count timeouts
+	SKIPN RLOD11		;Skip if someone's reloading the 11
+	JFCL	;JRST 4,.+1	;Can't type error msg if DTE or 11 losing
+	MOVEI TAC,0		;Return random zero response word
+	SETOM @DTFLOC	;DTFLG(TAC1)	;Make it look like this cmd finished normally
+	JRST DTEXW3		;Finish up just like hadn't timed out
+
+DTFLOC:	JUMP DTFLG(TAC1)	;indirected through to access DTE done flag.
+				;This way it's easy to patch for RSX-11/KLDCP.
+
+>;IFN FTNDTE
+
+BEND KLSER
+>;IFKL10 (WHOLE FILE)

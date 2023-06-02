@@ -1,0 +1,790 @@
+COMMENT ⊗   VALID 00020 PAGES
+C REC  PAGE   DESCRIPTION
+C00001 00001
+C00003 00002		universal NetDef - common definitions for universal network
+C00004 00003	\
+C00005 00004		subttl	compilation control symbols
+C00006 00005		subttl	protocol definitions  .lnkip .iptcp .ipicm .ipudp
+C00007 00006		subttl	constants desirable for their neumonic meaning
+C00009 00007		subttl	define fields of a leader with 32 bit words
+C00011 00008		subttl	define fields in some random storage location
+C00017 00009		subttl	THIS IS A HELPER MACRO FOR INTERNAL USE
+C00020 00010		subttl	support for odd instruction to odd bytes
+C00026 00011		subttl	macros for handle storage locations declared above
+C00029 00012		subttl	standard port definitions
+C00030 00013		subttl	BIB - buffer information block
+C00035 00014		subttl	NBH - network buffer header
+C00037 00015	SOME DEFINITION DEFINITIONS:
+C00038 00016		subttl	IMP DDB DEFINITIONS
+C00049 00017	SOME MACROS
+C00050 00018	OTHER PARAMETERS  NetArp NetEth
+C00051 00019	TELETYPE STUFF
+C00054 00020	IFWAITS<			Additional definitions for WAITS
+C00055 ENDMK
+C⊗;
+;;;	universal NetDef - common definitions for universal network
+; Above commented out for WAITS -- interferes with NETDEF[S,SYS]
+
+	UNIVERSAL NETMAC
+	subttl	provan - 1982
+
+	search	f,s
+	search	MacTen			; make coding convenient
+
+	$reloc
+	$high
+comment	\
+
+	common definitions which will be needed by most everybody
+
+\
+	subttl	compilation control symbols
+
+ifndef FtChck,<	FtChck==:-1 >	; on to do checksumming of messages.
+				; (when off, assumes checksums of +0 means
+				;  "no checksum", which is not true in
+				;  the later specs.)
+
+ifndef debug,< debug==-1 >	; off if code is bug free
+	subttl	protocol definitions ;⊗ .lnkip .iptcp .ipicm .ipudp
+
+.lnkip==↑d155	; IP's protocol number 	in 1822 "link" field.
+.iptcp==↑d6	; TCP's protocol number according to IP.
+.ipicm==↑d1	; ICMP's protocol number according to ICMP.
+.ipudp==↑d17	; UDP's protocol number according to IP.
+	subttl	constants desirable for their neumonic meaning
+
+
+ful.wd==↑d36		; the number of bits in a dec-10 word
+hlf.wd==↑d18		; the number of bits in a half word
+net.wd==↑d32		; the number of bits in a net word
+net.by==↑d8		; the number of bits in a net byte
+msk.hw==mask.(<↑d16>,<↑d35>)	; mask for complementing checksum half word.
+wd2byt==2		; how to shift from words to bytes
+byt2wd==-wd2byt		; how to shift from bytes to words
+oct2by==↑d3		; how to shift from an octet of bytes into bytes.
+byt2bt==↑d3		; how to shift from bytes to bits.
+IFWAITS<
+	;These definitions are copied in CACDAT, and made global in
+	;both files so loader can check consistency.
+	INTERN	FUL.WD,HLF.WD,NET.WD,NET.BY,WD2BYT,BYT2WD,OCT2BY,BYT2BT
+>;IFWAITS
+	subttl	define fields of a leader with 32 bit words
+
+; macros to define fields in leaders, and manipulate the fields
+; (much of this is from ideas in MACTEN.)
+
+
+;MACROS TO DEFINE AND LOAD/STORE A BYTE LOCATION
+
+;MACRO DefFd. (BYTE NAME, Offset into leader, first bit, length of field>
+; all numbers in all three numerical arguments are interpreted as DECIMAL.
+
+DEFINE	DefFd.(NAM$,LOC$,Pos$,Wid$),<
+	..OLD==10			;; get old radix
+	radix	10			;; do this part in decimal
+	..Pos==<Pos$>
+	..Wid==<Wid$>
+	..Loc==<Loc$>
+	..TYP==3				;; assume just a random byte
+	IFE <..Pos>!<..Wid-ful.wd>,..TYP==0	;; full network word
+	IFE <..Pos-hlf.wd>!<..Wid-hlf.wd>,..TYP==1
+						;; part of net word in <RH>...
+	IFE <..Pos>!<..Wid-hlf.wd>,..TYP==2	;; ...or <LF> of dec-10 word
+	DF%%ST (\..TYP,NAM$,\..Loc,\<..Pos+..Wid-1>,\..Wid)
+	PURGE	..OLD,..TYP,..Loc,..Pos,..Wid
+    >
+	subttl	define fields in some random storage location
+
+; use these marcos to define groups of storage symbolically
+;  without defining any real space for them.
+
+
+; call to start a block of storage, with optional starting offsets
+define	BkIni. (Word1$<0>, Bit1$<0>),
+	<
+		%%off==<Word1$>		; start with first word wanted
+		%%bit==<Bit1$>		; and first bit wanted
+	>
+
+
+; call to define each field in the group.  two arguments: name of
+;  the field and width of the field in bits (defaults to 1 full word).
+;  does not allocate the storage.  next call will start at the same spot.
+define	BkDef. (Nam$, Wid$<ful.wd>),
+    <
+	ifndef %%off,<		;; discourage caller from not initializing.
+		printx	? Must call BkIni. before defining storage.
+		BkIni.		;; take evasive action
+	    >
+	..Old==10
+	radix	10
+	..Wid==<Wid$>
+	..Typ==3		;; assume it's a random byte
+	ifge ..Wid-ful.wd,<	;; allocating at least a full word?
+		BkNxW%		;; need to start words on word boundaries
+		..Typ==0	;; this is a type 0 (full word) alocation
+	    >
+	ife ..Wid-hlf.wd,<	;; allocating exactly a 1/2 word?
+		BkNxH%		;; half words should start on half words
+		ifn %%bit,<	..Typ==1	>	;; <RH> of word
+		ife %%bit,<	..Typ==2	>	;; <LH> of word
+	    >
+	ife ..Typ-3,<		;; is it a random byte?
+		ifg <%%bit+..Wid>-ful.wd,<	;; yes.  is there
+						;;  enough room for it?
+			BkNxW%			;; not in this word.
+		    >
+	    >
+
+	DF%%ST (\..TYP,NAM$,\%%off,\<%%bit+..Wid-1>,\..Wid)
+
+	%%loff==%%off			;; remember last offset
+
+	PURGE	..OLD,..TYP,..Wid
+
+    > ; end of BkDef.
+
+
+;; same as BkDef., except the storage is allocated.  the next call to
+;;  either will define space after this spot.
+define	BkNxt. (Nam$, Wid$<ful.wd>),
+    <
+
+	BkDef.	Nam$, <Wid$>		;; define the right stuff
+
+	..Old==10
+	radix	10		;; make sure to read width in base 10
+
+	;; now allocate that storage
+	%%bit==%%bit+<Wid$>		;; assign those bits
+
+	radix	..Old		;; back to starting radix
+
+	ifge %%bit-ful.wd,<	;; allocated all of this word?
+		%%off==%%off+<<%%bit+ful.wd-1>/ful.wd>	;; yes.  save space
+		%%bit==0		;; start next byte at start of word
+	    >
+
+	PURGE	..Old
+
+    >
+
+define	BkOff. (Nam$),
+    <
+	ifndef %%loff,<
+	   printx ? BkOff. definition for 'Nam$' does not follow a definition.
+	>
+	ifdef %%loff,<
+		Nam$'==%%loff		;; define symbol
+	>
+    >
+
+define	BkEnd. (Len$),
+    <
+	BkNxW%				;; go to the next word
+	ifnb <Len$>,<	Len$'==%%off  >	;; get the final offset
+	purge	%%bit,%%off,%%loff	;; make sure nobody tries to
+					;;  use these.
+    >
+
+
+; macros that help out the above macros.  the BkNxW% may be of use
+;  to other users, but the BkNxH% should not be used except above.
+
+; guarentee that we start the next field on a word boundary
+define	BkNxW%,
+    <
+	ifn %%bit,<
+		%%off==%%off+1		;; next word
+		%%bit==0		;; at the start of it
+	    >
+    >
+
+; guarentee the next field start at the next 1/2 word boundary
+define	BkNxH%,
+    <
+	ifn %%bit,<			;; not already at a word boundary
+	    ifn %%bit-hlf.wd,<		;; nor a 1/2 word boundary
+		ifg %%bit-hlf.wd,<	;; beyond the middle 1/2
+		    BkNxW%		;; move on the next word
+		>
+		ifn %%bit,<		;; still not settled
+		    %%bit==hlf.wd	;; move to middle 1/2 word
+		>
+	    >
+	>
+    >
+	subttl	THIS IS A HELPER MACRO FOR INTERNAL USE
+
+
+; call this macro only from storage defining macros.  arguments:
+;		TYP$ - 0 if a full word, 1 is <RH>, 2 is <LH>, 3 if byte.
+;		NAM$ - name of field to be defined.
+;		LOC$ - offset from word zero of block.
+;		POS$ - right most bit.  bit 0 is 0. (only used if Type 3)
+;		WID$ - width of field. (only used if Type 3)
+; all of the last three arguments should be passed in as decimal digits;
+; normal calling sequence:
+;		..Old==10
+;		Radix	10
+;		DF%%ST (\..Typ,Nam$,\..Loc,\..Pos,\..Wid)
+
+DEFINE	DF%%ST (TYP$,NAM$,LOC$,POS$,WID$),<
+	RADIX	..OLD
+DEFINE	NAM$ (OPS,AC,E,Cond<NONE>),<
+    ifidn <Cond><NONE>,<	;; no condition means simple movement
+	..C==0
+	IRP OPS,<
+	    IFE TYP$-..C,<
+		STOPI
+		;; the IFE's that follow are to strip possible surrounding
+		;;  angle brackets from OPS.
+		IFN 3-..C,< ife 0, OPS <AC>,↑d'Loc$'+'E >
+		IFE 3-..C,< ife 0, OPS <AC>,[POINT WID$,↑d'Loc$'+'E,POS$] >
+	    >
+	..C==..C+1
+	>
+	PURGE	..C
+    > ;; end of IFIDN
+    ifdif <Cond><NONE>,<	;; a condition means it's an INCR/DECR
+	ife Typ$,<   OPS'Cond	<AC>,↑d'Loc$'+'E  >	;; simple word
+	ifn Typ$,<		;; not a simple word
+		pushj	p,[	;; allow us to skip this test
+			   $'OPS ('Cond,<AC>,Nam$,<E>)	;; call that version
+			  ]	;; end the literal
+	> ;; end of IFN Typ$
+    > ;; end of IFDIF
+> ;; end of NAM$ definition
+> ;; end of DF%%ST definition
+	subttl	support for odd instruction to odd bytes
+
+; these macros may be called if someone tries to do something
+;  odd (AOS) to an odd sort of location (a byte).  it would
+;  be wise to avoid misallocating space like this, probably,
+;  but we make sure these macros are defined so nobody gets
+;  surprised.  if the byte is a full word, these operations
+;  are trivial (single instructions) and handled before these
+;  macros are called.
+
+; all of these macros are called from within literals via PUSHJ P,
+
+; what to do to AOS a byte
+define	$AOS (Cond$,AC$,Nam$,E$),
+    <
+      ifb <AC$>,<	;; if there is no AC provided...
+	push	p,0			;; ...let the assembler use 0, but
+					;;  save it first.  note that caller
+					;;  can't use 0 to index, so we're
+					;;  relatively safe using this reg.
+      >
+	load.	<AC$>,Nam$,<E$>		;; get the byte or whatever
+	aos'Cond$ <AC$>			;; INCR it
+      ifnb <Cond$>,<	;; only if there is a condition
+	  sos	(p)			;; remeber not to skip return
+      >
+	stor.	<AC$>,Nam$,<E$>		;; put the byte back in its storage
+      ifb <AC$>,<	;; was there an AC provided?
+	pop	p,0			;; no.  restore 0 which we stole
+      >
+      ifnb <Cond$>,<	;; only if we ever skip
+	pjrst	cpopj1##		;; skip return (unless return
+					;;  address was SOSed before)
+      >
+      ifb <Cond$>,<	;; we never skip on any condition
+	popj	p,			;; normal return
+      >
+    >
+
+; what to do to SOS a byte
+define	$SOS (Cond$,AC$,Nam$,E$),
+    <
+      ifb <AC$>,<	;; if there is no AC provided...
+	push	p,0			;; ...let the assembler use 0, but
+					;;  save it first.  note that caller
+					;;  can't use 0 to index, so we're
+					;;  relatively safe using this reg.
+      >
+	load.	<AC$>,Nam$,<E$>		;; get the byte or whatever
+	sos'Cond$ <AC$>			;; INCR it
+      ifnb <Cond$>,<	;; only if there is a condition
+	  sos	(p)			;; remeber not to skip return
+      >
+	stor.	<AC$>,Nam$,<E$>		;; put the byte back in its storage
+      ifb <AC$>,<	;; was there an AC provided?
+	pop	p,0			;; no.  restore 0 which we stole
+      >
+      ifnb <Cond$>,<	;; only if we ever skip
+	pjrst	cpopj1##		;; skip return (unless return
+					;;  address was SOSed before)
+      >
+      ifb <Cond$>,<	;; we never skip on any condition
+	popj	p,			;; normal return
+      >
+    >
+
+; what to do to do a CAM to a byte
+define	$CAM (Cond$,AC$,Nam$,E$),
+    <
+      ifn T1-<AC$>,<			;; use T1 unless that's the AC$
+	push	p,t1			;; save the scratch register
+	load.	t1,Nam$,<E$>		;; get the value to be compared
+	cam'Cond$ <AC$>,t1		;; do they compare?
+	  pjrst	tpopj##			;; no.  normal return
+	pjrst	tpopj1##		;; yes.  skip return
+      > ;; using T1 for scratch
+      ife T1-<AC$>,<			;; otherwise use T2
+	push	p,t2			;; save the scratch register
+	load.	t2,Nam$,<E$>		;; get the value to be compared
+	cam'Cond$ <AC$>,t2		;; do they compare?
+	  pjrst	t2popj##		;; no.  normal return
+	pjrst	t2poj1##		;; yes.  skip return
+      > ;; using T2 for scratch
+    > ;; end of $CAM
+
+; what to do to do a SKIP on a byte
+define	$SKIP (Cond$,AC$,Nam$,E$),
+    <
+      ifnb <AC$>,<	;; provided with an AC
+	load.	<AC$>,Nam$,<E$>		;; get the value
+	jump'Cond$ <AC$>,cpopj1##	;; skip return if AC matches condition
+	popj	p,			;; else normal return
+      >
+      ifb <AC$>,<	;; if user doesn't give an AC to work with
+	push	p,t1			;; save T1
+	load.	t1,Nam$,<E$>		;; get the value
+	jump'Cond$ t1,tpopj1##		;; restore T1 and skip return
+	pjrst	tpopj##			;; restore T1 and don't skip
+      >
+    >
+	subttl	macros for handle storage locations declared above
+
+;MACRO LOAD. (AC, BYTE NAME, Block location (may be indexed AC))
+; WILL LOAD AC WITH THE CONTENTS OF THE BYTE.
+
+;MACRO STOR. IS IDENTICAL EXCEPT THE AC IS STORED INTO THE BYTE.
+
+;MACRO ZERO. IS IDENTICAL (FIRST ARG IGNORED) EXCEPT ZERO IS STORED,
+;	trashing the AC if the byte is not a full or half word.
+
+;MACRO ones. IS IDENTICAL (FIRST ARG IGNORED) EXCEPT -1 IS STORED,
+;	trashing the AC if the byte is not a full or half word.
+
+DEFINE LOAD. (AC$,STR$,E$),< STR$ (<MOVE,HRRZ,HLRZ,LDB>,<AC$>,<E$>)>
+DEFINE STOR. (AC$,STR$,E$),< STR$ (<MOVEM,HRRM,HRLM,DPB>,<AC$>,<E$>)>
+DEFINE ZERO. (AC$,STR$,E$),< STR$ (<SETZM,HLLZS,HRRZS,<tdza <AC$>,<AC$>
+							skipa
+							 dpb>>,<AC$>,<E$>)>
+DEFINE ones. (AC$,STR$,E$),< STR$ (<SEToM,HLLoS,HRRoS,<tdoa <AC$>,[-1]
+							skipa
+							 dpb>>,<AC$>,<E$>)>
+
+
+; macro INCR. ( <AC>, <Byte name>, <Block location>,<condition> )
+; increment the given byte in the given block, loading the resulting
+;  value into AC, and skip on condition: "n", "e", "g", "ge", "l", "le",
+;  "a", or "", just like the endings to the AOS instruction (what a
+;  coincedence!).  <AC> may be blank.
+define	Incr. (AC$,Str$,E$,Cond$<>),<	Str$ (AOS,<AC$>,<E$>,<Cond$>)	>
+define	Decr. (AC$,Str$,E$,Cond$<>),<	Str$ (SOS,<AC$>,<E$>,<Cond$>)	>
+
+; compare the contents of AC to a storage location and skip on condition.
+define	Cam. (AC$,Str$,E$,Cond$<>),<	Str$ (CAM,<AC$>,<E$>,<Cond$>)	>
+
+; compare the contents of the operand to zero and skip on condition,
+;  loading value into the AC if this field is not blank.
+define	Skip. (AC$,Str$,E$,Cond$<>),<	Str$ (SKIP,<AC$>,<E$>,<Cond$>)	>
+	subttl	standard port definitions
+
+
+; these are the stardard port descriptors for standard protocols
+;  if different port descriptors are ever used, ICMDDB will have
+;  to be taught about handling different protocols.
+
+StdPrt==0	; stand port word in the leader is the first word.
+DefFd.	StdSP,	StdPrt,	 0,	16	; source port of message
+DefFd.	StdDP,	StdPrt,	16,	16	; destination port
+	subttl	BIB - buffer information block
+
+; used to keep track of where and why a buffer stream exists.
+
+;;!------------------------------------|------------------------------------!
+;;! back pointer in transmission queue | forward pointer in transmission q  !
+;;!------------------------------------|------------------------------------!
+;;! pointer to first buffer of message |   pointer to next BIB in retran q  !
+;;!------------------------------------|------------------------------------!
+;;!	   sequence number of next byte after the end of this message	    !
+;;!------------------------------------|------------------------------------!
+;;!	uptime of system last time this message was sent, OR		    !
+;;!	zero if this message has never been sent or is now being sent, OR   !
+;;!	-1 if this message is now being sent and should be deleted after    !
+;;!		being sent
+;;!------------------------------------|------------------------------------!
+IFWAITS<
+;;!			     Network interface				    !
+;;!------------------------------------|------------------------------------!
+
+;JJW - A BIB exists for each output message.  For Arpanet output, pointers
+;in the first word link together all messages to a host.  For Ethernet
+;output, no such links exist (dummy data is stored in the first word to
+;satisfy BIBCHK).  The message pointer points to a list of IMP buffers for
+;Arpanet, or a system free storage block for Ethernet.  The retransmission
+;pointers link together messages for a connection in all cases.
+
+;We consider an Ethernet packet to be "being sent" from the time it is
+;placed in the transmission queue until transmission is actually done.
+;Thus there may be several packets simultaneously in this state, unlike
+;Arpanet where only one packet at a time is being sent to the IMP.
+
+>;IFWAITS
+
+
+; offset definitions for stardard buffer information block
+BkIni.		; start the block
+
+BkDef.	BIBTQ			; entire transmission queue pointer.
+BkOff.	BibTQO			; pointer to transmission queue.
+BkNxt.	BIBLTQ,hlf.wd		;(LH) pointer to BIB of previous message in
+				;	transmission queue, or zero if none.
+BkNxt.	BIBNTQ,hlf.wd		;(RH) pointer to BIB of next message in
+				;	transmission queue, or zero if none.
+
+BkNxt.	BIBMes,hlf.wd		;(LH) pointer to first buffer in the stream
+BkNxt.	BIBRTQ,hlf.wd		;(RH) pointer to BIB of next message in the
+				;	restranmission queue.
+
+BkNxt.	BIBSeq			; sequence number of the first byte after
+				;	message.
+
+BkNxt.	BIBTim			; uptime of system last time this buffer was
+				;	transmitted.
+
+IFWAITS<
+BkNxt.	BIBNET			;Network interface.
+>;IFWAITS
+
+BkEnd.	BIBLen		; close the block, get the length
+IFWAITS<INTERN BIBLEN>		;For BIBFS in CACDAT
+	subttl	NBH - network buffer header
+
+; this header appears at the start of each buffer of data within
+;  the network code.
+
+;;!------------------------------------|------------------------------------!
+;;!	count of 8 bit bytes here      |  pointer to next buffer in stream  !
+;;!------------------------------------|------------------------------------!
+
+BkIni.		; start the block
+
+BkNxt.	NBHCnt,hlf.wd	;(LH) number of 8 bit bytes contained in this buffer.
+			;	(word count for 36 bit buffers outbound.)
+BkNxt.	NBHNxt,hlf.wd	;(RH) pointer to next buffer in stream (or 0 if none)
+BkOff.	NBHNof		; offset to word with NBHNxt in it.
+
+BkEnd.	NBHLen		; get the length of the header
+IFWAITS<INTERN NBHLEN>		;Make LOADER check consistency with CACDAT
+
+NBfByt==<ImpBfs##-NBHLen>*4	; number of data bytes in a network buffer.
+NOWAITS<		;Not needed when using 32-bit mode
+NBfB36==<<ImpBfs##-NBHLen>*↑d9>/2	; number of bytes in a 36 bit buffer
+>;NOWAITS
+;SOME DEFINITION DEFINITIONS:
+
+NOWAITS<			;WAITS definitions are in the file IMPDDB
+DEFINE XXD(A,N,C)<
+	A==N
+	..XX==N>
+
+DEFINE XXP(A,C)<
+	A==<..XX==..XX+1>>
+
+DEFINE XXS(A,C)<
+	A==:<..XX==..XX+1>>
+
+DEFINE XX(A,N,C)<
+	IFNDEF A,<A==N>>
+
+DEFINE XXX(A,C)<
+	A==..XX>
+
+DEFINE XXM(A,N,C)<
+	A==..XX+1
+	..XX==..XX+N>
+>;NOWAITS
+	subttl	IMP DDB DEFINITIONS
+
+NOWAITS<			;WAITS definitions are in the file IMPDDB
+;DEVIOS BITS(RIGHT HALF)
+XX	IODATA,2000,		THERE IS DATA READY FOR INPUT
+
+;(LEFT HALF)  BITS 13-17 STANDARD (40, 20,10, 4, 2, 1)
+XX	IOBRKF,100,		BREAK CHAR SEEN IN ASCII
+
+;IMP SPECIFIC STUFF
+XXD	IMPCLR,DEVLSD+1,	WHERE TO START CLEARING
+
+XXX	IMPIOS,			IMP NCP STATUS
+	;LEFT HALF		COPIED IN DEVIOS LEFT HALF
+	XX AllcWt,2000,		ALLOCATION WAIT
+	xx StatWt,4000,		waiting for a change of state
+	XX IDATWT,10000,	INPUT DATA WAIT
+	XX ALLWAT,16600,	ALL WAIT BITS
+	; right half
+	xx TrgDwn,1b27,		target host went down
+	xx TimFlg,1b28,		user timeout flag
+
+XXP	IMPBYT,			(150) RESIDUAL BYTE COUNT (ASYNCH I/O)
+XXP	IMPPTR,			(150) POINTER TO RESIDUAL BYTES
+
+xxp	PDBTop,			first address in pseudo DDB
+
+xxx	NetAdr,			address of host on this network to send
+				;  messages to to get them to our host.
+
+xxp	OBfTop,			end of output area (used by ImpMak in ImpSer)
+
+XXx	OBFByt,			REMEMBERS Bytes SENT FOR FLOW CONTROL
+XXP	OBFLST,			ADDRESS OF LAST BUFFER IN OUTPUT STREAM
+XXP	OBFFST,			ADDRESS OF FIRST BUFFER IN OUTPUT STREAM
+XXP	OBFTHS,			ADDRESS OF BUFFER CURRENTLY BEING FILLED
+XXP	OBFPC,			ADDRESS OF ROUTINE TO GET NEXT BYTE
+ifn FtChck,<	; checksumming word
+xxp	ObfCsm,			temporary holding place for checksum of
+				;  message to this point (accurate copy
+				;  is in P3).
+>
+XXP	OBFBC,			BYTE COUNT REMAINING IN BUFFER
+XXP	OBFPNT,			ADDRESS OF LAST WORD FILLED IN BUFFER
+
+xxx	OBfBot,			end of output area (used by ImpMak in ImpSer)
+
+XXP	IBfTop,			top of input area (used by TCPSer)
+XXx	IBFTHS,			ADDRESS OF BUFFER CURRENTLY BEING EMPTIED
+XXP	IBFLST,			ADDRESS OF LAST BUFFER waiting to be
+					;  read by input.
+XXP	IBFPNT,			ADDRESS OF LAST WORD PLACED IN BUFFER
+XXP	IBFPC,			ADDRESS OF NEXT BYTE INPUT ROUTINE
+XXP	IBFBC,			COUNT OF BITS LEFT IN THE BUFFER
+XXP	IBFByt,			COUNT OF BITS INPUT BUT NOT REALLOCATED
+XXP	ABFLST,			ADDRESS OF LAST BUFFER of assembled 32
+					;  bit buffer stream.
+xxx	IBfBot,			bottom of input area
+
+; data area for our IP level protocl
+xxp	RmtAdr,			address of remote site
+xxp	LclAdr,			this should be our address
+xxp	SerTyp,			type of service (write only at this point)
+xxp	Protcl,			protocol above IP
+xxp	MsgLen,			length of the data in the message in bytes
+
+
+
+; area for TCP data or similar protocols
+xxp	RmtPrt,			remote port number of connection
+xxp	LclPrt,			local port number of connection
+xxp	State,			TCP connection state
+xxp	Future,			queue of messages which arrived out of
+				;  sequence.  messages are kept in order
+				;  of their ending sequence number.
+				;  duplicates are discarded.
+xxp	SndBts,			bits to send on next TCP message
+xxp	SndISS,			initial send sequence number
+xxp	SndNxt,			sequence number of next byte to be sent
+xxp	SndLst,			sequence number of last message sent
+xxp	SndUna,			sequence number of first byte which is not
+				;  yet acknowleged.
+xxp	SndWnd,			number of bytes we have permission to send
+				;  (accounts for bytes currently queued for
+				;   transmission)
+xxp	SndLWd,			SndNxt value last time SndWnd was updated.
+xxp	SndUrg,			urgent pointer for output
+xxp	SndPsh,			if set set PUSH at last packet to go in
+				;  the current output buffer
+xxp	SndMax,			maximum message size for other TCP (or 0)
+xxp	RcvIRS,			initial send sequence number of other site
+xxp	RcvNxt,			sequence number we are expecting next
+xxp	RcvRed,			sequence number of last byte actually read
+				; by "user", set each time RcvWnd is updated.
+xxp	RcvWnd,			number of bytes we are prepared to accept.
+xxp	RcvHld,			number of bytes we're holding from window
+xxp	RcvThr,			threshhold: when RcvHld gets this big it's ok
+				; to update RcvWnd: no getting silly window.
+xxp	RcvUrg,			incoming urgent pointer.
+xxp	RcvFin,			have seen an incoming FIN for this connection
+
+xxx	PDBBot,			end of area needed for pseudo DDB
+
+; timers and such
+xxp	RetrnQ,			retransmission queue
+xxp	RTTime,			retransmission delay time (in ticks)
+xxp	RTHold,			held retransmission time while probing 0 window
+xxp	UTTime,			time to use for user time-out (in seconds)
+xxp	UTTimr,			user time-out timer (in seconds)
+xxp	GTimer,			general time-out timer for the following:
+				; 1. in S%TimW state, times out time-wait.
+				; 2. when owning job is 0, times out incoming
+				;	connection waiting for a matching
+				;	Listen (waiting for server to start).
+				; always measures seconds 'till timeout.
+
+; data area for TelNet protocol
+XXP	OTTYC,			TEMPORARY TTY CHARACTER STORAGE
+XXP	ITTYC,			TEMPORARY CHARACTER SAVE AREA FOR TTY LINK
+XXP	TTYLIN,			TTY FLAGS AND LDB ADDRESS
+	XX TTYJOB,1B18,		IMP IS CONNECTED TO A TTY CONTROLLING A JOB
+	XX TTYPTR,1B19,		TTY PRINTER IS ATTACHED
+	XX TTYKBD,1B20,		TTY KEYBOARD IS ATTACHED
+	XX TTYCRL,1B21,		LAST CHARACTER WAS CR
+	XX TTYXWT,1B22,		JOB WAITING UNTIL CROSSPATCH BROKEN
+
+;THE FOLLOWING ARE THE IMP REQUEST FLAGS, INDICATING WHAT CLOCK-LEVEL
+;   SERVICES MUST BE PERFORMED FOR THIS DDB.
+	XX IRTIIO,1B23,		TTY INPUT TO CROSSPATCHED IMP OUTPUT
+	XX IRIITO,1B24,		IMP INPUT TO CROSSPATCHED TTY OUTPUT
+	XX IRTOIO,1B25,		OUTPUT FROM IMP TTY TO IMP
+	XX IRIITI,1B26,		INPUT FROM IMP TO TTY LINE
+
+	XX TTYRQF,IRTIIO!IRIITO!IRTOIO!IRIITI, ALL TTY REQUEST FLAGS
+
+
+XXP	TELWRD,			TELNET CONTROL STUFF
+	XX IACFLG,1B0,		CURRENTLY INTERPRETING COMMAND (MUST BE SIGN)
+	XX LSGAFG,1B1,		LOCAL SUPPRESS-GA OPTION IN EFFECT
+	XX FSGAFG,1B2,		FOREIGN SUPPRESS-GA OPTION IN EFFECT
+	XX INSWAT,1B3,		HAVE DATA MARK--WAITING FOR INS
+	XX SYNCLR,1B4,		CLEAR TTY OUTPUT BUFFER ON SYNCH
+	XX OPTCHR,377B17,	TELNET OPTION CHARACTER BEING PROCESSED
+	;BITS 18-35 ARE FOR THE TELNET COROUTINE LINKAGE
+
+XXP	ECPEND,			NO. OF ECHO NEGOTIATION REPLIES PENDING
+XXP	TELOWD,			FOR TELNET OUTPUT CODE AND MORE BITS
+	XX XPTECH,1B1,		EXPECTING REPLY TO ECHO NEGOTIATION
+	XX XPTSGA,1B2,		EXPECTING REPLY TO SUPRESS GA NEGOTIATION
+	XX LLCPWN,1B3,		FLAG TO PERMIT TOTAL ECHO SUPRESSION
+	XX IECHO,1B4,		BIT SET BY TALK IMPUUO - DISALLOWS SERVER ECHOING
+	XX TELOMR,1B5,		TELNET OUTPUT COROUTINE HAS MORE TO SAY
+	XX TelFnc,377B17,	TELNET function being output
+	;BITS 18-35 ARE TELNET OUTPUT COROUTINE ADDRESS
+
+XXP	ISHREG,			TEMP DATA STORAGE FOR ASSEMBLING A WORD
+XXP	USRPAR,			ARBITRARY USER-DEFINED CONNECTION PARAMETERS
+
+XXS	IMPDDS,			LENGTH OF IMP DDB
+>;NOWAITS
+;SOME MACROS
+
+	PI==	4	;ELSE MACRO WON'T ASSIGN VALUE UNTIL PASS 2
+
+
+;MACRO TO CHECK FOR IMP INTERRUPT CHANNEL TURNED OFF AND HALT IF NOT.
+;   USE AT THE START OF CRITICAL ROUTINES THAT MUST BE CALLED WITH
+;   INTERRUPTS OFF.
+DEFINE CHKINT <
+IFN DEBUG,<
+	CONSZ	PI,IMPBTS##	;SKIP IF IMP CHANNEL OFF
+	JSR	INDERR		;HALT IF NOT
+>>
+;OTHER PARAMETERS ;⊗ NetArp NetEth
+
+XX	UBUFL,↑D128,		USER BUFFER SIZE
+
+
+; some definitions about our network.  this assumes a class A network,
+;  which is OK since these values are only used when thinking about
+;  inerfacing to our local network.  if you try to host this software
+;  on a class B or C network, these are the symbols to watch out for.
+xx	NetMsk,037700000000		; mask of network value of address
+xx	HstMsk,000077600000		; mask of host value of address
+xx	LogMsk,000000177400		; mask of logical host (in IP,
+					;  but must be zero in 1822.)
+xx	ImpMsk,000000000377		; mask of imp value of address
+;TELETYPE STUFF
+XX	.CHETX,"C"&↑O37,	↑C (ETX) PDP-10 ESCAPE
+XX	.CHCNO,"O"&↑O37,	↑O SUPRESSES OUTPUT
+XX	.CHDLE,"N"&↑O37,	↑N QUOTES NEXT CHARACTER
+XX	.CHCNC,"←"&↑O37,	↑← (US) IS LOCAL ESCAPE CHARACTER
+XX	.CHESC,"↑"&↑O37,	↑↑ (RS) IS NETWORK ESCAPE CHARACTER
+XX	.CHLF,↑O12,		LINE FEED
+XX	.CHCR,↑O15,		CARRAIGE RETURN
+XX	.CHEOL,.CHLF,		LINE FEED IS STANDARD END OF LINE
+
+;TELNET PROTOCOL STUFF
+	.TNIAC==:↑D255		;INTERPRET FOLLOWING AS COMMAND
+	.TNSE==↑D241		;END SUBNEGOTIATION PARAMETERS
+
+	.TNNOP==↑D241		;NO-OP
+	.TNDM==	↑D242		;DATA MARK
+	.TNBRK==↑D243		;BREAK (OR REVERSE BREAK)
+	.TNIP==	↑D244		;INTERRUPT PROCESS
+	.TNAO==:↑D245		;ABORT OUTPUT
+	.TNAYT==↑D246		;ARE YOU THERE
+	.TNEC==	↑D247		;ERASE CHARACTER
+	.TNEL==	↑D248		;ERASE LINE
+	.TNGA==	↑D249		;GO AHEAD
+	.TNSB==	↑D250		;SUB-NEGOTIATE
+	.TNWIL==:↑D251		;WILL
+	.TNWNT==:↑D252		;WON'T
+	.TNDO==	↑D253		;DO
+	.TNDNT==↑D254		;DON'T
+
+	.TOBIN==0		;TRANSMIT BINARY OPTION
+	.TOECH==:1		;ECHO OPTION
+	.TORCP==2		;RECONNECTION PROTOCOL OPTION
+	.TOSGA==3		;SUPPRESS GO-AHEAD OPTION
+	.TOAMS==4		;APPROXIMATE MESSAGE SIZE OPTION
+	.TOSTT==5		;STATUS OPTION
+	.TOTIM==6		;TIMING MARK OPTION
+	.TORCT==7		;REMOTE CONT. TRANS AND ECHOING
+	.TOXOL==↑D255		;EXTENDED OPTIONS LIST OPTION
+
+;STILL MORE
+
+xx	MesDLN,↑d16,		amount of space to keep track of imp-host
+				; message types in the gettab tables.  must
+				; be at least as big as MesDSN in IMPSER.
+xx	ICMLen,↑d20,		amount of space to keep track of ICMP
+				; message types in the gettab tables.  must
+				; be bigger than ICMCnt in IPSer.
+IFWAITS<INTERN MESDLN,ICMLEN>	;make LOADER check consistency with CACDAT
+; maximum seqment lifetime
+xx	MSL,1*↑d60		; max segment lifetime (1 minute)
+IFWAITS<			;Additional definitions for WAITS
+
+DEFINE PUSHACS <
+	PUSHJ P,PUSHIT##
+>
+DEFINE POPACS <
+	PUSHJ P,POPIT##
+>
+
+;DISARG macro for calling DISERR.  Changes must be coordinated with OUTER.
+DEFINE DISARG (A,B)
+<	A'QQQ B
+>
+DEFINE QQQNAM
+<	ERRMAC STR
+	ERRMAC OCT
+	ERRMAC LOC
+	ERRMAC DEC
+	ERRMAC SIX
+	ERRMAC DCP
+	ERRMAC HE2
+	ERRMAC OCH
+	ERRMAC ADR
+	ERRMAC OHS
+	ERRMAC IPA
+>
+DEFINE ERRMAC (I)
+<	OPDEF I'QQQ [QQQ←↑D23]
+QQQ==QQQ+1
+>
+QQQ==0
+	QQQNAM
+
+>;IFWAITS
+
+	$lit
+
+NOWAITS<			;We are going to read IMPDDB next
+	end
+>;NOWAITS

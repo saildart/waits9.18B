@@ -1,0 +1,329 @@
+COMMENT ⊗   VALID 00002 PAGES
+C REC  PAGE   DESCRIPTION
+C00001 00001
+C00002 00002	DDB for IMP connections.  This file is read by both FAIL and MACRO.
+C00020 ENDMK
+C⊗;
+;DDB for IMP connections.  This file is read by both FAIL and MACRO.
+;FAIL uses it to allocate space for the model DDB, while MACRO just defines
+;the symbols giving the word offsets.
+
+IFDEF FOR,<MACRO←←0;>MACRO==1		;Find out who the assembler is
+
+IFE MACRO,<
+DEFINE XXY(N,C)<
+	N>
+
+DEFINE XXZ(A,N,C)<
+↑A::	N>
+
+DEFINE XXD(A,N,C)<
+IFDEF A,<printx Multiply defined symbol: A>
+↑A←←N>
+
+DEFINE XXP(A,C)<
+	0
+IFDEF A,<printx Multiply defined symbol: A>
+↑A←←.>
+
+DEFINE XXS(A,C)<
+	0
+IFDEF A,<printx Multiply defined symbol: A>
+↑A←←.>
+
+DEFINE XX(A,N,C)<
+IFDEF A,<printx Multiply defined symbol: A>
+IFNDEF A,<↑A←←N>>
+
+DEFINE XXX(A,C)<
+IFDEF A,<printx Multiply defined symbol: A>
+↑A←←.>
+>;IFE MACRO
+
+IFN MACRO,<
+DEFINE XXY(N,C)<
+	..XX==..XX+1>
+
+DEFINE XXZ(A,N,C)<
+	A==..XX
+	..XX==..XX+1>
+
+DEFINE XXD(A,N,C)<
+	A==..XX>
+
+DEFINE XXP(A,C)<
+	A==<..XX==..XX+1>>
+
+DEFINE XXS(A,C)<
+	A==:<..XX==..XX+1>>
+
+DEFINE XX(A,N,C)<
+	IFNDEF A,<A==N>>
+
+DEFINE XXX(A,C)<
+	A==..XX>
+>;IFN MACRO
+
+IFE MACRO,<				;Start of the model DDB
+	REPEAT DDBSKW-2,<0>	; new words not used
+	IMPDDB+DEVIOS		; DEVSPT
+	DEVIBF!DEVSHR!DEPCBC,,0	; DEVCMR
+↑IMPDDB:PHASE 0
+>;IFE MACRO
+IFN MACRO,<
+	..XX==0
+>;IFN MACRO
+XXY	SIXBIT/IMP/,		; DEVNAM
+XXY	RECSIZ+1,		; DEVCHR (same as disk for now)
+XXY	0,			; DEVIOS
+XXY	<IMP.NX,,IMPDSP>,	; DEVSER
+XXY	<DVIMP!DVLNG!DVIN!DVOUT,,154403>,	; DEVMOD
+XXY	0,			; DEVLOG
+XXY	0,			; DEVBUF
+XXY	0,			; DEVIAD
+XXY	0,			; DEVOAD
+
+;Following word must be in same position as PTIMES word in PUPDDB because
+;of shared use of byte pointers.  Some other words in pre-FTIP IMP DDB used
+;to agree with PUPDDB, but they no longer do.  We only use CLS, ALLOC, RFC
+;and INPUT timeouts.  PUPSER uses these and also RFNM and IDLE.
+
+XXZ	TIMES,<BYTE (6)5,0,20,20,0,0>, ;CLS,RFNM,ALLOC,RFC,INPUT,IDLE timeouts
+
+;DEVIOS BITS(RIGHT HALF)
+repeat 0,<			;Conflicts with HDEAD bit in WAITS
+XX	IODATA,2000,		THERE IS DATA READY FOR INPUT
+>;repeat 0
+repeat 1,<
+XX	IODATA,1000,		THERE IS DATA READY FOR INPUT
+>;repeat 1
+
+;(LEFT HALF)  BITS 13-17 STANDARD (40, 20,10, 4, 2, 1)
+repeat 0,<			;Not used in WAITS
+XX	IOBRKF,100,		BREAK CHAR SEEN IN ASCII
+>;repeat 0
+
+;IMP SPECIFIC STUFF
+XXD	IMPCLR,.,		;So TOPS-10 can agree with us
+
+;In WAITS, there is no IMPIOS.  Left half is the same in DEVIOS, and right-half
+;bits are equivalent to other bits in RH(DEVIOS).
+repeat 0,<
+XXX	IMPIOS,			IMP NCP STATUS
+>;repeat 0
+	;LEFT HALF		COPIED IN DEVIOS LEFT HALF
+	XX AllcWt,2000,		ALLOCATION WAIT
+	xx StatWt,4000,		waiting for a change of state
+	XX IDATWT,10000,	INPUT DATA WAIT
+	XX ALLWAT,16600,	ALL WAIT BITS
+	; right half
+repeat 0,<
+	xx TrgDwn,1b27,		target host went down
+	xx TimFlg,1b28,		user timeout flag
+>;repeat 0
+IFN MACRO,<		;Definitions for MACRO code of right-half DEVIOS bits
+	XX HDEAD,2000,		Target host dead
+	XX RSET,400,		Connection reset
+	XX TMO,200,		User timeout flag
+>;IFN MACRO
+
+repeat 0,<			;Not used in WAITS
+XXP	IMPBYT,			(150) RESIDUAL BYTE COUNT (ASYNCH I/O)
+XXP	IMPPTR,			(150) POINTER TO RESIDUAL BYTES
+>;repeat 0
+
+repeat 1,<
+;New DDB words introduced for WAITS.
+XXP	STB,			;Status bits for MTAPE return
+XXP	IDLTMR,			;Idle timer for ITYs, in seconds
+	XX IDLMAX,170		;Allow 2 minutes before closing idle ITYs
+XXP	PSHOPT,			;Push option.  One of:
+	XX PSHALL,0,		;Push all outputs
+	XX PSHNXT,1,		;Push next output, then go to state 2
+	XX PSHNOT,2,		;Push only after last output
+;Fix OUT05 in IMPSER if push options are changed.
+>;repeat 1
+
+xxp	PDBTop,			first address in pseudo DDB
+
+xxx	NetAdr,			address of host on this network to send
+				;  messages to to get them to our host.
+repeat 1,<
+;More new DDB words for WAITS, must be in pseudo DDB.
+XXP	NETWRK,			;Network interface for this DDB
+XXP	OUTBIB,			;Preallocated BIB for output
+XXP	OUTBFS,			;Preallocated buffer or packet for output
+>;repeat 1
+
+xxp	OBfTop,			end of output area (used by ImpMak in ImpSer)
+
+XXx	OBFByt,			REMEMBERS Bytes SENT FOR FLOW CONTROL
+XXP	OBFLST,			ADDRESS OF LAST BUFFER IN OUTPUT STREAM
+XXP	OBFFST,			ADDRESS OF FIRST BUFFER IN OUTPUT STREAM
+XXP	OBFTHS,			ADDRESS OF BUFFER CURRENTLY BEING FILLED
+XXP	OBFPC,			ADDRESS OF ROUTINE TO GET NEXT BYTE
+ifn FtChck,<	; checksumming word
+xxp	ObfCsm,			temporary holding place for checksum of
+				;  message to this point (accurate copy
+				;  is in P3).
+>
+XXP	OBFBC,			BYTE COUNT REMAINING IN BUFFER
+XXP	OBFPNT,			ADDRESS OF LAST WORD FILLED IN BUFFER
+
+xxx	OBfBot,			end of output area (used by ImpMak in ImpSer)
+
+XXP	IBfTop,			top of input area (used by TCPSer)
+XXx	IBFTHS,			ADDRESS OF BUFFER CURRENTLY BEING EMPTIED
+XXP	IBFLST,			ADDRESS OF LAST BUFFER waiting to be
+					;  read by input.
+XXP	IBFPNT,			ADDRESS OF LAST WORD PLACED IN BUFFER
+XXP	IBFPC,			ADDRESS OF NEXT BYTE INPUT ROUTINE
+XXP	IBFBC,			COUNT OF BITS LEFT IN THE BUFFER
+XXP	IBFByt,			COUNT OF BITS INPUT BUT NOT REALLOCATED
+XXP	ABFLST,			ADDRESS OF LAST BUFFER of assembled 32
+					;  bit buffer stream.
+xxx	IBfBot,			bottom of input area
+
+; data area for our IP level protocl
+xxp	RmtAdr,			address of remote site
+xxp	LclAdr,			this should be our address
+xxp	SerTyp,			type of service (write only at this point)
+xxp	Protcl,			protocol above IP
+xxp	MsgLen,			length of the data in the message in bytes
+
+
+
+; area for TCP data or similar protocols
+xxp	RmtPrt,			remote port number of connection
+xxp	LclPrt,			local port number of connection
+xxp	State,			TCP connection state
+xxp	Future,			queue of messages which arrived out of
+				;  sequence.  messages are kept in order
+				;  of their ending sequence number.
+				;  duplicates are discarded.
+xxp	SndBts,			bits to send on next TCP message
+xxp	SndISS,			initial send sequence number
+xxp	SndNxt,			sequence number of next byte to be sent
+xxp	SndLst,			sequence number of last message sent
+xxp	SndUna,			sequence number of first byte which is not
+				;  yet acknowleged.
+xxp	SndWnd,			number of bytes we have permission to send
+				;  (accounts for bytes currently queued for
+				;   transmission)
+xxp	SndLWd,			SndNxt value last time SndWnd was updated.
+xxp	SndUrg,			urgent pointer for output
+xxp	SndPsh,			if set set PUSH at last packet to go in
+				;  the current output buffer
+xxp	SndMax,			maximum message size for other TCP (or 0)
+xxp	RcvIRS,			initial send sequence number of other site
+xxp	RcvNxt,			sequence number we are expecting next
+xxp	RcvRed,			sequence number of last byte actually read
+				; by "user", set each time RcvWnd is updated.
+xxp	RcvWnd,			number of bytes we are prepared to accept.
+xxp	RcvHld,			number of bytes we're holding from window
+xxp	RcvThr,			threshhold: when RcvHld gets this big it's ok
+				; to update RcvWnd: no getting silly window.
+xxp	RcvUrg,			incoming urgent pointer.
+xxp	RcvFin,			have seen an incoming FIN for this connection
+
+xxx	PDBBot,			end of area needed for pseudo DDB
+
+; timers and such
+xxp	RetrnQ,			retransmission queue
+xxp	RTTime,			retransmission delay time (in ticks)
+xxp	RTHold,			held retransmission time while probing 0 window
+repeat 0,<		;Not needed in WAITS: use field in TIMES(DDB)
+xxp	UTTime,			time to use for user time-out (in seconds)
+>;repeat 0
+xxp	UTTimr,			user time-out timer (in seconds)
+xxp	GTimer,			general time-out timer for the following:
+				; 1. in S%TimW state, times out time-wait.
+				; 2. when owning job is 0, times out incoming
+				;	connection waiting for a matching
+				;	Listen (waiting for server to start).
+				; always measures seconds 'till timeout.
+
+; data area for TelNet protocol
+XXP	OTTYC,			TEMPORARY TTY CHARACTER STORAGE
+XXP	ITTYC,			TEMPORARY CHARACTER SAVE AREA FOR TTY LINK
+XXP	TTYLIN,			TTY FLAGS AND LDB ADDRESS
+	XX TTYJB,1B18,		IMP IS CONNECTED TO A TTY CONTROLLING A JOB
+;Following symbol not used in FAIL code, and conflicts with WAITS symbol
+IFN MACRO,<
+	XX TTYPTR,1B19,		TTY PRINTER IS ATTACHED
+>;IFN MACRO
+	XX TTYKBD,1B20,		TTY KEYBOARD IS ATTACHED
+	XX TTYCRL,1B21,		LAST CHARACTER WAS CR
+repeat 0,<
+	XX TTYXWT,1B22,		JOB WAITING UNTIL CROSSPATCH BROKEN
+
+;THE FOLLOWING ARE THE IMP REQUEST FLAGS, INDICATING WHAT CLOCK-LEVEL
+;   SERVICES MUST BE PERFORMED FOR THIS DDB.
+	XX IRTIIO,1B23,		TTY INPUT TO CROSSPATCHED IMP OUTPUT
+	XX IRIITO,1B24,		IMP INPUT TO CROSSPATCHED TTY OUTPUT
+	XX IRTOIO,1B25,		OUTPUT FROM IMP TTY TO IMP
+	XX IRIITI,1B26,		INPUT FROM IMP TO TTY LINE
+
+	XX TTYRQF,IRTIIO!IRIITO!IRTOIO!IRIITI, ALL TTY REQUEST FLAGS
+>;repeat 0
+
+repeat 1,<
+	;We don't use all of these bits in WAITS.  The order is significant,
+	;since it determines what clock-level service is done first.  We
+	;want to handle input, then output, then ACKs, because input may
+	;generate echoes as output, and output may take care of ACKs in the
+	;same packet.  The CLKACK bit is used for ordinary IMP DDBs as well
+	;as Telnet servers.
+	XX IRIITI,1B25,		INPUT FROM IMP TO TTY LINE
+	XX IRTOIO,1B26,		OUTPUT FROM IMP TTY TO IMP
+	XX CLKACK,1B27,		Request for ACK at clock level
+
+	XX TTYRQF,IRTOIO!IRIITI!CLKACK, 	All request flags
+
+	;The following bits are also defined in the TTYLIN word.
+	XX TTYFIN,1B34,		Output done. Send a FIN after output buffer empty
+	XX IMPSRV,1B35,		DDB waiting to be INITed by server job
+>;repeat 1
+
+XXP	TELWRD,			TELNET CONTROL STUFF
+	XX IACFLG,1B0,		CURRENTLY INTERPRETING COMMAND (MUST BE SIGN)
+	XX LSGAFG,1B1,		LOCAL SUPPRESS-GA OPTION IN EFFECT
+	XX FSGAFG,1B2,		FOREIGN SUPPRESS-GA OPTION IN EFFECT
+	XX INSWAT,1B3,		HAVE DATA MARK--WAITING FOR INS
+	XX SYNCLR,1B4,		CLEAR TTY OUTPUT BUFFER ON SYNCH
+repeat 1,<			;Following added in WAITS
+	XX TRNBIN,1B5,		Currently transmitting binary
+	XX RCVBIN,1B6,		Currently receiving binary
+>;repeat 1
+	XX OPTCHR,377B17,	TELNET OPTION CHARACTER BEING PROCESSED
+	;BITS 18-35 ARE FOR THE TELNET COROUTINE LINKAGE
+
+XXP	ECPEND,			NO. OF ECHO NEGOTIATION REPLIES PENDING
+XXP	TELOWD,			FOR TELNET OUTPUT CODE AND MORE BITS
+	XX XPTECH,1B1,		EXPECTING REPLY TO ECHO NEGOTIATION
+	XX XPTSGA,1B2,		EXPECTING REPLY TO SUPRESS GA NEGOTIATION
+	XX LLCPWN,1B3,		FLAG TO PERMIT TOTAL ECHO SUPRESSION
+	XX IECHO,1B4,		BIT SET BY TALK IMPUUO - DISALLOWS SERVER ECHOING
+	XX TELOMR,1B5,		TELNET OUTPUT COROUTINE HAS MORE TO SAY
+repeat 1,<			;Added in WAITS
+	XX XPTBIN,1B6,		Expecting reply to binary negotiation
+>;repeat 1
+	XX TelFnc,377B17,	TELNET function being output
+	;BITS 18-35 ARE TELNET OUTPUT COROUTINE ADDRESS
+
+repeat 0,<			;JJW - I don't see these used anywhere
+XXP	ISHREG,			TEMP DATA STORAGE FOR ASSEMBLING A WORD
+XXP	USRPAR,			ARBITRARY USER-DEFINED CONNECTION PARAMETERS
+>;repeat 0
+
+XXS	IMPDDS,			LENGTH OF IMP DDB
+
+IFE MACRO,<
+↑IMPDLS←←.-1			;DDB index of last word in IMP DDB
+↑IMPDLN←←IMPDLS+1+DDBSKW	;Length of IMP DDB
+
+	DEPHASE
+>;IFE MACRO
+IFN MACRO<
+	END			;of the NETMAC+IMPDDB assembly
+>;IFN MACRO

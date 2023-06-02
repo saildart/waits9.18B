@@ -1,0 +1,2968 @@
+COMMENT ⊗   VALID 00024 PAGES
+C REC  PAGE   DESCRIPTION
+C00001 00001
+C00007 00002	 RECDM RECDM0 RECD00 RECDM1 RECDM8 RECDM5 RECDM3 RECDM9 RECDM4 RECDM6 RECDMC RECDM2 RECDM7
+C00015 00003	 RECNED RECNER RECNNE RECNSP RECQNC RECQSP RECQVC RECNNQ RECNEC RECNE1 RECNE3 RECNE2 RECNEQ RECNEA RECNEZ RECNEN RECNEE RECNES NECLR NEFLSH NEHOLD NEHOL1 NEUNH NEC600 RECNEM RECNM0 RECNM1 RECNM2 RECNM3
+C00027 00004	CHRMAC UUO  CHRER0 CHRER1 CHRER2 CHRER3 CHRER4 CHRER5 CHRER6 CHRER7 CHRE10 CHRE11 CHRERR MACMAX MALMAX MNCRMC MXCRMC CRMACB CHRMAC CHRM11 CHRMA1 CHRM00 MALCNT MALCN2 MALCN3 MALCN4 CRMAC CRMA0 CHRMA2 CHRMA3 CHRMA6 CHRMA7 CHRMA0 CHRMA4 CHRM99 CHRMA9
+C00043 00005	GETMAC UUO  GETMAC GETMA3 GETMA4 GETMA1 GCRMAC
+C00048 00006	 BKCRMC DOCRMC BKCRM2 CLCRMC CLCRML POP21J DMMODE DMMODN DMMOD0 DMMOD1 DMQESC DMQES1 DMQES2
+C00054 00007	Format of NOEDIT(LINE)  NOEDFL NEHTFL NEALLQ NEQMOD NEMMOD NECMOD NENUMB NEQUOT NEMETA NECTRL NEUMSK NETBPT NEBBPT NESBPT NEMBPT EKESCC NECVBP
+C00056 00008	Conversion table for no-edit-key display input.  NECNUM NECQUO NECDSP NECCNV NECARR NECSUP NECVEC VECTNM NECHAR
+C00062 00009	DM output flags  INIDUN TBSSET RAPPED BELOWS NOINTR DMBPND LEWAIT DMSTAY DMXCAL DMQUOT TRUNCA NOEEOL NOEEOB BETWEE USERGO CHASTE PROTLE DMATXY DMXLE QUO177 DMUXFR EMPHON BLNKON IDON DMUMSK CTRLCH DMTAPE
+C00068 00010	Dispatch table for quoted DM control characters  IDSPCL XYSPCL INQUOT DMCONV PDADDR PDDELR DMTABL
+C00074 00011	DPYDES flags, DPYBTS flags, AC usage, dpy hdr usage.  PADID DM128 NO177 NOBOLD NOIDCU DM3025 DMWAITS ALTNEQ ALTEMP ALTBEL LEFTAR DPUMSK DPYDFT
+C00080 00012	Display-type definition tables.  DPCNAM DPCPOS DPCHOM DPCEOL DPCPRT DPCPR2 DPCADC DPCDLC DPCFLS DPCRGT DPCLFT DPCUP DPCDWN DPCBEL DPCABL DPCERS DPCERB DPCERO DPCADR DPCDLR DPCMOD DPCBCL DPCMCL DPCID DPCBLI DPCTBS DPCINI DPCCID DPCCIB DPCDCX DPC128 DPCACX DPCNDM DPCSEM DPCCEM DPCSAE DPCCAE DPCABT DPCABM DPCIMS DPCSIZ DPCFGS DRFARI DRFDRI DRFACI DRFDCI DRFAUS DRFALF DRFWRP DRFTWR DRFCLE DRFMEM DRFESH NBTSEQ XXX XXX NDPCBK NDPCBK DM2500 HP2648 TELERAY C100A C100B HEATH1 TELEVI AMBASS ALTOTA DM3052 VT102 SUNDPY DPTPAT DPTPA2 HTHINI LHTHIN C100AB LC100A C100ND LC100N C100IN LC100I LC100B AMBINI LAMBIN V02INI LV02IN
+C00145 00013	Transmitter routine beginning.  DMXMT DMXMG2 DMXMGO DMXMG3 DMXMT0 DMXRPT DMXDEQ DMXMT1 DMXMT9 DMXMT2 DMXM8L DMXM8C DMXM8U DMNOXY DMXMT8 NODPYH NODPYD
+C00155 00014	Get specified cursor position.  XYGET XYCHK DMSETQ
+C00157 00015	Main output code.  DMXMTL DMXMUS DMXMTO DMXMTM DMLEM5 DMXMT6 DMXMT3 DMNOQ2 DMXMT5 DMTAB3 DMNOOP DMNOO2 DMXM5A DMXM5S DMXM5T DMWRSC DMXM5B DMXM5X DMXM5Y DMCR6 DMLF4 DMXM5D DMXTAP SKIPCR RANGE0 RANGE
+C00168 00016	 IGNOR0 IGNOR3 IGNOR2 IGNFF DMMAST DMERAS DMHOME DMBACK DMFOR2 DMFORW DM175 DM177B DM177C
+C00175 00017	 DMNOQU DMXMT7 DM177 DMXM4A DMXMT4 DMCALC DMBELL DMCHPD DM30PD DM30PA DM30PB DM25PA DM25PB DMCALX DMPAD DMPADM DMPAD2
+C00184 00018	 DMBETW DMBET2 DMTAB DMSPA9 DMSPA8
+C00187 00019	 DMSPAC DMSPA4 DMSPA2 DMSPA3
+C00189 00020	 DMLEMV DMLEM2 DMLEM3 DMLEM4
+C00191 00021	 DMLEFX
+C00195 00022	 DMLEDE DMLEF3 DMBLNK DMEMPH DMCANC DMID ADDCHR ADDCH2 DELCHR DELCH2 ADDROW ADDRO2 DELROW DELRO2 DMUP DMFOR3 DPEEOL DPEEO2 DMEEOL DMLED2 DMSTAB DMLED1
+C00203 00023	 DMCR3 DMLF2 DMLF3 DMCR4 DMTAB4 DMCR DMTAB5 DMLF5 DMLF DMLF1 C100DC C100AC C100A2
+C00211 00024	 DMCUR0 DMCURS DMCUR2 DMCU22 DMXR2 DMOUT2 DMXL1 DMXR1 DMCUR4 DMYU2 DMYD1 DMYU1 DMCUR5 DMCERR DCPBEG DM25CU HP26CU V102CU AMBACU C100CU TVIDCU DCPEND HEATCU DM52CU TELECU TELEC2 DMCUR3 DMOUT0 DMOUT1 DMPOSC DMPRE1 DMPR1A DMPRE2 DMPREP DMCKMD DMPR20 DMPR2A DMPR22 DMPRE3 DMPRE4 DMPR6A DMPRE7 DMPRE8
+C00229 ENDMK
+C⊗;
+;⊗ RECDM RECDM0 RECD00 RECDM1 RECDM8 RECDM5 RECDM3 RECDM9 RECDM4 RECDM6 RECDMC RECDM2 RECDM7
+
+;PREPROCESSING ROUTINE FOR DMs TO MAKE THEIR INPUT CHARS LOOK LIKE DD/III CHARS
+;Direct return taken if char is just "ESC" or "ADD META" (no more handling).
+;Skip return taken if not DM or preprocessing not needed (eg, PTWR1W or image mode).
+;  Note that if we came from RECINT, then the 10400 bits cannot be on!
+;Double skips on DM after doing the preprocessing (now char looks like on DD/III).
+RECDM:	MOVE TAC,LINTAB(LINE)
+	TRNN CHR,10400		;Char in DD/III form (esc or meta char)?
+	TLNN TAC,DMLIN		;No, is this a Datamedia display?
+	JRST CPOPJ1		;Not DM or doesn't need preprocessing
+	SKIPLE MACROC		;Are we expanding a character macro?
+	JRST CPOPJ1		;Yes, no preprocessing needed.
+	HLL TAC,PRGESC(LINE)	;Get escape bits
+	SKIPN DDB,TTYTAB(LINE)	;Skip preprocessing if image mode
+	JRST RECDM0		;No DDB, can't be image mode
+	MOVE IOS,DEVIOS(DDB)	;Check for image mode
+	TRNE IOS,10
+	TRNE IOS,6		;Image mode 10 or 11?
+	JRST RECDM0		;No, do preprocessing
+	JRST CPOPJ1		;Yes, don't do DM preprocessing
+
+RECDM0:	SKIPE AC1,LETAB(LINE)	;Get DPY header
+	SKIPL AC2,EDITKY(LINE)	;Skip if no-edit-key DM
+	JRST .+2		;No.
+	JRST RECNED		;Yes.
+	SETZB AC1,AC2		;Used by DMESC and below
+	JUMPE CHR,DMESC		;NULL is the DM display ESCAPE char
+	CAIN CHR,200
+	JRST DMMETA		;EDIT-NULL is the "add META" character
+	LDB UCHN,EKESCC		;BH 9/18/82  Get non-null ESC char
+	JUMPE UCHN,RECD00	;    Isn't any.
+	CAIN CHR,(UCHN)
+	JRST DMESC
+	CAIN CHR,200(UCHN)
+	JRST DMMETA
+RECD00:	AOS (P)			;Take double skip return now
+	LDB UCHN,NEBBPT		;get any prefixed bucky bits
+	JUMPE UCHN,RECDM1	;jump if no prefixed buckies
+;user previously typed an escape cmd that quotes and supplies CONTROL and/or META
+	DPB AC2,NEBBPT		;clear buckies for next time
+	ANDI CHR,177		;flush current EDIT bit and any other garbage
+	CAIGE CHR,40		;Special char?
+	MOVE AC1,DMTABL(CHR)	;Yes, get DM bits for this char, for conversion
+	TLNE AC1,INQUOT
+	TLZ AC1,INQUOT!DMCONV	;avoid converting INQUOT chars, we're quoting this
+	JRST RECDM5
+
+RECDM1:	LDB UCHN,[POINT 1,CHR,28] ;Get EDIT bit
+	ANDI CHR,177		;Flush EDIT bit and any other garbage
+	CAIGE CHR,40		;Special char?
+	MOVE AC1,DMTABL(CHR)	;Yes, get DM bits for this char
+	TLNN TAC,ESCNEG		;allow BREAK <char> without quoting char
+	TLNN TAC,REGESC!SPCESC	;Is char being quoted or getting META added?
+	JRST RECDM5		;No
+	TLNN TAC,REGESC
+	JRST RECDM8		;Add META
+	TLNE AC1,INQUOT		;Can we quote this char?
+	DPB AC2,[ESCFLD+LINE,,PRGESC] ;Yes, clear quote (ESC) flag
+	JRST RECDM2		;No, must be ESC char
+
+RECDM8:	IORI UCHN,2		;Give him META
+	DPB AC2,[ESCFLD+LINE,,PRGESC] ;Clear "add META" flag
+	TLNE AC1,INQUOT		;Does META quote this char?
+	JRST RECDM2		;Yes
+RECDM5:	TLNE TAC,PTYLIN		;If this is a non-ARPA PTY, then no
+	TLNE TAC,IMPBIT		; ASCII to Stanford conversion needed
+	JRST RECDM3		;Not PTY or is ARPA PTY, do conversion
+	TLNN AC1,INQUOT		;Non-arpa PTY needs special action only
+	JRST RECDM2		; on quotable chars (CLEAR, HOLD, CALL)
+RECDM3:	CAIN CHR,176
+	JRST [	MOVEI CHR,32
+		JRST RECDM2]	;176→32 (tilde)
+	CAIN CHR,175
+	AOJA CHR,RECDM2		;175→176 (right brace)
+	CAIE CHR,30
+	CAIN CHR,137
+	JRST [	MOVE DSER,DPYDES(LINE) ;Get LEFTARROW bit
+		TLNN DSER,LEFTAR ;This terminal have left arrow key?
+		TRC CHR,30≠137	 ;No, so interchange left arrow and underscore
+		JRST RECDM2]
+	TLNN AC1,DMCONV		;Need to convert this character?
+	JRST RECDM2		;No
+	LDB CHR,[POINT 9,AC1,17] ;Get new character
+	TRNE CHR,600
+	JRST RECDM7		;Already has bits--preserve 'em (CALL)
+	JUMPN CHR,RECDM2	;Now put in CONTROL bit, if typed
+	CAME AC1,DMTABL+HOLDER	;Is this the hold/unhold character
+	JRST RECDM6		;No, must be clear character
+	JUMPN UCHN,RECDM4	;EDIT-HOLD is currently a no-op (reserved)
+	MOVEI CHR,10044		;CONTROL-CLEAR for assumed unhold
+	SKIPE AC1,LETAB(LINE)
+	SKIPL DPHOLD(AC1)	;Are we holding?
+RECDM9:	MOVEI CHR,10041		;No, use CONTROL-BREAK for hold
+	MOVEI UCHN,1
+	JRST RECDM7
+
+RECDM4:	SOS (P)			;Undo the AOS we already did
+	POPJ P,			;So direct return for no-op char
+
+;Here with CLEAR.  If it was EDIT-CLEAR, it becomes META-CLEAR to flush DM queues.
+RECDM6:	JUMPE UCHN,RECDMC
+	MOVE CHR,DPYDES(LINE)	;If this is a WAITS DM, EDIT-CLEAR is unhold
+	TLNN CHR,DMWAITS	;Skip if WAITS keyboard -- keep as EDIT-CLEAR
+	MOVEI UCHN,2		;EDIT-CLEAR becomes META-CLEAR (flush queues)
+RECDMC:	SKIPA CHR,[10044]	;Clear--leave EDIT bit as is
+RECDM2:	DPB UCHN,[POINT 2,CHR,28] ;Put control bits into character
+RECDM7:	LDB DSER,[POINT 7,CHR,35]
+	CAIL DSER,"A"
+	CAILE DSER,"Z"
+	JRST CPOPJ1
+	TRO DSER,40		;Make lower case
+	JRST CPOPJ1
+;⊗ RECNED RECNER RECNNE RECNSP RECQNC RECQSP RECQVC RECNNQ RECNEC RECNE1 RECNE3 RECNE2 RECNEQ RECNEA RECNEZ RECNEN RECNEE RECNES NECLR NEFLSH NEHOLD NEHOL1 NEUNH NEC600 RECNEM RECNM0 RECNM1 RECNM2 RECNM3
+
+;Here to preprocess character for NOEDIT DM.
+;Get here with DPY HDR pointer in AC1, NOEDIT word in AC2
+RECNED:	ANDI CHR,177		;No EDIT key, so flush parity bit.
+	MOVEI AC3,0		;For clearing out bits later.
+	MOVE UCHN,NECHAR(CHR)	;Get dispatch word for this char.
+	TLNE AC2,NEQUOT		;Are we supposed to quote next char?
+	JRST RECNEQ		;Yes.
+	TLNE AC2,NENUMB		;Are we in a numeric arg?
+	JRST RECNEN		;Yes.
+RECNER:	TLNN AC2,NEQMOD		;Are we in a quoting mode?
+	JRST RECNNQ		;No.
+	CAIGE CHR,40		;Yes, is this character special?
+	JRST RECNSP		;Special char is complicated.
+	TLNE TAC,REGESC		;Is ESC pending?
+	TDZA AC2,AC2		;Yes, no bucky bits
+RECNNE:	LDB AC2,NEMBPT		;No, get bucky mode
+	DPB AC2,NEBBPT		;Set to quote this char according to mode
+	JRST RECNEQ		;Now just like once-only quoting.
+
+;Quote mode w/ASCII control char typed.
+RECNSP:	TLNE AC2,NEALLQ		;ALL-QUOTE mode?
+	TLZ UCHN,NECSUP		;Yes, no super characters.
+	TLNE UCHN,NECSUP	;Quote mode and some kind of special char.
+	JRST RECQSP		;Super char (CALL, HOLD, but not ESC)
+	TLNE UCHN,NECVEC
+	JRST RECQVC		;Vectorable char, might be ESC
+	CAIE CHR,15		;Allow ESC n CR without quoting like ESC n " CR
+RECQNC:	TLZN TAC,REGESC		;Normal special (lined) character.  ESC on?
+	JRST RECNNE		;No, just like normal char in quote mode.
+	MOVSI AC2,REGESC	;Yes, turn off ESC flag for TTYSER
+	TLNN TAC,SPCESC		; unless we are controlifying end of ESC [ cmd.
+	ANDCAM AC2,PRGESC(LINE)
+	JRST RECNNQ		;Treat as if not quoting mode.
+
+;Not-all quote mode w/CALL or HOLD char typed.
+RECQSP:	TLNN TAC,REGESC		;Super char, ESC bit has opposite sense
+	JRST RECNEC		;Just CALL does a CALL.
+	MOVSI AC2,REGESC	;Turn off ESC flag for TTYSER
+	ANDCAM AC2,PRGESC(LINE)
+	JRST RECNNE		;ESC CALL (etc) does buckied beta (etc)
+
+;Vectorable char seen in quote mode.  Quote it unless is ESCAPE.
+RECQVC:	LDB AC2,NECVBP		;Vectorable char, get its vector index.
+	ADDI AC2,(AC1)		;Index into dpy hdr
+	SKIPL NEVECT-1(AC2)	;Is this an ESCAPE code?
+	JRST RECQNC		;No, just like any other control code (quoted)
+	JRST DMESC		;Yes, it means ESCAPE by golly.
+
+;Not quoting this character.  Might be a macro or special (control char).
+RECNNQ:	LDB AC2,NECVBP		;Get variable-char dispatch
+	JUMPE AC2,RECNEC	;Zero means constant char.
+	ADDI AC2,(AC1)		;Make pointer into dpy hdr.
+	SKIPE AC2,NEVECT-1(AC2)	;Skip unless this tty has a macro for this char.
+	JRST RECNEM		;Process the macro.
+RECNEC:	TLNE UCHN,NECQUO	;Is this a quoting character?
+	JRST RECNES		;Yes, set bucky bits.
+	TLNE UCHN,NECDSP	;Is this a special dispatch char?
+	JRST (UCHN)		;Yes, do whatever's right.
+	TLNE TAC,PTYLIN		;If this is a non-ARPA PTY, then no
+	TLNE TAC,IMPBIT		; ASCII to Stanford conversion needed
+	JRST [	CAIE CHR,137	;Is it ASCII underscore?
+		JRST RECNE1	;No, get new char from table (even if ↑X)
+		MOVE DSER,DPYDES(LINE)	;Get leftarrow bit
+		TLNN DSER,LEFTAR	;Skip if not swapping them
+		MOVEI CHR,30	;ASCII underscore → WAITS underscore
+		JRST RECNE3]
+	TLNN UCHN,NECCNV	;Local PTY, skip if table does ASCII/SAIL.
+RECNE1:	MOVEI CHR,(UCHN)	;Otherwise it's a nine-bit SAIL character.
+RECNE3:	LDB UCHN,[POINT 2,CHR,28]
+RECNE2:	AOS (P)			;This is a real character.
+	JRST RECDM2		;Set up ACs for TTYSER and leave.
+
+;Here to quote this one character (with possible bucky bits).
+RECNEQ:	JUMPE CHR,RECNEZ	;Can't quote null.
+	TLNE TAC,PTYLIN		;If this is a non-ARPA PTY, then no
+	TLNE TAC,IMPBIT		; ASCII to Stanford conversion needed
+	JRST .+2		;Not PTY or is ARPA PTY, do conversion
+	JRST RECNEA		;No conversion for local PTY.
+	CAIN CHR,32		;↑Z has αTAB in its table entry
+	AOJA CHR,RECNEA		; but means not-equal when quoted
+	TLNE UCHN,NECARR	;Is this left arrow or underscore?
+	JRST [	MOVE DSER,DPYDES(LINE) ;Get leftarrow bit
+		TLNN DSER,LEFTAR ;Skip if not swapping them
+		TRC CHR,30≠137	 ;Interchange leftarrow and underscore
+		JRST RECNEA]
+	TLNE UCHN,NECCNV	;Does this char require ASCII/SAIL conversion?
+	MOVEI CHR,(UCHN)	;Yes, get the converted version.
+RECNEA:	LDB UCHN,NEBBPT		;Get saved bucky bits.
+	DPB AC3,NESBPT		;Clear out state flags.
+	JRST RECNE2
+
+RECNEZ:	DPB AC3,NESBPT		;Trying to quote null, just flush quote mode
+	POPJ P,			; and flush this character.
+
+;Here while reading numeric repeat arg, maybe controlify new digit.
+RECNEN:	TLNN UCHN,NECNUM	;Is this char a digit or sign?
+	JRST RECNEE		;No, end of numeric arg
+	MOVEI UCHN,1		;Yes, controlify it
+	JRST RECNE2
+
+;Non-digit seen, meaning end of numeric repeat arg.
+RECNEE:	DPB AC3,NESBPT		;End of number.  Clear out state flags.
+	JRST RECNER		;This is a regular char.
+
+RECNES:	DPB UCHN,NESBPT		;Quoting char, save state flags.
+	POPJ P,			;No further processing of this char.
+
+NECLR:	TDZA UCHN,UCHN		;Simulate CLEAR
+NEFLSH:	MOVEI UCHN,1		;Simulate EDIT-CLEAR
+	AOS (P)
+	JRST RECDM6		;Join edit-key code
+
+NEHOLD:	MOVSI AC2,REGESC	;Hold.  Get rid of ESC bit for uplevel.
+	ANDCAM AC2,PRGESC(LINE)
+	TLZE TAC,REGESC		;Is it ESC HOLD?
+	JRST NEUNH		;Yes, unhold.
+	MOVE AC2,EDITKY(LINE)	;No.  Get back flag word.
+	TLNN AC2,NEHTFL		;TTY HTOGGLE set?
+	JRST NEHOL1		;No.  Hold.
+	SKIPL DPHOLD(AC1)	;Are we holding?
+NEHOL1:	SKIPA CHR,[10041]	;No, use CONTROL-BREAK for hold
+NEUNH:	MOVEI CHR,10044		;CONTROL-CLEAR for unhold
+	MOVEI UCHN,1
+	AOS (P)
+	MOVEI AC2,0		;Make sure not to confuse SETESC
+	JRST RECDM7
+
+NEC600:	SETZB UCHN,DSER		;CALL: no bucky bits
+	MOVEI CHR,600		;    (as opposed to 3)
+	JRST CPOPJ2		; despite 600 bits on in CHR.
+
+;Here to expand a NOEDIT macro.
+RECNEM:	JUMPL AC2,DMESC		;If it's an ESCAPE macro, just do ESCAPE
+;Enter here to expand an ESC # CR macro.  TTY is NOT necessarily a display.
+RECNM0:	TLNN AC2,-1		;Make sure there is a nonzero length
+	POPJ P,			;Else it's a null macro (can't happen)
+	HLRZM AC2,MACROC	;Save character count
+	HRLI AC2,441400		;Make 12.-bit BPT to character string
+	MOVEM AC2,MACROP	;Save in core.
+RECNM1:	ILDB CHR,MACROP		;Macro loop.  Get a char
+	TRZE CHR,2000
+	JRST RECNM3		;Special quoting character
+	TRZE CHR,4000
+	TRO CHR,10000		;Not enough room in byte to store this right.
+	LDB UCHN,[POINT 2,CHR,28]
+	TRNE CHR,10000		;If some flavor of escape char,
+	TRZ CHR,600		; bucky bits should be only in UCHN, not in CHR.
+	LDB DSER,[POINT 7,CHR,35] ;Get char w/o bucky bits for escape testing, etc.
+	CAIL DSER,"A"
+	CAILE DSER,"Z"
+	CAIA
+	TRO DSER,40		;Make it unshifted letter
+;??ME	PUSH P,AC1		;Save our dpy hdr pointer	;WHAT FOR??
+	PUSH P,LINE		;Save our line number
+	MOVEI AC2,0		;Make sure not to confuse SETESC
+	PUSHJ P,RECINC		;Deal with it.
+	POP P,LINE
+;??ME	POP P,AC1		;Dpy hdr			;WHAT FOR??
+RECNM2:	SOSLE MACROC		;Count down
+	JRST RECNM1
+	POPJ P,			;Done with macro
+
+;Here with NOEDIT quoter from macro expansion.  Supposedly this won't have any
+;effect if the tty isn't a NOEDIT display, so don't bother checking for one.
+RECNM3:	TRO CHR,NEQUOT		;Special quoting code:
+	DPB CHR,NESBPT		;Save state
+	JRST RECNM2
+;CHRMAC UUO ;⊗ CHRER0 CHRER1 CHRER2 CHRER3 CHRER4 CHRER5 CHRER6 CHRER7 CHRE10 CHRE11 CHRERR MACMAX MALMAX MNCRMC MXCRMC CRMACB CHRMAC CHRM11 CHRMA1 CHRM00 MALCNT MALCN2 MALCN3 MALCN4 CRMAC CRMA0 CHRMA2 CHRMA3 CHRMA6 CHRMA7 CHRMA0 CHRMA4 CHRM99 CHRMA9
+
+;; UUO to set up a macro definition for a noedit dpy character or for ESC # CR.
+;; call:
+;;	MOVEI AC,ADDR
+;;	CHRMAC AC,
+;;	 <error return -- code in AC>
+;;	<success return>
+;;
+;;ADDR:	CHAR,,LENGTH		;If sign bit is on, then rest of LH specifies macro
+;;	BYTE (12)XX,XX,XX	;  by giving # arg for ESC # CR cmd
+;;	ETC
+;;
+;; CHAR is the character which is to be redefined.  It must be a 7-bit
+;; character, and must be one of the redefinable ones.
+;; LENGTH is the number of 12.-bit bytes in the macro definition.
+;; If LENGTH is zero then any previous macro will be flushed and
+;; the character will have its default meaning.
+;; The bytes are standard 9-bit SAIL characters, with the following
+;; special codes allowed:
+;;	0600	CALL
+;;	2000	quote following char (↑Q)
+;;	2001	quote with CONTROL (↑P)
+;;	2002	quote with META (↑V)
+;;	2003	quote with CONTROL-META (↑W)
+;;	4041	BREAK
+;;	4042	ESCAPE
+;;	4044	CLEAR
+;;	4241	HOLD is CONTROL-BREAK
+;;	4244	UNHOLD is CONTROL-CLEAR
+;;	4444	FLUSH DM QUEUES is META-CLEAR
+;; If the UUO takes the direct return, the AC will contain one of these codes:
+;;	0  system error
+;;	1  Trying to make NOEDIT macro and job's TTY not a NOEDIT display
+;;	2  Trying to make NOEDIT macro and CHAR not a redefinable character
+;;	3  Trying to make NOEDIT macro and redefining the only ESCAPE character
+;;	4  LENGTH is greater than maximum allowed
+;;	5  Some byte isn't an allowable SAIL character
+;;	6  ESC # CR arg (#) out of allowable range for definable macro
+;;	7  Job is detached
+;;	10 No physical terminal is responsible for job's TTY for ESC # CR macros
+;;	11 Too much macro text in all macros defined for this TTY
+
+;Table for returning given error code
+CHRER0:	JSP TAC,CHRERR		;Code 0
+CHRER1:	JSP TAC,CHRERR		;Code 1
+CHRER2:	JSP TAC,CHRERR		;Code 2
+CHRER3:	JSP TAC,CHRERR		;Code 3
+CHRER4:	JSP TAC,CHRERR		;Code 4
+CHRER5:	JSP TAC,CHRERR		;Code 5
+CHRER6:	JSP TAC,CHRERR		;Code 6
+CHRER7:	JSP TAC,CHRERR		;Code 7
+CHRE10:	JSP TAC,CHRERR		;Code 10
+CHRE11:	JSP TAC,CHRERR		;Code 11
+CHRERR:	MOVEI TAC,-CHRER0-1(TAC) ;Normalize from PC to error code
+	JRST STOTAC		;Store error code
+
+;Max number of characters in one macro.
+MACMAX←←6*3	;Pretty small because we stay in CH5 during the execution.
+		;Fits in min size FS block (10 words) at 3 chars per word).
+
+;Max number of characters in all macros for one TTY (3 chars stored per word).
+MALMAX←←100*3	;Allow about 100 wds of FS (not counting wasted FS pieces)
+
+;Min and max arg for ESC # CR to be a macro
+MNCRMC←←5	;Minimum # for ESC # CR macro (lower args reserved for system).
+MXCRMC←←=20	;Max # for ESC # CR macro (limit amount of FS used for defs).
+
+CRMACB←←400000	;Bit in LH of first word of CHRMAC/GETMAC block meaning rest of
+		;  LH is ESC # CR argument value instead of noedit macro char.
+		;  Must be Sign Bit!
+
+↑CHRMAC:PUSHJ P,TTYFNU		;Set up LINE, DDB, IOS
+	TLNE IOS,TTYDTC
+	JRST CHRER7		;Detached job, return error code 7
+	XCTR XR,[MOVE DSER,(UUO)] ;Get user's AC
+	XCTR XR,[MOVE DDB,(DSER)] ;Get first word of arg block
+	JUMPL DDB,CRMAC		;Jump if defining an ESC # CR macro, legal anywhere
+	SKIPE AC2,LETAB(LINE)
+	SKIPL EDITKY(LINE)
+	JRST CHRER1		;Not a NOEDIT dpy, return error code 1
+	HLRZ CHR,DDB		;Get char user wants to modify
+	CAILE CHR,177
+	JRST CHRER2		;Char out of range, return error code 2
+	LDB CHR,NECVBP		;Get vector index for macro char
+	JUMPLE CHR,CHRER2	;If not vectorable, return error code 2
+	ADDI CHR,NEVECT-1(AC2)	;Point to vector word in dpy hdr
+	MOVEI AC1,(DDB)		;Length of new definition
+	CAIN CHR,NEVECT(AC2)	;Skip unless diddling NULL's definition
+	JUMPE AC1,CHRM99	;Jump if undefining--make null an escape again
+	SKIPL (CHR)		;Was this char previously an ESCAPE char?
+	JRST CHRM00		;No, OK to modify.
+	SOJN AC1,CHRM11		;Jump if new macro length not exactly 1
+	XCTR XLB,[LDB AC1,[POINT 12,1(DSER),11]] ;Get first and only char of macro
+	CAIN AC1,4042		;Is this escape?
+	JRST CHRM00		;Yes, OK to redefine last escape as escape
+CHRM11:	HRLI AC2,-VECTNM	;Make sure there is another ESCAPE too.
+CHRMA1:	CAIE CHR,NEVECT(AC2)	;Is this the word we're changing?
+	SKIPL NEVECT(AC2)	;No, is it an ESCAPE?
+	AOBJN AC2,CHRMA1	;Our word, or not ESCAPE
+	JUMPGE AC2,CHRER3	;Error code 3 for eliminating last ESCAPE
+	MOVE AC2,LETAB(LINE)	;Get back dpy hdr for noedit dpy, for MALCNT
+CHRM00:	LDB LINE,[DDQREQ+LINE,,LSTESC] ;Get responsible TTY, for MALCNT
+	JRST CHRMA2		;There is another ESCAPE, so this is OK.
+
+;Here to count total character storage for all macros.  Return char count in AC1.
+;Includes (DDB) (new macro's length) in count returned.  Clobbers AC2, AC3.
+;Enter with AC2 being noedit dpy hdr or zero, LINE being responsible tty (LH 0),
+;and CHR pointing to word where new macro's FS pointer will go.
+
+MALCNT:	MOVEI AC1,(DDB)		;Start with length of new macro
+;Now add in text counts for NOEDIT macros.
+	TRNN AC2,-1		;Any dpy hdr there?
+	JRST MALCN3		;No, no noedit macros to think about
+	HRLI AC2,-VECTNM	;Make aobjn for looking at macro counts
+MALCN2:	HLRZ AC3,NEVECT(AC2)	;Get a count
+	TRZ AC3,400000		;Clear possible sign-bit flag, leave only length
+	CAIE CHR,NEVECT(AC2)	;Is this the macro we're changing?
+	ADDI AC1,(AC3)		;No, add in its count
+	AOBJN AC2,MALCN2	;Loop through noedit macro table
+;Now add in ESC # CR macro text.
+MALCN3:	CAIE LINE,APLINE	;Don't charge any CR macro text if disowned DD
+	SKIPN AC2,CRMCPT(LINE)	;Get back pointer to table
+	POPJ P,			;No table (or disowned) means no CR macros
+	HRLI AC2,-MXCRMC+MNCRMC-1 ;Make aobjn ptr for table
+MALCN4:	HLRZ AC3,(AC2)		;Get count for this macro, if any
+	ADDI AC1,(AC3)		;Add count to total
+	AOBJN AC2,MALCN4	;Loop through whole table
+	POPJ P,
+
+CRMAC:	LDB CHR,[POINT 9,DDB,17] ;Get # for which this macro is ESC # CR
+	CAIG CHR,MXCRMC		;Is # in range?
+	CAIGE CHR,MNCRMC	;Between min and max?
+	JRST CHRER6		;No, store error code 6 for # out of range
+	SKIPE AC2,LETAB(LINE)	;Before we clobber LINE, figure out if we might
+	SKIPL EDITKY(LINE)	;  have any noedit macro storage, for making
+	MOVEI AC2,0		;  total macro count check later--dpy hdr in AC2
+	LDB LINE,[DDQREQ+LINE,,LSTESC] ;Get responsible TTY
+	CAIN LINE,APLINE	;Anyone responsible?
+	JRST CHRE10		;No, error code 10 for no one responsible
+	SKIPE AC1,CRMCPT(LINE)	;Get FS ptr if table already there
+	JRST CRMA0		;Got it
+	TRNN DDB,-1		;Non-zero length?
+	JRST CPOPJ1		;No, undefining, but no macros defined, so all done
+	MOVEI AC3,MXCRMC-MNCRMC+1 ;Amoung of FS needed for table
+	PUSHJ P,FSGET		;No table yet, get some FS
+	 PUSHJ P,POPTRP		;(FSGET can't fail at UUO level)
+	HRRZM AC1,CRMCPT(LINE)	;Remember address of the table
+	SETZM (AC1)		;Clear the initial table
+	MOVSI AC3,(AC1)		;Source of blt
+	HRRI AC3,1(AC1)		;Destination
+	BLT AC3,MXCRMC-MNCRMC(AC1) ;Zero the table
+CRMA0:	ADDI CHR,-MNCRMC(AC1)	;Make addr of word to hold macro pointer
+	HRRZ AC1,(CHR)		;Get address of any old macro
+	SETZM (CHR)		;Flush any old macro
+	JUMPE AC1,.+2		;Was there a macro here?
+	PUSHJ P,FSGIVE		;Yes, return its FS
+;Here with DDB and DSER still set up, and LINE holding responsible tty, AC2
+;holding zero or noedit dpy hdr, CHR pointing to word to hold macro FS ptr/length.
+CHRMA2:	PUSHJ P,MALCNT		;Count up all macro text (noedit + ESC # CR) in AC1
+	MOVEI TAC,(DDB)		;Length of macro string
+	JUMPE TAC,CHRMA9	;User is undefining a macro.
+	CAILE TAC,MACMAX	;Must be within maximum length for one macro
+	JRST CHRER4		;Error code 4 for macro def too long
+	CAILE AC1,MALMAX	;Is total of all macro def lengths too big?
+	JRST CHRE11		;Yes, error code 11 means too much macro text
+	MOVEI AC2,1(DSER)	;Set up BPT to user string
+	HRLI AC2,441400		;12.-bit bytes
+CHRMA3:	XCTR XLB,[ILDB TAC1,AC2] ;Get a user byte
+	CAIL TAC1,2000
+	CAILE TAC1,2003
+	JRST CHRMA0		;Not a special quoting code
+CHRMA6:	SOJG TAC,CHRMA3		;Check next char
+	HRRZ AC1,(CHR)		;OK.  Get previous macro block if any.
+	JUMPE AC1,.+2		;No previous macro
+	PUSHJ P,FSGIVE		;Flush it.
+	MOVEI TAC,2(DDB)	;OK, get length
+	IDIVI TAC,3		; in words
+	MOVEI AC3,(TAC)		;Length of FS needed, for FSGET
+	PUSHJ P,FSGET		;Get some FS
+	 PUSHJ P,POPTRP		;(FSGET can't fail at UUO level)
+	MOVEI TAC1,(AC1)	;Here is the new FS block
+	HRLI TAC1,1(DSER)	;TAC1 is the BLT AC
+	ADDI TAC,-1(AC1)	;TAC has the last word to BLT into
+	XCTR XBLTR,[BLT TAC1,(TAC)]
+	HRLI AC1,(DDB)		;Get char length in LH of pointer
+	JUMPL DDB,CHRMA7	;No special escape flag for ESC # CR macros
+	MOVEI TAC,(DDB)		;Length
+	SOJN TAC,CHRMA7		;Jump if not of length 1
+	XCTR XLB,[LDB TAC,[POINT 12,1(DSER),11]] ;Get first (only) char
+	CAIN TAC,4042		;Is it ESCAPE?
+	TLO AC1,400000		;Yes, flag it.
+CHRMA7:	MOVEM AC1,(CHR)		;Establish the macro.
+	JRST CPOPJ1		;Success.
+
+;Here to validate a character from the macro definition.
+CHRMA0:	TRNE TAC1,3000
+	JRST CHRER5		;These bits are undefined, return error code 5
+	TRZN TAC1,4000
+	JRST CHRMA4		;Not an escape char
+	CAIE TAC1,41		;BREAK
+	CAIN TAC1,42		;ESCAPE
+	JRST CHRMA6		;ok
+	CAIE TAC1,44		;CLEAR
+	CAIN TAC1,241		;HOLD, is CONTROL-BREAK
+	JRST CHRMA6
+	CAIE TAC1,244		;UNHOLD, is CONTROL-CLEAR
+	CAIN TAC1,444		;FLUSH DM QUEUES, is META-CLEAR
+	JRST CHRMA6
+	JRST CHRER5		;Error code 5 for bad char in macro def
+
+CHRMA4:	TRNN TAC1,177		;Is this a null?
+	CAIN TAC1,600		;Yes, must be a CALL
+	JRST CHRMA6		;ok
+	JRST CHRER5		;not ok, error code 5 for bad char
+
+;Here when undefining NULL macro.  Pointer to NULL's macro entry is in CHR.
+;Besides undefining old macro, must flag NULL as an escape again.
+CHRM99:	HRLI CHR,400000		;Flag meaning NULL is now an escape
+;Here to undefine a macro.  Return any old FS.  LH CHR is zero on entry here.
+CHRMA9:	HRRZ AC1,(CHR)		;Get address of any old macro
+	HLLZM CHR,(CHR)		;Flush old macro, maybe restoring NUL as ESC
+	JUMPE AC1,CPOPJ1	;Any FS from old macro?
+	PUSHJ P,FSGIVE		;Yes, return it
+	JRST CPOPJ1
+;GETMAC UUO ;⊗ GETMAC GETMA3 GETMA4 GETMA1 GCRMAC
+
+;; UUO to read a character macro.
+;;
+;;call:	MOVE AC,[400000+LINE,,ADDR] ;LH of zero means own TTY
+;;	GETMAC AC,		;Line is a physical line number
+;;	 <error -- detached, disowned, bad line number, or not noedit dpy>
+;;	<success -- ADDR is set up as CHRMAC arg block (possibly zero length)>
+;;
+;;ADDR:	CHR,,0			;If sign bit is on, rest of LH specifies macro
+;;	BLOCK 6			;  by giving # arg for ESC # CR cmd
+
+↑GETMAC:XCTR XR,[MOVE DSER,(UUO)] ;Get user's AC
+	TLZN DSER,400000	;Check and clear flag saying use given line nbr
+	JRST GETMA3		;Get macro for own line
+	HLRZ LINE,DSER		;Get line number specified
+	CAIL LINE,TTPLEN	;Better be reasonable line number
+	POPJ P,			;Error return for bad line number
+	MOVEI AC1,(LINE)	;If getting ESC # CR macro, user gave phys line
+	JRST GETMA4
+
+GETMA3:	PUSHJ P,TTYFNU		;Set up LINE, DDB, IOS
+	TLNE IOS,TTYDTC
+	POPJ P,			;Detached job, take error return
+	LDB AC1,[DDQREQ+LINE,,LSTESC] ;Get responsible tty in case of ESC # CR
+GETMA4:	XCTR XR,[HLRZ CHR,(DSER)] ;Get user's char
+	TRZE CHR,CRMACB		;Is this an ESC # CR macro?
+	JRST GCRMAC		;Yes, any terminal can have one
+	SKIPE AC2,LETAB(LINE)
+	SKIPL EDITKY(LINE)
+	POPJ P,			;Not a NOEDIT dpy
+	AOS (P)			;Take success return
+	MOVEI AC1,0		;Assume bad char value
+	CAIL CHR,200		;Better be ascii value
+	JRST GETMA1		;Return zero length for no such macro
+	LDB AC1,NECVBP		;Get its vector word
+	JUMPE AC1,GETMA1	;Not vectorable
+	ADDI AC2,-1(AC1)	;Find vector word
+	MOVE AC1,NEVECT(AC2)
+	TLZ AC1,400000		;Flush escape flag
+GETMA1:	XCTR XRW,[HLRM AC1,(DSER)] ;Tell user the length
+	JUMPE AC1,CPOPJ		;Done if no macro
+	HLRZ TAC,AC1		;Length in TAC
+	ADDI TAC,2		;Make it words
+	IDIVI TAC,3
+	HRLZI AC2,(AC1)		;BLT org is FS block
+	HRRI AC2,1(DSER)	;BLT dest is user block
+	ADDI TAC,(DSER)		;BLT end is start plus length
+	XCTR XBLTW,[BLT AC2,(TAC)]
+	POPJ P,
+
+GCRMAC:	CAIN AC1,APLINE		;Skip unless job's TTY is disowned
+	XCTR XR,[SKIPGE (UUO)]	;Skip if asking for own TTY (which is disowned!)
+	AOSA (P)		;Take success return now, no matter what
+	POPJ P,			;Take error return for disowned TTY
+	MOVE LINE,AC1		;Use physical line number
+	MOVEI AC1,0		;Assume no macro, prepare to return zero length
+	CAIG CHR,MXCRMC		;Is # in range?
+	CAIGE CHR,MNCRMC	;Between min and max?
+	JRST GETMA1		;No, return zero length for no macro
+	SKIPN AC1,CRMCPT(LINE)	;Get FS ptr if table already there
+	JRST GETMA1		;No table, can't be any macro there
+	ADDI CHR,-MNCRMC(AC1)	;Make addr of word to hold macro pointer
+	MOVE AC1,(CHR)		;Get length,,addr of macro, if any
+	JRST GETMA1
+;⊗ BKCRMC DOCRMC BKCRM2 CLCRMC CLCRML POP21J DMMODE DMMODN DMMOD0 DMMOD1 DMQESC DMQES1 DMQES2
+
+;Here for non-display doing ↑← # CR command (macro).
+BKCRMC:	CAIL AC1,MNCRMC		;See if arg in proper range for macro
+	CAILE AC1,MXCRMC	;Between min and max?
+	POPJ P,			;Forget it
+	JRST BKCRM2
+
+;Here for ESC # CR from STDESC
+DOCRMC:	CAIL AC1,MNCRMC		;See if arg in proper range for macro
+	CAILE AC1,MXCRMC	;Between min and max?
+	JRST STDES2		;Arg not in our range, perhaps LINED wants this
+BKCRM2:	SKIPN MACROC		;** Recursion not allowed!!! ** (Avoid pdl ov)
+	SKIPN CHR,CRMCPT(LINE)	;Get pointer to table of macro ptrs
+	POPJ P,			;No table, no macro defined
+	ADDI AC1,-MNCRMC(CHR)	;Make addr of word holding macro pointer
+	SKIPN AC2,(AC1)		;Get length,,ptr for macro's definition
+	POPJ P,			;No macro
+	JRST RECNM0		;Go expand the macro
+
+;Here to clear all the ESC # CR macros for physical line in AC2.
+CLCRMC:	PUSH P,AC1
+	PUSH P,AC2
+	SKIPN AC2,CRMCPT(AC2)	;Get pointer to table of ptrs
+	JRST POP21J		;No table, no FS to return
+	HRLI AC2,-MXCRMC+MNCRMC-1 ;Negative count of possible macros, for aobjn
+CLCRML:	SKIPE AC1,(AC2)		;Any FS here?
+	PUSHJ P,FSGIVE		;Yes, return it (FSGIVE clears LH AC1)
+	AOBJN AC2,CLCRML
+	MOVE AC2,(P)		;Saved line from AC2
+	SKIPE AC1,CRMCPT(AC2)	;Table ptr, should still be there
+	PUSHJ P,FSGIVE		;Give back the table too
+	SETZM CRMCPT(AC2)	;Clear the ptr
+POP21J:	POP P,AC2
+	POP P,AC1
+	POPJ P,
+
+;; Here from DOESC for ESC/BRK n '
+
+DMMODE:	HLL LINE,LINTAB(LINE)	;Get good bits
+	TLNE LINE,DMLIN		;Must be a DM
+	SKIPN AC2,LETAB(LINE)	; with a dpy hdr (drd)
+	POPJ P,
+	SKIPE GOTARG
+	JRST DMMODN		;Jump for BRK '
+	CAILE AC1,3		;Arg must be 3 or less
+	CAIN AC1,ESCNUL		; or none at all
+	JRST DMMOD0
+	JRST DMBONG		;Beep bad argument
+
+DMMODN:	CAMN AC1,[-ESCNUL]
+	JRST DMMOD0		;Plain BRK ' is EDIT mode
+	MOVMS AC1		;Else it's ALL-QUOTE mode
+	MOVE AC3,EDITKY(LINE)
+	TLNE AC3,NEALLQ		;If already in an ALL-QUOTE mode,
+	CAILE AC1,3		; OK to switch to another with easy arg
+	SUBI AC1,=100		;Arg must be 100 to 103 (hard to type)
+	JUMPL AC1,DMBONG	;Too small.
+	CAILE AC1,3
+	JRST DMBONG		;Too big.
+	IORI AC1,10		;Add ALL-QUOTE bit and fall through
+DMMOD0:	PUSH P,AC1
+	PUSH P,AC2
+	PUSH P,[DMMOD1]		;Set up call to TTY NOEDIT code
+	HLLM AC1,(P)		;BREAK ' clears NOEDIT
+	JRST NOEDCM		;POPJs back
+DMMOD1:	 JFCL			;skip return possible
+	POP P,AC1		;Get back dpy hdr in AC1
+	POP P,AC2		;Get back arg in AC2
+	JUMPL AC2,CPOPJ		;Done if entering EDIT mode
+	CAIN AC2,ESCNUL		;Skip if entering quote mode
+	TDZA TAC,TAC		;Normal noedit mode
+	MOVEI TAC,4(AC2)	;TAC has quote-mode bit plus buckies
+	DPB TAC,NEMBPT		;Set quoting mode in NOEDIT word
+	POPJ P,
+
+;; Here from DOESC1 for ESC " command, sets both REGESC and ↑Q flags
+
+DMQESC:	SKIPN LETAB(LINE)	;Must be a dpy
+	JRST DMQES2		;Ignore cmd
+	SKIPL EDITKY(LINE)	; in NOEDIT mode
+	JRST DMQES1		;No, ESC " turns into quoted ESC char
+	MOVEI TAC,NEQUOT
+	DPB TAC,NESBPT		;Set ↑Q quote without bucky for next char
+	POPJ P,			;Turn ESC flag (back) on
+
+DMQES1:	LDB CHR,EKESCC		;BH 9/18/82 Quote EDIT-KEY esc char
+	HRRZS PRGESC(LINE)	;CLEAR THE ESCAPE BITS AND ARG
+	JUMPE CHR,CPOPJ		;Can't quote NUL.
+	CAIE AC1,ESCNUL
+	DPB AC1,[POINT 2,CHR,28] ; Add numeric arg as bucky bits
+	LDB UCHN,[POINT 2,CHR,28] ;get bucky bits where we want them
+	ANDI CHR,777		; Don't let luser add more than 2 bucky bits
+	JRST ESCRET
+
+DMQES2:	HRRZS PRGESC(LINE)	;CLEAR THE ESCAPE BITS AND ARG
+	POPJ P,
+;Format of NOEDIT(LINE) ;⊗ NOEDFL NEHTFL NEALLQ NEQMOD NEMMOD NECMOD NENUMB NEQUOT NEMETA NECTRL NEUMSK NETBPT NEBBPT NESBPT NEMBPT EKESCC NECVBP
+
+;LH flag bits
+NOEDFL←←400000			;On if TTY NOEDIT.  Must be sign bit.
+↑NEHTFL←←200000			;On if TTY HTOGGL.
+;The next four bits must be together.
+NEALLQ←←200			;On if ALL-QUOTE mode.
+NEQMOD←←100			;On if any quoting mode in effect
+NEMMOD←←40			;Meta quoting mode
+NECMOD←←20			;Control quoting mode
+;The next four bits must be together.
+NENUMB←←10			;On if ↑N numeric arg mode.
+NEQUOT←←4			;On if next char should be quoted.
+;;Note: The next two bits are used by EDIT displays as well as NOEDIT ones.
+NEMETA←←2			;Meta bit for next (quoted) char
+NECTRL←←1			;Control bit for next (quoted) char
+↑NEUMSK←←NOEDFL!NEHTFL!NEALLQ!NEQMOD!NEMMOD!NECMOD ;User settable NOEDIT LH bits
+
+NETBPT:	POINT 1,EDITKY(LINE),1	;BPT to HTOGGL bit
+↑NEBBPT:POINT 2,EDITKY(LINE),17	;BPT to bucky bits only
+↑NESBPT:POINT 4,EDITKY(LINE),17	;BPT to quoting state flags
+↑NEMBPT:POINT 4,EDITKY(LINE),13	;BPT to noedit quoting mode
+
+↑EKESCC:POINT 7,EDITKY(LINE),35	;BPT to esc char for EDIT-KEY(!!) display
+
+NECVBP:	POINT 6,NECHAR(CHR),17	;BPT to variable char vector index
+;Conversion table for no-edit-key display input. ;⊗ NECNUM NECQUO NECDSP NECCNV NECARR NECSUP NECVEC VECTNM NECHAR
+;128. words, one per 7-bit typable character.
+;LH is flag bits, RH is a dispatch of some sort depending on the bits.
+
+NECNUM←←400000			;Char is a digit or sign (for ↑N)
+				;  RH is the char itself
+NECQUO←←200000			;Char is a quoter for following char
+				;  RH is the state bits for NESBPT deposit
+NECDSP←←100000			;Char requires special processing
+				;  RH is the routine to JRST to
+NECCNV←←40000			;Char requires ASCII-to-SAIL conversion
+				;  RH is the converted char
+NECARR←←20000			;Char is leftarrow or underscore, for interchange
+
+;If none of the above flags are set, RH is a (9-bit) char which
+;is used in place of the input (7-bit) char.  The new char will
+;be the same as the old except for the below-40 control codes.
+
+NECSUP←←10000			;Char is "super" in quote mode (CALL, HOLD)
+
+NECVEC←←77			;If this LH field is nonzero, the char
+				;is "variable" and the field is an index
+				;into an index of macro definitions
+				;for user-definable multi-char sequences.
+;If the number of characters with NECVEC set changes, the length of the
+;NEVECT block in DPYHDR (in CACDAT) must be changed too.
+;
+;The macro definitions are in a block starting at NEVECT in the dpy hdr.
+;Each entry is zero if there is no macro defined, or <length>,,<addr>
+;where addr is the address of a free storage block containing 12.-bit
+;bytes, and <length> is the number of such bytes.  Notwithstanding the
+;preceding sentence, the sign bit of the vector word is on iff the
+;macro char is an ESCAPE char.  (This can be either by macro or by default.)
+
+VECTNM←←13			;NUMBER OF VECTOR WORDS (FOR TTYSUB)
+
+NECHAR:	NECDSP!1,,DMESC		;000 ↑@ ESCAPE
+	214			;001 ↑A αFF
+	200+"B"			;002 ↑B αB
+	NECSUP!NECDSP,,NEC600	;003 ↑C CALL
+	200+"D"			;004 ↑D αD
+	200+"I"			;005 ↑E αI
+	240			;006 ↑F αSP
+	NECSUP!NECDSP,,NEHOLD	;007 ↑G HOLD
+	2,,377			;010 ↑H αBS
+	3,,11			;011 ↑I TAB
+	4,,12			;012 ↑J LF
+	5,,13			;013 ↑K VT
+	6,,14			;014 ↑L FF
+	15			;015 ↑M CR
+	NECQUO,,NENUMB		;016 ↑N Numeric arg
+	215			;017 ↑O αCR
+	NECQUO,,NEQUOT!NECTRL	;020 ↑P Quote with α
+	NECQUO!7,,NEQUOT	;021 ↑Q Quote without bucky
+	200+"R"			;022 ↑R αR
+	10,,200+"S"		;023 ↑S αS
+	200+"T"			;024 ↑T αT
+	NECDSP,,NECLR		;025 ↑U CLEAR
+	NECQUO,,NEQUOT!NEMETA	;026 ↑V Quote with β
+	NECQUO,,NEQUOT!NECTRL!NEMETA
+				;027 ↑W Quote with αβ
+	NECARR,,200+"K"		;030 ↑X αK (or leftarrow or underscore)
+	200+"L"			;031 ↑Y αL
+	211			;032 ↑Z αTAB
+	NECCNV!11,,175		;033 ↑[ ALT
+	NECDSP!12,,NEFLSH	;034 ↑\ Flush output queues
+	NECDSP!13,,DMBONG	;035 ↑] Undefined
+	NECDSP!14,,DMBONG	;036 ↑↑ Undefined
+	NECDSP!15,,DMBONG	;037 ↑← Undefined
+REPEAT 52-37,<
+	.-NECHAR		;040-052 Punctuation, unmodified
+>
+	NECNUM,,"+"		;053  + Controllified by ↑N
+	","			;054  ,
+	NECNUM,,"-"		;055  - Controllified by ↑N
+REPEAT 57-55,<
+	.-NECHAR		;056-057 Punctuation, unmodified
+>
+REPEAT 71-57,<
+	NECNUM,,.-NECHAR	;060-071 Digits, controllified by ↑N
+>
+REPEAT 136-71,<
+	.-NECHAR		;072-136 Unmodified ASCII chars
+>
+	NECARR,,137		;137 left arrow or underscore (for interchanging)
+REPEAT 174-137,<
+	.-NECHAR		;140-174 Unmodified ASCII chars
+>
+	NECCNV,,176		;175 Close brace converted ASCII/SAIL
+	NECCNV,,32		;176 Tilde converted ASCII/SAIL
+	577			;177 Rubout αBS
+IFN .-NECHAR-200,<.FATAL NECHAR table is wrong length>
+;DM output flags ;⊗ INIDUN TBSSET RAPPED BELOWS NOINTR DMBPND LEWAIT DMSTAY DMXCAL DMQUOT TRUNCA NOEEOL NOEEOB BETWEE USERGO CHASTE PROTLE DMATXY DMXLE QUO177 DMUXFR EMPHON BLNKON IDON DMUMSK CTRLCH DMTAPE
+
+;DISPLAY INTERRUPT LEVEL (CH5) CODE: COMMENTS AND DEFS
+
+;FIGURES OUT WHAT TEXT TO SEND OUT TO THE DISPLAY NEXT.
+
+;   FLAGS in DAT:
+
+;DM STATE FLAGS
+;(RH of DAT, RH of DMFLAG(J))
+
+↑INIDUN←←100000	;Terminal has been initialized.
+↑TBSSET←←40000	;Tabs have been set
+↑RAPPED←←20000	;Temporary flag: just passed last screen col, or need to skip LF
+↑BELOWS←←10000	;This xfer is off screen or over line editor--suppress its output.
+↑NOINTR←←1000	;Don't output anything but user program queue
+↑DMBPND←←100	;There is a beep pending (or running) on this DM
+↑LEWAIT←←40	;Only user program output is permitted while this bit is on
+;;modes←←17	;See 4 mode flags below.
+↑DMSTAY←←TBSSET	;Bits that don't get reset by ESC C and friends
+
+;QUEUE ENTRY FLAGS
+;(LH of DAT and RH of QFLAGS(TAC); LH of DMLEFL(J) for line editor xfers.)
+
+↑DMXCAL←←200000	;Call routine in LH of QFREE(TAC) when xfer done
+↑DMQUOT←←100000	;Don't interpret any text		
+↑TRUNCA←←40000	;Ignore text beyond last col on display
+↑NOEEOL←←20000	;Suppress erasing each old line before output on it
+↑NOEEOB←←10000	;Suppress erasing of lines on which nothing is output but CRLF
+↑BETWEE←←4000	;Ignore spaces between tabs and ending tab
+↑USERGO←←2000	;Don't interrupt user program in progress
+↑CHASTE←←1000	;No output (nor EEOL) done yet on current line
+↑PROTLE←←400	;Don't overwrite the line editor's text (user program only)
+↑DMATXY←←200	;Get and store X-Y position @QXYLOC
+↑DMXLE←←100	;Line editor xfer--store final XY position at DMLEXY(J)
+↑QUO177←←40	;Don't interpret 177's as quoting anything, just send them
+↑DMUXFR←←20	;This is a user program transfer
+;;modes←←17	;See 4 mode flags below.
+;;Note that the CHASTE bit on in a user program header block flag word means
+;; that any previously queued and unfinished user program should be flushed
+;; immediately.  This flushes only those entries in the user program queue that
+;; have a QXYLOC LH equal to <job number> in addition to having the DMXCAL
+;; bit on.  Thus a job can flush any of the programs which that particular
+;; job queued.
+;;Note also that the DMATXY bit on in a user program header block flag word
+;; means that when the user program finishes, any entries in the wholine
+;; queue for this DM should be flushed (to establish cursor stability briefly).
+;;Note also that the DMXLE bit on in a user program header block flag word
+;; means that user program output is given highest priority until the given
+;; user display program has finished.  Thus the line editor and page printer
+;; cannot even start before the user program, much less interrupt it.
+
+;The next four flags are used in both halves of DAT
+;In LH, a one means Queue entry has set corresponding mode.
+;In RH, a one means the DM is actually in the corresponding mode.
+
+↑EMPHON←←10	;Emphasis enabled
+↑BLNKON←←4	;Blinking enabled
+↑IDON←←2	;Insert/Delete mode enabled
+
+;This is the mask of user-settable flags
+↑DMUMSK←←DMQUOT!TRUNCA!NOEEOL!NOEEOB!BETWEE!USERGO!PROTLE
+
+;Special flag in RH of CHR indicating character is an arrow char (control char).
+CTRLCH←←400000	;Output this character as blinking
+DMTAPE←←200000	;Output this character preceded by ascii escape character
+
+;Normally, an EEOL is output before the first character on a line, but this
+;is inhibited if either DMQUOT or NOEEOL is on, or if NOEEOB is on and nothing
+;printable (what's that mean, you ask?) has been output (CHASTE is on).
+
+;Dispatch table for quoted DM control characters ;⊗ IDSPCL XYSPCL INQUOT DMCONV PDADDR PDDELR DMTABL
+
+;Dispatch table for quoted control characters.
+;These routines keep track of the X-Y position and the mode flags, and
+;many of these routines do nothing but diddle these things without doing output.
+;Therefore, it is necessary that any way out of this code save the DAT flags in
+;QFLAGS(TAC) and DMFLAG(J).
+
+;400000		;Means character need not be quoted on output to get special effect
+IDSPCL←←200000	;Special output char in I/D mode--doesn't change cursor position
+XYSPCL←←100000	;Special output char when seen just after FF (as X or Y position)
+INQUOT←←40000	;This character can be quoted on input by NULL or "add META".
+DMCONV←←20000	;This character normally gets converted to something else on input.
+PDADDR←←10000	;In ID mode, char is ADD ROW (for padding)
+PDDELR←←4000	;In ID mode, char is DEL ROW (for padding)
+;;convertedchr←←777	;Bits in LH used to hold character we convert to on input.
+
+;MASTER is the CLEAR character which clears the line editor.
+;HOLDER is the HOLD character that holds PP output.
+;These two chars' entries must be unique in the table below.
+
+DEFINE C(X) <↑X←←.-DMTABL>
+
+DMTABL:		DMXMT6			;000 NL	;↑@	;null--if it prints, put DMXMT5 here
+C(PADCHR)	DMXMT6			;001 ↓	;↑A	;no-op, used for padding
+C(HOME)	  XYSPCL,,DMHOME		;002 α	;↑B	;home
+	  DMCONV!INQUOT!600,,DMXMT6	;003 β	;↑C	;no-op
+C(LEMOVE)	DMLEMV			;004 ∧	;↑D	;no-op except for LE
+C(LEDELE)	DMLEDE			;005 ¬	;↑E	;no-op except for LE
+C(LEFIXT)	DMLEFX			;006 ε	;↑F	;no-op except for LE
+		DMBELL			;007 π	;↑G	;bell
+C(IDDELC) IDSPCL,,DMBACK		;010 λ	;↑H	;back cursor (I/D: delete char)
+	  400000,,DMTAB			;011 TB	;↑I	;tab
+C(IDADDR) 400000!IDSPCL!PDADDR,,DMLF	;012 LF	;↑J	;lf (I/D: add row w/padding)
+		DMXMT6			;013 VT	;↑K	;tab clear, not allowed
+	  XYSPCL,,XYGET			;014 FF	;↑L	;set X-Y position
+	  400000,,DMCR			;015 CR	;↑M	;cr
+C(EMPHAS)	DMEMPH			;016 ∞	;↑N	;enable bold (assume bold/blinking reversed)
+C(PROTEC)	DMBLNK			;017 ∂	;↑O	;blinking on
+C(ID)		DMID			;020 ⊂	;↑P	;I/D on
+	  XYSPCL,,DMXMT6		;021 ⊃	;↑Q	;transmit page, currently flushed
+	  XYSPCL,,DMXMT6		;022 ∩	;↑R	;transmit page to printer, currently flushed
+		DMXMT6			;023 ∪	;↑S	;transmit line, currently flushed
+		DMXMT6			;024 ∀	;↑T	;no-op
+		DMXMT6			;025 ∃	;↑U	;no-op
+		DMXMT6			;026 ⊗	;↑V	;no-op
+C(EEOL)		DMEEOL			;027 ↔	;↑W	;erase to end of line
+C(CANCEL) XYSPCL,,DMCANC		;030 _	;↑X	;cancel (unlock)
+		DMSTAB			;031 →	;↑Y	;set tab, usually illegal
+C(IDDELR) DMCONV!IDSPCL!PDDELR!33,,DMUP	;032 ~	;↑Z	;up cursor (I/D: delete row)
+	  DMCONV!175,,DMXMT6		;033 ≠	;↑[	;no-op
+C(IDADDC) IDSPCL,,DMFORW		;034 ≤	;↑\	;forward cursor (I/D: add char)
+		DMXMT6			;035 ≥	;↑]	;roll on, not allowed
+C(MASTER) DMCONV!INQUOT!XYSPCL,,DMMAST	;036 ≡	;↑↑	;master clear--like home+erase+clears tabs
+C(HOLDER) DMCONV!INQUOT!XYSPCL,,DMERAS	;037 ∨	;↑←	;erase screen
+	  400000,,DMSPAC		;040 SP		;space
+;Output escapes start at 41 and dispatch just like quoted control chars.
+		DMNOQU			;041	;interpret next char as text
+C(OUTESC) ;Marks end of output escapes
+		BLOCK 2			;patch space for more output escapes
+;if you patch in anything, fix the ref(s) to OUTESC to patch new max nbr.
+;DPYDES flags, DPYBTS flags, AC usage, dpy hdr usage. ;⊗ PADID DM128 NO177 NOBOLD NOIDCU DM3025 DMWAITS ALTNEQ ALTEMP ALTBEL LEFTAR DPUMSK DPYDFT
+
+;Flag bits in Left half of DPYDES(LINE), carried here in LH of PROG.
+;These flags describe the terminal-type of the display.
+↑PADID←←      1	;Need padding for I/D operations, using DM 2500 algorithm
+↑DM128←←      2	;DM has special esc sequence mod to allow 128 chars displayed
+↑NO177←←      4	;DM doesn't print 177s
+↑NOBOLD←←    10	;Don't use emphasis in line editor (DM w/o bold/blinking reversed).
+↑NOIDCU←←    20	;Cannot do arbitrary cursor positioning while in ID mode
+↑DM3025←←    40 ;DM 3025.
+↑DMWAITS←←  100	;DM 3025 modified with WAITS keyboard.
+↑ALTNEQ←←   200	;Display font has Altmode at 32 and not-equal at 33.
+↑ALTEMP←←   400	;Use alternate emphasis form for terminal
+↑ALTBEL←←  1000	;Use alternate bell form (like, rapid video reverse and back)
+↑LEFTAR←←  2000	;Terminal has a left arrow key and/or font character.
+
+;Mask of user settable (independent) bits
+↑DPUMSK←←DM128!NO177!NOBOLD!ALTEMP!ALTBEL!LEFTAR!ALTNEQ
+
+;Flag bits in Left half of DPYBTS(dpy hdr), carried here in LH of J.
+;(no bits defined yet)
+
+;Here is the default value for a line's DPYDES cell.
+↑DPYDFT:PADID!NOIDCU!LEFTAR,,DM2500 ;Standard DM 2500 bits and dpy descriptor address.
+
+
+;AC usage, dpy header cell usage.
+
+Comment ⊗  AC usage by DMXMT.  J, DDB, LINE are preserved, IOS only set to DEVIOS.
+IOS/	DEVIOS(DDB)	;used rarely
+TAC/	pointer to FS block for queue entry being output
+TAC1 (LINE)/ line characteristics and number
+P/	PDL pointer
+J/	DPYBTS(J),,LETAB(LINE)	;dpy-type bits,,dpy header address
+DAT/	queue entry flags,,display state flags
+DDB/	TTYTAB(LINE)	;TTY DDB address
+PROG/	DPYDES(J)	;dpy-type flags,,dpy descriptor block address
+TEM (CHR)/ character being output
+DSER/	byte pointer into quicky buffer
+UCHN/	constant dpy-type flag bits
+PID/  (unused)
+UUO/  (unused)
+AC1/	temporary
+AC2/	temporary
+AC3/	X,,Y cursor position
+end of comment ⊗
+
+;DPY HEADER CELLS FOR "QUICK" OUTPUT:
+;DMQKCT count of bytes waiting for output
+;DMQKPT byte pointer to waiting quick bytes
+;DMQKBF buffer for quick output bytes, 9 bits each (4 per word).
+;	Must be able to hold: cursor pos,mode clr,mode sel,id,eeol,8 spaces)
+; (rough max terminal:		9		4	4   4  2   8  = 31 bytes)
+; (padding is always less than the 8 bytes taken by spaces and doesn't co-exist)
+;Current size is 12 (decimal) words, or 48 bytes.
+
+;OTHER DPY HEADER CELLS
+;UCOUNT
+; <job>,,<address of user run flag to SOS (or SETZM?) when user dpy program is done>
+;	(used by clock level routine which actually SOSes the cell)
+;	(UCOUNT cell must be cleared by RESET; perhaps RESET should actually flush
+;	  DM user dpy program and SOS the user cell before clearing UCOUNT.)
+;DMLEPT	;Header of queue of Line Editor xfers
+;DMSPPT	;Header of queue of SPecial xfers (holding message, setting tabs, DMEOSL)
+;DMPPPT	;Header of queue of Page Printer xfers
+;DMUSER	;Header of queue of USER display program xfers
+;DMWHO	;Header of queue of WHOline xfers
+;DMFLAG ;Flag word indicating current actual status of DM terminal
+;DMXY	;Actual X-Y position of DM cursor
+;DPYHGT	;Number of lines on display's screen (should be valid for any type of dpy)
+;Display-type definition tables. ;⊗ DPCNAM DPCPOS DPCHOM DPCEOL DPCPRT DPCPR2 DPCADC DPCDLC DPCFLS DPCRGT DPCLFT DPCUP DPCDWN DPCBEL DPCABL DPCERS DPCERB DPCERO DPCADR DPCDLR DPCMOD DPCBCL DPCMCL DPCID DPCBLI DPCTBS DPCINI DPCCID DPCCIB DPCDCX DPC128 DPCACX DPCNDM DPCSEM DPCCEM DPCSAE DPCCAE DPCABT DPCABM DPCIMS DPCSIZ DPCFGS DRFARI DRFDRI DRFACI DRFDCI DRFAUS DRFALF DRFWRP DRFTWR DRFCLE DRFMEM DRFESH NBTSEQ XXX XXX NDPCBK NDPCBK DM2500 HP2648 TELERAY C100A C100B HEATH1 TELEVI AMBASS ALTOTA DM3052 VT102 SUNDPY DPTPAT DPTPA2 HTHINI LHTHIN C100AB LC100A C100ND LC100N C100IN LC100I LC100B AMBINI LAMBIN V02INI LV02IN
+
+Comment ⊗ Display Descriptor Cells (reached via (PROG)):
+
+Many of these cells simply contain the output character sequences to carry
+out certain functions on the terminal.  In such Dpy Descriptor Cells, the
+chars are stored in up to four 9-bit bytes (high-order byte is output
+first), with the 400 bit of each byte flagging that that byte contains a
+char.  If the 400 bit of a byte is off, but the remainder of the byte is
+non-zero, then that byte specifies the function's execution time in
+characters transmitted at 9600 baud, for inserting the right amount of
+padding for that function.  (No further bytes can follow the padding count
+byte.)  For example, if a function takes 2 character-transmission times at
+9600 baud, and if the terminal is actually running at 9600 baud, then 1
+padding character will be transmitted, since the terminal has the
+transmission time of the character after the padding during which to
+finish the function (maybe, unless the terminal cannot carry out the
+function while receiving the next char).
+
+If the whole word of an output sequence cell contains zero, then that means
+the given terminal cannot execute the given function.  (Some functions are
+required to be do-able by display terminals, other functions are optional.)
+
+(The standard ASCII commands CR and LF are assumed to behave normally on
+all displays supported by this code.  The CR is allowed to generate an
+automatic LF provided it also makes the terminal ignore an immediately
+following LF.  This code will never send a CR without an immediately
+following LF.)
+
+DPCNAM:	sixbit name of terminal
+DPCPOS:	(LH) unused (RH) dispatch to routine to set arbitrary cursor position
+DPCHOM:	output sequence to position cursor at Home (upper left)
+DPCEOL:	output sequence to erase from cursor to end of line
+DPCPRT:	output sequence to force next character to print
+DPCPR2:	trailing part of output seq to force char to print, follows char
+DPCADC:	output sequence to insert a character
+DPCDLC:	output sequence to delete a character
+DPCFLS:	output sequence to flush cursor
+DPCRGT:	output sequence to move right one column
+DPCLFT:	output sequence to move left one column
+DPCUP:	output sequence to move up one row
+DPCDWN:	output sequence to move down one row
+DPCBEL:	output sequence to ring the terminal's bell
+DPCABL:	output sequence to ring bell in alternate form
+DPCERS:	output sequence to erase terminal's screen
+DPCERB:	(LH) must be zero (RH) bits for terminal states cleared by erase screen
+DPCERO:	(LH) must be zero (RH) bits for terminal states cleared set by erase screen
+DPCADR:	output sequence to add (insert) a blank row
+DPCDLR:	output sequence to delete a row
+DPCMOD:	(LH) must be zero (RH) bits for modes that must be right before output
+DPCBCL:	(LH) must be zero (RH) bits for modes cleared by DPCMCL sequence
+DPCMCL:	output sequence to clear modes in DPCBCL
+DPCID:	output sequence to enable Insert/Delete mode
+DPCBLI:	output sequence to enable blinking
+DPCTBS:	output sequence to set tab stop at current column
+DPCINI:	(LH) length of init string (RH) ptr to 8-bit initialization string
+DPCCID:	output sequence to clear Insert/Delete mode
+DPCCIB:	bits for terminal modes cleared by clearing Insert/Delete
+DPCDCX:	0 or address of special delete char routine
+DPC128:	bits for graphic chars needing quoting on output, bit 35 for null, etc.  Sign bit is flag for 177.
+DPCACX:	0 or address of special add char routine
+DPCNDM:	byte count,,addr of 8-bit string to output on TTY NO DM
+DPCSEM:	output sequence to enable emphasis
+DPCCEM:	output sequence to clear emphasis (unused!)
+DPCSAE:	output sequence to enable alternate emphasis form
+DPCCAE: output sequence to clear alternate emphasis form (unused!)
+DPCABT:	(LH) byte count (RH) ptr to 8-bit seq to abort any cmd, clear modes
+DPCABM:	(LH) must be zero (RH) bits for modes cleared by DPCABT (all modes)
+DPCIMS:	(LH) zero (RH) zero or address of ASCIZ string to type after initing done
+DPCSIZ:	(LH) default width for this display (RH) default height
+DPCFGS:	various flags indicating how the terminal works (see list below)
+
+end of comment ⊗
+
+;Flag bits that may appear in DPCFGS cell of dpy descriptor table.
+;Flag names have the form DhFxxx, where h is L or R for left- or right-half flag.
+;Right half flags (DRFxxx):
+DRFARI←←000001	;On if Add Row operation needs ID mode on
+DRFDRI←←000002	;On if Delete Row operation needs ID mode on
+DRFACI←←000004	;On if Add Char operation needs ID mode on
+DRFDCI←←000010	;On if Delete Char operation needs ID mode on
+DRFAUS←←000020	;On if automatic scroll upon LF off bottom of screen
+DRFALF←←000040	;On if automatic LF upon CR and won't ignore immediate LF
+DRFWRP←←000100	;On if wraparound from non-tab char needs no following CRLF
+DRFTWR←←000200	;On if wraparound from tab needs no following CRLF
+DRFCLE←←000400	;On if need emphasis off before doing clear to end of line
+DRFMEM←←001000	;On if emphasis must be diddled anytime cursor re-positioned
+	;Note, code doesn't work if terminal has both CLE and MEM flags.
+DRFESH←←002000	;On if erase screen needs a home command first
+;Left half flags (DLFxxx):
+ ;;none yet
+
+NBTSEQ←←=9	;Number of bits per character in output sequences.
+		;The high-order bit is the valid bit -- consecutive chars
+		;from the sequence are output until a char is found
+		;that doesn't have the high-order bit on.  See DMOUT1.
+
+;Macro to set up DPCFGS word from list of flags with last 3 chars of each name.
+;The argument LS must be of the form "<xxx,yyy,...,zzz>", where "xxx", etc., can
+;be either left half or right half flags, or some of each, in any order.
+DEFINE DPF(LS)<FOR @' X IN (LS)<IFAVL DRF'X,<DRF'X!>IFNAVL DRF'X,<DLF'X⊗=18!>>0>
+
+;Macro to set up output sequence for carrying out a display terminal function.
+DEFINE DPC(A,B,C,D)<
+  IFDIF <><D><BYTE (9)400≠A,400≠B,400≠C,400≠D
+;>IFDIF <><C><BYTE (9)400≠A,400≠B,400≠C
+;>IFDIF <><B><BYTE (9)400≠A,400≠B
+;>IFDIF <><A><BYTE (9)400≠A
+>>;DPC ;Turns 400 bit on (or off, for padding) on bytes up to last non-null one.
+
+DEFINE XX'(NAM)<
+    IFDEF DPC'NAM,<
+	IFN <DPC'NAM-XXX>,<.FATAL Dpy descriptor table entry out of order>>
+    IFNDEF DPC'NAM,<↑DPC'NAM←←.-XXXX
+	IFG NDPCBK,<.FATAL Dpy descriptor not defined in initial block.>>
+    XXX←←XXX+1		;Count offset from beginning of block
+>;Defines the names of the table offsets.
+
+DEFINE DPCBEG<XXXX←←.	;Remember where block starts
+	XXX←←0		;Initialize offset of entries within this block
+>;DPCBEG
+
+DEFINE DPCEND<
+    IFE NDPCBK,<↑LDPCBK←←XXX> ;This is the length of the block
+    IFN NDPCBK,<IFN XXX-LDPCBK,<.FATAL Wrong length Dpy descriptor table>>
+    ↑NDPCBK←←NDPCBK+1	;Counts the blocks
+>;DPCEND
+
+NDPCBK←←0		;Initial count of blocks.
+
+;DM erase screen and home (DPCERS,DPCHOM) do CANCEL since DM 3025 doesn't.
+
+;Here is the Dpy Descriptor Table for the Datamedia 2500.
+;All other terminals must have their tables in the same order.
+↑DM2500:DPCBEG
+XX(NAM)	'DM    ';name of terminal (DM2500, DM3025, DM128, DMWAITS all here)
+XX(POS)	DM25CU	;dispatch address for cursor positioning routine
+XX(HOM)	DPC(30,2) ;home command
+XX(EOL)	DPC(27)	;erase to end of line cmd
+XX(PRT)	DPC(33)	;force next character to print
+XX(PR2)	0	;trailing part of output seq to force char to print, follows char
+XX(ADC)	DPC(34)	;insert a space (assumes ID mode on)
+XX(DLC)	DPC(10)	;delete a character (assumes ID mode on)
+XX(FLS)	DPC(14)	;flush cursor from screen
+XX(RGT)	DPC(34)	;move right one column
+XX(LFT)	DPC(10)	;move left one column
+XX(UP)	DPC(32)	;move up one row
+XX(DWN)	DPC(12)	;move down one row
+XX(BEL)	DPC(7)	;ring the terminal's bell
+XX(ABL)	DPC(7)	;ring bell in alternate form
+XX(ERS)	DPC(30,37) ;erase whole screen (but don't clear tabs)
+XX(ERB)	0,,EMPHON!BLNKON!IDON ;bits for terminal states cleared by erase screen
+XX(ERO)	0	;bits for terminal states SET by erase screen
+XX(ADR)	DPC(12)	;add (insert) a blank row
+XX(DLR)	DPC(32)	;delete a row
+XX(MOD)	0,,EMPHON!BLNKON!IDON ;bits for modes that must be right before output
+XX(BCL)	0,,EMPHON!BLNKON!IDON ;bits for modes cleared by DPCMCL sequence
+XX(MCL)	DPC(30)	;clear modes in DPCBCL
+XX(ID)	DPC(20)	;enable Insert/Delete mode
+XX(BLI)	DPC(17)	;enable blinking (assumes bold and blinking are interchanged)
+XX(TBS)	DPC(31)	;set tab stop at current column
+XX(INI)	2,,[BYTE (8) 36,30] ;length of init string,,ptr to 8-bit init string
+XX(CID)	DPC(30)	;clear Insert/Delete mode
+XX(CIB)	EMPHON!BLNKON!IDON ;bits for modes cleared by clearing Insert/Delete
+XX(DCX)	0	;no special delete char routine
+XX(128)	-1	;Bits for graphic chars needing quoting on output, bit 35 for null, etc.  Sign bit is flag for 177.
+XX(ACX)	0	;no special add char routine
+XX(NDM)	2,,[BYTE (8)30,35] ;byte count,,addr of 8-bit string to output on TTY NO DM
+XX(SEM)	DPC(16)	;enable emphasis (bold, assuming bold and blinking are interchanged)
+XX(CEM)	DPC(30)	;clear emphasis
+XX(SAE)	DPC(33,"O","3") ;output sequence for alternate emphasis form (3025)
+XX(CAE)	DPC(33,"O","2") ;output sequence to clear alternate emphasis form (3025)
+XX(ABT)	1,,[BYTE (8)30] ;(LH) byte count (RH) ptr to 8-bit seq to abort any interrupted cmd
+XX(ABM)	0,,EMPHON!BLNKON!IDON ;(LH) must be zero (RH) bits for modes cleared by DPCABT (all modes)
+XX(IMS)	[ASCIZ/Datamedia/] ;(LH) zero (RH) zero or address of ASCIZ string to type after initing done
+XX(SIZ)	=80,,=24	;(LH) default width for this display (RH) default height
+XX(FGS)	DPF<ARI,DRI,ACI,DCI> ;All 4 I/D operations need ID mode on
+DPCEND	;DM2500
+
+;Here is the Dpy Descriptor Table for the HP 2648A.
+↑HP2648:DPCBEG
+XX(NAM)	'HP2648'	;name of terminal
+XX(POS)	HP26CU		;dispatch address for cursor positioning routine
+XX(HOM)	DPC(33,"H")	;home command
+XX(EOL)	DPC(33,"K")	;erase to end of line cmd
+XX(PRT)	0		;force next character to print
+XX(PR2)	0		;trailing part of output seq to force char to print, follows char
+XX(ADC)	DPC(40,10)	;insert a space (assumes ID mode on)
+XX(DLC)	DPC(33,"P")	;delete a character (assumes ID mode on)
+XX(FLS)	DPC(33,"H")	;flush cursor from screen (home)
+XX(RGT)	DPC(33,"C")	;move right one column
+XX(LFT)	DPC(10)		;move left one column
+XX(UP)	DPC(33,"A")	;move up one row
+XX(DWN)	DPC(12)		;move down one row
+XX(BEL)	DPC(7)		;ring the terminal's bell
+XX(ABL)	DPC(7)		;ring bell in alternate form
+XX(ERS)	DPC(33,"H",33,"J") ;erase whole screen
+XX(ERB)	0		;bits for terminal states cleared by erase screen
+XX(ERO)	0		;bits for terminal states SET by erase screen
+XX(ADR)	DPC(33,"L")	;add (insert) a blank row
+XX(DLR)	DPC(33,"M")	;delete a row
+XX(MOD)	EMPHON!IDON	;bits for modes that must be right before output
+XX(BCL)	EMPHON		;bits for modes cleared by DPCMCL sequence (below)
+XX(MCL)	DPC(33,"&","d","@") ;clear modes in DPCBCL (above)
+XX(ID)	DPC(33,"Q")	;enable Insert/Delete mode (for inserting chars)
+XX(BLI)	DPC(33,"&","d","A") ;enable blinking
+XX(TBS)	DPC(33,"1")	;set tab stop at current column
+XX(INI)	=10,,[BYTE (8)33,"&","d","@",33,"R",33,"H",33,"3"] ;(LH) byte count (RH) init ptr (clears tabs)
+XX(CID)	DPC(33,"R")	;clear Insert/Delete mode (clears insert char mode) (below)
+XX(CIB)	IDON 		;bits for modes cleared by clearing Insert/Delete (above)
+XX(DCX)	0		;no special delete char routine
+XX(128)	0		;Bits for graphic chars needing quoting on output, bit 35 for null, etc.  Sign bit is flag for 177.
+XX(ACX)	0		;no special add char routine
+XX(NDM)	6,,[BYTE (8)33,"&","d","@",33,"R"] ;byte count,,addr of 8-bit string to output on TTY NO DM
+XX(SEM)	DPC(33,"&","d","B") ;enable emphasis (reverse video)
+XX(CEM)	DPC(33,"&","d","@") ;clear emphasis (reverse video)
+XX(SAE)	DPC(33,"&","d","B") ;output sequence for alternate emphasis form
+XX(CAE)	DPC(33,"&","d","@") ;output sequence to clear alternate emphasis form
+XX(ABT)	6,,[BYTE (8)33,"&","d","@",33,"R"] ;(LH) byte count (RH) ptr to 8-bit seq to abort any interrupted cmd
+XX(ABM)	0,,EMPHON!IDON	;(LH) must be zero (RH) bits for modes cleared by DPCABT (all modes)
+XX(IMS)	[ASCIZ/HP 2648A/] ;(LH) zero (RH) zero or address of ASCIZ string to type after initing done
+XX(SIZ)	=80,,=24	;(LH) default width for this display (RH) default height
+XX(FGS)	DPF<ACI,AUS,WRP,TWR,MEM> ;Need ID mode for Add Char; auto scroll; wrap w/o CR; emph kludge.
+DPCEND	;HP2648A
+
+;Here is the Dpy Descriptor Table for the Teleray 1000 series.
+↑TELERAY:DPCBEG
+XX(NAM)	'TELERA'	;name of terminal
+XX(POS)	TELECU		;dispatch address for cursor positioning routine
+XX(HOM)	DPC(33,"H")	;home command
+XX(EOL)	DPC(33,"K",405)	;erase to end of line cmd
+XX(PRT)	0		;force next character to print
+XX(PR2)	0		;trailing part of output seq to force char to print, follows char
+XX(ADC)	DPC(33,"P",406)	;insert a space (assumes ID mode on)
+XX(DLC)	DPC(33,"Q",406)	;delete a character (assumes ID mode on)
+XX(FLS)	DPC(33,"H")	;flush cursor from screen (home)
+XX(RGT)	DPC(33,"C")	;move right one column
+XX(LFT)	DPC(10)		;move left one column
+XX(UP)	DPC(33,"A")	;move up one row
+XX(DWN)	DPC(12)		;move down one row
+XX(BEL)	DPC(7)		;ring the terminal's bell
+XX(ABL)	DPC(7)		;ring bell in alternate form
+XX(ERS)	DPC(14,465)	;erase whole screen
+XX(ERB)	0		;bits for terminal states cleared by erase screen
+XX(ERO)	0		;bits for terminal states SET by erase screen
+XX(ADR)	DPC(33,"L",475)	;add (insert) a blank row
+XX(DLR)	DPC(33,"M",475)	;delete a row
+XX(MOD)	0		;bits for modes that must be right before output
+XX(BCL)	0		;bits for modes cleared by DPCMCL sequence
+XX(MCL)	0		;clear modes in DPCBCL
+XX(ID)	0		;enable Insert/Delete mode
+XX(BLI)	0		;enable blinking
+XX(TBS)	DPC(33,"F")	;set tab stop at current column
+XX(INI)	4,,[BYTE (8)33,"A",33,"G"] ;init string: (LH) byte count (RH) ptr (clears tabs)
+XX(CID)	0		;clear Insert/Delete mode (clears insert char mode)
+XX(CIB)	0		;bits for modes cleared by clearing Insert/Delete
+XX(DCX)	0		;no special delete char routine
+XX(128)	0		;Bits for graphic chars needing quoting on output, bit 35 for null, etc.  Sign bit is flag for 177.
+XX(ACX)	0		;no special add char routine
+XX(NDM)	0,,0		;byte count,,addr of 8-bit string to output on TTY NO DM
+XX(SEM)	0		;enable emphasis (  "  )
+XX(CEM)	0		;clear emphasis (no emphasis possible, takes up char position)
+XX(SAE)	0		;output sequence for alternate emphasis form
+XX(CAE)	0		;output sequence to clear alternate emphasis form
+XX(ABT)	2,,[BYTE (8)33,"A"] ;(LH) byte count (RH) ptr to 8-bit seq to abort any interrupted cmd
+XX(ABM)	0		;(LH) must be zero (RH) bits for modes cleared by DPCABT (all modes)
+XX(IMS)	[ASCIZ/Teleray (Make sure PAGE key is down!)/] ;(LH) zero (RH) zero or address of ASCIZ string to type after initing done
+XX(SIZ)	=80,,=24	;(LH) default width for this display (RH) default height
+XX(FGS)	0		;No flags on.
+DPCEND	;TELERAY 1000
+
+;Here is the Dpy Descriptor Table for the Concept 100, type A.
+↑C100A:DPCBEG
+XX(NAM)	'C100A '	;name of terminal
+XX(POS)	C100CU		;dispatch address for cursor positioning routine
+XX(HOM)	DPC(33,"?")	;home command
+XX(EOL)	DPC(33,25)	;erase to end of line cmd
+XX(PRT)	DPC(33,"r")	;force next character to print
+XX(PR2)	DPC(41)		;trailing part of output seq to force char to print, follows char
+XX(ADC)	DPC(" ",10)	;insert a space (assumes ID mode on), and back up under it
+XX(DLC)	DPC(33,21)	;delete a character (assumes ID mode on)
+XX(FLS)	DPC(33,"?")	;flush cursor from screen (home)
+XX(RGT)	DPC(33,"=")	;move right one column
+XX(LFT)	DPC(10)		;move left one column
+XX(UP)	DPC(33,";")	;move up one row
+XX(DWN)	DPC(12)		;move down one row
+XX(BEL)	DPC(7)		;ring the terminal's bell
+XX(ABL)	DPC(33,"k",33,"K") ;ring bell in alternate form (one screen flash)
+XX(ERS)	DPC(14,460)	;erase whole screen, 48. char-time padding at 9600
+XX(ERB)	0		;bits for terminal states cleared by erase screen
+XX(ERO)	0		;bits for terminal states SET by erase screen
+XX(ADR)	DPC(33,22,530)	;add (insert) a blank row, 88. char-time padding at 9600
+XX(DLR)	DPC(33,2,530)	;delete a row
+XX(MOD)	EMPHON		;bits for modes that must be right before output
+XX(BCL)	EMPHON		;bits for modes cleared by DPCMCL sequence
+XX(MCL)	DPC(33,"d",33,"e") ;clear modes in DPCBCL
+XX(ID)	DPC(33,20)	;enable Insert/Delete mode
+XX(BLI)	0		;enable blinking
+XX(TBS)	DPC(33,"]")	;set tab stop at current column
+XX(INI)	LC100I,,C100IN	;length of init string,,ptr to 8-bit init string (see below)
+XX(CID)	DPC(33,200)	;clear Insert/Delete mode (clears insert char mode)
+XX(CIB)	IDON		;bits for modes cleared by clearing Insert/Delete
+XX(DCX)	C100DC		;special delete char routine
+XX(128)	-1		;Bits for graphic chars needing quoting on output, bit 35 for null, etc.  Sign bit is flag for 177.
+XX(ACX)	C100AC		;special add char routine
+XX(NDM)	LC100N,,C100ND	;(LH) byte count (RH) address of 8-bit TTY NO DM string
+XX(SEM)	DPC(33,"D",33,"E") ;enable emphasis (reverse video, half bright)
+XX(CEM)	DPC(33,"d",33,"e") ;clear emphasis
+XX(SAE)	DPC(33,"D",33,"e") ;set alternate emphasis (rev video but no half bright)
+XX(CAE)	DPC(33,"d",33,"e") ;clear clear alternate emphasis
+XX(ABT)	LC100A,,C100AB	;(LH) byte count (RH) ptr to 8-bit seq to abort any interrupted cmd
+XX(ABM)	0,,EMPHON!IDON	;(LH) must be zero (RH) bits for modes cleared by DPCABT (all modes)
+XX(IMS)	[ASCIZ/Concept 100/] ;(LH) zero (RH) zero or address of ASCIZ string to type after initing done
+XX(SIZ)	=80,,=24	;(LH) default width for this display (RH) default height
+XX(FGS)	DPF<ACI,CLE>	;Need ID mode for Add Char operation, emph off on c-eol
+DPCEND	;C100(A)
+
+;Here is the Dpy Descriptor Table for the Concept 100, type B.
+↑C100B:DPCBEG
+XX(NAM)	'C100B '	;name of terminal
+XX(POS)	C100CU		;dispatch address for cursor positioning routine
+XX(HOM)	DPC(33,"?")	;home command
+XX(EOL)	DPC(33,25)	;erase to end of line cmd
+XX(PRT)	DPC(33,"r")	;force next character to print
+XX(PR2)	DPC(41)		;trailing part of output seq to force char to print, follows char
+XX(ADC)	DPC(" ",10)	;insert a space (assumes ID mode on), and back up under it
+XX(DLC)	DPC(33,21)	;delete a character (assumes ID mode on)
+XX(FLS)	DPC(33,"?")	;flush cursor from screen (home)
+XX(RGT)	DPC(33,"=")	;move right one column
+XX(LFT)	DPC(10)		;move left one column
+XX(UP)	DPC(33,";")	;move up one row
+XX(DWN)	DPC(12)		;move down one row
+XX(BEL)	DPC(7)		;ring the terminal's bell
+XX(ABL)	DPC(33,"k",33,"K") ;ring bell in alternate form (one screen flash)
+XX(ERS)	DPC(14,460)	;erase whole screen, 48. char-time padding at 9600
+XX(ERB)	0		;bits for terminal states cleared by erase screen
+XX(ERO)	0		;bits for terminal states SET by erase screen
+XX(ADR)	DPC(33,22,530)	;add (insert) a blank row, 88. char-time padding at 9600
+XX(DLR)	DPC(33,2,530)	;delete a row
+XX(MOD)	EMPHON		;bits for modes that must be right before output
+XX(BCL)	EMPHON		;bits for modes cleared by DPCMCL sequence
+XX(MCL)	DPC(33,"d",33,"e") ;clear modes in DPCBCL
+XX(ID)	DPC(33,20)	;enable Insert/Delete mode
+XX(BLI)	0		;enable blinking
+XX(TBS)	DPC(33,"]")	;set tab stop at current column
+XX(INI)	LC100B,,C100IN	;length of init string,,ptr to 8-bit init string (see below)
+XX(CID)	DPC(33,200)	;clear Insert/Delete mode (clears insert char mode)
+XX(CIB)	IDON		;bits for modes cleared by clearing Insert/Delete
+XX(DCX)	C100DC		;special delete char routine
+XX(128)	401000,,33601	;177,33,15,14,12,11,10,7,0 graphic output chars needing quoting
+XX(ACX)	C100AC		;special add char routine
+XX(NDM)	LC100N,,C100ND	;(LH) byte count (RH) address of 8-bit TTY NO DM string
+XX(SEM)	DPC(33,"D",33,"E") ;enable emphasis (reverse video, half bright)
+XX(CEM)	DPC(33,"d",33,"e") ;clear emphasis
+XX(SAE)	DPC(33,"D",33,"e") ;set alternate emphasis (rev video but no half bright)
+XX(CAE)	DPC(33,"d",33,"e") ;clear alternate emphasis
+XX(ABT)	LC100A,,C100AB	;(LH) byte count (RH) ptr to 8-bit seq to abort any interrupted cmd
+XX(ABM)	0,,EMPHON!IDON	;(LH) must be zero (RH) bits for modes cleared by DPCABT (all modes)
+XX(IMS)	[ASCIZ/Concept 100/] ;(LH) zero (RH) zero or address of ASCIZ string to type after initing done
+XX(SIZ)	=80,,=24	;(LH) default width for this display (RH) default height
+XX(FGS)	DPF<ACI,CLE>	;Need ID mode for Add Char operation, emph off on c-eol
+DPCEND	;C100(B)
+
+;Here is the Dpy Descriptor Table for the Heath(kit) 19.
+↑HEATH1:DPCBEG
+XX(NAM)	'HEATH1'	;name of terminal
+XX(POS)	HEATCU		;dispatch address for cursor positioning routine
+XX(HOM)	DPC(33,"H")	;home command
+XX(EOL)	DPC(33,"K")	;erase to end of line cmd
+XX(PRT)	0		;force next character to print
+XX(PR2)	0		;trailing part of output seq to force char to print, follows char
+XX(ADC)	DPC(" ",10)	;insert a space (assumes ID mode on), and back up under it
+XX(DLC)	DPC(33,"N")	;delete a character (assumes ID mode on)
+XX(FLS)	DPC(33,"H")	;flush cursor from screen (home)
+XX(RGT)	DPC(33,"C")	;move right one column
+XX(LFT)	DPC(10)		;move left one column
+XX(UP)	DPC(33,"A")	;move up one row
+XX(DWN)	DPC(12)		;move down one row
+XX(BEL)	DPC(7)		;ring the terminal's bell
+XX(ABL)	DPC(7)		;ring bell in alternate form
+XX(ERS)	DPC(33,"E")	;erase whole screen
+XX(ERB)	0		;bits for terminal states cleared by erase screen
+XX(ERO)	0		;bits for terminal states SET by erase screen
+XX(ADR)	DPC(33,"L",430)	;add (insert) a blank row (24. pad chars at 9600 baud)
+XX(DLR)	DPC(33,"M",430)	;delete a row (24. pad chars at 9600 baud)
+XX(MOD)	EMPHON		;bits for modes that must be right before output
+XX(BCL)	EMPHON		;bits for modes cleared by DPCMCL sequence
+XX(MCL)	DPC(33,"q")	;clear modes in DPCBCL
+XX(ID)	DPC(33,"@")	;enable Insert/Delete mode
+XX(BLI)	0		;enable blinking
+XX(TBS)	0		;set tab stop at current column
+XX(INI)	LHTHIN,,HTHINI	;length of init string,,ptr to 8-bit init string
+XX(CID)	DPC(33,"O")	;clear Insert/Delete mode (clears insert char mode)
+XX(CIB)	IDON		;bits for modes cleared by clearing Insert/Delete
+XX(DCX)	0		;no special delete char routine
+XX(128)	0		;no graphic output chars can be quoted
+XX(ACX)	0		;no special add char routine
+XX(NDM)	2,,[BYTE (8)33,"q"] ;byte count,,addr of 8-bit string to output on TTY NO DM
+XX(SEM)	DPC(33,"p")	;enable emphasis
+XX(CEM)	DPC(33,"q")	;clear emphasis
+XX(SAE)	DPC(33,"p")	;output sequence for alternate emphasis form
+XX(CAE)	DPC(33,"q")	;output sequence to clear alternate emphasis form
+XX(ABT)	1,,[BYTE (8)30] ;(LH) byte count (RH) ptr to 8-bit seq to abort any interrupted cmd
+XX(ABM)	0,,0		;(LH) must be zero (RH) bits for modes cleared by DPCABT
+XX(IMS)	[ASCIZ/Heath 19/] ;(LH) zero (RH) zero or address of ASCIZ string to type after initing done
+XX(SIZ)	=80,,=24	;(LH) default width for this display (RH) default height
+XX(FGS)	DPF<ACI,AUS>	;Need ID mode for Add Char; auto scroll
+DPCEND	;Heath 19
+
+;Here is the Dpy Descriptor Table for the Televideo 912/920.
+↑TELEVI:DPCBEG
+XX(NAM)	'TELEVI'	;name of terminal
+XX(POS)	TVIDCU		;dispatch address for cursor positioning routine
+XX(HOM)	DPC(36)		;home command
+XX(EOL)	DPC(33,"T")	;erase to end of line cmd
+XX(PRT)	0		;force next character to print
+XX(PR2)	0		;trailing part of output seq to force char to print, follows char
+XX(ADC)	DPC(33,"Q")	;insert a space
+XX(DLC)	DPC(33,"W")	;delete a character
+XX(FLS)	DPC(36)		;flush cursor from screen (home)
+XX(RGT)	DPC(14)		;move right one column
+XX(LFT)	DPC(10)		;move left one column
+XX(UP)	DPC(13)		;move up one row
+XX(DWN)	DPC(12)		;move down one row
+XX(BEL)	DPC(7)		;ring the terminal's bell
+XX(ABL)	DPC(7)		;ring bell in alternate form
+XX(ERS)	DPC(32)		;erase whole screen
+XX(ERB)	0		;bits for terminal states cleared by erase screen
+XX(ERO)	0		;bits for terminal states SET by erase screen
+XX(ADR)	DPC(33,"E",430)	;add (insert) a blank row (24. pad chars at 9600 baud)
+XX(DLR)	DPC(33,"R",430)	;delete a row (24. pad chars at 9600 baud)
+XX(MOD)	EMPHON		;bits for modes that must be right before output
+XX(BCL)	EMPHON		;bits for modes cleared by DPCMCL sequence
+XX(MCL)	DPC(33,<")">)	;clear modes in DPCBCL (must bracket for right paren)
+XX(ID)	0		;enable Insert/Delete mode
+XX(BLI)	0		;enable blinking
+XX(TBS)	DPC(33,"1")	;set tab stop at current column
+XX(INI)	=14,,[BYTE (8)33,"A",33,"3",33,"k",33,"'",33,"C",33,")",33,"w"] ;length of init string,,ptr to 8-bit init string
+XX(CID)	0		;clear Insert/Delete mode
+XX(CIB)	0		;bits for modes cleared by clearing Insert/Delete
+XX(DCX)	0		;no special delete char routine
+XX(128)	0		;no graphic output chars can be quoted
+XX(ACX)	0		;no special add char routine
+XX(NDM)	=14,,[BYTE (8)33,"A",33,"3",33,"k",33,"'",33,"C",33,")",33,"w"] ;byte count,,addr of 8-bit string to output on TTY NO DM
+XX(SEM)	DPC(33,"(")	;enable emphasis
+XX(CEM)	DPC(33,<")">)	;clear emphasis
+XX(SAE)	DPC(33,"(")	;output sequence for alternate emphasis form
+XX(CAE)	DPC(33,<")">)	;output sequence to clear alternate emphasis form
+XX(ABT)	=14,,[BYTE (8)33,"A",33,"3",33,"k",33,"'",33,"C",33,")",33,"w"] ;(LH) byte count (RH) ptr to 8-bit seq to abort any interrupted cmd
+XX(ABM)	0,,EMPHON	;(LH) must be zero (RH) bits for modes cleared by DPCABT
+XX(IMS)	[ASCIZ/Televideo 912/] ;(LH) zero (RH) zero or address of ASCIZ string to type after initing done
+XX(SIZ)	=80,,=24	;(LH) default width for this display (RH) default height
+XX(FGS)	DPF<AUS,WRP>	;Auto scroll
+DPCEND	;Televideo 912
+
+;Here is the Dpy Descriptor Table for the Ann Arbor Ambassador.
+↑AMBASS:DPCBEG
+XX(NAM)	'AMBASS'	;name of terminal
+XX(POS)	AMBACU		;dispatch address for cursor positioning routine
+XX(HOM)	DPC(33,"[","H")	;home command
+XX(EOL)	DPC(33,"[","K")	;erase to end of line cmd
+XX(PRT)	DPC(33)		;force next character to print
+XX(PR2)	0		;trailing part of output seq to force char to print, follows char
+XX(ADC)	DPC(33,"[","@")	;insert a space
+XX(DLC)	DPC(33,"[","P")	;delete a character
+XX(FLS)	DPC(33,"[","H")	;flush cursor from screen (home)
+XX(RGT)	DPC(33,"[","C")	;move right one column
+XX(LFT)	DPC(10)		;move left one column
+XX(UP)	DPC(33,"[","A")	;move up one row
+XX(DWN)	DPC(12)		;move down one row
+XX(BEL)	DPC(7)		;ring the terminal's bell
+XX(ABL)	DPC(7)		;ring bell in alternate form
+XX(ERS)	DPC(33,"[","J",777) ;erase whole screen (255. pad chars at 9600)
+XX(ERB)	0		;bits for terminal states cleared by erase screen
+XX(ERO)	0		;bits for terminal states SET by erase screen
+XX(ADR)	DPC(33,"[","L")	;add (insert) a blank row
+XX(DLR)	DPC(33,"[","M")	;delete a row
+XX(MOD)	EMPHON		;bits for modes that must be right before output
+XX(BCL)	EMPHON		;bits for modes cleared by DPCMCL sequence
+XX(MCL)	DPC(33,"[","m")	;clear modes in DPCBCL
+XX(ID)	0		;enable Insert/Delete mode
+XX(BLI)	DPC(33,"[","5","m") ;enable blinking
+XX(TBS)	DPC(33,"H")	;set tab stop at current column
+XX(INI)	LAMBIN,,AMBINI	;length of init string,,ptr to 8-bit init string
+XX(CID)	0		;clear Insert/Delete mode (clears insert char mode)
+XX(CIB)	0		;bits for modes cleared by clearing Insert/Delete
+XX(DCX)	0		;no special delete char routine
+XX(128)	401000,,173601	;177,33,17,16,15,14,12,11,10,7,0 graphic output chars needing quoting
+XX(ACX)	0		;no special add char routine
+XX(NDM)	6,,[BYTE (8)33,"[",">","3","5","l"] ;byte count,,addr of 8-bit string to output on TTY NO DM
+XX(SEM)	DPC(33,"[","1","m") ;enable emphasis (bold)
+XX(CEM)	DPC(33,"[","0","m") ;clear emphasis
+XX(SAE)	DPC(33,"[","7","m") ;output sequence for alternate emphasis form (rev vid)
+XX(CAE)	DPC(33,"[","0","m") ;output sequence to clear alternate emphasis form
+XX(ABT)	0		;(LH) byte count (RH) ptr to 8-bit seq to abort any interrupted cmd
+XX(ABM)	0		;(LH) must be zero (RH) bits for modes cleared by DPCABT
+XX(IMS)	[ASCIZ/Ambassador/] ;(LH) zero (RH) zero or address of ASCIZ string to type after initing done
+XX(SIZ)	=80,,=48	;(LH) default width for this display (RH) default height
+XX(FGS)	DPF<WRP,TWR,ESH,AUS> ;Avoid CRLF after wrap, need home before erase screen
+DPCEND	;Ann Arbor Ambassador
+
+;Here is the Dpy Descriptor Table for the Alto TALK program, like teleray w/emph.
+↑ALTOTA:DPCBEG
+XX(NAM)	'ALTOTA'	;name of terminal
+XX(POS)	TELECU		;dispatch address for cursor positioning routine
+XX(HOM)	DPC(33,"H")	;home command
+XX(EOL)	DPC(33,"K",405)	;erase to end of line cmd
+XX(PRT)	DPC(33)		;force next character to print
+XX(PR2)	0		;trailing part of output seq to force char to print, follows char
+XX(ADC)	DPC(33,"P",406)	;insert a space (assumes ID mode on)
+XX(DLC)	DPC(33,"Q",406)	;delete a character (assumes ID mode on)
+XX(FLS)	DPC(33,"H")	;flush cursor from screen (home)
+XX(RGT)	DPC(33,"C")	;move right one column
+XX(LFT)	DPC(10)		;move left one column
+XX(UP)	DPC(33,"A")	;move up one row
+XX(DWN)	DPC(12)		;move down one row
+XX(BEL)	DPC(7)		;ring the terminal's bell
+XX(ABL)	DPC(7)		;ring bell in alternate form
+XX(ERS)	DPC(14,465)	;erase whole screen
+XX(ERB)	0		;bits for terminal states cleared by erase screen
+XX(ERO)	0		;bits for terminal states SET by erase screen
+XX(ADR)	DPC(33,"L",475)	;add (insert) a blank row
+XX(DLR)	DPC(33,"M",475)	;delete a row
+XX(MOD)	EMPHON		;bits for modes that must be right before output
+XX(BCL)	EMPHON		;bits for modes cleared by DPCMCL sequence
+XX(MCL)	DPC(33,"R","@")	;clear modes in DPCBCL
+XX(ID)	0		;enable Insert/Delete mode
+XX(BLI)	0		;enable blinking
+XX(TBS)	DPC(33,"F")	;set tab stop at current column
+XX(INI)	4,,[BYTE (8)33,"A",33,"G"] ;init string: (LH) byte count (RH) ptr (clears tabs)
+XX(CID)	0		;clear Insert/Delete mode (clears insert char mode)
+XX(CIB)	0		;bits for modes cleared by clearing Insert/Delete
+XX(DCX)	0		;no special delete char routine
+XX(128)	1000,,33600	;Bits for graphic chars needing quoting on output, bit 35 for null, etc.  Sign bit is flag for 177.
+XX(ACX)	0		;no special add char routine
+XX(NDM)	0,,0		;byte count,,addr of 8-bit string to output on TTY NO DM
+XX(SEM)	DPC(33,"R","D")	;enable emphasis (  "  )
+XX(CEM)	DPC(33,"R","@")	;clear emphasis
+XX(SAE)	DPC(33,"R","D")	;output sequence for alternate emphasis form
+XX(CAE)	DPC(33,"R","@")	;output sequence to clear alternate emphasis form
+XX(ABT)	2,,[BYTE (8)33,"A"] ;(LH) byte count (RH) ptr to 8-bit seq to abort any interrupted cmd
+XX(ABM)	0		;(LH) must be zero (RH) bits for modes cleared by DPCABT (all modes)
+XX(IMS)	[ASCIZ/ALTO TALK/] ;(LH) zero (RH) zero or address of ASCIZ string to type after initing done
+XX(SIZ)	=80,,=24	;(LH) default width for this display (RH) default height
+XX(FGS)	DPF<WRP>	;Free wraparound from col 80
+DPCEND	;ALTO TALK program
+
+;Here is the Dpy Descriptor Table for the Datamedia Elite 3052.
+↑DM3052:DPCBEG
+XX(NAM)	'DM3052'	;name of terminal
+XX(POS)	DM52CU		;dispatch address for cursor positioning routine
+XX(HOM)	DPC(33,"H")	;home command
+XX(EOL)	DPC(33,"K")	;erase to end of line cmd
+XX(PRT)	0		;force next character to print
+XX(PR2)	0		;trailing part of output seq to force char to print, follows char
+XX(ADC)	DPC(" ",10,406)	;insert a space (assumes ID mode on), and back up under it
+XX(DLC)	DPC(33,"D",406)	;delete a character (assumes ID mode on) (6 pads at 9600)
+XX(FLS)	DPC(33,"H")	;flush cursor from screen (home)
+XX(RGT)	DPC(33,"C")	;move right one column
+XX(LFT)	DPC(10)		;move left one column
+XX(UP)	DPC(33,"A")	;move up one row
+XX(DWN)	DPC(12)		;move down one row
+XX(BEL)	DPC(7)		;ring the terminal's bell
+XX(ABL)	DPC(7)		;ring bell in alternate form
+XX(ERS)	DPC(33,"M")	;erase whole screen
+XX(ERB)	0,,EMPHON!BLNKON!IDON ;bits for terminal states cleared by erase screen
+XX(ERO)	0,,EMPHON!BLNKON ;bits for terminal states SET by erase screen (kludge)
+XX(ADR)	DPC(33,"B",600)	;add (insert) a blank row (128. pad chars at 9600 baud)
+XX(DLR)	DPC(33,"A",600)	;delete a row (128. pad chars at 9600 baud)
+XX(MOD)	0,,EMPHON!BLNKON!IDON ;bits for modes that must be right before output
+XX(BCL)	0,,EMPHON!BLNKON ;bits for modes cleared by DPCMCL sequence
+XX(MCL)	DPC(33,"O","2")	;clear modes in DPCBCL (selects Dim mode)
+XX(ID)	DPC(33,"P")	;enable Insert/Delete mode
+XX(BLI)	DPC(33,"O","6")	;enable blinking (Blinking and Dim)
+XX(TBS)	0		;set tab stop at current column
+XX(INI)	5,,[BYTE (8)33,"M",33,"O","2"] ;length of init string,,ptr to 8-bit init string
+XX(CID)	DPC(33,"Q")	;clear Insert/Delete mode
+XX(CIB)	IDON		;bits for modes cleared by clearing Insert/Delete
+XX(DCX)	0		;no special delete char routine
+XX(128)	0		;no graphic output chars can be quoted
+XX(ACX)	0		;no special add char routine
+XX(NDM)	0		;byte count,,addr of 8-bit string to output on TTY NO DM
+XX(SEM)	DPC(33,"O","0")	;enable emphasis (non-Dim mode)
+XX(CEM)	DPC(33,"O","2")	;clear emphasis (Dim mode)
+XX(SAE)	DPC(33,"O","1")	;output sequence for alternate emphasis form (Rev video, non-Dim)
+XX(CAE)	DPC(33,"O","2")	;output sequence to clear alternate emphasis form
+XX(ABT)	3,,[BYTE (8)33,"O","2"] ;(LH) byte count (RH) ptr to 8-bit seq to abort any interrupted cmd
+XX(ABM)	0,,EMPHON!BLNKON ;(LH) must be zero (RH) bits for modes cleared by DPCABT
+XX(IMS)	[ASCIZ/Datamedia 3052/] ;(LH) zero (RH) zero or address of ASCIZ string to type after initing done
+XX(SIZ)	=80,,=24	;(LH) default width for this display (RH) default height
+XX(FGS)	DPF<ARI,DRI,ACI,DCI,AUS> ;Need ID mode for all 4 ops; auto scr on bottom LF
+DPCEND	;DM 3052
+
+;Here is the Dpy Descriptor Table for the DEC VT102.
+↑VT102:	DPCBEG
+XX(NAM)	'VT102 '	;name of terminal
+XX(POS)	V102CU		;dispatch address for cursor positioning routine
+XX(HOM)	DPC(33,"[","H")	;home command
+XX(EOL)	DPC(33,"[","K",402) ;erase to end of line cmd
+XX(PRT)	0		;force next character to print
+XX(PR2)	0		;trailing part of output seq to force char to print, follows char
+XX(ADC)	DPC(" ",10)	;insert a space (assumes ID mode on)
+XX(DLC)	DPC(33,"[","P")	;delete a character
+XX(FLS)	DPC(33,"[","H")	;flush cursor from screen (home)
+XX(RGT)	DPC(33,"[","C")	;move right one column
+XX(LFT)	DPC(10)		;move left one column
+XX(UP)	DPC(33,"[","A")	;move up one row
+XX(DWN)	DPC(12)		;move down one row
+XX(BEL)	DPC(7)		;ring the terminal's bell
+XX(ABL)	DPC(7)		;ring bell in alternate form
+XX(ERS)	DPC(33,"[","J",464) ;erase whole screen (52. pad chars at 9600)
+XX(ERB)	0		;bits for terminal states cleared by erase screen
+XX(ERO)	0		;bits for terminal states SET by erase screen
+XX(ADR)	DPC(33,"[","L",420) ;add (insert) a blank row
+XX(DLR)	DPC(33,"[","M",420) ;delete a row
+XX(MOD)	EMPHON		;bits for modes that must be right before output
+XX(BCL)	EMPHON		;bits for modes cleared by DPCMCL sequence
+XX(MCL)	DPC(33,"[","m")	;clear modes in DPCBCL
+XX(ID)	DPC(33,"[","4","h") ;enable Insert/Delete mode
+XX(BLI)	DPC(33,"[","5","m") ;enable blinking
+XX(TBS)	DPC(33,"H")	;set tab stop at current column
+XX(INI)	LV02IN,,V02INI	;length of init string,,ptr to 8-bit init string
+XX(CID)	DPC(33,"[","4","l") ;clear Insert/Delete mode (clears insert char mode)
+XX(CIB)	IDON		;bits for modes cleared by clearing Insert/Delete
+XX(DCX)	0		;no special delete char routine
+XX(128)	0		;no graphic output chars needing quoting
+XX(ACX)	0		;no special add char routine
+XX(NDM)	5,,[BYTE (8)33,"[","?","7","h"] ;byte count,,addr of 8-bit string to output on TTY NO DM (auto wrap on)
+XX(SEM)	DPC(33,"[","1","m") ;enable emphasis (bold)
+XX(CEM)	DPC(33,"[","m")	;clear emphasis
+XX(SAE)	DPC(33,"[","7","m") ;output sequence for alternate emphasis form (rev vid)
+XX(CAE)	DPC(33,"[","m")	;output sequence to clear alternate emphasis form
+XX(ABT)	0		;(LH) byte count (RH) ptr to 8-bit seq to abort any interrupted cmd
+XX(ABM)	0		;(LH) must be zero (RH) bits for modes cleared by DPCABT
+XX(IMS)	[ASCIZ/DEC VT102/] ;(LH) zero (RH) zero or address of ASCIZ string to type after initing done
+XX(SIZ)	=80,,=24	;(LH) default width for this display (RH) default height
+XX(FGS)	DPF<ACI,ESH,AUS> ;ID mode for ins char, need home before erase screen
+DPCEND	;DEC VT102
+
+;Here is the Dpy Descriptor Table for the SUN terminal.
+↑SUNDPY:DPCBEG
+XX(NAM)	'SUN   '	;name of terminal
+XX(POS)	AMBACU		;dispatch address for cursor positioning routine
+XX(HOM)	DPC(33,"[","H")	;home command
+XX(EOL)	DPC(33,"[","K")	;erase to end of line cmd
+XX(PRT)	DPC(33)		;force next character to print
+XX(PR2)	0		;trailing part of output seq to force char to print, follows char
+XX(ADC)	DPC(33,"[","@")	;insert a space
+XX(DLC)	DPC(33,"[","P")	;delete a character
+XX(FLS)	DPC(33,"[","H")	;flush cursor from screen (home)
+XX(RGT)	DPC(33,"[","C")	;move right one column
+XX(LFT)	DPC(10)		;move left one column
+XX(UP)	DPC(33,"[","A")	;move up one row
+XX(DWN)	DPC(12)		;move down one row
+XX(BEL)	DPC(7)		;ring the terminal's bell
+XX(ABL)	DPC(7)		;ring bell in alternate form
+XX(ERS)	DPC(33,"[","J",777) ;erase whole screen (255. pad chars at 9600)
+XX(ERB)	0		;bits for terminal states cleared by erase screen
+XX(ERO)	0		;bits for terminal states SET by erase screen
+XX(ADR)	DPC(33,"[","L")	;add (insert) a blank row
+XX(DLR)	DPC(33,"[","M")	;delete a row
+XX(MOD)	EMPHON		;bits for modes that must be right before output
+XX(BCL)	EMPHON		;bits for modes cleared by DPCMCL sequence
+XX(MCL)	DPC(33,"[","m")	;clear modes in DPCBCL
+XX(ID)	0		;enable Insert/Delete mode
+XX(BLI)	DPC(33,"[","5","m") ;enable blinking
+XX(TBS)	DPC(33,"H")	;set tab stop at current column
+XX(INI)	LAMBIN,,AMBINI	;length of init string,,ptr to 8-bit init string
+XX(CID)	0		;clear Insert/Delete mode (clears insert char mode)
+XX(CIB)	0		;bits for modes cleared by clearing Insert/Delete
+XX(DCX)	0		;no special delete char routine
+XX(128)	401000,,173601	;177,33,17,16,15,14,12,11,10,7,0 graphic output chars needing quoting
+XX(ACX)	0		;no special add char routine
+XX(NDM)	6,,[BYTE (8)33,"[",">","3","5","l"] ;byte count,,addr of 8-bit string to output on TTY NO DM
+XX(SEM)	DPC(33,"[","1","m") ;enable emphasis (bold)
+XX(CEM)	DPC(33,"[","0","m") ;clear emphasis
+XX(SAE)	DPC(33,"[","7","m") ;output sequence for alternate emphasis form (rev vid)
+XX(CAE)	DPC(33,"[","0","m") ;output sequence to clear alternate emphasis form
+XX(ABT)	0		;(LH) byte count (RH) ptr to 8-bit seq to abort any interrupted cmd
+XX(ABM)	0		;(LH) must be zero (RH) bits for modes cleared by DPCABT
+XX(IMS)	[ASCIZ/SUN/]	;(LH) zero (RH) zero or address of ASCIZ string to type after initing done
+XX(SIZ)	=80,,=28	;(LH) default width for this display (RH) default height
+XX(FGS)	DPF<ESH,AUS>	;Need home before erase screen, avoid LF at end of screen
+DPCEND	;SUN
+
+DPTPAT:	BLOCK LDPCBK	;A display-type block for patching
+DPTPA2:	BLOCK LDPCBK	;A second display-type block for patching
+
+;Here are some long strings for various terminals.
+HTHINI:	BYTE(8)33,"q",33,">",33,"u",33,"G",33,"\",33,"w"
+	BYTE(8)33,"y","4",33,"y","5",33,"y","6",33,"y","8",33,"y","9"
+LHTHIN←←=27	;Number of bytes in HTHINI string
+
+C100AB:	BYTE (8)200,200,33,200,33,200,33,"d",33,"e"
+LC100A←←=10
+
+C100ND:	BYTE (8)33,"s",33,"3",33,"d",33,"e",33,"i",33,25,33,"u"
+LC100N←←=14	;Number of bytes in above string
+  ;Scroll mode, link comm/kbd, reverse video off,
+  ;half-bright off, erase eol, user mode, beep.
+
+;Initialization string for C-100 terminals.
+;The last line (5 chars) are not transmitted to C-100B's.
+C100IN:	BYTE (8)200,200,33,200,33,200,33,"t"
+	BYTE (8)33,"3",33,"U",33,"t",33,"5",33,"7",33,"8",33,"9",33,")"
+	BYTE (8)33,"N","H",33,"j"," ",33,"l",33,"b",33,"f",33,"v"," "," "
+	BYTE (8)"8","p",33,"u",33,"#",33,"U",33,"I",33,"S"
+	BYTE (8)33,"K",33,"j","!"	;this line for C100A only
+LC100I←←=57	;Number of bytes in above string for C100A
+LC100B←←=52	;Number of bytes used for C100B
+  ;exit transparent mode, link comm/kbd, prog, nontransparent again (now linked),
+  ;u/l-case, chr, fdx, rem, ascii, all attr's off ("N","H"), charset 0,
+  ;no auto-lf, no auto-tab, text, window, user,
+  ;liberate comm, prog (comm only),
+  ;protection on (to defeat SEND), page,
+  ;(rest for C100A only:) screen w/b, charset 1
+
+AMBINI:	BYTE (8)33,"[",">","1","2",";","3","5",";","5","2",";"
+	BYTE (8)"6",";","3","3","h",33,"[",">","1","8",";","2"
+	BYTE (8)"0",";","2","9",";","3","0",";","3","7",";","3"
+	BYTE (8)"9",";","4","0","l",33,"[","5","W"
+  ;set modes: SRM (full duplex), ZDDM (display rubout), ZMKM (meta
+  ;	      key), ERM (erase), ZWFM (wrap forward);
+  ;reset modes: TSM, LNM, ZRLM, ZDBM, ZAXM, ZHDM;
+  ;clear all tabs;
+LAMBIN←←=45	;Number of bytes in above string
+
+V02INI:	BYTE (8)33,"[","?","3","l",33,"[","?","4","l",33,"["
+	BYTE (8)"?","6","l",33,"[","?","7","l",33,"[","2","0"
+	BYTE (8)"l",33,"[","2","l",33,"[","4","l",33,"[","1"
+	BYTE (8)"2","h",33,"[","3","g",33,"(","B",33,"[","r"
+  ;VT102 init string.  Selects: 80 cols; fast scroll; absolute origin;
+  ;no auto wrap; no LF on CR; unlock kbd; clear insert mode; no local echo;
+  ;clear all tabs; US chars; whole screen.
+LV02IN←←=48	;Number of bytes in above string
+;Transmitter routine beginning. ;⊗ DMXMT DMXMG2 DMXMGO DMXMG3 DMXMT0 DMXRPT DMXDEQ DMXMT1 DMXMT9 DMXMT2 DMXM8L DMXM8C DMXM8U DMNOXY DMXMT8 NODPYH NODPYD
+
+↑DMXMT:	PUSH P,J		;Preserve J throughout DMXMT
+	SKIPN J,LETAB(LINE)
+	JRST NODPYH		;Can't get here without a dpy header
+	PUSH P,[POPJJ]		;Restore J when POPJing
+DMXMG2:	SOSGE DMQKCT(J)		;Any quick (uninterruptible) chars ready?
+	JRST DMXMT0		;No
+DMXMGO:	ILDB CHR,DMQKPT(J)
+	TRNN CHR,400		;Are we supposed to put out some padding here?
+	JRST TYPDM		;No, just output this char
+	SUBI CHR,1		;Decrement the padding count
+	TRNN CHR,377		;Skip unless count has reached zero
+	JRST DMXMG3		;Don't backup byte
+	DPB CHR,DMQKPT(J)	;Store decremented count for next time
+	MOVSI CHR,110000	;Back up byte pointer so we'll see
+	ADDM CHR,DMQKPT(J)	; the padding count again next time.
+DMXMG3:	MOVE CHR,PADCNT(LINE)	;Get padding char
+	ANDI CHR,377		;No extraneous bits in padding char, please
+	JRST TYPDM		;Output padding char
+
+DMXMT0:	SKIPGE RPTCNT(J)	;Is it time to repeat some sequence?
+	JRST DMXRPT		;Yes
+	HLL J,DPYBTS(J)		;Get display-dependent bits
+	SKIPN PROG,DPYDES(LINE)	;Get pointer to dpy descriptor block, more bits
+	PUSHJ P,NODPYD		;Oops, there isn't one!
+	MOVE UCHN,DPCFGS(PROG)	;Get some good display-specific flags
+	PUSH P,[SCNONJ]		;Turn scanner on when done
+	OFFSCN			;But off while we diddle queue
+	JRST DMXMT1		;Look for something to output
+
+DMXRPT:	AOS RPTCNT(J)		;Count another repeat done
+	MOVE CHR,RPTSIZ(J)	;Number of chars in repeating string, minus one
+	MOVEM CHR,DMQKCT(J)	;Set up quicky output, avoiding immediate SOS
+	MOVE CHR,RPTPTR(J)	;Get byte pointer to string to repeat
+	MOVEM CHR,DMQKPT(J)	;And store for quicky output
+	JRST DMXMGO		;Go output first char
+
+;Any routine to be called when xfer is done (LH QFREE) better
+; preserve J,TAC,TAC1,DDB.
+DMXDEQ:	TLNE DAT,DMXLE
+	MOVEM DAT,DMLEFL(J)	;Line editor xfer--store flags in dpy hdr
+	TLNE DAT,USERGO		;Just finish uninterruptible user program?
+	SETOM DMXY(J)		;Yes, don't for sure know where cursor is
+	HLRZ AC1,QFREE(TAC)	;Get address of routine to run now
+	TLNE DAT,DMXCAL		;Does this queue entry have routine to call?
+	PUSHJ P,(AC1)		;Yes
+	PUSHJ P,DMDEQ		;Unqueue request that finished
+	HRRZS DMFLAG(J)		;No old output going
+DMXMT1:	MOVE DAT,DMFLAG(J)	;Get flags
+	TDNE DAT,[USERGO,,NOINTR!LEWAIT] ;Uninterruptible user program in progress?
+	JRST DMXMT2		;Yes
+	HRRZ TAC,DMLEPT(J)	;Pointer to first LE incremental queue block
+	CAIE TAC,DMLEPT-QLINK(J) ;Header point to itself?
+	JRST DMXMTL		;No, output LE stuff
+DMXMT9:	HRRZ TAC,DMSPPT(J)	;Pointer to first special queue block
+	CAIE TAC,DMSPPT-QLINK(J) ;Header point to itself?
+	JRST DMXMTO		;No
+	SKIPE DPHOLD(J)		;Are we holding
+	JRST DMXMT2		;Yes, don't do any PP output
+	HRRZ TAC,DMPPPT(J)	;Pointer to first PP queue block
+	CAIE TAC,DMPPPT-QLINK(J) ;Header point to itself?
+	JRST DMXMTO		;No
+DMXMT2:	HRRZ TAC,DMUSER(J)	;Pointer to first user program queue block
+	CAIE TAC,DMUSER-QLINK(J) ;Header point to itself?
+	JRST DMXMUS		;No
+	TRNE DAT,NOINTR		;Suppressing all non-user-program xfers?
+	JRST DMXMT8		;Yes, no wholine, and don't reposition cursor
+	HRRZ TAC,DMWHO(J)	;Pointer to wholine queue block
+	CAIE TAC,DMWHO-QLINK(J)	;Header point to itself?
+	JRST DMXMTO
+;No more queued requests. 
+;Now we will leave the cursor wherever user or the line editor wants it.
+	SETZ CHR,		;For PTYUUO which expects 0 to mean no output
+	SKIPL AC3,DMUSXY(J)	;Any user-specified position?
+	JRST DMXM8U		;Yes
+DMXM8L:	SKIPE LECLK(J)		;If line editor is still working,
+	JRST DMXMT8		; don't bother moving cursor
+	MOVE AC3,CVP(J)		;Vertical position of LE cursor
+	SOJL AC3,DMNOXY		;LE counts lines from 1 but DM counts from 0
+	CAML AC3,DPYHGT(J)	;Is the vertical position on the screen?
+	JRST DMNOXY		;No, flush cursor
+	HRL AC3,CHP(J)		;Horizontal position of LE cursor
+DMXM8C:	CAMN AC3,DMXY(J)	;Is cursor already there?
+	JRST DMXMT8		;Finally all done
+	PUSHJ P,DMSETQ		;Initialize quicky byte pointer and count
+	PUSHJ P,DMCURS		;Calculate FF,X,Y string to position cursor
+	MOVEM AC3,DMXY(J)	;Remember where we are putting cursor
+	MOVEM DAT,DMFLAG(J)	;Might have had to turn off ID mode (and others)
+	JRST DMXMG2		;Now output a char
+
+;Here to leave cursor where user program wants it
+DMXM8U:	HRRZ AC1,PRGNUM(J)	;Get line number
+	MOVE IOS,DEVIOS(DDB)	;Maybe user program is not in charge of TTY
+	SKIPGE LETAB(AC1)	;Line initialized?
+	SKIPG CCPOS(J)		;Yes, cursor into line?
+	TLNE IOS,TPMON		;No, skip if user program in charge
+	JRST DMXM8L		;Yes, use line editor position
+	HLRZ AC1,AC3		;Use user-specified cursor position
+	HRRZ AC2,AC3
+	CAMGE AC1,DPYWID(J)	;Check for legal X position
+	CAML AC2,DPYHGT(J)	;Check for legal Y position
+	JRST DMNOXY
+	JRST DMXM8C		;Ok, now position cursor as user requested
+
+DMNOXY:	MOVSI AC3,707070	;Funny code to mark cursor gone (used here only)
+	CAMN AC3,DMXY(J)	;Cursor already gone?
+	JRST DMXMT8		;Yes, and we are too now
+	MOVEM AC3,DMXY(J)	;No, but it will be in a moment
+	PUSHJ P,DMSETQ		;Initialize output byte pointer
+	MOVE AC2,DPCFLS(PROG)	;Get sequence to hide cursor
+	TLNE PROG,DM3025	;Dpy w/o flush cursor cmd, or with different one?
+	MOVE AC2,DPCHOM(PROG)	;Yes, do a home command instead
+	PUSHJ P,DMOUT1		;Output it
+	JRST DMXMG2		;Start up final quicky output
+
+DMXMT8:	MOVSI IOS,IO!TOIP!IRMA
+	ANDCAB IOS,DEVIOS(DDB)
+	LDB J,PJOBN		;Get job number of tty's owner
+	JUMPN J,CPOPJ		;Don't kill tty if in use
+	TLNN LINE,TLKRNG	; nor if in talk ring
+	PUSHJ P,TTYKIL
+	POPJ P,
+
+NODPYH:	POP P,J
+	PUSHACS
+	PUSHJ P,DISGST		;PRINT TIME OF NEW MESSAGE ON CTY
+	PUSHJ P,DISMES
+	ASCIZ /NO DPY HEADER FOR DATAMEDIA LINE AT DMXMT.
+/
+	PUSHJ P,DISFLU
+	POPACS
+	PUSHJ P,WDDTCA
+	JRST NODPY2
+
+NODPYD:	PUSHACS
+	PUSHJ P,DISGST		;PRINT TIME OF NEW MESSAGE ON CTY
+	PUSHJ P,DISMES
+	ASCIZ /No DPY DESCRIPTOR for DM line at DMXMT.
+/
+	PUSHJ P,DISFLU
+	POPACS
+	PUSHJ P,WDDTCA
+	MOVE PROG,DPYDFT	;Make this a default-type display
+	MOVEM PROG,DPYDES(LINE)
+	POPJ P,
+;Get specified cursor position. ;⊗ XYGET XYCHK DMSETQ
+
+XYGET:	SOSGE QDMCNT(TAC)
+	JRST DMXDEQ		;OOPS, end of entry.
+	PUSHJ P,XYCHK		;See if legal X char
+	 CAML CHR,DPYWID(J)
+	TDZA AC1,AC1		;Out of range, use column 0
+	MOVEI AC1,(CHR)		;Save X while checking Y
+	SOSGE QDMCNT(TAC)
+	JRST DMXDEQ		;OOPS, end of entry.
+	PUSHJ P,XYCHK		;See if legal Y char
+	 CAML CHR,DPYHGT(J)
+	MOVEI CHR,0		;Out of range, use line 0
+	HRL CHR,AC1
+	MOVEM CHR,QXY(TAC)	;Remember new position requested
+	TLNN DAT,DMXLE
+	TLOA DAT,CHASTE		;New virgin output line waiting
+	MOVEM CHR,DMLEXY(J)	;Make sure line editor knows where we are
+	JRST DMXMT6		;Don't output anything, get next char from queue
+
+XYCHK:	ILDB CHR,QTAKR(TAC)	;Get X or Y position
+	CAIL CHR,40
+	TRCA CHR,140
+	SKIPA AC2,DMTABL(CHR)
+	POPJ P,
+	AOS (P)			;Control-chars are out of range for both X and Y.
+	TLNN AC2,XYSPCL		;Is this a special char in X-Y position setting?
+	POPJ P,			;No
+	SUB P,[1,,1]		;Don't return to XYGET
+	JRST DMXMT4		;Now go process this special char
+
+↑DMSETQ:MOVEI DSER,DMQKBF(J)
+	HRLI DSER,441100	;Initialize byte pointer for storing quicky output
+	MOVEM DSER,DMQKPT(J)	;Set up taker byte pointer, too.
+	SETZM DMQKCT(J)		;No quickies yet
+	POPJ P,
+;Main output code. ;⊗ DMXMTL DMXMUS DMXMTO DMXMTM DMLEM5 DMXMT6 DMXMT3 DMNOQ2 DMXMT5 DMTAB3 DMNOOP DMNOO2 DMXM5A DMXM5S DMXM5T DMWRSC DMXM5B DMXM5X DMXM5Y DMCR6 DMLF4 DMXM5D DMXTAP SKIPCR RANGE0 RANGE
+
+DMXMTL:	HLL DAT,DMLEFL(J)	;Get line editor flags
+	SKIPE LETXC(J)		;Has LE text already changed?
+	JRST DMXDEQ		;Yes, just dequeue this xfer
+	JRST DMXMTM
+
+DMXMUS:	TRNN DAT,NOINTR		;Want this xfer sent uninterruptibly?
+	JRST DMXMTO		;Nope, normal user xfer
+	HRL DAT,QFLAGS(TAC)	;Get flags for this xfer
+	TLNE DAT,DMQUOT		;Want to be interpreted?
+	TLZN DAT,DMUXFR		;No, have we already sent this xfer?
+	JRST DMXMTM		;Yes
+	HLRM DAT,QFLAGS(TAC)	;No, but note we will have in a moment
+	MOVE AC1,QTAKR(TAC)	;Get byte pointer to text of xfer
+	MOVEM AC1,DMQKPT(J)	; and use it for quickies
+	MOVE AC1,QDMCNT(TAC)	;Get byte count
+	MOVEM AC1,DMQKCT(J)	; and use it for quickies
+	SETOM DMXY(J)		;Note we have lost track of cursor
+	SETZM QDMCNT(TAC)	;Make sure xfer flushed when quicky buffer empties
+	JRST DMXMG2		;All set up, now start transmitting quickies
+
+DMXMTO:	HRL DAT,QFLAGS(TAC)	;Get flags for this transfer
+DMXMTM:	PUSHJ P,DMSETQ		;Initialize quicky output byte ptr and byte count
+	TLNN DAT,DMATXY		;X-Y position stored in special word?
+	JRST DMXMT6
+	MOVE AC3,@QXYLOC(TAC)	;Yes, get X-Y position
+DMLEM5:	MOVEM AC3,QXY(TAC)	;Put into queue entry for use here
+DMXMT6:	SOSGE QDMCNT(TAC)	;Decrement number of characters in the entry
+	JRST DMXDEQ		;End of queue entry
+DMXMT3:	ILDB CHR,QTAKR(TAC)	;Get next character
+	JUMPE CHR,DMXMT6	;Ignore null not preceded by 177
+	MOVE AC3,QXY(TAC)	;Save X-Y position we are supposed to be at.
+	CAIN CHR,177
+	JRST DM177		;This is an escape or quoted char
+	TLNE DAT,DMQUOT		;Quoting most everything?
+	JRST DMXMT7		;Yes
+DMNOQ2:	CAIL CHR,175
+	JRST DM175-175(CHR)	;Special dispatch on 175, 176
+	CAIE CHR,30
+	CAIN CHR,137
+	JRST [	TLNN PROG,LEFTAR ;Does this terminal display left arrow?
+		TRC CHR,30≠137	 ;No, so interchange left arrow and underscore
+		JRST .+1]
+	CAIN CHR,32
+	TRCA CHR,32≠176		;Map Stanford tilde to ASCII tilde
+	CAILE CHR,40		;Control char or space?
+	JRST DMXMT5		;No, just update X-Y and send the char
+	SKIPGE AC2,DMTABL(CHR)	;This char automatically quoted?
+	JRST DMXMT4		;Yes, output control char (or check for space)
+	CAIN CHR,"≠"
+	JRST [	MOVEI CHR,32	;Turn not-equals sign into ↑Z, to match input rep.
+		TLNE PROG,ALTNEQ
+		MOVEI CHR,33	;Display as not-equals on WAITS DM
+		JRST .+1]
+	TLNE PROG,DM128		;CAN THIS DM TTY DISPLAY CONTROL CHARACTERS?
+	JRST DMXTAP		;Yes, see if control char needs quoting
+	CAIG CHR,32
+	TROA CHR,140!CTRLCH	;Use lower case for control-letters
+	TRO CHR,100!CTRLCH	;Use "upper case" for control-funny-chars
+DMXMT5:	HLRZ AC2,AC3		;Get column position
+	ADDI AC2,1
+	HRLM AC2,QXY(TAC)
+	CAML AC2,DPYWID(J)
+	TRO DAT,RAPPED		;Moved past end of line
+DMTAB3:
+IFN FTRANGE,< JSP AC1,RANGE >	;Don't return if this is a user xfer out of range
+DMNOOP:	PUSHJ P,DMPOSC		;Make sure cursor is at right place
+	 JRST DMXM5S		;Off screen transfer, avoid diddling modes
+DMNOO2:	TLZE DAT,CHASTE		;Any previous output on this line?
+	TLNE DAT,DMQUOT!NOEEOL	;No, suppressing erasures?
+	JRST DMXM5A		;Yes to one of these
+	PUSHJ P,DPEEOL		;Do right stuff to erase to end of line
+DMXM5A:	PUSHJ P,DMCKMD		;Now erase is done, make sure modes are correct
+DMXM5S:	TRZN CHR,DMTAPE		;Is this a control char on DM that can display it?
+	JRST DMXM5B		;No
+	MOVE AC2,DPCPRT(PROG)	;Yes, tell terminal to print next char
+	PUSHJ P,DMOUT1		;Output the char sequence
+	IDPB CHR,DSER		;Some terminals require quoted char in middle
+	SKIPE AC2,DPCPR2(PROG)	; of the quoting sequence
+	PUSHJ P,DMOUT1		;So if there is a second part of seq, output it
+	JRST DMXM5X
+
+DMXM5T:	TRNE UCHN,DRFTWR	;Does tab wrap around without needing CRLF?
+	JRST DMXM5D		;Yes, no CRLF
+	JRST DMXM5Y		;Need CRLF
+
+;Here if wrapping around from last line on screen and terminal does auto scroll
+DMWRSC:	TRNN UCHN,DRFWRP	;Will this wrap cause auto scroll?
+	JRST DMXM5D		;No, go ahead and output it
+	JRST DMLF5		;Suppress actual char output.  Note: this screws
+;OK if no dpy			;up if char is DMTAPE char on DM128 dpy because
+;has all of			;we'll merely suppress last char of the
+;AUS, WRP and DM128.		;quoted char sequence!  See JRST DMXM5X above.
+
+DMXM5B:	IDPB CHR,DSER		;Put in real character (but don't count it)
+DMXM5X:	TRZN DAT,RAPPED		;Did we just pass last column on screen?
+	JRST DMXM5D		;No
+	TLNE DAT,TRUNCA		;Want to suppress stuff beyond last screen col?
+	PUSHJ P,IGNOR0		;Yes, look for CR or LF--skip return unless hit CR
+	 PUSHJ P,SKIPCR		;Skip over any following CRs and/or LF
+	PUSHJ P,DMCR3		;Adjust X-Y position to beginning of next line
+	 JRST DMWRSC		;Would scroll if put out CRLF, so avoid it
+	CAIN CHR,11		;If this is tab, may wrap differently
+	JRST DMXM5T		;Check special bit for tab wraparound handling
+	TRNE UCHN,DRFWRP	;Do we need a CRLF to normalize cursor pos?
+	JRST DMXM5D		;No CR
+DMXM5Y:	AOS DMQKCT(J)		;Count following CR as quicky
+DMCR6:	MOVEI AC1,15		;Clear DM hardware flags by sending actual CRLF now
+	IDPB AC1,DSER
+	TRNE UCHN,DRFALF	;Avoid LF if free LF and if real LF not ignored
+	JRST DMXM5D
+	AOS DMQKCT(J)		;Count following LF as quicky
+DMLF4:	MOVEI AC1,12
+	IDPB AC1,DSER
+DMXM5D:	MOVEM DAT,DMFLAG(J)	;Save DM state flags
+	HLRM DAT,QFLAGS(TAC)	;Save transfer dependent flags
+	TLNE DAT,DMXLE
+	MOVEM DAT,DMLEFL(J)	;Line editor xfer--store flags in dpy hdr
+	MOVE AC1,QXY(TAC)
+	TLNE DAT,DMATXY		;Is X-Y position stored somewhere special?
+	MOVEM AC1,@QXYLOC(TAC)	;Yes, store X-Y position there
+	TRNE DAT,BELOWS		;Is this transfer off screen?
+	JRST DMXMTM		;Yes, don't output it, just look for more work
+	MOVEM AC1,DMXY(J)	;Save DM actual position
+	SKIPG DMQKCT(J)		;Did we set up any quickies?
+	JRST TYPDM		;No, just output one char
+	JRST DMXMGO		;Avoid one AOS and immediate SOS--output quickies
+
+;Here with control char to output.  See if needs quoting.
+DMXTAP:	MOVEI AC2,1		;Make a mask bit
+	LSH AC2,(CHR)		;Into the right position for this char
+	TDNE AC2,DPC128(PROG)	;This char need quoting?
+	TRO CHR,DMTAPE		;Yes, make it get quoted just before output
+	JRST DMXMT5
+
+SKIPCR:	SOSGE QDMCNT(TAC)
+	POPJ P,			;Nothing left in xfer
+	ILDB AC1,QTAKR(TAC)
+	CAIN AC1,15
+	JRST SKIPCR		;Ignore all CRs
+	CAIE AC1,12
+	JRST IGNFF		;Not CR or LF, put it back
+	POPJ P,			;Ignore one LF
+
+IFN FTRANGE,<
+RANGE0:	HLRZ AC2,AC3		;Get current column
+RANGE:	TLNE DAT,DMUXFR		;User program xfer?
+	TLNE DAT,IDON		;Yes, but don't suppress output in ID mode
+	JRST (AC1)		;Don't suppress
+	CAML AC2,DMBEG(J)	;Before beginning of range?
+	CAMLE AC2,DMEND(J)	;Or after end of range?
+	TROA DAT,BELOWS		;Yes, out of range--flag xfer as off screen
+	JRST (AC1)		;Don't suppress
+	JRST DMXM5X		;Don't try to erase if suppressing output
+>;FTRANGE
+;⊗ IGNOR0 IGNOR3 IGNOR2 IGNFF DMMAST DMERAS DMHOME DMBACK DMFOR2 DMFORW DM175 DM177B DM177C
+
+;Routine to skip text beyond last screen col until CR, LF, or FF.  Skips on CR.
+IGNOR0:	AOS (P)			;Assume skip return
+IGNOR3:	SOSGE QDMCNT(TAC)	;Here to skip text beyond last screen col
+	POPJ P,			;Nothing to ignore
+	ILDB AC1,QTAKR(TAC)
+	CAIN AC1,15
+	SOSA (P)		;Direct return to skip any following CRs and/or LF
+	CAIN AC1,12
+	POPJ P,			;All done for sure
+	TLNE DAT,DMQUOT		;Quoting everything?
+	JRST IGNOR2		;Yes
+	TLNN DAT,QUO177		;Are 177's themselves quoted?
+	CAIE AC1,177		;No, quoting next char?
+	JRST IGNOR3		;No
+	SKIPG QDMCNT(TAC)	;Peek at char after 177 to look for FF
+	POPJ P,			;Nothing is being quoted
+	MOVE AC2,QTAKR(TAC)
+	ILDB AC1,AC2
+	CAIE AC1,14
+	JRST IGNOR3
+	JRST IGNFF		;Back up byte pointer and byte count over the 177
+
+;Here if quoting everything
+IGNOR2:	CAIE AC1,14
+	JRST IGNOR3		;Loop back and ignore more
+IGNFF:	MOVSI AC1,070000
+	ADDM AC1,QTAKR(TAC)	;Back up byte pointer so we'll see same char again
+	AOS QDMCNT(TAC)		;Fix up count too
+	POPJ P,
+
+;For now, master clear just pretends tabs are gone and does erase of screen.
+DMMAST:	TRZ DAT,TBSSET		;This will clear all tabs, unfortunately
+;Here to erase display screen.
+DMERAS:	PUSHJ P,DMFORC		;Force whole wholine out next time
+	SETZM QXY(TAC)		;Back to home corner with all modes cleared
+	MOVE AC2,DPCHOM(PROG)	;Home cmd in case need it
+	TRNE UCHN,DRFESH	;Need home cmd before erase screen?
+	PUSHJ P,DMOUT1		;Yes, output home cmd first
+	TDZ DAT,[EMPHON!BLNKON!IDON,,BELOWS]
+	TDZ DAT,DPCERB(PROG)	;Clear bits for terminal states cleared by erase
+	TDO DAT,DPCERO(PROG)	;Set bits for terminal states set by erase
+	TLO DAT,CHASTE		;New virgin output line waiting
+	MOVE AC2,DPCERS(PROG)	;Get output sequence to erase screen
+	JRST DMLED1		;Output it the usual way
+
+DMHOME:	SETZM AC1,QXY(TAC)	;Back to home corner with all modes cleared
+	TLZ DAT,EMPHON!BLNKON!IDON
+	TLO DAT,CHASTE		;New virgin output line waiting
+	JRST DMFOR3		;Store flags and maybe X-Y position
+
+	DELCHR			;DMXMT4 dispatches thru here to delete char
+DMBACK:	HLRZ AC2,AC3
+	SOJL AC2,DMXMT6		;Can't back up past left margin, get next char
+DMFOR2:	HRLM AC2,QXY(TAC)	;Store new X position
+	TLNE DAT,DMATXY		;Is X-Y position stored somewhere special?
+	HRLM AC2,@QXYLOC(TAC)	;Yes, store new X position there
+	JRST DMXMT6		;Get next char from this xfer
+REPEAT 0,<	;For now we'll just remember where xfer wants the cursor
+	PUSHJ P,DMPREP		;Get cursor positioned to old place
+	MOVE AC2,DMCLFT(PROG)	;Get output sequence for moving left
+	PUSHJ P,DMOUT1		;And output it
+	SOS DMQKCT(J)		;As usual, don't count one quicky
+	LDB CHR,DSER		; ...and get back last output char
+	JRST DMXM5D
+>;REPEAT 0
+
+	ADDCHR			;DMXMT4 dispatches thru here to insert char
+DMFORW:	HLRZ AC2,AC3		;Get current X position
+	ADDI AC2,1		;Move right one column
+	CAMGE AC2,DPYWID(J)	;Does this make us pass end of line?
+	JRST DMFOR2		;No, just store new X position
+	PUSHJ P,DMCR3		;Back to col 0 on next line
+	 JFCL			;Ignore "would scroll" indication
+	MOVE AC1,QXY(TAC)	;Get new X-Y position for xfer
+	JRST DMFOR3		;Store it in special place if necessary
+
+;The next two words are JRSTed to for output of chars 175, 176 respectively.
+DM175:	SKIPA CHR,["$"]		;175: Output altmode as dollar sign normally
+	SOJA CHR,DMXMT5		;176: Right brace -- becomes ASCII 175
+	TLNN PROG,ALTNEQ	;On certain terms, display altmode as diamond
+	JRST DMXMT5		;Use dollar sign for altmode
+	MOVEI CHR,32		;Use "standard" char for altmode display
+	JRST DMXTAP		;But see if it needs to be quoted
+
+DM177B:	TLNN PROG,NO177!DM128	;DOES THIS DM PRINT 177S?
+	JRST DMXMT5		;Yes, just send it
+	TLNE PROG,DM128		;Can we quote it to make it print?
+	JRST DM177C		;Yes, but maybe we don't really need to
+	MOVEI CHR,137!CTRLCH	;No, use inverted intensity left arrow
+	JRST DMXMT5		;Now output it
+
+DM177C:	SKIPGE DPC128(PROG)	;Does rubout need quoting?
+	TRO CHR,DMTAPE		;Yes, flag it
+	JRST DMXMT5		;Go do output
+;⊗ DMNOQU DMXMT7 DM177 DMXM4A DMXMT4 DMCALC DMBELL DMCHPD DM30PD DM30PA DM30PB DM25PA DM25PB DMCALX DMPAD DMPADM DMPAD2
+
+;Here for output escape 41, which means interpret next char as text,
+;not as display control.  Useful in DMQUOT mode to display char below 40.
+DMNOQU:	SOSGE QDMCNT(TAC)	;Here to "unquote" next char
+	JRST DMXDEQ		;WHAT! Nothing there to unquote!
+	ILDB CHR,QTAKR(TAC)	;get text char to display
+	JUMPE CHR,DMXMT6	;can't display nulls (hard to get thru PTY)
+	MOVE AC3,QXY(TAC)	;Save X-Y position we are supposed to be at.
+	CAIN CHR,177		;special check for "unquoted" 177
+	JRST DM177B		;which is actually same as quoted 177 -- text
+	JRST DMNOQ2		;treat like it was never quoted
+
+;Here if DMQUOT is on and char is neither 177 nor 0.
+DMXMT7:	CAIL CHR,40
+	JRST DMXMT5		;Normal char, just output it
+	JRST DMXM4A
+
+DM177:	TLNE DAT,QUO177		;177: Is it quoting next char?
+	JRST DM177B		;No, it is itself quoted--just send it
+	SOSGE QDMCNT(TAC)	;Here to quote next character
+	JRST DMXDEQ		;WHAT! Nothing there to quote!
+	ILDB CHR,QTAKR(TAC)
+	CAIN CHR,177
+	JRST DM177B		;Here we have a quoted 177
+	CAIGE CHR,175		;Quotable text char?
+	CAIN CHR,40		;Space can be quoted
+	JRST DMXMT5		;Yes, update X-Y position and send char
+	CAIL CHR,OUTESC		;Control character or escape command?
+	JRST DMXMT6		;No, ignore for now, allowing expansion of escapes
+DMXM4A:	MOVE AC2,DMTABL(CHR)	;Yes, dispatch to special routine
+DMXMT4:	TLNE AC2,IDSPCL		;Special char in I/D mode?
+	TLNN DAT,IDON		;Yes, are we in I/D mode?
+	JRST (AC2)		;No, go to special routine
+	MOVEI AC1,1		;Repeat count for any special I/D routine (C100AC)
+	PUSHJ P,@-1(AC2)	;Prepare for I/D output, get output seq
+	PUSHJ P,DMOUT1		;And output it
+	SOS DMQKCT(J)		;Don't count one quicky, as usual
+	MOVE AC2,DMTABL(CHR)	;Get bits for char again
+	LDB CHR,DSER		;Get back last quicky output char, for DMXM5D
+	TLNN PROG,DM3025	;3025s don't get padding
+	TLNN PROG,PADID		;Need special DM 2500 padding algorithm?
+	JRST DMXM5D		;No (padding may be included already)
+	MOVEI AC1,DM25PA	;Routine to pad quick I/D operations on 2500
+	TLNE AC2,PDADDR		;ADD ROW char?
+	MOVEI AC1,DM25PB	;Yes, use routine to pad slower operation
+DMCALC:	LDB AC2,DMBAUD		;Get actual DMs running baud rate
+	JRST (AC1)		;Call routine to calculate padding
+
+DMBELL:	TLNE PROG,ALTBEL	;Want alternate bell form?
+	SKIPA AC2,DPCABL(PROG)	;Yes, get it
+	MOVE AC2,DPCBEL(PROG)	;Get normal bell-ringing output sequence
+	PUSHJ P,DMOUT1		;Output it
+	LDB CHR,DSER		;Get back last char of sequence
+	SOS DMQKCT(J)		;Don't really count one quicky, as usual
+	TLNN PROG,DM3025	;3025s don't get padding
+	TLNN PROG,PADID		;Pad beeps on DM 2500
+	JRST DMXM5D		;No padding (unless already included)
+	LDB AC2,DMBAUD		;Get baud rate
+	IMULI AC2,=250		;Pad for 250 msec
+DMCHPD:	IDIVI AC2,B10000	;Make number of character transmission times
+	JUMPN AC3,DMCALX	;Jump if any remainder (use original char time)
+	SOJA AC2,DMCALX		;Minus one for the original char
+
+REPEAT 0,<	;For now, use no padding on 3025s
+DM30PD:	MOVEI AC1,DM30PA	;Routine to pad quick I/D operations on 3025
+	TLNE AC2,PDADDR!PDDELR	;Add or delete row?
+	MOVEI AC1,DM30PB	;Yes, use routine from slower operations
+	JRST DMCALC		;Now calculate padding
+
+;Routine to calculate padding for ADD/DEL CHAR on DM 3025.
+DM30PA:	IMULI AC2,6		;It takes 6 msec for the 3025 to do these ops
+	JRST DMCHPD
+
+;Routine to calculate padding for ADD/DEL ROW on DM 3025.
+DM30PB:	IMULI AC2,=130		;It takes 130 msec for the 3025 to do these ops
+	JRST DMCHPD
+>;REPEAT 0
+
+;Routine to calculate padding for all I/D ops except ADD ROW on DM 2500.
+;Pentti's algorithm for quick ops.
+DM25PA:	IMULI AC2,3		;Takes 3 character transmission times at 9600
+	IDIVI AC2,BD9600	;Divide by 9600 baud
+	SOJA AC2,DMCALX		;Minus one for the original char
+
+;Routine to calculate padding for ADD ROW on DM 2500.
+;Another Pentti Kanerva algorithm
+DM25PB:	MOVNI AC1,(AC3)		;Negative of number of lines above cursor
+	ADDI AC1,=24+6		;Make it number of lines from here down + 6
+	IMUL AC2,AC1		;Times baud rate
+;	SUBI AC2,BD2400		; minus 2400
+	ADDI AC2,BD9600+BD4800-1 - BD2400 ; minus 2400, but force ceiling rounding
+	IDIVI AC2,BD9600+BD4800	;Divided by 14400
+;Padding calculation routines all exit through here
+DMCALX:	JUMPLE AC2,DMXM5D	;Jump if no padding needed
+	PUSHJ P,DMPAD		;Put out padding
+	JRST DMXM5D		;Start output
+
+;Routine to insert given number of padding chars in quicky buffer.
+;Number is specified in AC2 and must be positive; assumed less than 400 octal.
+DMPAD:	ADDM AC2,DMQKCT(J)	;Count more quickies for padding
+	CAILE AC2,8		;Quicky buffer has room for some explicit pad chars
+	JRST DMPADM		;Lots of padding needed, use different method
+	MOVE AC1,PADCNT(LINE)	;Padding char
+	IDPB AC1,DSER		;Put padding chars into quicky buffer
+	SOJG AC2,.-1
+	POPJ P,
+
+;Here we queue lots of padding by putting one char in quicky buffer with the
+;400 bit on, which bit explicitly means the char is really a padding count.
+DMPADM:	CAIL AC2,400		;can only indicate 377 pad chars at a time
+	JRST DMPAD2
+	TRO AC2,400		;Flag this quicky output byte as padding count
+	IDPB AC2,DSER		;Insert padding count in quicky buffer
+	POPJ P,
+
+;Need lots of padding -- requires at least two bytes in output stream.
+DMPAD2:	MOVEI AC1,400!377	;request 377 pad chars with this byte
+	IDPB AC1,DSER		;put padding count into quicky buffer
+	SUBI AC2,377		;reduce amt needed by amt already requested now
+	JRST DMPADM		;go request more (better not be more than 8*377)
+;⊗ DMBETW DMBET2 DMTAB DMSPA9 DMSPA8
+
+DMBETW:	SOSGE QDMCNT(TAC)
+	JRST DMBET2		;Oops, ran out of text
+	ILDB CHR,QTAKR(TAC)	;Get next char
+	CAIN CHR,11
+	POPJ P,			;Found ending tab
+	CAIN CHR,40
+	JRST DMBETW		;Ignore this space
+	JUMPE CHR,DMBETW	;Ignore nulls too
+	PUSHJ P,IGNFF		;Strange char, put it back
+DMBET2:	MOVEI CHR,11		;Set up actual tab again
+	POPJ P,
+
+DMTAB:	TLNE DAT,BETWEE		;Want to skip spaces between tabs?
+	PUSHJ P,DMBETW		;Yes, skip over them
+DMSPA9:	HLRZ AC1,AC3		;Get column position
+	MOVEI AC2,10(AC1)
+	ANDI AC2,-10		;Make it multiple of 8
+	HRLM AC2,QXY(TAC)	;Store new column position
+	CAML AC2,DPYWID(J)	;Will this pass the right margin?
+;The following instr will fail to put out a quoted tab!!!!!
+	JRST DMTAB4		;Wrapping around, omit tab and put out CRLF
+;Note--If this tab is quoted, we will very probably screw up X-Y position
+;iff the tab stops are not really where we expect them--tough.
+	TDNE DAT,[DMQUOT,,TBSSET] ;Can we output actual tab?
+	JRST DMTAB3		;Yes
+	MOVEI CHR,40		;No, use spaces
+	SUBI AC1,-1(AC2)	; - (number of spaces needed - 1)
+DMSPA8:	JUMPE AC1,DMTAB3	;If just one space, pretend normal space
+IFN FTRANGE,< JSP AC1,RANGE >	;Don't return if this xfer is out of range
+	PUSHJ P,DMPREP		;Make sure cursor at right place and ID mode off
+	HLRZ AC2,QXY(TAC)	;New column position
+	HLRZ AC1,AC3		;Old column position
+	SUBI AC2,1(AC1)		;Number of spaces - 1
+	ADDM AC2,DMQKCT(J)	;Count all spaces but 1 as quickies
+	IDPB CHR,DSER
+	SOJG AC2,.-1		;Put out 1 to 7 spaces (save one for later)
+	JRST DMNOO2
+;⊗ DMSPAC DMSPA4 DMSPA2 DMSPA3
+
+;We don't get here with quoted spaces.
+DMSPAC:	TLNE DAT,NOEEOL		;Can we erase line and convert spaces to tabs?
+	JRST DMXMT5		;Nope
+	TLC AC3,7
+	TLCE AC3,7		;Only one space to next tab stop?
+	TRNN DAT,TBSSET		;Or tabs not set?
+	JRST DMXMT5		;Yes to one of these
+	HLRZ AC2,AC3		;Get previous X position
+	ADDI AC2,1		;Update X position for first space
+DMSPA4:	SOSGE QDMCNT(TAC)
+	JRST DMSPA2		;Nothing left in queue entry--go put out spaces
+	ILDB CHR,QTAKR(TAC)
+	CAIN CHR,11		;If its a tab, just ignore preceding spaces
+	JRST DMTAB
+	CAIN CHR,40
+	JRST DMSPA3		;Collect spaces until hit a tab stop
+	PUSHJ P,IGNFF		;Back up byte pointer and count over this last char
+	MOVEI CHR,40		;Now go put out number of spaces we have accumulated
+DMSPA2:	HRLM AC2,QXY(TAC)	;Store new X position
+	HLRZ AC1,AC2		;Number of "extra" spaces
+	MOVEI AC2,(AC2)		;New X position
+	JRST DMSPA8		;Put out extras
+
+DMSPA3:	AOBJN AC2,.+1
+	TRNE AC2,7		;Have we reached a tab stop?
+	JRST DMSPA4		;No
+	MOVEI CHR,11		;Yes, simulate these spaces with a tab
+	JRST DMSPA9
+;⊗ DMLEMV DMLEM2 DMLEM3 DMLEM4
+
+;Here to adjust cursor position for line editor.
+DMLEMV:	TLNN DAT,DMXLE		;Only valid for line editor xfer
+	JRST DMXMT6		;Not legal otherwise
+	SOSGE QDMCNT(TAC)
+	JRST DMXDEQ		;Missing arg!
+	ILDB AC1,QTAKR(TAC)	;Get low-order bits of X adjustment
+	SOSGE QDMCNT(TAC)
+	JRST DMXDEQ		;Missing arg!
+	ILDB AC2,QTAKR(TAC)	;Get high-order bits of X adjustment
+	DPB AC2,[POINT 7,AC1,28];Combine bytes in AC1
+	TRNE AC1,1B22		;Negative number?
+	IOR AC1,[-1B22]		;Yes, extend sign bit
+	HLRZ AC2,AC3		;Get starting X position
+	ADD AC1,AC2		;Adjust it
+DMLEM2:	JUMPGE AC1,DMLEM3	;Jump unless moved past left margin
+	ADD AC1,DPYWID(J)
+	SOJA AC3,DMLEM2		;Back up a line
+
+DMLEM3:	CAMGE AC1,DPYWID(J)	;Pass right margin?
+	JRST DMLEM4		;No
+	SUB AC1,DPYWID(J)
+	AOJA AC3,DMLEM3		;Move down a line
+
+DMLEM4:	HRL AC3,AC1		;Combine new X and Y positions
+	MOVEM AC3,DMLEXY(J)	;Store new X-Y position in dpy hdr
+	JRST DMLEM5		;Now store X-Y in queue entry and get another char
+;⊗ DMLEFX
+
+;Routine for line editor -- inserts or deletes some spaces away from cursor.
+;First arg is numbers of chars to insert or delete, with 100 bit on iff
+;deleting; 40 bit of first arg is high-order bit of offset, whose low
+;seven bits are in the second arg -- the offset from LE cursor where
+;inserting or deleting is to take place.
+DMLEFX:	TLNN DAT,DMXLE		;This is only legal if from line editor
+	JRST DMXMT6		;Not legal otherwise
+	SOSGE QDMCNT(TAC)
+	JRST DMXDEQ		;Missing arg
+	ILDB AC2,QTAKR(TAC)	;Get first arg
+	MOVE CHR,AC2		;Remember flag of whether deleting or adding chars
+	TRZ AC2,100		;Clear add/delete flag
+	TRNN AC2,777630		;Better not be any spurious bits on in the arg
+	SOSGE QDMCNT(TAC)
+	JRST DMXMT6		;Bad first arg, or missing second arg
+	ILDB AC1,QTAKR(TAC)	;Get second arg, which is offset from LE cursor
+	TRZE AC2,40		;Is offset bigger than fits in one byte?
+	IORI AC1,200		;Yes, turn on high-order bit in offset
+	JUMPE AC2,DMXMT6	;Zero correction count can't happen
+	PUSH P,AC2		;Save the number of chars to insert or delete
+	HLRZ AC2,AC3		;Get current X position
+	ADDI AC2,(AC1)		;Adjust it appropriately
+	CAMGE AC2,DPYWID(J)	;Did it go past end of screen?
+	JRST .+3		;No
+	SUB AC2,DPYWID(J)	;Yes, wrap around to next line
+	AOJA AC3,.-3
+	HRL AC3,AC2		;New X position back into position word for DMPREP
+	MOVEM AC3,QXY(TAC)	;Store it where DMXM5D will copy into DMXY
+	MOVEM DAT,DMLEFL(J)	;Store LE flags in case they have changed this xfer
+	TLZ DAT,DMATXY!DMXLE	;Don't let it store in DMLEXY, nor flags in DMLEFL
+	TRNE CHR,100		;Deleting or adding chars?
+	PUSHJ P,DELCHR		;Wants to delete some chars, get seq in AC2, set ID
+	MOVE AC1,(P)		;Get repeat count for C100AC
+	TRNN CHR,100		;Deleting or adding chars?
+	PUSHJ P,ADDCHR		;Wants to add some chars, get seq in AC2, set ID
+	POP P,AC1		;Get repeat count for inserting or deleting char
+	JRST DMLEF3		;Go repeat the output sequence using RPTCNT, etc.
+;⊗ DMLEDE DMLEF3 DMBLNK DMEMPH DMCANC DMID ADDCHR ADDCH2 DELCHR DELCH2 ADDROW ADDRO2 DELROW DELRO2 DMUP DMFOR3 DPEEOL DPEEO2 DMEEOL DMLED2 DMSTAB DMLED1
+
+;Routine for deleting chars from line editor.
+DMLEDE:	TLNN DAT,DMXLE		;Only valid for line editor xfer
+	JRST DMXMT6		;Not legal otherwise
+	SOSGE QDMCNT(TAC)
+	JRST DMXDEQ		;Oops, this ain't supposed to happen
+	PUSHJ P,DELCHR		;Turn on ID mode if necessary, get output seq
+	ILDB AC1,QTAKR(TAC)	;Get count of chars to delete
+DMLEF3:	SUBI AC1,1		;Sequence is output once normally
+	MOVNM AC1,RPTCNT(J)	;Number of times to restart this string
+	MOVEM DSER,RPTPTR(J)	;Byte pointer to beginning of string
+	MOVN AC3,DMQKCT(J)	;Figure size of repeat string by change in count
+	PUSHJ P,DMOUT1		;Output the sequence to quicky buffer
+	ADD AC3,DMQKCT(J)	;-old+new = number of chars in repeat string
+	SUBI AC3,1		;When repeating, first char isn't counted down
+	MOVEM AC3,RPTSIZ(J)	;Store size for each repetition
+	JRST DMLED2		;Uncount one output char, load last char, go.
+
+DMBLNK:	TLOA DAT,BLNKON		;Enable blinking mode (ugh)
+DMEMPH:	TLO DAT,EMPHON		;Enable emphasis mode
+	JRST DMXMT6
+
+DMCANC:	TLZ DAT,BLNKON!EMPHON!IDON ;Clear all kinds of modes
+	JRST DMXMT6
+
+DMID:	TLO DAT,IDON		;Enter ID mode
+	JRST DMXMT6
+
+ADDCHR:	SKIPE AC2,DPCACX(PROG)	;Any special routine to call for insert char?
+	PUSHJ P,(AC2)		;Yes, call it (and skip if ends w/cursor set)
+	 PUSHJ P,DMCUR0		;Position cursor if necessary
+	SKIPE AC2,DPCID(PROG)	;Get ID mode setting sequence, if any
+	TRNN UCHN,DRFACI	;Skip if Insert Char needs ID mode on
+	JRST ADDCH2		;No mode setting needed right now
+	TRON DAT,IDON		;Is terminal already in ID mode?
+	PUSHJ P,DMOUT1		;No, put it in ID mode now
+ADDCH2:	MOVE AC2,DPCADC(PROG)	;Get output seq to insert char
+	POPJ P,
+
+DELCHR:	PUSHJ P,DMCUR0		;Position the cursor if necessary
+	SKIPE AC2,DPCID(PROG)	;Get ID mode setting sequence, if any
+	TRNN UCHN,DRFDCI	;Skip if Delete Char needs ID mode on
+	JRST DELCH2		;No mode setting needed right now
+	TRON DAT,IDON		;Is terminal already in ID mode?
+	PUSHJ P,DMOUT1		;No, put it in ID mode now
+DELCH2:	SKIPE AC2,DPCDCX(PROG)	;Any special routine to call to make this work?
+	PUSHJ P,(AC2)		;Yup, call it
+	MOVE AC2,DPCDLC(PROG)	;Get output seq to delete char
+	POPJ P,
+
+ADDROW:	PUSHJ P,DMCUR0		;Position cursor if necessary
+	SKIPE AC2,DPCID(PROG)	;Get ID mode setting sequence, if any
+	TRNN UCHN,DRFARI	;Skip if Insert Row needs ID mode on
+	JRST ADDRO2		;No mode setting needed right now
+	TRON DAT,IDON		;Is terminal already in ID mode?
+	PUSHJ P,DMOUT1		;No, put it in ID mode now
+ADDRO2:	MOVE AC2,DPCADR(PROG)	;Get output seq to insert row
+	POPJ P,
+
+DELROW:	PUSHJ P,DMCUR0		;Position cursor if necessary
+	SKIPE AC2,DPCID(PROG)	;Get ID mode setting sequence, if any
+	TRNN UCHN,DRFDRI	;Skip if Delete Row needs ID mode on
+	JRST DELRO2		;No mode setting needed right now
+	TRON DAT,IDON		;Is terminal already in ID mode?
+	PUSHJ P,DMOUT1		;No, put it in ID mode now
+DELRO2:	MOVE AC2,DPCDLR(PROG)	;Get output seq to delete row
+	POPJ P,
+
+	DELROW			;DMXMT4 dispatches thru here to delete row
+DMUP:	HRRZ AC1,AC3
+	SOJL AC1,DMXMT6		;Can't move up from top line, get next char
+	HLL AC1,AC3		;Maintain same X position
+	TLO DAT,CHASTE		;New virgin output line waiting
+	MOVEM AC1,QXY(TAC)	;Store new Y position
+DMFOR3:	TLNE DAT,DMATXY		;Is X-Y position stored somewhere special?
+	MOVEM AC1,@QXYLOC(TAC)	;Yes, store new Y position there
+	HLRM DAT,QFLAGS(TAC)	;Save transfer dependent flags
+	JRST DMXMT6		;Get next char from this xfer
+
+;Here to do right stuff to erase to end of line.  Maybe need emphasis off.
+DPEEOL:	TRNE UCHN,DRFCLE	;Does this terminal need emphasis off on cl-eol?
+	TRNN DAT,EMPHON		;Yes, is emphasis on now?
+	JRST DPEEO2		;No to one of these
+	TDZ DAT,DPCBCL(PROG)	;Yes, clear bits for modes this will clear
+	MOVE AC2,DPCMCL(PROG)	;Get output sequence to clear modes
+	PUSHJ P,DMOUT1		;Clear terminal modes, including emphasis
+DPEEO2:	MOVE AC2,DPCEOL(PROG)	;Erase to end-of-line char sequence
+	JRST DMOUT1		;Erase line and return
+
+;Here on explicit command char to erase to end of line.
+DMEEOL:	PUSHJ P,DMPOSC		;Make sure cursor at right place
+	 JRST DMXM5D		;Off-screen, avoid some work
+	TLZ DAT,CHASTE		;Remember that the line has been erased
+	PUSHJ P,DPEEOL		;Do right stuff to erase to end of line
+DMLED2:	SOS DMQKCT(J)		;As usual, don't count one quicky
+	LDB CHR,DSER		;Get back last character of quickies
+	JRST DMXM5D		;Now put out some quickies
+
+;Here to set tabs.  Only legal for system from LEPDM2.
+DMSTAB:	HLRZ AC1,QFREE(TAC)	;See if there is a routine to call when done
+	CAIN AC1,TBDONE		;Skip if not the system's official tab setting
+	SKIPN DPCTBS(PROG)	;Skip if terminal actually has settable tabs
+	JRST DMXMT6		;Ignore command
+	TLNN AC3,-1		;Don't bother setting tabs in col 0 (wraparound)
+	JRST DMXMT6		;Ignore command
+	PUSHJ P,DMCUR0		;Make sure cursor is positioned right
+	MOVE AC2,DPCTBS(PROG)	;Get tab setting command
+DMLED1:	PUSHJ P,DMOUT1		;And output it
+	JRST DMLED2		;Finish up and start output
+;⊗ DMCR3 DMLF2 DMLF3 DMCR4 DMTAB4 DMCR DMTAB5 DMLF5 DMLF DMLF1 C100DC C100AC C100A2
+
+;Routine to adjust known line position down a line, checking for reaching bottom.
+;Skips unless at bottom where moving down would cause screen to scroll.
+DMCR3:	HRRZS QXY(TAC)		;Back to column 0
+DMLF2:	HRRZ AC2,AC3		;Get screen line number
+	ADDI AC2,1
+	CAMGE AC2,DPYHGT(J)	;To bottom of screen?
+	JRST DMLF3		;No
+	TLNE DAT,USERGO		;Can only wrap around to top in uninterruptible user prog
+	MOVEI AC2,0		;Wrap around to top
+	TRNN UCHN,DRFAUS	;Skip if LF off bottom automatically scrolls
+DMLF3:	AOS (P)			;All OK, take success return
+	HRRM AC2,QXY(TAC)	;Save new line number
+	TLO DAT,CHASTE		;Mark new line as untouched
+	POPJ P,
+
+;Subroutine for CR and LF to make sure line we're leaving has been erased.
+DMCR4:	PUSHJ P,DMPOSC		;Make sure cursor positioned correctly
+	 POPJ P,		;Off screen, don't try outputting anything
+	TLNE DAT,CHASTE		;Need to erase this line we are leaving?
+	TLNE DAT,DMQUOT!NOEEOL!NOEEOB	;Here with CR ending blank line
+	JRST DMCKMD		;No erase, but make sure modes (ID) right
+	PUSHJ P,DPEEOL		;Do right stuff to erase to end of line
+	JRST DMCKMD		;Now make sure modes right for the CR or LF
+
+DMTAB4:	PUSHJ P,DMCR4		;Erase line we are leaving, if necessary
+	TLNE DAT,TRUNCA		;Want to suppress stuff beyond last screen col?
+	PUSHJ P,IGNOR0		;Yes, look for CR or LF--skip return unless hit CR
+	 PUSHJ P,SKIPCR		;Skip over any following CRs and/or LF
+	JRST DMTAB5		;Put out CRLF instead of tab
+
+DMCR:
+;bugfix;HLL AC3,DMXY(J)		;We don't really care if X position is wrong
+	PUSHJ P,DMCR4		;Erase line we are leaving, if necessary
+	PUSHJ P,SKIPCR		;Skip over any following CRs and/or LF
+DMTAB5:	PUSHJ P,DMCR3		;Adjust X-Y position to beginning of next line
+DMLF5:	 SOSA AC1,DMQKCT(J)	;Would scroll if put out CRLF, so suppress it
+	JRST DMCR6		;Stuff actual CRLF in quicky buffer
+	JUMPGE AC1,DMXM5D	;Jump if any output (erase) needed
+	TRO DAT,BELOWS		;Prevent output attempt
+	JRST DMXM5D		;Store cursor position and flags
+
+	ADDROW			;DMXMT4 dispatches thru here to insert row
+DMLF:	TLNN DAT,DMXLE		;Skip if this bare LF is from line editor
+	JRST DMLF1		;Not line editor, output normally
+	TLO DAT,NOEEOL		;Don't ever erase any lines now
+	JRST DMXMT6		;Ignore this bare LF from line editor
+
+DMLF1:	PUSHJ P,DMCR4		;Erase line we are leaving, if necessary
+	PUSHJ P,DMLF2		;Adjust Y position down a line
+	 JRST DMLF5		;Don't transmit the LF, see if need erase
+	JRST DMLF4		;Output the LF
+
+;Here to make sure there are no "secure spaces" on the current C-100 line.
+;Any such "secure spaces" would stop the current delete-char command from
+;reaching the end of the line.
+;Come here before deleting or inserting char.
+C100DC:	MOVEI AC2,33
+	IDPB AC2,DSER
+	MOVEI AC2,"J"		;Set attribute of block, to non-secure
+	IDPB AC2,DSER
+	MOVEI AC2,100+1		;Mask for attribute to be affected plus offset
+	IDPB AC2,DSER
+	MOVEI AC2,100+0		;Value (off) of the non-display attribute + offset
+	IDPB AC2,DSER
+	MOVEI AC2,40+1		;Affect one line only (plus offset)
+	IDPB AC2,DSER
+	HLRZ AC2,AC3		;Current X position
+	SUB AC2,DPYWID(J)	;..minus line width is minus col count to eol
+	MOVNI AC2,-40+1(AC2)	;Positive col count before eol, plus offset
+	IDPB AC2,DSER
+	MOVEI AC2,6
+	ADDM AC2,DMQKCT(J)	;Count all these quickies
+	POPJ P,
+
+;Special C100 routine prepatory to inserting a char.
+;Do an erase to eol at eol to stop insert from wrapping around,
+;then make sure insert won't stop before eol because of secure spaces.
+C100AC:	PUSH P,AC3		;Remember where to insert the char later
+	MOVE AC2,DPYWID(J)	;Want to move to end of line
+	SUBI AC2,(AC1)		;AC1 contains number of chars we'll be inserting
+	HRLI AC3,(AC2)		;Cols count from 0 to width-1
+	PUSHJ P,DMCUR0		;Position to end of line
+	MOVE AC2,DPCEOL(PROG)	;Get seq to erase to end of line
+	PUSHJ P,DMOUT1		;Output it, forcing next insert to stop at eol
+	CAMN AC3,(P)		;Maybe we're already there (we're at eol)
+	JRST C100A2		;Yup, so insert can't stop before eol!
+	EXCH AC3,DMXY(J)	;Store position we just reached, save old one
+	EXCH AC3,(P)		;Get desired pos in AC3, old pos onto stack
+	PUSHJ P,DMCURS		;Position cursor back at spot for insert
+	PUSHJ P,C100DC		;Make sure insert won't stop before eol
+	POP P,DMXY(J)		;Restore old cursor position
+	AOS (P)			;Skip return to avoid setting cursor again
+	POPJ P,
+
+C100A2:	SUB P,[1,,1]		;Flush duplicate cursor position from stack
+	AOS (P)			;Skip return to avoid setting cursor again
+	POPJ P,
+;⊗ DMCUR0 DMCURS DMCUR2 DMCU22 DMXR2 DMOUT2 DMXL1 DMXR1 DMCUR4 DMYU2 DMYD1 DMYU1 DMCUR5 DMCERR DCPBEG DM25CU HP26CU V102CU AMBACU C100CU TVIDCU DCPEND HEATCU DM52CU TELECU TELEC2 DMCUR3 DMOUT0 DMOUT1 DMPOSC DMPRE1 DMPR1A DMPRE2 DMPREP DMCKMD DMPR20 DMPR2A DMPR22 DMPRE3 DMPRE4 DMPR6A DMPRE7 DMPRE8
+
+DMCUR0:	HRRZ AC2,AC3		;Get line number
+	CAML AC2,DPYHGT(J)	;Is it on screen?
+	JRST DMPRE1		;No, set flag to suppress output of anything
+	TRZ DAT,BELOWS		;Transfer is on screen
+	CAMN AC3,DMXY(J)	;Skip if cursor not yet positioned right
+	POPJ P,
+DMCURS:	TLNE PROG,NOIDCU	;Skip if can't position while in ID mode
+	TRNN DAT,IDON		;Cannot position while in ID mode
+	JRST DMCUR2
+	SKIPE AC2,DPCCID(PROG)	;Get sequence to clear ID mode, if any
+	PUSHJ P,DMOUT1		;Output it
+	TDZ DAT,DPCCIB(PROG)	;Clear bits for all modes that clears
+repeat 0,< ;old way to clear ID mode, only worked for DM 2500s (uses CANCEL)
+;;	TRZ DAT,EMPHON!BLNKON!IDON
+;;	MOVEI AC1,CANCEL
+;;	IDPB AC1,DSER		;Turn 'em all off--it's the only way, sigh
+;;	AOS DMQKCT(J)		;Count a quicky
+>;repeat 0
+DMCUR2:	JUMPE AC3,DMCUR3	;If positioning to upper left corner, use home char
+DMCU22:
+IFN 1,<
+	HRRZ AC1,DMXY(J)	;Old Y
+	HLRZ AC2,DMXY(J)	;Old X
+	CAIE AC1,(AC3)		;Right line?
+	JRST DMCUR4		;No
+	HLRZ AC1,AC3		;Yes, get new X
+	CAIN AC1,1(AC2)
+	JRST DMXR1		;Need to move right one
+	CAIN AC1,-1(AC2)
+	JRST DMXL1		;Need to move left one
+	CAIN AC1,2(AC2)
+	JRST DMXR2		;Need to move right two
+	CAIE AC1,-2(AC2)
+	JRST DMCUR5
+	SKIPA AC2,DPCLFT(PROG)	;Need to move left two
+DMXR2:	MOVE AC2,DPCRGT(PROG)	;Move right
+	JUMPE AC2,DMCUR5	;Jump if dump terminal can't move like that
+DMOUT2:	PUSH P,AC2		;Save output sequence, clobbered by DMOUT1
+	PUSHJ P,DMOUT1		;Output it once
+	POP P,AC2
+	JRST DMOUT1		;And output it again
+
+DMXL1:	SKIPA AC2,DPCLFT(PROG)	;Move left one
+DMXR1:	MOVE AC2,DPCRGT(PROG)	;Move right one
+	JUMPN AC2,DMOUT1
+	JRST DMCUR5		;Dumb terminal can't move cursor that way
+
+DMCUR4:	HLRZ AC1,AC3		;New X
+	CAIE AC1,(AC2)		;Right column?
+	JRST DMCUR5		;No, must use cursor positioning command
+	HRRZ AC1,DMXY(J)	;Old Y
+	CAML AC1,DPYHGT(J)	;Is it beyond bottom of screen?
+	JRST DMCUR5		;Yes, don't be fooled by having wrapped around
+	CAIN AC1,1(AC3)
+	JRST DMYU1		;Need to move up one
+	CAIN AC1,-1(AC3)
+	JRST DMYD1		;Need to move down one
+	CAIN AC1,2(AC3)
+	JRST DMYU2		;Need to move up two
+	CAIE AC1,-2(AC3)
+	JRST DMCUR5
+	SKIPA AC2,DPCDWN(PROG)	;Need to move down two
+DMYU2:	MOVE AC2,DPCUP(PROG)	;Move up two
+	JUMPN AC2,DMOUT2
+	JRST DMCUR5		;Dumb terminal can't move that way
+
+DMYD1:	SKIPA AC2,DPCDWN(PROG)	;Move down one
+DMYU1:	MOVE AC2,DPCUP(PROG)	;Move up one
+	JUMPN AC2,DMOUT1
+>;1
+DMCUR5:	HRRZ AC2,DPCPOS(PROG)	;Address of routine to call to position cursor
+	CAIL AC2,DCPBEG		;Make sure it is valid address
+	CAILE AC2,DCPEND
+	JRST DMCERR		;Invalid cursor dispatch!!!!!
+	JRST (AC2)		;Use positioning routine for specific terminal
+
+DMCERR:	PUSHACS
+	PUSHJ P,DISGST		;PRINT TIME OF MESSAGE ON CTY
+	PUSHJ P,DISERR
+	[ASCIZ/Cursor routine dispatch out of bounds at DMCUR5: /]
+	DISARG LOC,<AC2-20(P)>	;Print illegal dispatch address
+	[ASCIZ/, TTY/]
+	-1
+	HRRZ TAC,PRGNUM(J)	;Get tty number
+	PUSHJ P,DISLOC
+	PUSHJ P,DISCRLF
+	PUSHJ P,DISFLU
+	POPACS
+	PUSHJ P,WDDTCAL
+	HRRZ AC2,PRGNUM(J)	;Get tty number
+	MOVE PROG,DPYDFT	;Get default dpy descriptor data
+	MOVEM PROG,DPYDES(AC2)	; so that we won't have this problem again
+	JRST DMCUR5		;Now again try to position the cursor
+
+DCPBEG::	;Beginning of cursor positioning routines for various terminals
+;Cursor positioning routine for DM 2500.  Outputs FF X Y.
+DM25CU:	XOR AC3,[140,,140]	;Convert X-Y position to char format
+	HLRZ AC2,AC3
+	MOVEI AC1,14
+	IDPB AC1,DSER		;FF
+	IDPB AC2,DSER		;X-Pos
+	IDPB AC3,DSER		;Y-Pos
+	XOR AC3,[140,,140]	;Restore position word
+	MOVEI AC1,3
+	ADDM AC1,DMQKCT(J)	;Count three quickies to be output
+	POPJ P,
+
+;Cursor positioning routine for HP 2648A.  Outputs ESC & a 0 0 c 0 0 Y.
+HP26CU:	MOVEI AC1,33
+	IDPB AC1,DSER
+	MOVEI AC1,"&"
+	IDPB AC1,DSER
+	MOVEI AC1,"a"
+	IDPB AC1,DSER
+	HLRZ AC1,AC3		;desired X position
+	IDIVI AC1,=10
+	ADDI AC1,"0"
+	IDPB AC1,DSER
+	ADDI AC2,"0"
+	IDPB AC2,DSER
+	MOVEI AC1,"c"		;column select just ended
+	IDPB AC1,DSER
+	MOVEI AC1,(AC3)		;desired Y position
+	IDIVI AC1,=10
+	ADDI AC1,"0"
+	IDPB AC1,DSER
+	ADDI AC2,"0"
+	IDPB AC2,DSER
+	MOVEI AC1,"Y"		;row select just ended
+	IDPB AC1,DSER
+	MOVEI AC1,9
+	ADDM AC1,DMQKCT(J)	;number of quickies we just inserted
+	POPJ P,
+
+;Cursor positioning routine for DEC VT102.  Same as for Ambassador.
+V102CU:
+;Cursor positioning routine for Ambassador.  Outputs ESC [ 0 0 ; 0 0 f.
+AMBACU:	MOVEI AC1,33
+	IDPB AC1,DSER
+	MOVEI AC1,"["
+	IDPB AC1,DSER
+	MOVEI AC1,1(AC3)	;desired Y position (starting at 1)
+	IDIVI AC1,=10
+	ADDI AC1,"0"
+	IDPB AC1,DSER
+	ADDI AC2,"0"
+	IDPB AC2,DSER
+	MOVEI AC1,";"
+	IDPB AC1,DSER
+	HLRZ AC1,AC3		;desired X position
+	ADDI AC1,1		;starts at 1
+	IDIVI AC1,=10
+	ADDI AC1,"0"
+	IDPB AC1,DSER
+	ADDI AC2,"0"
+	IDPB AC2,DSER
+	MOVEI AC1,"H"		;end of position spec
+	IDPB AC1,DSER
+	MOVEI AC1,8
+	ADDM AC1,DMQKCT(J)	;number of quickies we just inserted
+	POPJ P,
+
+C100CU:	MOVEI AC1,33
+	IDPB AC1,DSER
+	MOVEI AC1,"a"
+	IDPB AC1,DSER
+	MOVEI AC1,40(AC3)	;desired Y position, plus offset
+	IDPB AC1,DSER
+	HLRZ AC1,AC3		;desired X position
+	ADDI AC1,40
+	IDPB AC1,DSER
+	MOVEI AC1,4	
+	ADDM AC1,DMQKCT(J)	;number of quickies we just inserted
+	POPJ P,
+
+
+;Cursor position routine for Televideo.  Outputs ESC = y x.
+TVIDCU:	MOVEI AC1,33
+	IDPB AC1,DSER
+	MOVEI AC1,"="
+	JRST TELEC2
+
+DCPEND::	;Last cursor positioning routine for specific terminal
+;Cursor position for Heath 19, same as Teleray
+HEATCU:
+;Cursor position for Datamedia 3052 (sic).  Same as others.
+DM52CU:
+;Cursor positioning routine for Teleray 1000 series.  Outputs ESC Y x y.
+TELECU:	MOVEI AC1,33
+	IDPB AC1,DSER
+	MOVEI AC1,"Y"
+TELEC2:	IDPB AC1,DSER
+	MOVEI AC1,40(AC3)	;desired Y position, plus offset
+	IDPB AC1,DSER
+	HLRZ AC1,AC3		;desired X position
+	ADDI AC1,40
+	IDPB AC1,DSER
+	MOVEI AC1,4	
+	ADDM AC1,DMQKCT(J)	;number of quickies we just inserted
+	POPJ P,
+;Don't put arbitrary cursor positioning routines starting beyond DPCEND above.
+
+
+DMCUR3:	SKIPN AC2,DPCHOM(PROG)	;Go to upper left corner
+	JRST DMCU22		;No home command, do it hard way
+	JRST DMOUT1		;Output home command
+
+;Enter at DMOUT1 to output one copy of the sequence in AC2.
+DMOUT0:	LSHC AC1,NBTSEQ		;Get next char in sequence into AC1
+	IDPB AC1,DSER		;Output one char of sequence
+	AOS DMQKCT(J)		;Count another quicky ready to go
+↑DMOUT1:TLZE AC2,400000
+	JRST DMOUT0
+	TLNN AC2,377000		;Is there anything in this byte at all?
+	POPJ P,			;No char here, end of sequence
+	MOVEI AC1,0		;Get remaining 8-bit byte into AC1
+	LSHC AC1,NBTSEQ		;This is the padding count, for 9600 baud
+	LDB AC2,DMBAUD		;Get actual terminal baud rate
+	IMULI AC1,(AC2)		;Provide padding proportional to baud rate
+	IDIVI AC1,BD9600	;Default padding is for 9600 baud
+	JUMPE AC1,CPOPJ		;Jump if no padding needed beyond one cmd char
+	JUMPN AC2,.+2		;Jump if any partial padding char needed
+	SOJLE AC1,CPOPJ		;Default padding count includes one cmd char
+	MOVE AC2,AC1		;Padding count for next routine
+	JRST DMPAD		;Go queue the padding
+
+;Position cursor and skip unless transfer is off-screen.
+DMPOSC:	HRRZ AC2,AC3		;Get line number
+	CAML AC2,DPYHGT(J)	;Is it on screen?
+DMPRE1:	TROA DAT,BELOWS		;No, set flag to suppress output of anything
+	TRZA DAT,BELOWS		;Flag transfer on screen
+	POPJ P,
+	TLNN DAT,PROTLE		;Want to avoid overwriting the line editor?
+	JRST DMPRE2		;No
+	SKIPGE LETAB(LINE)	;Is the line editor non-empty?
+	SKIPL AC2,LEPOS(J)	;Yes, Is the line editor positioned by LEYPOS
+	JRST DMPRE2		;No, go on
+	HRRZ AC1,LELINE(J)
+	SKIPN LECLK(J)		;Yes, is LELINE valid?
+	JRST DMPR1A		;Yes, use it
+REPEAT 0,<	;DON'T DELETE THIS CODE -- IT MAY COME BACK SOMEDAY SOON
+	LDB AC1,[POINT 11,AC2,21] ;Get user-specified position
+	TRNE AC1,1⊗=10		;Negative?
+	OR AC1,[-1⊗=10]		;Yes, extend sign
+>;REPEAT 0
+	HRRE AC1,LEYVAL(J)	;GET 18-BIT LINE EDITOR Y-POSITION FROM LEYPOS
+	EXCH AC1,AC3
+	PUSHJ P,POSLD2		;Convert to text line number
+	EXCH AC1,AC3		;User line in AC1, current position into AC3
+DMPR1A:	HRRZ AC2,NCRS(J)
+	ADD AC2,AC1		;Ending line of line editor
+	CAIG AC1,1(AC3)
+	CAIGE AC2,1(AC3)
+	JRST DMPRE2
+	JRST DMPRE1		;Don't really do the output
+
+DMPRE2:	CAME AC3,DMXY(J)	;Are we at correct initial cursor position?
+	PUSHJ P,DMCURS		;No, position cursor
+	JRST CPOPJ1		;Skip return means transfer on screen
+
+;Check for off screen, position cursor, set modes
+DMPREP:	PUSHJ P,DMPOSC		;Check for off screen, position cursor if OK
+	 POPJ P,		;Off screen
+DMCKMD:	TRNE DAT,IDON		;First, see if we need to clear ID mode
+	TLNE DAT,IDON		;Terminal is in ID mode, skip if don't want ID
+	JRST DMPR20		;Don't need to clear ID mode
+	SKIPE AC2,DPCCID(PROG)	;Get sequence to clear ID mode, if any
+	PUSHJ P,DMOUT1		;Output it
+	TDZ DAT,DPCCIB(PROG)	;Clear bits for all modes that clears
+DMPR20:	HLRZ AC1,DAT		;See if modes are all set correctly
+	TLNE PROG,NOBOLD
+	JRST DMPR2A		;Poor guy has inferior DM, don't hypnotize him
+	TLNE DAT,DMXLE		;Line editor transfer?
+	XORI AC1,EMPHON		;Yes, invert emphasis
+DMPR2A:	TRNE CHR,CTRLCH		;Is this a non-displayable control character?
+	XORI AC1,EMPHON		;Yes, invert emphasis
+	XORI AC1,(DAT)
+	AND AC1,DPCMOD(PROG)	;Keep only the mode bits that exist
+	TRNE UCHN,DRFMEM	;Terminal always need emphasis diddled if
+	CAMN AC3,DMXY(J)	; cursor positioned? and did cursor move?
+	JRST DMPR22		;No, no special hack needed
+	TRNE AC1,EMPHON		;Emphasis seem wrong already?
+	JRST DMPR22		;Yes, then it will already get output
+	TRC DAT,EMPHON		;No, make it look like it was wrong all along
+	TROA AC1,EMPHON		;Make it look definitely wrong now
+DMPR22:	JUMPE AC1,CPOPJ		;Any modes in wrong sense?
+	TRNN AC1,(DAT)		;Yes, any on that should be off?
+	JRST DMPRE3		;No
+	TDZ DAT,DPCBCL(PROG)	;Yes, clear bits for modes this will clear
+	MOVE AC2,DPCMCL(PROG)	;Get output sequence to clear modes
+	PUSHJ P,DMOUT1		;Clear terminal modes
+DMPRE3:	TLNE DAT,BLNKON		;Skip unless want blinking
+	SKIPN AC2,DPCBLI(PROG)	;Skip if this terminal has blinking
+	JRST DMPRE4
+	TRON DAT,BLNKON		;Skip if blinking already on
+	PUSHJ P,DMOUT1		;Turn on blinking
+DMPRE4:	TLNE PROG,NOBOLD
+	JRST DMPR6A		;Poor guy has inferior DM, don't hypnotize him
+	TLNE DAT,DMXLE
+	TRC CHR,CTRLCH		;Invert emphasis of line editor
+DMPR6A:	TRZN CHR,CTRLCH		;Is this a non-displayable control char?
+	JRST DMPRE7
+	TLNE DAT,EMPHON		;Yes, emphasize only if not normally emphasized
+	POPJ P,			;Normally emphasized, but not this time
+	JRST DMPRE8
+
+DMPRE7:	TLNE DAT,EMPHON		;Is emphasis supposed to be on for this xfer?
+DMPRE8:	SKIPN AC2,DPCSEM(PROG)	;Skip if this terminal has emphasis
+	POPJ P,
+	TLNE PROG,ALTEMP	;Are we using alternate emphasis?
+	MOVE AC2,DPCSAE(PROG)	;Yes
+	TRON DAT,EMPHON		;Skip if emphasis already on
+	JRST DMOUT1		;Turn on emphasis
+ 	POPJ P,

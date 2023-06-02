@@ -1,0 +1,4533 @@
+COMMENT ⊗   VALID 00084 PAGES
+C REC  PAGE   DESCRIPTION
+C00001 00001
+C00011 00002		title	TCPSer  VTCPSr 
+C00012 00003	\
+C00013 00004		subttl	compilation control
+C00014 00005		subttl	TCP states  S%Clos S%List S%SynS S%SyRP S%SyRA S%Estb S%Fin1 S%Fin2 S%Clsn S%TimW S%ClsW S%LAck
+C00016 00006		subttl	macro for dispatching on different states  Dispat  ...min ...max ...flg ...x ...flg ...x
+C00020 00007		subttl	defintions describing a TCP leader  TcpLen TCPIBH TCPIBf TCPObf TCPPnt TCPFlg TC%Urg TC%Ack TC%Psh TC%Rst TC%Syn TC%Fin TC%Low TC%ALL TC%Onc
+C00024 00008		subttl	definitions  TC$ACK TCPMax WndSiz StartT WndSiz TCPUTT TCPRTT RTMin RTMax AckTst PrbTim
+C00027 00009		subttl	FMB
+C00030 00010		subttl	process incoming TCP message  TCPIn TCPIn0 TCPNCk RedCnt NewLst
+C00038 00011		subttl	now parse options  OptnLp OptDis OptEOL OptNop OptMSS OptMax OptSeg OptDun NoOptn
+C00042 00012	 here to process the message with DDB in tow.  FuturL NoFutr NoFut1
+C00047 00013		subttl	process a connection which has no DDB  NewCon NewCo1 NEWCO2 NowCon PLsSn NotExc
+C00055 00014	ROUTINE TO CHECK LEGALITY OF AN EXEC Well Known Port.  WKPFND WKPFN1 WKPSRV WKPSRV WKPNUM WKPSKT WKPTFC
+C00059 00015	 here to process one message.  this may be hot off the presses or it  PrcMsg
+C00062 00016	 here to check for the segment starting in the window  WndFit
+C00065 00017	 here to check for a segment finishing in the window  WndEnd FlsLp FlsBa1 FlsBad
+C00069 00018	 at this point we have a message which starts and ends within  InWind
+C00072 00019	 deal with the urgent pointer, if there is one  TCPUrg
+C00074 00020	 message chain is in P1. left half: first buffer, right half: last buffer.  TCPTxt TCPTx1
+C00076 00021	 here to check for a FIN and handle it  TCPFin TCPFi0 TCPFi1
+C00080 00022	FINF2:	movei	t1,2*MSL		 load up twice maximum segment life  FINF2 FINTW
+C00082 00023	 here if we received a segment for a connection that doesn't exist  TryRst RstFls SndRst
+C00084 00024	 here if we received a segment while listening for one  InLstn AckAck AckAc1
+C00090 00025	 here if received a segment for a connection in SYN-SENT state  InSynS InSyn1 InSyn2
+C00094 00026	
+C00095 00027		subttl	returns  NoLead NoMess BadChk FlsOpt NoPort NoDDB BadCon NoIPCF NoITY AckErr UrgErr FinErr SeqBad BufFls FlsRst RstSRP RstBTL RstSRA RstEst RstCls FlsSyn
+C00101 00028		subttl	routines to handle an ACK in various states  ACKSyR ACKEst AckEs1 ACKF1 ACKCln ACKLAc ACKTW
+C00108 00029		subttl	AckUpd  ACKUpd AckWnd Not0Wn Allc1 NoAllc RetrLp RetrNo RetrD0 RetrDn
+C00118 00030		subttl	deal with a message received before it should be  NotNxt FtrOrd FtrOr1 FtrRpl FtrOr2 FtrNew FtrSav
+C00122 00031	 routine to get an FMB, return it in T1  GetFMB RelFMB FlsFMB FlsFM1
+C00124 00032		subttl	GetISS  GetISS
+C00126 00033		subttl	SecChk  SecChk
+C00127 00034		subttl	TCPMak  TCPMak TCPMa1 MakCnt
+C00134 00035		subttl	TCPRsp  TCPRsp RspEnd
+C00137 00036		subttl	TCPIFn  TCPIFn TCPIF1
+C00140 00037		subttl	TCPICK  TCPICK
+C00142 00038		subttl	TCPOCK  TCPOCK
+C00144 00039		subttl	TCPTCk  TCPTCk
+C00146 00040		subttl	TCPWUp  TCPWUp
+C00148 00041		subttl	SetUrg  SetUrg
+C00150 00042		subttl	TCPCls  TcpCls
+C00151 00043		subttl	TCPPsh  TcpPsh
+C00153 00044		subttl	TcpChk  TCPChk EndWt TCPCRT TCPRTR RtLoop RtZero RtNxt TCPCUT TCPUTO
+C00161 00045	IFWAITS<
+C00163 00046	NOWAITS< Not needed  TCPRst TCPRs1
+C00165 00047	USER INTERFACE (IMPUUO)  CALL FLAGS IF.NWT IF.PRV IF.ALS TIMEOUT E .UUDEV .UUSTT .UUSKT .UUHST .UURMT .UULST PUUTIM sk.lcl FreOvr FreLsh FrePrt FreMin FreMch
+C00168 00048	NOWAITS<  IMPUUO IMPUU1 ImpUU2 ImpUU3 ImpUU4
+C00171 00049	MACRO FOR BUILDING THE DISPATCH TABLE  ZZ ZZ ZZ ZZ UU.PVN UU.PVI UU.ASD UU.NDB UU.INT UU.DNU uu.NUp
+C00173 00050	THE DISPATCH TABLE  UUOTAB UUOLEN
+C00176 00051		ERROR CODES   --  RETURNED IN E+1 ON NON-SKIP RETURN  ERRLST ERRLST ERRXIT ErrSet DURErr
+C00181 00052	NOWAITS<  TRANS RAISS KILLS VERSS INISS IFRSTR
+C00183 00053	Still NOWAITS
+C00185 00054	Still NOWAITS  XSTSS XSTSS0 XSTSS1 XSTSTB XSTBLN XSTSS
+C00188 00055	Still NOWAITS  STATS STATS0 STATS9 STATS1
+C00190 00056	Still NOWAITS  ITTYS ITTYS1 ITTYS2
+C00193 00057	Still NOWAITS  ITTYS3
+C00194 00058	Still NOWAITS  PIALS
+C00196 00059	Still NOWAITS  XPWTS PPARS RPARS
+C00200 00060	Still NOWAITS  PESCS RESCS ALLQUO ALLQU1
+C00203 00061	SUBROUTINE FOR SETTING UP A SIMPLEX CONNECTION.  CONNS GotArp
+C00208 00062	SUBROUTINE TO DROP A CONNECTION.  CLOSS PCLSSD ClsFls ClsCls ClsEst ClosUp ClosWt
+C00215 00063	 Abors NoRst
+C00217 00064	NOWAITS<  DEASS
+C00218 00065	Still NOWAITS  PLsts PLsts1 PLsts2 PLsts3
+C00220 00066	SUBROUTINE TO PUT A SOCKET IN THE LISTENING STATE  LISTS Lists2 LISTS1
+C00223 00067	SUBROUTINE TO GET A SOCKET REQUEST  REQUS PW1PJ1
+C00225 00068	NOWAITS< No crosspatching in WAITS  TALKS TalkOK
+C00227 00069	Still NOWAITS  TRACS TRCTAB PINTS AINTS PECOS
+C00231 00070	Still NOWAITS  PHSTS PWUPJ1
+C00233 00071	Still NOWAITS  PALLS PALLS1 PGVBS RSETS PNOPS PNOPS1 GETHS1
+C00236 00072	Still NOWAITS  SETDDB SETDD3 SETDD0 SETDD2 SETDD1 SetDD4
+C00239 00073	 subroutine to set up essential areas of a DDB  PrpDDB
+C00242 00074	ROUTINE TO MAKE A LOCAL SOCKET NUMBER FOR A USER'S IMPUUO.  MAKMYS MAKMY0 MakM00 MakMy1 MakNxt MakFre
+C00248 00075	ROUTINE TO ALLOCATE A FREE SOCKET RANGE  FRESKT FRESK1
+C00252 00076	NOWAITS<  Target
+C00258 00077	 subroutine to wait for state to arrive at an established state.  EstbWt EstbW0 EstbCl EstbSF EstbCR EstbTm EstbEr EstbFl EstbW1
+C00263 00078	NOWAITS< WAITS version below  StWait StWai1 StWai2
+C00266 00079	SUBROUTINE TO SET TCP state WAIT DONE.  CALLED AT INTERRUPT LEVEL.  TCPIOD ClsIOD ClsIOE
+C00268 00080	NOWAITS<  LDPQTB LDPQUO LDPSFT LDPLCL LDPNET NQUPTS LQLQUO LQLSFT LQLDWN LQLNET LQPDwn LDPSMD INDSTM
+C00270 00081	Still NOWAITS (no crosspatching in WAITS)  RECQUO LTRCHK RECQU2 SFTTAB
+C00274 00082	Still NOWAITS  NETQUO NETQ01 QUOIMI NETSET QUOSET SFTSET LQLSTO
+C00277 00083	Still NOWAITS  QUOCHK QUOCK0 QUOCK1 QUOTOK
+C00280 00084	 TCPDat SktNum TCPDDB PLsPrt PlsPID PlsJob TCPDCn
+C00282 ENDMK
+C⊗;
+	title	TCPSer ; VTCPSr ;⊗
+	subttl	provan
+
+	search	f,s
+NOWAITS<
+	search	NetDef		; network definitions
+>;NOWAITS
+IFWAITS<SEARCH NETMAC>
+	search	MacTen		; search only if symbol not found in NetDef
+
+	sall
+
+	$reloc
+	$high
+
+XP	VTCPSr,7		; TCP version
+comment	\
+
+this module contains the support routines for the transmission
+control protocol as defined in RFC-793
+
+[JJW - For the record: This code doesn't check for TCP sequence numbers
+ wrapping around the 32-bit field, in either input or output.  But it's
+ very unlikely to happen since if the initial sequence number is chosen
+ as recommended in RFC 793, a connection started just one second before
+ the numbers wrap around would have to send 250Kbytes to encounter the
+ bug.  Someone with time on his hands might want to fix it, though.]
+
+\
+	subttl	compilation control
+
+NOWAITS<			;JJW - We don't have this feature
+; number of perpetual listens to allow at one time.
+ifndef PlsLen,<	PlsLen==↑d10 >		; default is 10 entries
+>;NOWAITS
+	subttl	TCP states ;⊗ S%Clos S%List S%SynS S%SyRP S%SyRA S%Estb S%Fin1 S%Fin2 S%Clsn S%TimW S%ClsW S%LAck
+
+
+; first define the states we have for TCP
+
+S%Clos==↑d0		;; closed (sometimes convenient, although usually
+			;;		detected by absense of DDB)
+			;; must ALWAYS be zero.  "closed" type states are
+			;;	less than or equal to zero.
+S%List==↑d1		;; listen
+S%SynS==↑d2		;; SYN sent
+S%SyRP==↑d3		;; SYN received, passive
+S%SyRA==↑d4		;; SYN received, active (from S%SynS)
+S%Estb==↑d5		;; established
+S%Fin1==↑d6		;; FIN wait 1
+S%Fin2==↑d7		;; FIN wait 2
+S%Clsn==↑d8		;; Closing
+S%TimW==↑d9		;; time wait
+S%ClsW==↑d10		;; Close wait
+S%LAck==↑d11		;; last ACK
+
+IFWAITS<INTERNAL S%LIST,S%ESTB>		;Needed in IMPSER and IMPMAC.MAC
+	subttl	macro for dispatching on different states ; Dispat ;⊗ ...min ...max ...flg ...x ...flg ...x
+
+
+; now define a macro to define a dispatch vector.  there are three
+;  arguments.  the first is the register containing the state code.
+;  the second is the location to jump to if a state comes which
+;  is not defined in this table.  the third is a list of pairs of
+;  entries: the state code and the instruction to execute.
+
+;warning: the state pairs MUST begin on the same line as the second
+;	argument.  state pairs MUST be separated from each other with
+;	commas (between each pair) which MUST be on the same line as
+;	the macro which FOLLOWs.
+
+define	Dispat (AC,ErrLoc,StPair),
+    <
+	...min==777777			;; a high starting point
+	...max==-1			;; and a low one
+	define	Pair (state,instr),
+	    <
+		ifl <state>-...min,<	...min==<state>	>
+		ifg <state>-...max,<	...max==<state>	>
+	    >
+
+	define	$$help(bogus),<	pair(bogus) >	;; your classic helper macro
+
+	irp StPair,<		;; for each pair
+		$$help(StPair)	;; expand the Pair macro with each pair
+				;;  the as arguments.
+	>
+
+	;; code to check to see if the state is in the legal range
+	cail	<AC>,...min		;; less than the lowest we know
+	 caile	<AC>,...max		;; or greater than the highest
+	  jrst	<ErrLoc>		;; go to the error handler
+
+	define	Pair (state,instr),
+	    <
+		ife ...x-<state>,<	;; is this our state?
+			instr		;; expand the instruction
+			...flg==1	;; and tell that we did something
+		>
+	    >
+
+	;; code for the actual dispatching
+	xct	[
+		 ...x==...min		;; start with lowest state
+		 repeat ...max-...min+1,<	;; do every state in the range
+		    ...flg==0		;; nobody's claimed this spot yet
+		    irp StPair,<	;; go through all the pairs
+			$$help(StPair)	;; expanding the Pair macro with each.
+		    >
+		    ife ...flg,<	;; if no one claimed to be this
+			jrst	<ErrLoc>;; go to the error handler
+		    >
+		    ...x==...x+1	;; next place.
+		 >
+		]-...min(<AC>)		;; now correctly index the XCT
+	purge	...min,...max,...x,...flg
+    >	;; end of Dispat macro definition
+	subttl	defintions describing a TCP leader ;⊗ TcpLen TCPIBH TCPIBf TCPObf TCPPnt TCPFlg TC%Urg TC%Ack TC%Psh TC%Rst TC%Syn TC%Fin TC%Low TC%ALL TC%Onc
+
+; see RFC-793 for details of this header.
+
+
+TcpLen==:5		; number ofwords in an TCP leader (not including options)
+
+NOWAITS<			;Data is in CACDAT
+	$low		; define the storage needed
+
+TCPIBH:	block	NBHLen			; buffer header.
+TCPIBf:	block	TCPLen			; words needed for header
+
+; the following block is used to create a TCP leader for output.
+;  it is filled and then converted to 36 bit buffers all under ScnOff.
+TCPObf:	block	NBHLen+TCPLen		; output buffer for forming leader
+	byte	(8)OptMSS,4(16)TCPMax	; option word for max segment size.
+					;  sent only with SYN bit messages.
+
+>;NOWAITS
+IFWAITS<
+	EXTERN	TCPIBH,TCPIBF,TCPOBF
+>;IFWAITS
+	$high		; back to protected code
+
+TCPPnt:	point	8,TCPIBf		; pointer to start loading the
+					;  header block from the stream.
+
+; define the actual header fields.  position is the bit position of the
+;  left most bit.
+;
+; 	name   word  position width
+
+; TCP uses the standard ports, StdSP and StdDP.
+;DefFd.	TCPSP,	0,	0,	16	; source port of message
+;DefFd.	TCPDP,	0,	16,	16	; destination port
+DefFd.	TCPSeq,	1,	0,	32	; sequence number
+DefFd.	TCPAck,	2,	0,	32	; acknowledgement number
+DefFd.	TCPOff,	3,	0,	4	; data offset from start of leader
+					;  (length of total leader in words)
+TCPFlg==3	; flags are in the third word
+	TC%Urg==1b<↑d10>	; urgent flag
+	TC%Ack==1b<↑d11>	; acknowledge flag
+	TC%Psh==1b<↑d12>	; push flag
+	TC%Rst==1b<↑d13>	; reset flag
+	TC%Syn==1b<↑d14>	; syncronize sequence numbers
+	TC%Fin==1b<↑d15>	; finished
+	TC%Low==TC%Fin		; low order bit of group
+	TC%ALL==TC%Urg!TC%Ack!TC%Psh!TC%Rst!TC%Syn!TC%Fin
+	; bits which must be manually set each time they need to be sent.
+	TC%Onc==TC%Urg!TC%Psh!TC%Rst!TC%Syn!TC%Fin
+DefFd.	TCPWnd,	3,	16,	16	; window allocated
+DefFd.	TCPChk,	4,	0,	16	; checksum of message
+DefFd.	TCPUP,	4,	16,	16	; urgent pointer
+	subttl	definitions ;⊗ TC$ACK TCPMax WndSiz StartT WndSiz TCPUTT TCPRTT RTMin RTMax AckTst PrbTim
+
+; flags in S during input
+	TC$ACK==1b<↑d35>	; send an ACK at end of processing
+
+
+NOWAITS<
+; standard allocations and time-out times
+;	TCPMax==IPMax##-<4*IPLen##+4*TCPLen>	; normal amount of TCP data
+;						;  in an IP packet.
+	TCPMax==↑d536			; normal amount of TCP data in an
+					;  IP packet.  (we can't compute this
+					;  value because it's used in a
+					;  byte pseudo OP (the Linker can't
+					;  fixup byte externals).  no errors
+					;  are reported, but it doesn't work.
+					;  just as well: it's not clear how
+					;  to properly compute it, anyway.)
+	WndSiz==20*NBfByt		; number of bytes is normal window
+	StartT==↑d60			; time we'll wait for server
+					;  process to start up.
+
+	TCPUTT==2*↑d60			; time to wait before declaring
+					;  a connection dead in the water.
+	TCPRTT==↑d5*↑d60		; retransmission time (in jiffies)
+	RTMin==1*↑d60			; minimum retranmission time (1 sec.)
+	RTMax==↑d60*↑d60		; maximum retranmission time (1 min.)
+	AckTst==↑d30			; time between spontaneous ACKs if
+					;  nothing else is going on.
+	PrbTim==↑d30*↑d60		; time between probes of a zero
+					;  window, in jiffies.
+>;NOWAITS
+
+IFWAITS<	;Some changes to the above values to improve performance.
+	TCPMax==:↑d536		;Global for LOADER to check with CACDAT
+	WndSiz==40*NBfByt	;Bigger default window
+	TCPUTT==2*↑d60		;2 minute default for user timeouts
+	TCPRTT==5*↑d60		;5 second initial retransmit time
+	RTMin==2*↑d60		;2 second minimum retransmit time
+	RTMax==↑d60*↑d60	;60 second maximum retransmit time
+	AckTst==↑d60		;60 seconds between spontaneous ACKs
+	PrbTim==↑d30*↑d60	;30 seconds between probes of zero window
+>;IFWAITS
+	subttl	FMB
+
+; the FMB, Future Message Block, is a block of information about a
+;  message who's sequence number we are not ready to handle yet.
+;  this block contains all the information necessary to process
+;  the message, including the complete TCP header  for this message
+;  and a pointer to buffers containing the message itself.
+
+
+;;!------------------------------------|------------------------------------!
+;;!									    !
+;;!									    !
+;;!			TCP header for this message (5 words)		    !
+;;!									    !
+;;!									    !
+;;!------------------------------------|------------------------------------!
+;;!   first buffer in message chain    |   last buffer in message chain	    !
+;;!------------------------------------|------------------------------------!
+;;!			pointer to next FMB in chain			    !
+;;!------------------------------------|------------------------------------!
+;;!		sequence number of first byte following this message	    !
+;;!------------------------------------|------------------------------------!
+
+
+bkini.		; have to start somewhere
+
+	bknxt.	FMBTCL,TCPLen*ful.wd	; space TCP header
+	bkoff.	FMBTCP			; grab offset into block for start
+					;  of that field.
+
+	bkdef.	FMBPnt			; buffer pointer (whole word)
+	bknxt.	FMBFst,hlf.wd		; first buffer in message
+	bknxt.	FMBLst,hlf.wd		; last buffer in message
+
+	bknxt.	FMBNxt			; next buffer in chain
+	bkoff.	FNxtOf			; grab offset, too
+
+	bknxt.	FMBNBy			; sequence number of first byte
+					;  of message which should follow.
+
+bkend.	FMBLen				; get the length
+	subttl	process incoming TCP message ;⊗ TCPIn TCPIn0 TCPNCk RedCnt NewLst
+
+
+entry	TCPIn	; only load this module if IP calls this routine
+
+
+IFWAITS<	;On entry to TCPIn, W points to info block for network
+		;interface this packet came from.
+>;IFWAITS
+TCPIn::
+	move	p2,MsgLen(f)		; get length of message through IP
+ifn FtChck,<	; doing checksum
+	setz	p3,			; clear checksum
+	move	t1,p2			; make sure to checksum length
+					;  of TCP message before we
+					;  convert it to length of segment.
+	pushj	p,CSmHWd##		; checksum the length.
+>
+	subi	p2,TCPLen*4		; cut length by that amount
+	jumpl	p2,NoLead		; not enough message to read in leader
+	movei	t1,TCPIBH		; get pointer to input leader
+	move	t2,ABfLst(f)		; get last buffer so far
+	stor.	t1,NBHNxt,(t2)		; make us their next
+	movem	t1,ABfLst(f)		; and make us last (for grins)
+	move	t1,TCPPnt		; point at the storage block
+	movei	t2,TCPLen*4		; length of leader in bytes
+	stor.	t2,NBHCnt,TCPIBH	; store in buffer header
+	pushj	p,GetLed##		; get the leader and checksum
+	  jrst	NoLead			; not enough bytes for leader.
+
+
+	; now read in the options and hold for later
+	load.	t1,TCPOff,TCPIBf	; get "offset to data"
+	subi	t1,TCPLen		; get words left to be read in leader
+	jumpe	t1,TCPIn0		; no options to read
+	jumpl	t1,NoLead		; not enough for a leader.
+	lsh	t1,wd2byt		; convert to bytes
+	sub	p2,t1			; cut down message length again
+	jumpl	p2,NoLead		; not enough in IP message for
+					;  TCP leader indicated.
+	pushj	p,GetMes##		; read in the options
+	  jrst	NoLead			; message ended too soon.
+	aos	TCPOpt##		; saw an option
+
+TCPIn0:
+	exch	t1,p2			; position length of message
+					;  and put options in a safe place.
+	movem	t1,MsgLen(f)		; save length of TCP message
+	pushj	p,GetMes##		; copy T1 bytes in.
+	  jrst	NoMess			; problem reading message
+
+	move	p1,t1			; save new stream pointer for later.
+
+ifn FtChck,<	; doing checksumming
+	load.	t1,TCPChk,TCPIBf	; get the checksum from the leader
+	jumpe	t1,TCPNCk		; this guy doesn't do checksums
+
+	move	t1,RmtAdr(f)		; get their address.
+	pushj	p,CSmWrd##		; add in that checksum.
+	move	t1,LclAdr(f)		; our address
+	pushj	p,CSmWrd##		; checksum it.
+	move	t1,Protcl(f)		; get the protocol
+	pushj	p,CSmHWd##		; checksum that half a word
+	
+
+	; bear in mind that the checksum we now have in P3 has, along with
+	;  all the right stuff, its own one's complement.  therefore, what
+	;  we really have is <checksum> + -<checksum>, which is 0.
+	;  further, since <checksum> has some bit on (otherwise the
+	;  sender isn't checksuming and we wouldn't be here), it can be
+	;  shown that the brand of one's complement 0 we must have is
+	;  the version with all 1's.  if that's what we have, we're ok.
+	;  if not, the checksum failed.
+	hrrzs	p3			; get just the checksum
+	caie	p3,<1←↑d16>-1		; magic explained above
+	  jrst	BadChk			; checksum is bad.
+
+TCPNCk:	; here to skip over the checksum checks because sender is not
+	;  checksumming the messages.
+>
+	; count all the bits in the flag word as message types to get some
+	;  idea of what we're sending.
+	movx	t1,TC%Low		; get lowest order bit
+	setz	t2,			; and a count
+RedCnt:	tdne	t1,TCPFlg+TCPIBf	; is that bit on in the flag word?
+	  aos	TCPITy##(t2)		; yes.  count one more with
+					;  that bit on.
+	lsh	t1,1			; shift bit over one
+	txne	t1,TC%All		; bit no longer in field?
+	  aoja	t2,RedCnt		; still in flag field.  count on.
+
+	; now count the number of TCP messages of each size.
+	move	t1,MsgLen(f)		; get the message length again, in
+					;  bytes.
+	JFFO	T1,.+2		;COUNT HIGH BIT POSITION
+	MOVEI	T2,↑D36		;IF NONE SET
+	MOVNI	T1,-↑D36(T2)	;ORDER OF MAGNITUDE [2]
+	AOS	SIZHST##(T1)	;COUNT THIS MESSAGE SIZE
+
+	move	t1,RmtAdr(f)		; source (foreign host address)
+	load.	t2,StdSP,TCPIBf		; get his port
+	movem	t2,RmtPrt(f)		; and keep pseudo DDB up-to-date
+	load.	t3,StdDP,TCPIBf		; get my port
+	movem	t3,LclPrt(f)		; still keep pseudo DDB up-to-date
+	move	t4,Protcl(f)		; get protocol
+	move	p3,MsgLen(f)		; put length of this message
+					;  somewhere where we can get
+					;  it for the new DDB.
+	push	p,f			; save current DDB, in case we fail
+	pushj	p,FndDDB##		; scan network DDBs for the one
+					;  that matches.
+	  jrst	NewCon			; this is one we haven't heard of
+	pop	p,(p)			; don't want that F any more.
+
+NewLst:					; return here if we are now listening
+					;  for an unknown port (exec port).
+	movem	p3,MsgLen(f)		; remember the message length
+					;  in the new DDB.
+	subttl	now parse options ;⊗ OptnLp OptDis OptEOL OptNop OptMSS OptMax OptSeg OptDun NoOptn
+
+
+	jumpe	p2,NoOptn		; skip all this if no options
+					;  were read in.
+	push	p,p1			; preserve our actual message
+	hlrz	p1,p2			; point at the first buffer of options
+	push	p,p1			; save that for later
+	setzb	p3,s			; clear count register and flags
+OptnLp:	pushj	p,NxtByt##		; get next option
+	  jrst	OptDun			; no more
+	caig	t1,OptMax		; larger number than we know about?
+	  jrst	@OptDis(t1)		; no.  handle it
+	aos	TCEUOp##		; we don't understand this option.
+	pushj	p,OptFls##		; flush the option
+	  jrst	OptDun			; all done.
+	jrst	OptnLp			; and try the next option
+
+; dispatch table for options
+OptDis:
+	OptEOL==.-OptDis		; symbol for end of option list option
+		OptDun			; end of option list
+	OptNop==.-OptDis		; symbol for noop option
+		OptnLp			; noop
+	OptMSS==.-OptDis		; symbol for maximum segment size option
+		OptSeg			; maximum segment size
+OptMax==.-OptDis-1			; get highest option number we know.
+IFWAITS<INTERN OPTMSS>		;Make LOADER check consistency with CACDAT
+
+OptSeg:	pushj	p,NxtByt##		; get next byte.
+	  jrst	OptDun			; no next byte.  all done.
+	move	t4,t1			; save count
+	pushj	p,NxtByt##		; get first byte of length
+	  jrst	OptDun			; ran out
+	move	t3,t1			; save it
+	pushj	p,NxtByt##		; get next byte
+	  jrst	OptDun			; ran out again
+	lsh	t3,net.by		; shift first byte over to make room
+	ior	t1,t3			; or in the other byte
+NOWAITS<
+	;JJW - This is nonsense.  OTBYTE makes sure we don't overflow a packet.
+	lsh	t1,byt2bt		; get number of bits that is
+	idivi	t1,ful.wd		; how many PDP-10 words max?
+	imuli	t1,ful.wd		; that's the real number of bits we
+					;  can send, since the imp-10 sends
+					;  36 bit chunks.
+	lsh	t1,-byt2bt		; back to bytes now.
+>;NOWAITS
+	movem	t1,SndMax(f)		; save it it the DDB
+	movei	t1,-4(t4)		; get length back, minus parts
+					;  we read.
+	pushj	p,NxtFls##		; flush any that are more than
+					;  we needed.
+	  jrst	OptDun			; nothing left in buffers
+	jrst	OptnLp			; get next option
+
+; here when all done reading options
+OptDun:
+	pop	p,t1			; get the pointer to the first buffer
+	pushj	p,RelBuf##		; release the entire stream
+	pop	p,p1			; recover message buffer pointer.
+
+NoOptn:	; come here if there are no options to process
+; here to process the message with DDB in tow. ;⊗ FuturL NoFutr NoFut1
+
+	movei	u,TCPIBf		; leader is still in the block.
+
+	setz	p4,			; clear flags word
+
+	pushj	p,PrcMsg		; process this message
+
+; scan the future queue for messages which can now be processed
+FuturL:	skipn	t2,Future(f)		; get the start of the futures
+	  jrst	NoFutr			; no futures
+	load.	t1,TCPSeq,FMBTCP(t2)	; get sequence number from header
+	camle	t1,RcvNxt(f)		; are we ready for this one yet?
+	  jrst	NoFutr			; no.  newest future is too late.
+
+	load.	t1,FMBNxt,(t2)		; get this one's next pointer
+	movem	t1,Future(f)		; now that's the next one
+	load.	p1,FMBPnt,(t2)		; get buffer pointer back
+	load.	t1,FMBNBy,(t2)		; get byte just past this message
+	camge	t1,RcvNxt(f)		; did we pass the message altogether?
+	  jrst	[			; yes.  throw this one out.
+		 pushj	p,RelFMB	; get rid of the FMB
+		 pushj	p,BufFls	; release the buffers in the message
+		 jrst	FuturL		; try the next future
+		]
+	aos	TCPFTU##		; count future message used
+	load.	p2,FMBNBy,(t2)		; get the  sequence number of the
+					;  next message after this one.
+	load.	t1,TCPSeq,FMBTCP(t2)	; get sequence number
+	sub	p2,t1			; compute the length of the message.
+	movem	p2,MsgLen(f)		; remember that in the DDB
+	movei	u,FMBTCP(t2)		; point at block with TCP leader.
+    
+	push	p,t2			; save FMB so we can delete it
+	pushj	p,PrcMsg		; process this message
+	pop	p,t2			; get back FMB
+
+	pushj	p,RelFMB		; free FMB
+
+	jrst	FuturL			; check for another future
+
+NoFutr:
+	scnoff				; shut down interrupts
+	skiple	t1,State(f)		; have we been closed while we
+					;  weren't looking?
+	 cain	t1,S%List		; or are we in an infant stage?
+	  pjrst	sonppj##		; yes, to one.  forget anything.
+
+	; set for spontaneous ACKs if nothing else is happening.
+	cain	t1,S%TimW		; in time wait, GTimer means something
+					;  else.
+	  jrst	NoFut1			; no need to send random ACKs
+	movx	t1,AckTst		; load the ACK test time
+	skipn	Retrnq(f)		; only spontaneously ACK if there's
+					;  nothing in the retransmission queue.
+	  movem	t1,GTimer(f)		; save in DDB
+
+NoFut1:	txnn	p4,TC$ACK		; should we fire off an ACK?
+	  pjrst	sonppj##		; no.  interrupts on and return.
+	movx	t2,TC%Ack		; get ACK bit
+	iorm	t2,SndBts(f)		; make sure it's set.
+NOWAITS<
+	pushj	p,SndMsg##		; yes.  tell IMPSER to get it sent or
+					;  send it directly and return.
+	  jfcl				; ignore error return
+	pjrst	sonppj##		; interrupts on and go.
+>;NOWAITS
+IFWAITS<
+	;Request an ACK be sent at the end of the current clock tick,
+	;unless one is sent as a result of a reply packet.  This avoids
+	;wasted ACKs.
+	PJRST REQACK##
+>;IFWAITS
+	subttl	process a connection which has no DDB ;⊗ NewCon NewCo1 NEWCO2 NowCon PLsSn NotExc
+
+
+; handle a connection to a port which is not listening.
+; port number is in T3.  old DDB (at this writing, always the pseudo
+;	DDB) is on the stack.  it STAYS on the stack through most of
+;	this routine, so watch your ass or you'll try to popj p, to it.
+NewCon:
+	; remember that we STILL have the old DDB on the stack.
+
+	movx	t1,TC%Rst		; get reset bit into T1
+	tdne	t1,TCPIBf+TCPFlg	; is it on in these headers?
+	  jrst	NotExc			; yes.  save multiple headaches
+					;  by just ignoring the message.
+
+NOWAITS<
+	; first check for a perpetual listen on that socket
+	movei	t4,PlsLen-1		; point at last entry
+NewCo1:	camn	t3,PlsPrt(t4)		; is this it?
+	  jrst	PLsSn			; yes.  a perptual listen seen.
+	sojge	t4,NewCo1		; count down
+>;NOWAITS
+
+	caxl	t3,FrePrt		; is it below freely assigned ports?
+	  jrst	NotExc			; yes.  not an exec port.
+
+	; now check for pemanent port services, handled through Telnet
+	skipe	t1,t3			; position our port number better
+					; (zero isn't legal)
+	 PUSHJ	P,WKPFND	;IS THIS SOCKET'S SERVICE IMPLEMENTED?
+	  jrst	NoPort			; remember this "error"
+	push	p,t1			; save service offset
+	MOVEI	J,0		;NO JOB NUMBER YET
+	PUSHJ	P,DDBGET##	;TRY FOR FREE DDB
+	  jrst	[			; can't get one
+		 pop	p,t1		; clear stack
+		 jrst	NoDDB		; declare problem
+		]
+IFWAITS<
+	MOVE T1,(P)		;Get back for byte pointer in next instr.
+	LDB T2,WKPTFC		;Fetch TTY forced command index
+	JUMPN T2,NEWCO2		;Jump if there is a forced command to do
+	;No forced command--instead we want to fire up a phantom server program.
+	POP P,T1		;Clear stack
+	MOVSI T2,IMPSRV		;Flag that indicates DDB is awaiting server
+	IORM T2,TTYLIN(F)	;Set flag for server in IMP DDB
+	SKIPE MAINTM##		;System down?
+	SKIPE SERVOK##		;Yes, OK to start servers?
+	JRST NOWCON		;System up or servers OK, continue processing
+	JRST NOITY		;Release DDB and tell him he loses
+
+NEWCO2:
+>;IFWAITS
+	PUSHJ	P,ITYGET##	;GET A PORT
+	  jrst	[			; can't get one
+		 pop	p,t1		; clear stack
+		 jrst	NoITY		; tell world
+		]
+	MOVSI	u,TTYKBD!TTYPTR
+	IORb	u,TTYLIN(F)	; SET TTY BITS, get ITY's LDB into U
+	PUSHJ	P,TSETBI##	;CLEAR INPUT BUFFER
+	PUSHJ	P,TSETBO##	;CLEAR OUTPUT BUFFER
+IFWAITS<
+	PUSHJ P,TLNBGN##	;Set Telnet control defaults
+>;IFWAITS
+	pop	p,t1			; recover pointer to service
+	HRRO	T2,WKPSRV(T1)	;FETCH POINTER TO LOGICAL NAME
+	POP	T2,DEVLOG(F)	;SET LOGICAL NAME INTO DDB
+	LDB	T1,WKPTFC	;FETCH TTY FORCED COMMAND INDEX
+	pushj	p,TTFORC##		;FORCE THE APPROPRIATE COMMAND
+
+; here from perpetual listen setup
+NowCon:	pushj	p,PrpDDB		; set essential DDB words
+
+	pop	p,t2			; get back the DDB which was used
+					;  while the message was arriving.
+
+	;now fill in the information we know
+	move	t1,RmtAdr(t2)		; get the foreign host address.
+	movem	t1,RmtAdr(f)		; and save it the real DDB
+	move	t1,NetAdr(t2)		; get ARPA address
+	movem	t1,NetAdr(f)		; save in the DDB
+IFWAITS<
+	MOVE T1,NETWRK(T2)		;Copy target network also
+	MOVEM T1,NETWRK(F)
+>;IFWAITS
+	move	t1,RmtPrt(t2)		; get the source port (his port)
+	movem	t1,RmtPrt(f)		; save in DDB
+	move	t1,LclPrt(t2)		; get the destination port (my port)
+	movem	t1,LclPrt(f)		; save in DDB
+	movei	t1,S%List		; get state code "listen"
+	movem	t1,State(f)		; make it this DDB's state
+
+	pushj	p,NewLst		; go back a process this message
+					;  as if nothing has happened.
+	move	t2,State(f)		; now get the state
+NOWAITS<
+	caie	t2,S%List		; still listening?
+	  popj	p,			; no.  just return.
+	pushj	p,DDBFls##		; clear out DDB
+	pjrst	DDBRel##		; and return it to free pool
+>;NOWAITS
+IFWAITS<
+	CAIN T2,S%LIST		;Still listening?
+	JRST [	PUSHJ P,DDBFLS## ;Yes, clear out DDB
+		PJRST DDBREL##]	;and return it to free pool
+	MOVE T2,TTYLIN(F)
+	TLNN T2,IMPSRV		;Is this DDB for a server?
+	POPJ P,			;No, just return
+	PJRST GOSERV##		;Yes, start the server
+>;IFWAITS
+
+NOWAITS<
+; here to deal with a perpetual listen found
+PLsSn:	move	j,PlsJob(t4)		; get job number listening
+	pushj	p,DDBGet##		; get a DDB and assign it to this job.
+	  jrst	NoDDB			; can't.  count and deny access
+	movei	t1,PlsPID(t4)		; point at the PID to notify
+	hrrzi	t2,DevNam(f)		; point at the device name in the
+					; DDB as the data to send.
+	hrli	t2,1			; just that one word, please.
+	setz	j,			; mark as being sent from interupt
+					;  level.
+	pushj	p,SendSI##		; send the IPCF packet to the user
+	  jrst	NoIPCF			; oops.  flush DDB and deny connection
+	jrst	NowCon			; now process this packet
+>;NOWAITS
+
+
+NotExc:	pop	p,f			; restore fake DDB.
+	movei	u,TCPIBf		; point at TCP leader
+	move	p3,TCPFlg(u)		; get the flags from leader.
+	jumpe	p2,TryRst		; just reset if no options
+	hlrz	t1,p2			; get the first buffer of options
+	pushj	p,RelBuf##		; free the options.
+	jrst	TryRst			; try to send a reset and
+					;  return the buffers and return.
+;ROUTINE TO CHECK LEGALITY OF AN EXEC Well Known Port. ;⊗ WKPFND WKPFN1 WKPSRV WKPSRV WKPNUM WKPSKT WKPTFC
+;	MOVE	t1,[local port NUMBER]
+;	PUSHJ	P,WKPFND
+;	  ERROR--SERVICE NOT IMPLEMENTED
+;	NORMAL--T1 CONTAINS INDEX INTO SERVER TABLE (WKPSRV)
+
+WKPFND:	pushj	p,save2##		; get p1 and p2
+	move	p2,t1			; save port number
+	MOVSI	t1,-WKPNUM	;NUMBER OF SERVICES IMPLEMENTED
+WKPFN1:	LDB	p1,WKPSKT	;FETCH SOCKET NUMBER OF THIS SERVICE
+	CAMN	p1,p2		;MATCH?
+	  JRST	CPOPJ1		;YES, GOOD RETURN, T1 is offset.
+	AOBJN	t1,WKPFN1	;NO, TRY NEXT
+	POPJ	P,		;ERROR--SERVICE NOT IMPLEMENTED
+
+
+;TABLE OF DEFINED SERVICES AVAILABLE THROUGH EXEC WKP.
+;   MACRO TO DEFINE A SERVICE:
+;	SERVER	(PORT# , TTY FORCED COMMAND , LOGICAL NAME)
+
+
+NOWAITS<
+DEFINE SERVER(SKT,TFC,NAME) <
+	↑D<SKT>B26 + TFC## ,, [SIXBIT\NAME\]
+>
+
+WKPSRV:
+;[tcp]	SERVER	(3,TTFCXF,FTPSRV)	;FILE TRANSFER PROTOCOL SERVER
+	SERVER	(21,TTFCXF,FTPSRV)	;[tcp] FILE TRANSFER PROTOCOL SERVER
+	SERVER	(23,TTFCXH,NETUSR)	;TELNET SERVER
+	server	(79,ttfcxg,FngSrv)	;(241) finger service
+IFN FTPATT,<
+	0		;SPACE TO PATCH IN NEW SERVICES
+	0
+>
+	WKPNUM==.-WKPSRV	;NUMBER OF DEFINED SERVICES
+>;NOWAITS
+
+IFWAITS<
+DEFINE SERVER(SKT,TFC,NAME) <
+	↑O<SKT>B26 + TFC ,, [SIXBIT\NAME\]
+>
+;0 in TFC field means server should be started as a detached job
+;Servers for Well-Know Ports.
+WKPSRV:	SERVER (25,0,FTPSER)		;FTP
+	SERVER (27,F.HELL##,TELSER)	;Telnet
+	SERVER (31,0,SMTPSR)		;SMTP (mail)
+	SERVER (117,0,FNGSER)		;Finger
+	SERVER (137,0,SUPSER)		;SUPDUP
+	SERVER (13,0,SYSSER)		;SYSSTAT (who is on)
+	SERVER (15,0,DYTSER)		;Date & Time
+	SERVER (45,0,TIMSER)		;Time
+IFE FTF2,<
+	SERVER (7,0,ECHSER)		;Echo
+	SERVER (11,0,DSCSER)		;Discard
+0;;	SERVER (17,0,STASER)		;NETSTAT (who is up)	needs HOSTAT fixed
+	SERVER (21,0,LINSER)		;Short text message
+0;;	SERVER (23,0,TSTSER)		;Character generator	uses up IMP buffers?
+;	SERVER (113,0,DTLSER)		;MRC's DTLSER
+	SERVER (131,0,SUNSER)		;MIT/SU telnet gateway
+;	SERVER (143,0,DTLSER)		;GFF's DTLSER
+	SERVER (365,0,RSSER)		;LINK
+0;;	SERVER (371,0,LAVSER)		;RSEXEC			uses dump mode
+>;IFE FTF2
+	REPEAT 2,<0>			;Space to patch in new services
+	WKPNUM==.-WKPSRV		;NUMBER OF DEFINED SERVICES
+>;IFWAITS
+
+WKPSKT:	POINT	9,WKPSRV(T1),8	;POINTER TO SERVICE SOCKET NUMBER
+WKPTFC:	POINT	9,WKPSRV(T1),17	;POINTER TO TTY FORCED COMMAND INDEX
+; here to process one message.  this may be hot off the presses or it ;⊗ PrcMsg
+;  may be a message that's was received out of order and can only now
+;  be processed, but it's ALWAYS called at IMP interrupt level.
+; arguments:
+;		F - DDB
+;		U - pointer to block containing TCP leader for this message
+;		P1 - buffer descriptor: <LH> first buffer, <RH> last buffer
+;		length of message in bytes is in MsgLen(f)
+
+; during this routine, P3 ALWAYS has the current flags from the TCP
+;	leader (we sometimes change them), and P2 ALWAYS has the current
+;	State, which should ALWAYS agree with State(f).
+;	P4 is a flag word.  set TC$Ack if you see something that should
+;	cause an ACK to be sent.
+PrcMsg:
+	move	p3,TCPFlg(u)		; get the flags from leader.
+
+	move	p2,State(f)		; get state of this connection
+	cain	p2,S%List		; waiting for anything?
+	  jrst	InLstn			; yes
+	cain	p2,S%SynS		; waiting for SYN ACK?
+	  jrst	InSynS			; yes
+
+	; this is a segment arriving at a previously established connection.
+
+	move	t1,RcvWnd(f)		; get the receive window size
+	move	t2,RcvNxt(f)		; get the beginning of the rec window
+	load.	t3,TCPSeq,(u)		; get the sequence number of it
+	move	t4,MsgLen(f)		; load up message length
+
+	jumpg	t1,WndFit		; receive window is non-zero, so
+					;  try to fit this one in.
+	jumpn	t4,SeqBad		; can't handle it, it's too big
+	came	t3,t2			; is it the one we are expecting?
+	  jrst	SeqBad			; no.  sequence number out of range.
+	move	t4,t3			; last byte is the first byte.
+	jrst	InWind			; this is it.  process it.
+; here to check for the segment starting in the window ;⊗ WndFit
+WndFit:	add	t1,t2			; compute the end of the window
+	add	t4,t3			; compute the end of the message
+	; note: now T4 points one beyond the end of the current message,
+	;	T1 points one beyond the end of the current window.
+
+	camg	t4,t1			; does this message end within
+					;  the window?
+	  jrst	WndEnd			; yes.  do more checking.
+	caml	t3,t1			; does it start before the end?
+	  jrst	SeqBad			; no, it's way out of line.
+	aos	TCPWET##		; count window end truncated
+	move	t4,t1			; the end of the message is
+					;  going to agree with the end
+					;  of the window when we get done.
+	sub	t1,t3			; compute the length we will accept:
+					;  end of window less start of message.
+
+	; now scan through stream until we've seen as many bytes as we
+	;  are going to allow, then throw away everything else.
+	hlrz	t2,p1			; get pointer to first buffer.
+
+	pushj	p,SkpByt##		; skip past that many bytes.
+					;  now pointing at unwanted bytes.
+ifn debug,<	; is the code buggy?
+	skipn	t2			; is there a buffer with this byte?
+	  stopcd CPOPJ##,DEBUG,NEB,	;++ not enough bytes.
+>
+
+	hrr	p1,t2			; new last buffer in our pointer
+	stor.	t1,NBHCnt,(p1)		; make this buffer have only as
+					;  many bytes as we're prepared
+					;  to see.
+	load.	t1,NBHNxt,(p1)		; get pointer to next buffer
+	pushj	p,RelBuf##		; release the rest of the stream
+	zero.	t1,NBHNxt,(p1)		; zero out the link to the
+					;  non-existent remains.
+
+	movx	p3,TC%Fin		; get Fin bit
+	andcab	p3,TCPFlg(u)		; clear Fin in P3 and leader
+
+	; restore these two badly clobbered values
+	move	t2,RcvNxt(f)		; get the beginning of the rec window
+	load.	t3,TCPSeq,(u)		; get the sequence number of it
+
+	; and charge on to check the end of the message.
+; here to check for a segment finishing in the window ;⊗ WndEnd FlsLp FlsBa1 FlsBad
+WndEnd:	caml	t3,t2			; starts after the start of window?
+	  jrst	InWind			; yes.  this message is all in window
+
+	camg	t4,t2			; ends after start of window?
+	  jrst	SeqBad			; no.  we've already seen this.
+		 			;  ACK may have been lost: make
+					;  sure he KNOWS we saw this.
+
+	aos	TCPWFT##		; count window front truncated
+	push	p,f			; save real DDB
+	push	p,t4			; save T4 over the following stuff
+	push	p,p4			; save flags
+	sub	t4,RcvNxt(f)		; subtract beginning of window
+					;  to get number of bytes we want
+					;  while we still have F correct.
+	push	p,t4			; save that over the flushing
+	movei	f,TCPDDB		; get the pointer to the pseudo
+					;  DDB for input hacking.
+	hlrz	t1,p1			; get first buffer
+	hrrom	t1,IBfThs+TCPDDB	; save as current buffer, untouched.
+	setzm	IBfBC+TCPDDB		; clear count.
+	movei	p4,InByte##		; input from buffers which are already
+					;  in 32 bit words.
+	move	p1,t2			; get the start of window
+	sub	p1,t3			; subtract starting sequence
+
+FlsLp:	jsp	p4,(p4)			; get next byte
+	  jrst	FlsBa1			; someone miscounted.
+	sojg	p1,FlsLp		; one more read.  loop.
+
+	pop	p,t1			; recall the number of bytes which
+					;  are good.
+
+	pushj	p,GetMes##		; go read it into fresh buffers.
+	  jrst	FlsBad			; can't happen.  someone miscounted.
+
+	move	p1,t1			; put message chain in proper place.
+	hrrz	t1,IBfThs+TCPDDB	; get buffers still assigned.  (in
+					;  particular, since we have an exact
+					;  count, the last buffer will not be
+					;  freed in GetMes.)
+	pushj	p,RelBuf##		; release buffers.
+	pop	p,p4			; get back flags
+	pop	p,t4			; get back number of last byte.
+	pop	p,f			; get back real DDB address.
+	movx	p3,TC%SYN		; get SYN bit
+	andcab	p3,TCPFlg(u)		; clear SYN and get flags back in P3.
+					; (they're clobbered by GetMes.)
+	jrst	InWind			; this is the next message, so go.
+
+; restore and go
+FlsBa1:	pop	p,t4			; clear count off stack
+FlsBad:	pop	p,p4			; restore flag reg
+	pop	p,t4			; restore last byte (not used again)
+	pop	p,f			; clear stack
+	hrrz	t1,IBfThs+TCPDDB	; get next buffer to be input.
+	jrst	RelBuf##		; release buffers and return
+; at this point we have a message which starts and ends within ;⊗ InWind
+;  the receive window.  now we must check for problems, then 
+;  see if it is the next message to be used.
+;	T3 - sequence number of the first byte in message (as sent: some
+;		bytes may have been chopped off the front.  set below)
+;	T4 - sequence number of the next byte after this message (set before)
+InWind:	txne	p3,TC%Rst		; reset coming in?
+	  jrst	FlsRst			; yes.  reset connection.
+
+	pushj	p,SecChk		; check security for this packet.
+	  jrst	BufFls			; not good enough.
+
+	txne	p3,TC%Syn		; incoming SYN?
+	  jrst	FlsSyn			; yes.  can't be.  reset connection.
+
+	txnn	p3,TC%ACK		; an ACK?
+	  jrst	BufFls			; no.  can't be for us.  throw
+					;  it away.
+
+	load.	t3,TCPSeq,(u)		; restore the sequence number.
+	camle	t3,RcvNxt(f)		; is this the byte we want next?
+	  jrst	NotNxt			; no.  save it until its time.
+
+; now we have the next entry we need to process
+
+	; deal with an ACK differently depending on state
+	Dispat (p2,ACKErr,<<S%SyRP,<pushj p,ACKSyR>>
+			,<S%SyRA,<pushj p,ACKSyR>>
+			,<S%Estb,<pushj p,ACKEst>>
+			,<S%Fin1,<pushj p,ACKF1>>
+			,<S%Fin2,<pushj p,ACKEst>>
+			,<S%ClsW,<pushj p,ACKEst>>
+			,<S%Clsn,<pushj p,ACKCln>>
+			,<S%LAck,<pushj p,ACKLAc>>
+			,<S%TimW,<pushj p,ACKTW>>
+			>)
+	  jrst	BufFls			; non-skip return from dispatch:
+					;  discard message and return.
+	; fall through to next page.
+; deal with the urgent pointer, if there is one ;⊗ TCPUrg
+TCPUrg:	; SYN-Sent state processing for incoming may join us at this point.
+
+	; skip URG and text processing for states which can't have them.
+	Dispat(p2,UrgErr,<<S%Estb,<jfcl>>
+			,<S%Fin1,<jfcl>>
+			,<S%Fin2,<jfcl>>
+			,<S%ClsW,<jrst	TCPFin>>
+			,<S%Clsn,<jrst	TCPFin>>
+			,<S%LAck,<jrst	TCPFin>>
+			,<S%TimW,<jrst	TCPFin>>
+		>)
+
+	txnn	p3,TC%Urg		; urgent bit set?
+	  jrst	TCPTxt			; no.  process text
+	load.	t1,TCPUP,(u)		; get the urgent pointer
+	add	t1,t3			; add offset to sequence number
+					;  to get sequence number after
+					;  urgentness
+	camg	t1,RcvUrg(f)		; is this more urgent than previously?
+	  jrst	TCPTxt			; no.  just ignore it.
+
+	movem	t1,RcvUrg(f)		; yes.  save the new urgent pointer.
+	pushj	p,TTyUrg##		; do TTY urgent processing if
+					;  necessary.
+; message chain is in P1. left half: first buffer, right half: last buffer. ;⊗ TCPTxt TCPTx1
+; note: can only get here in established or one of the FIN-wait states
+TCPTxt:
+	camg	t4,RcvNxt(f)	 	; it there any data here?
+	  jrst	TCPFin			; nope.
+
+	scnoff				; we are mucking with the
+					;  stream, so protect our ass.
+	SKIPE	T1,IBFLST(F)	;IS THERE ALREADY A STREAM?
+	  jrst	[			; yes.
+		 hlrz	t2,p1		; get first buffer of new message.
+		 stor.	t2,NBHNxt,(T1)	; join the new message to the end of
+					;  the old stream.
+		 jrst	TCPTx1		; and continue
+		]
+	HLROM	p1,IBFTHS(F)	;NO, START ONE
+TCPTx1:	HRRZM	P1,IBFLST(F)	;NEW END OF STREAM
+	ScnOn				; ok.  let anyone have it.
+
+	setz	p1,			; don't let anyone flush the buffers
+	pushj	p,ImpNew##		; tell IO service about new data.
+
+	exch	t4,RcvNxt(f)		; save the sequence number we
+					;  expect next.
+	sub	t4,RcvNxt(f)		; get negative number of words here
+	addm	t4,RcvWnd(f)		; remove that many words from
+					;  the window.
+
+	txo	p4,TC$ACK		; make sure to ACK this data
+; here to check for a FIN and handle it ;⊗ TCPFin TCPFi0 TCPFi1
+TCPFin:	pushj	p,BufFls		; flush any unused buffers.
+	txnn	p3,TC%Fin		; FIN set?
+	  popj	p,			; no.  that's all for this message.
+	skipe	RcvFin(f)		; have we received this FIN already?
+	  jrst	TCPFi1			; yes.  skip initial FIN processing.
+	aos	RcvNxt(f)		; no.  update next byte past FIN
+	setom	RcvFin(f)		; remember we received a FIN
+	pushj	p,ImpNew##		; tell input service about new
+					;  informtaion.
+NOWAITS<			;TTY4C in IMPMAC will close connection
+	movsi	t1,ttyptr!ttykbd	; set up keyboard and printer bits
+	scnoff				; shut down interrupts for
+					;  these checks.
+	cain	p2,S%Estb		; are we established?
+	 tdnn	t1,ttylin(f)		; and are we dependent on the
+					;  IMP for any TTY info?  (actually,
+					;  should check for KBD and JOB or
+					;  PTR and not JOB, but since
+					;  we always set both PTR and
+					;  KBD together, we don't have to.)
+	  jrst	TCPFi0			; no to one or the other.
+	movx	t1,TC%Fin		; set FIN bit
+	iorm	t1,SndBts(f)		; set it in bits to be sent
+; can't need these lines: about to send an ACK anyway
+;	pushj	p,SndMsg##		; try to send a FIN in response.
+;	  jfcl				; ignore errors
+
+	movei	p2,S%LAck		; skip straight to last ACK
+	movem	p2,State(f)		; save the new state
+
+TCPFi0:	scnon				; interrupts back on
+>;NOWAITS
+TCPFi1:	txo	p4,TC$ACK		; have to ACK this FIN.
+
+	; skip if we want to stay in the same state, else load P2 with
+	;  the new state and non-skip
+	Dispat(p2,FinErr,<<S%Estb,<movei p2,S%ClsW>>
+			,<S%Fin1,<movei	p2,S%Clsn>>
+			,<S%Fin2,<pushj p,FINF2>>
+			,<S%ClsW,<skipa>>
+			,<S%Clsn,<skipa>>
+			,<S%LAck,<skipa>>
+			,<S%TimW,<pushj p,FINTW>>
+		>)
+NOWAITS<
+	  movem	p2,State(f)		; store a new state
+	popj	p,			; all done.
+>;NOWAITS
+IFWAITS<
+	 CAIA
+	POPJ P,
+	MOVEM P2,STATE(F)	;Store a new state
+	PJRST IMSINT##		;Set up state-change interrupt
+>;IFWAITS
+FINF2:	movei	t1,2*MSL		; load up twice maximum segment life ;⊗ FINF2 FINTW
+	movem	t1,GTimer(f)		; time wait timer is running
+	; RFC says "turn off other timers", but i see no timers here.
+	setzm	DevLog(f)		; clear the logical name.  this
+					;  makes it easier to spot
+					;  someone trying to reuse this
+					;  connection in a legitimate way.
+	pushj	p,TCPIOD		; make sure user wakes if waiting
+					;  for a close.
+	movei	p2,S%TimW		; change to time wait state
+	popj	p,			;  return non-skip to set the
+					;  new state.
+
+FINTW:	; he must not know we're here yet.  just restart timer.
+	movei	t1,2*MSL		; two times the longest time a
+					;  packet can live
+	movem	t1,GTimer(f)		; set the timer.
+	pjrst	cpopj1##		; and don't change state
+; here if we received a segment for a connection that doesn't exist ;⊗ TryRst RstFls SndRst
+TryRst:	txnn	p3,TC%Rst		; reset on?
+RstFls:	  pushj	p,SndRst		; no.  reply with a reset
+	pjrst	BufFls			; and flush the buffers
+
+; send a reset
+SndRst:	load.	t1,TCPSeq,(u)		; get sequence number
+	add	t1,MsgLen(f)		; add the length
+	txne	p3,TC%Syn		; is SYN set?
+	  aos	t1			; yes.  length is one more
+	txne	p3,TC%Fin		; is FIN set?
+	  aos	t1			; yes.  remember to count that, too.
+	movem	t1,RcvNxt(f)		; use that as the ACK field.
+	movx	t2,TC%Rst		; get reset bit
+	setz	t1,			; assume no ACK so no sequence number
+	txnn	p3,TC%Ack		; ACK set?
+	 txoa	t2,TC%Ack		; no.  set in response and skip
+	  load.	t1,TCPAck,(u)		; yes.  use ACK field for sequence.
+	pushj	p,TCPRsp		; send it off, T1 and T2 are args.
+	movx	t1,TC%All		; get all the bits
+	andcam	t1,SndBts(f)		; clear them ALL.
+	popj	p,			; return
+; here if we received a segment while listening for one ;⊗ InLstn AckAck AckAc1
+InLstn:	txne	p3,TC%Rst		; is this a reset?
+	  jrst	BufFls			; can't be real.  flush message
+	txnn	p3,TC%ACK		; acknowleging?
+	 txnn	p3,TC%Syn		; or not SYNing?
+	  jrst	[			; we didn't say anything, so this
+					;  can't be for us.
+		 push	p,f		; save old F in case someone wants it
+		 movei	f,PSDDDB##	; don't blast a good DDB over it.
+		 pushj	p,RstFls	; respond RESET and flush message
+		 pjrst	fpopj##		; restore original F and return.
+		]
+
+	; here when receiving a ligit incoming for our listen state.
+	load.	t1,TCPSeq,(u)		; get sequence number
+	movem	t1,RcvIRS(f)		; save in DDB
+	aos	t1			; compute next message expected
+	movem	t1,RcvNxt(f)		; save that as what is expected
+	movem	t1,RcvRed(f)		; save this as sequence number
+					;  last time we updated RcvWnd.
+					; (we actually first "updated"
+					;  it when we prepped the window.)
+
+	pushj	p,GetISS		; decide on the initial send
+					;  sequence number.
+	movem	t1,SndISS(f)		; save ISS
+NOWAITS<			;TCPMAK accounts for SYN
+	aos	t1			; account for SYN
+>;NOWAITS
+	movem	t1,SndNxt(f)		; and save it.
+	setzm	SndWnd(f)		; we have no idea how much we
+					;  can send until we hear.
+	setom	SndLWd(f)		; make last window allocation
+					;  non-zero.
+
+	; fill in defaults for passive open, just in case.
+	move	t1,RmtAdr+PSDDDB##	; get the foreign host address.
+	movem	t1,RmtAdr(f)		; and save it the real DDB
+	move	t1,NetAdr+PSDDDB##	; get ARPA address
+	movem	t1,NetAdr(f)		; save in the DDB
+IFWAITS<
+	MOVE T1,LCLADR+PSDDDB##		;Copy local address
+	MOVEM T1,LCLADR(F)		;(we may have more than one)
+	MOVE T1,NETWRK+PSDDDB##		;Copy target network also
+	MOVEM T1,NETWRK(F)
+>;IFWAITS
+	load.	t1,StdSP,(u)		; get the source port (his port)
+	movem	t1,RmtPrt(f)		; save in DDB
+	load.	t1,StdDP,(u)		; get the destination port (my port)
+	movem	t1,LclPrt(f)		; save in DDB
+
+	movei	p2,S%SyRP		; change to syn-received, passive
+	jrst	AckAc1			; and continue
+
+AckAck:	; here from Syn-sent code, to pretend to be a listen.
+	sos	SndNxt(f)		; pretend we didn't send anything
+	movei	p2,S%SyRA		; change state to syn-received, active
+
+AckAc1:	scnoff				; protect against unlikely race
+	skipg	State(f)		; has this DDB been wiped while
+					;  we were thinking?
+	  pjrst	sonppj##		; yes.  just try to give up
+	movem	p2,State(f)		; in DDB
+IFWAITS<
+	PUSHJ P,IMSINT##		;Set up state-change interrupt
+>;IFWAITS
+	movx	t1,TC%Syn!TC%Ack	; get SYN bit and ACK the SYN we got
+	iorm	t1,SndBts(f)		; set it in bits to be sent
+	setzm	SndLst(f)		; force into retransmission queue.
+	pushj	p,SndMsg##		; send message now.
+	  jfcl				; ignore a error we can't help.
+	scnon				; ok to interrupt now.
+
+	skipn	t4,MsgLen(f)		; any text in this message?
+	  popj	p,			; no text.  just return.
+
+	load.	t3,TCPSeq,(u)		; get the starting sequence number
+	add	t4,t3			; compute the sequence number
+					;  of the byte following this message.
+	txz	p3,TC%Syn!TC%Ack	; don't reprocess SYN and ACK.
+	jrst	NotNxt			; remember the text.
+; here if received a segment for a connection in SYN-SENT state ;⊗ InSynS InSyn1 InSyn2
+InSynS:	txnn	p3,TC%ACK		; is this an ACK?
+	  jrst	InSyn1			; no
+	load.	t1,TCPACK,(u)		; get the ACK number
+	came	t1,SndNxt(f)		; is this the correct ACK?
+	  jrst	TryRst			; no.  send a reset (unless reset)
+InSyn1:	txnn	p3,TC%Rst		; is this a reset?
+	  jrst	InSyn2			; no.  still processable
+	txnn	p3,TC%ACK		; was ACK on?
+	  jrst	BufFls			; no.  this isn't for us.
+	; we flush this connection.  set IODErr.
+	jrst	RstSRA			; delete DDB and message and return.
+
+InSyn2:	pushj	p,SecChk		; security check.  honk!  honk!
+	  jrst	BufFls			; security isn't tight enough.
+
+	txnn	p3,TC%Syn		; is this trying to get us together?
+	  jrst	BufFls			; no.  must be from outer space
+	load.	t4,TCPSeq,(u)		; get the sent sequence number
+	movem	t4,RcvIRS(f)		; that's the first one we got
+	movem	t4,RcvRed(f)		; save this as sequence number
+					;  last time we updated RcvWnd.
+					; (we didn't really know it at
+					;  the time.)
+	aos	t4			; we're expecting the next one
+	movem	t4,RcvNxt(f)		; that's what we're expecting
+					;  (after this SYN).  (now T4 is
+					;  loaded as it must be for TCPUrg)
+	txnn	p3,TC%Ack		; is this ACKing our SYN?
+	  jrst	AckAck			; no.  now we send another SYN as
+					;  if we were coming from a listen
+					;  with the RcvNxt we just got.
+					;  if this beats our other SYN,
+					;  then all will proceed as if
+					;  we had been listening and
+					;  the earlier SYN will be discarded
+					;  (not in window).  if the other
+					;  SYN gets there first, this
+					;  one will be discarded (not
+					;  in window) and a proper ACK
+					;  will be sent to us.  this
+					;  ACK will appear to us to
+					;  "ACK our SYN", taking us
+					;  from Syn-Rcvd to established.
+					;  And vice versa.
+	pushj	p,ACKUpd		; yes.  go update the ACK stuff.
+	movei	p2,S%Estb		; set state to ESTABLISHED
+	movem	p2,State(f)		; in DDB
+IFWAITS<
+	PUSHJ P,IMSINT##		;Set up state-change interrupt
+>;IFWAITS
+	pushj	p,TCPIOD		; wake up the job if needed.
+	txo	p4,TC$ACK		; remember to always ACK his ACK
+	jrst	TCPUrg			; join ESTABLISHED processing
+					;  at urgent pointer processing.
+	subttl	returns ;⊗ NoLead NoMess BadChk FlsOpt NoPort NoDDB BadCon NoIPCF NoITY AckErr UrgErr FinErr SeqBad BufFls FlsRst RstSRP RstBTL RstSRA RstEst RstCls FlsSyn
+
+; message ended before leader was read in
+NoLead:	aos	TCELed##		; error with leader
+	popj	p,			; return
+
+; bytes ended before message or ran out of buffers while reading it
+NoMess:	aos	TCEMes##		; count error reading message in
+	jumpe	p2,cpopj##		; return if no options
+	hlrz	t1,p2			; get first buffer of options
+	pjrst	RelBuf##		; release the options, too.
+
+BadChk:	aos	TCEChk##		; checksum wrong.  count it
+FlsOpt:	jumpe	p2,BufFls		; just flush the buffers in no options
+	hlrz	t1,p2			; get first buffer of options
+	pushj	p,RelBuf##		; free them
+	pjrst	BufFls			; flush out buffers and return
+
+NoPort:	aosa	TCEPrt##		; incoming to a exec port we
+					;  don't watch.
+NoDDB:	  aos	TCEDDB##		; couldn't get DDB when needed.
+BadCon:	pop	p,f			; restore fake DDB with info in it.
+	scnoff				; stop interupts
+	pushj	p,SndNSP##		; call ICMP to tell him we
+					;  don't do that.
+	scnon				; interrupts ok again.
+	jrst	FlsOpt			; go flush message and options
+
+NOWAITS<
+NoIPCF:	aosa	TCEIPC##		; IPCF failed
+>;NOWAITS
+NoITY:	  aos	TCEITY##		; couldn't get an ITY when i
+					;  wanted one.
+	pushj	p,DDBREL##		; RETURN THE DDB
+	jrst	BadCon			; do bad connection things
+
+
+
+AckErr:
+UrgErr:
+FinErr:	stopcd	BufFls,DEBUG,SES,	;++ state error seen
+
+; here to force an ACK if not handling a RESET and discard the message.
+SeqBad:	aos	TCPMNW##		; count message not in window
+	txnn	p3,TC%Rst		; a reset?
+	  txo	p4,TC$ACK		; get an ACK sent back.
+
+; subroutine to release all the buffers in our message.
+BufFls:	hlrz	t1,p1			; get first buffer of chain.
+	pjrst	RelBuf##		; release the entire chain.
+
+; here to flush the message and handle a reset
+FlsRst:	dispat	(p2,RstCls,<<S%SyRP,<jrst	RstSRP>>
+			,<S%SyRA,<jrst	RstSRA>>
+			,<S%Estb,<jrst	RstEst>>
+			,<S%Fin1,<jrst	RstEst>>
+			,<S%Fin2,<jrst	RstEst>>
+			,<S%ClsW,<jrst	RstEst>>
+		   >)
+
+; incoming RESET to an almost established connection from a listen
+RstSRP:
+NOWAITS<
+	pushj	p,ImpDev##		; is this controlling a job?
+	  jrst	[			; this device is NOT an IMP?
+		 stopcd	CPOPJ##,DEBUG,CNI	;++ connection not an IMP
+		]
+	  jrst	RstBTL			; not controlling a job: back
+					;  to listen
+>;NOWAITS
+IFWAITS<
+	MOVE T1,DEVMOD(F)	;See who has this DDB
+	TRNE T1,ASSPRG		;Skip if not held by a job - flush DDB
+	JRST RSTBTL		;If job has it, back to listen state
+>;IFWAITS
+	pushj	p,DDBFls##		; clear our all data buffers
+	pjrst	DDBRel##		; this is an incoming
+					;  connection to a server.
+					;  flush it.
+RstBTL:	pushj	p,DDBFls##		; clear our all data buffers
+	movei	p2,s%List		; get listen state
+	movem	p2,State(f)		; back to listen state
+				;JJW - IMSINT has already been called by DDBFLS
+	setz	p4,			; no bits apply
+	popj	p,			; try to get out of it
+
+; incoming reset to a connection in SYN received, active
+RstSRA:	; fall into established code
+
+; incoming reset to an established connection
+RstEst:
+NOWAITS<
+	movei	s,IODERR		; set device error
+>;NOWAITS
+IFWAITS<
+	movei	s,IODERR!RSET		; set reset error
+>;IFWAITS
+	iorm	s,DevIOS(f)		; in DDB
+RstCls:	setz	p4,			; no bits are operative
+	pushj	p,BufFls		; get rid of the data.
+	pjrst	ClsIOD			; do normal close DDB handling
+
+; incoming SYN where there can't be one.  reset.
+FlsSyn:	pushj	p,SndRst		; send a reset
+	jrst	RstCls			; throw away DDB, queues and all.
+	subttl	routines to handle an ACK in various states ;⊗ ACKSyR ACKEst AckEs1 ACKF1 ACKCln ACKLAc ACKTW
+
+; all routines should skip return if this segment is still worthy
+;  of consideration, non-skip return if this segment should be
+;  discarded.
+
+; ACK while in SYN-received state
+ACKSyR:	load.	t2,TCPAck,(u)		; get ACK number for this message
+	caml	t2,SndUna(f)		; has it been previously ACKed?
+	 camle	t2,SndNxt(f)		; or is it ACKing something
+					;  not sent yet?
+	  jrst	[			; yes.  fucked up.
+		 move	t1,t2		; get sequence number placed
+		 movx	t2,TC%Rst	; reset is the bit we want
+		 pjrst	TCPRsp		; queue it up to be sent and error
+					;  return from AckSyR
+		]
+	movei	p2,S%Estb		; change state to ESTABLISHED
+	movem	p2,State(f)		; in the DDB
+IFWAITS<
+	PUSHJ P,IMSINT##		;Set up state-change interrupt
+>;IFWAITS
+	pushj	p,TCPIOD		; try to wake job
+	jrst	ACKEs1			; now do established like processing
+
+; ACK while in established state (also CLOSE-wait), as well as
+;  part of the processing for FIN-wait-1, FIN-wait-2, and Closing.
+ACKEst:	load.	t2,TCPAck,(u)		; get the ACK number
+	camle	t2,SndNxt(f)		; ACKing data not yet sent?
+	  jrst	[			; yes.  our friend seems confused.
+		 txo	p4,TC$ACK	; send an ACK with the fields
+					;  properly set.
+		 popj	p,		; perhaps that will straighten
+					;  him out.
+		]
+AckEs1:	caml	t2,SndUna(f)		; any chance of progress made here?
+	  pushj	p,ACKUpd		; yes.  update ACK information.
+
+	pjrst	cpopj1##		; and continue processing
+
+
+; ACK while in FIN-wait-1
+ACKF1:	pushj	p,ACKEst		; do the common established processing
+	  popj	p,			; this segment is no good
+	skipe	RetrnQ(f)		; retransmission queue empty?
+	  pjrst	cpopj1##		; no.  FIN hasn't been ACKed yet.
+	movei	p2,S%Fin2		; yes: our FIN's been ACKed
+	movem	p2,State(f)		; enter FIN-wait-2 state
+IFWAITS<
+	PUSHJ P,IMSINT##		;Set up state-change interrupt
+>;IFWAITS
+	pjrst	cpopj1##		; continue processing
+
+; ACK while in closing state
+ACKCln:	pushj	p,ACKEst		; common established processing
+	  popj	p,			; drop the segment
+	skipe	RetrnQ(f)		; everything been ACKed
+					;  (including our FIN)?
+	  popj	p,			; no: discard segment
+	movei	t1,2*MSL		; load up twice maximum segment life
+	movem	t1,GTimer(f)		; time wait timer is running
+	setzm	DevLog(f)		; don't let the logical name be
+					;  used anymore.
+	movei	p2,S%TimW		; change state to Time-wait
+	movem	p2,State(f)		; and remember in DDB
+IFWAITS<
+	PUSHJ P,IMSINT##		;Set up state-change interrupt
+>;IFWAITS
+	pushj	p,TCPIOD		; wake user if waiting for this
+	pjrst	cpopj1##		; still going on this segment
+
+; ACK while in Last-ACK
+ACKLAc:	pushj	p,ACKEst		; normal ACK processing.
+					; (note: the specs indicate
+					;  that this isn't necessary,
+					;  but in last-ACK state, we
+					;  can get ACKs of data which
+					;  must be removed from the
+					;  retransmission queue as always.)
+	  popj	p,			; flush segment
+	skipe	RetrnQ(f)		; everything's been ACKed,
+					;  including our FIN?
+	  popj	p,			; no.  keep waiting
+	movx	p2,S%Clos		; set state to closed
+	movem	p2,State(f)		; in DDB.
+IFWAITS<
+	PUSHJ P,IMSINT##		;Set up state-change interrupt
+>;IFWAITS
+; legally, the following two lines should be in, but experience shows that
+;  the user (well, me, anyway) expects the DDB to disappear at this point.
+;	skipe	IBfThs(f)		; has everything been read?
+;	  popj	p,			; no.  let input delete the DDB.
+	pjrst	ClsIOD			; close the DDB and wake anyone waiting
+
+; ACK while in time-wait
+ACKTW:	txnn	p3,TC%Fin		; is this a FIN?
+	  popj	p,			; no.  it can't be legal.  ignore it.
+	txo	p4,TC$ACK		; ACK this FIN again: he didn't
+					;  hear it last time.
+	movei	t1,2*MSL		; time-wait max
+	movem	t1,GTimer(f)		; set it
+	popj	p,			; nothing more to do with this
+	subttl	AckUpd ;⊗ ACKUpd AckWnd Not0Wn Allc1 NoAllc RetrLp RetrNo RetrD0 RetrDn
+
+;++
+; Functional description:
+;
+;	update information about how much data has been acknowleged
+;	as received by the other host.  this update includes
+;	remembering where the unacknowleged data now is, where the
+;	end of the receive window is, and deleting any packets in
+;	the retransmission queue that are entirely acknowleged.
+;
+;
+; Calling sequence:
+;
+;		move	f,DDB
+;		pushj	p,AckUpd
+;		<always returns here>
+;
+; Input parameters:
+;
+;	F - DDB in question.
+;
+; Output parameters:
+;
+;	none.
+;
+; Implicit inputs:
+;
+;	TCP header, DDB
+;
+; Implicit outputs:
+;
+;	outgoing window information in DDB.
+;
+; Routine value:
+;
+;	none.
+;
+; Side effects:
+;
+;	modified data in DDB.  may delete some messages in the
+;	retransmission queue.
+;
+;	may change the retransmission time to the probe time so that
+;	a zero window probe isn't sent too often.  may also change it back.
+;--
+
+
+ACKUpd:	pushj	p,save1##		; get P1.
+	pushj	p,savt##		; and all the T's
+	load.	p1,TCPACK,(u)		; get ACK number.
+	load.	t1,TCPWnd,(u)		; get window length
+	jumpn	t1,AckWnd		; if there's a window, we can send.
+
+	; can't send anything, since there's a zero window.
+	exch	t1,SndLWd(f)		; get last window size, set it to zero
+	jumpe	t1,NoAllc		; if it was already zero, don't allow
+					;  the extra probing byte.
+	movei	t1,1			; allow one more byte
+	movem	t1,SndWnd(f)		; so we get a reaction when the window
+					;  reopens
+	movx	t1,PrbTim		; get the standard probe time
+	exch	t1,RtTime(f)		; make that the retransmission time,
+					;  get the real retransmission time.
+	movem	t1,RTHold(f)		; hold the old retransmission time.
+	jrst	Allc1			; wake job to get that one byte sent
+
+AckWnd:	exch	t1,SndLWd(f)		; remember that the last window was
+					;  non-zero.
+	jumpn	t1,Not0Wn		; didn't use to be zero
+
+	; window was zero.
+	move	t1,RTHold(f)		; get the held retransmission time
+	movem	t1,RtTime(f)		; restore that
+
+	; make sure to get the probe byte sent NOW.
+	hrrz	t1,RetrnQ(f)		; get first entry in retransmission q.
+	jumpe	t1,Not0Wn		; nothing there?  odd.
+NOWAITS<
+	scnoff				; stop interrupts
+ifn debug,<	; still unsure
+	pushj	p,BibChk##		; check the BIB
+>
+	skip.	t2,BIBTQ,(t1),n		; is it in the transmission queue now?
+	 pushj	p,Go1822##		; no. send it to 1822 service
+	  jfcl				; oh, well.  still being retransmitted
+	scnon				; interrupts back on
+>;NOWAITS
+IFWAITS<
+	SKIP. T2,BIBTQ,(T1),E		;Is it in the transmission queue now?
+	 JRST NOT0WN			;Yes, it'll be sent
+	LOAD. W,BIBNET,(T1)		;Get network interface
+	PUSHJ P,RETFIX			;Update its headers
+	PUSHJ P,@NI.OUT##(W)		;And send it
+	 JFCL				;Oh, well.  Still being retransmitted
+>;IFWAITS
+
+Not0Wn:	move	t1,SndLWd(f)		; get back new send window
+	move	t2,t1			; get copy
+	lsh	t2,-2			; 25% of window for later comparison
+	add	t1,p1			; get highest sequence number
+					;  we're allowed to send.
+	scnoff				; no interrupts here
+	sub	t1,SndNxt(f)		; figure the length of window we
+					;  can use.
+	camg	t1,t2			; is the amount of window over
+					;  the threshhold for sending?
+	  jrst	[			; no.  don't update window yet
+		 scnon			; interrupts ok
+		 jrst	NoAllc		; do ACK processing
+		]
+IFWAITS<
+	CAILE T1,2*WNDSIZ	;Never allow more than this much
+	MOVEI T1,2*WNDSIZ	;to avoid using all our buffers
+	SUB T1,OBFBYT(F)	;Account for bytes we've used already
+>;IFWAITS
+	movem	t1,SndWnd(f)		; update window.
+	scnon				; interrupts ok.
+Allc1:	pushj	p,AlcNew##		; wake job if waiting.
+
+NoAllc:	camg	p1,SndUna(f)		; a real increase?
+	  popj	p,			; no.
+	movem	p1,SndUna(f)		; remember how much has been ACKed.
+
+NOWAITS<
+	move	t1,UTTime(f)		; get user timeout time.
+>;NOWAITS
+IFWAITS<
+	LDB T1,ALLTP##			;Get user timeout time
+	LSH T1,1			;Convert to seconds
+	SKIPN T1			;Skip unless zero
+	MOVEI T1,TCPUTT			;Use default
+>;IFWAITS
+	movem	t1,UTTimr(f)		; and reset it.
+
+	scnoff				; protect BIB freeing code
+	move	t3,RTTime(f)		; get standard retransmission time
+	move	t4,UpTime##		; get time since last reload
+
+	hrrz	t1,RetrnQ(f)		; get retransmission queue head.
+	jumpe	t1,RetrD0		; this shouldn't happen....
+RetrLp:
+ifn debug,<	; debugging
+	pushj	p,BIBChk##		; consistency check
+>
+	cam.	p1,BIBSeq,(t1),ge	; is this fully ACKing this one?
+	  jrst	RetrDn			; no.  that's the lowest we
+					;  have. stop scanning.
+	skip.	t2,BIBTim,(t1),g	; get uptime when sent
+	  jrst	RetrNo			; now being sent or
+					;  shouldn't be on retransmission
+					;  queue at all.
+	subm	t4,t2			; compute jiffies since sent
+	; smooth retransmission timeout time by computing
+	;   (7/8*<old retran time> + 1/8*<2*round trip time for this segment>),
+	; or	(7*<old> + 2*<round trip>)/8, in this case.
+	imuli	t3,7			; RT time times 7
+	lsh	t2,1			; RTTime is smoothed round trip
+					;  time times 2.
+	add	t3,t2			; total them.
+	addi	t3,4			; make sure to round up.
+	ash	t3,-3			; now divide total by 8
+
+RetrNo:	load.	t2,BIBRTQ,(t1)		; get next BIB in queue
+IFWAITS<OFFIMP>
+	pushj	p,RelBIB##		; dump that BIB.
+IFWAITS<ONIMP>
+	skipe	t1,t2			; position next BIB.  is one?
+	  jrst	RetrLp			; yes.  loop.
+
+RetrD0:	setzb	t1,RetrnQ(f)		; nothing left in the queue
+IFWAITS<
+	PUSHJ P,RQTOIO##	;Wake up TTY output
+>;IFWAITS
+RetrDn:
+	hrrm	t1,RetrnQ(f)		; update pointer to new first buffer.
+
+	; now remember new retransmission time
+	caige	t3,RTMin		; is it too small?
+	  movei	t3,RTMin		; yes.  least legal time
+	caile	t3,RTMax		; is it too big?
+	  movei	t3,RTMax		; yes.  most legal time
+	movem	t3,RTTime(f)		; set new timeout time in ticks.
+
+	; may need to send some information to user concerning the
+	;	data we now know the other end received.
+
+	pjrst	sonppj##		; interrupts on and return
+	subttl	deal with a message received before it should be ;⊗ NotNxt FtrOrd FtrOr1 FtrRpl FtrOr2 FtrNew FtrSav
+
+; P1 has a message pointer to message which cannot be accepted
+;  until other messages before it arrive.  T4 has the sequence number
+;  just after this message.
+NotNxt:
+	aos	TCPFTS##		; count future message seen
+	load.	t3,TCPSeq,(u)		; get sequence number (chain is
+					;  ordered by initial sequence number)
+
+	movei	t2,Future-FNxtOf(f)	; get the start of the FMB chain.
+					;  such that using FMBNxt will
+					;  point at future pointer word.
+
+FtrOrd:	load.	p2,FMBNxt,(t2)		; get next FMB in queue
+	jumpe	p2,FtrNew		; found the end of the futures chain.
+					;  get an FMB and save this in it.
+	load.	t1,TCPSeq,FMBTCP(p2)	; get sequence number of this one.
+	camg	t3,t1			; new starts after old?
+	  jrst	FtrOr1			; no.  could precede or be together.
+	cam.	t4,FMBNBy,(p2),g	; does new extend beyond the old?
+	  jrst	BufFls			; no. new is duplicate. discard.
+	move	t2,p2			; grab copy of this pointer in
+					;  case it's the last.
+	jrst	FtrOrd			; try next FMB.
+
+FtrOr1:	came	t3,t1			; do they start at the same place?
+	  jrst	FtrOr2			; no.  new one definitely
+					;  starts first.
+	cam.	t4,FMBNBy,(p2),g	; does the new one end after
+					;  the old one?
+	  jrst	BufFls			; nope.  old has everything the
+					;  new one does.  kill new.
+	; replace old one: new one consumes it.
+FtrRpl:	load.	t1,FMBFst,(p2)		; get first buffer in old message
+	pushj	p,RelBuf##		; free all buffers
+	move	t1,p2			; position used but loved FMB
+	jrst	FtrSav			; save all the data
+
+FtrOr2:	cam.	t4,FMBNBy,(p2),l	; new one ends before old one?
+	  jrst	FtrRpl			; nope.  completely consumes it.
+
+; here to get an FMB and save the data in it
+FtrNew:	pushj	p,GetFMB		; get a Future Message Block
+	  jrst	BufFls			; no big deal.  flush buffer
+					;  and go out normally.
+	stor.	t1,FMBNxt,(t2)		; link to the rest of the stream
+	stor.	p2,FMBNxt,(t1)		; whatever the next one was (may be
+					;  zero), make sure it's our next.
+
+; here to save the data in the FMB in t1
+FtrSav:	movem	p3,TCPFlg(u)		; save the bits on this message.
+					;  (we may have changed them)
+	movei	t2,FMBTCP(t1)		; point at correct place in FMB
+	hrl	t2,u			; BLT pointer to copy TCP header.
+	blt	t2,FMBTCP+TCPLen-1(t1)	; copy the entire header into
+					;  the FMB.
+	stor.	p1,FMBPnt,(t1)		; save pointer to the buffer chain.
+	stor.	t4,FMBNBy,(t1)		; save the sequence number of
+					;  the next byte after this message.
+	popj	p,
+; routine to get an FMB, return it in T1 ;⊗ GetFMB RelFMB FlsFMB FlsFM1
+NOWAITS<
+GetFMB:	push	p,t2			; save T2
+	movei	t2,<FMBLen+3>/4		; this many 4 word blocks in an FMB
+	push	p,t4			; save T4
+	syspif				; turn off PIE for this
+	pushj	p,Get4Wd##		; go get it.
+	  jrst	GetFM1			; failed
+	aos	TCPFMB##		; coutn future message blocks.
+	aos	-2(p)			; plan for skip return
+GetFM1:	syspin				; PIE back on
+	pop	p,t4			; restore T4
+	pjrst	t2popj##		; restore T2 and return
+
+; routine to return an FMB in T2 to free core.
+RelFMB:	sos	TCPFMB##		; one less future message block
+	movei	t1,<FMBLen+3>/4		; this many 4 word blocks in an FMB
+	pjrst	Giv4Wd##		; tell Core1 to take it back.
+>;NOWAITS
+
+IFWAITS<
+	INTERNAL FMBLen			; for spare FS list
+	EXTERNAL GETFMB,RELFMB
+>;IFWAITS
+
+; routine to delete an FMB chain.  first FMB is in T1
+FlsFMB::
+	pushj	p,save1##		; get p1
+	move	p1,t1			; start with buffer in correct place
+FlsFM1:	load.	t1,FMBFst,(p1)		; get pointer to first buffer
+					;  in message.
+	pushj	p,RelBuf##		; release the buffer chain
+	move	t2,p1			; position this FMB for release
+	load.	p1,FMBNxt,(p1)		; get pointer to next FMB in chain
+	pushj	p,RelFMB		; release this FMB
+	jumpn	p1,FlsFM1		; loop if there's more
+
+	popj	p,			; return
+	subttl	GetISS ;⊗ GetISS
+
+;++
+; Functional description:
+;
+;	decide on the Initial Send Sequence number whenever we need one.
+;
+;
+; Calling sequence:
+;
+;		pushj	p,GetISS
+;		<always return here, ISS to use in T1>
+;
+; Input parameters:
+;
+;	none.
+;
+; Output parameters:
+;
+;	T1 - ISS
+;
+; Implicit inputs:
+;
+;	none.
+;
+; Implicit outputs:
+;
+;	none.
+;
+; Routine value:
+;
+;	none.
+;
+; Side effects:
+;
+;	none.
+;--
+
+
+NOWAITS<
+GetISS:	setz	t1,0			; just use zero for now.
+	popj	p,
+>;NOWAITS
+IFWAITS<			;Approximate method in RFC 793
+GETISS:	MOVE T1,PSTIME##	;Ticks since midnight
+	LSH T1,↑D12		;Times 4096 makes about 4usec units
+	TLZ T1,740000		;Truncate to 32 bits
+	POPJ P,
+>;IFWAITS
+	subttl	SecChk ;⊗ SecChk
+
+;++
+; Functional description:
+;
+;	Classified.
+;
+;
+; Calling sequence:
+;
+;	Classified.
+;
+; Input parameters:
+;
+;	Classified.
+;
+; Output parameters:
+;
+;	Classified.
+;
+; Implicit inputs:
+;
+;	Classified.
+;
+; Implicit outputs:
+;
+;	Classified.
+;
+; Routine value:
+;
+;	Classified.
+;
+; Side effects:
+;
+;	Classified.
+;
+;--
+
+
+SecChk:	pjrst	cpopj1##		; security looks good.
+	subttl	TCPMak ;⊗ TCPMak TCPMa1 MakCnt
+
+;++
+; Functional description:
+;
+;	put TCP leader (in 32 bit format) into fixed TCP output leader
+;	buffer.  then link the buffer to the beginning of the
+;	current output stream.  then send the message down to the
+;	next level of protocol for further processing.
+;
+;
+; Calling sequence:
+;
+;		move	f,DDB
+;		pushj	p,TCPMak
+;		<always returns here>
+;
+; Input parameters:
+;
+;	f - DDB for connection
+;
+; Output parameters:
+;
+;	none.
+;
+; Implicit inputs:
+;
+;	data in DDB
+;
+; Implicit outputs:
+;
+;	data in DDB
+;
+; Routine value:
+;
+;	returns non-skip if can't get a buffer
+;
+; Side effects:
+;
+;	adds a buffer to the beginning of the current output stream.
+;--
+
+
+TCPMak::
+	setzm	TCPOBf+NBHLen		; zero first word of leader.
+	move	t2,[TCPOBf+NBHLen,,TCPOBf+NBHLen+1]	; set up blt
+	blt	t2,TCPOBf+TCPLen+NBHLen-1	; clear to end
+
+	move	t3,SndBts(f)		; get bit field from DDB somewhere
+	movx	t1,TC%Onc		; get bits which should only be
+					;  sent once.
+	andcam	t1,SndBts(f)		; clear bits which we should
+					;  not send again.
+	andx	t3,TC%All		; make sure not to get stray bits.
+	movsi	t1,ttyptr!ttykbd	; some brand of crosspatch bits
+	tdne	t1,TtyLin(f)		; some kind of crosspatch?
+	  txo	t3,TC%Psh		; yes.  make sure it's shoved through.
+
+	move	t1,SndNxt(f)		; no.  get next sequence number
+	stor.	t1,TCPSeq,NBHLen+TCPOBf	; save in leader
+	move	t1,ObfByt(f)		; get byte count of this message
+	addm	t1,SndNxt(f)		; update the current sequence
+					;  that much.
+	txne	t3,TC%Fin!TC%Syn	; FIN and SYN take up a sequence number.
+	  aos	SndNxt(f)		; add it.
+
+; enter here for out of sequence sending.  sequence number already set in
+;	TCP leader, bits to be sent now in t3.
+TCPMa1:
+	; count all the bits in the flag word as message types to get some
+	;  idea of what we're sending.
+	movx	t1,TC%Low		; get lowest order bit
+	setz	t2,			; and a count
+MakCnt:	tdne	t3,t1			; is that bit on?
+	  aos	TCPOTy##(t2)		; yes.  count one more with
+					;  that bit on.
+	lsh	t1,1			; shift bit over one
+	txne	t1,TC%All		; bit no longer in field?
+	  aoja	t2,MakCnt		; still in flag field.  count on.
+
+	movem	t3,TCPFlg+NBHLen+TCPOBf	; set the bits wanted.
+
+	movei	t1,TCPOBf		; point at the output leader space
+	exch	t1,OBfFst(f)		; make us first, get old first
+	stor.	t1,NBHNxt,TCPOBf	; link old first to us.
+	move	t1,RmtPrt(f)		; get his port
+	stor.	t1,StdDP,NBHLen+TCPOBf	; that's the destination port
+	move	t1,LclPrt(f)		; get my port
+	stor.	t1,StdSP,NBHLen+TCPOBf	; that's the source port
+	move	t1,RcvNxt(f)		; get ACK number
+	stor.	t1,TCPAck,NBHLen+TCPOBf	; into leader.
+	move	t1,RcvWnd(f)		; current window
+	stor.	t1,TCPWnd,NBHLen+TCPOBf	; in
+	move	t1,SndUrg(f)		; current out going urgent pointer
+	stor.	t1,TCPUP,NBHLen+TCPOBf	; save
+	movei	t2,TCPLen		; get length of normal header
+	txne	t3,TC%Syn		; start up message?
+	  aos	t2			; yes.  send the max segment
+					;  option word, also.
+	stor.	t2,TCPOff,NBHLen+TCPOBf	; save that.
+	lsh	t2,Wd2Byt		; convert from words to bytes
+	stor.	t2,NBHCnt,TCPOBf	; save byte count for this buffer
+	addm	t2,OBfByt(f)		; get a grand total in bytes.
+	; save T2 for checksumming
+
+ifn FtChck,<	; doing checksums?
+	move	t1,[point 16,NBHLen+TCPOBf]; starting pointer
+	; number of bytes is in t2
+	pushj	p,CSmWds##		; and checksum it.
+	move	t1,RmtAdr(f)		; get remote address
+	pushj	p,CSmWrd##		; add it to checksum
+	move	t1,LclAdr(f)		; local address, too
+	pushj	p,CSmWrd##		; add it in.
+	move	t1,Protcl(f)		; and get protocol
+	pushj	p,CSmHWd##		; and add it in as well
+	move	t1,OBfByt(f)		; get byte count of message
+					;  plus leader
+	pushj	p,CSmHWd##		; add that to checksum, too.
+
+	txc	p3,msk.hw		; send one's complement of the sum
+	txnn	p3,msk.hw		; if zero, make it...
+	  movei	p3,msk.hw		; ...the zero with all bits on
+	stor.	p3,TCPChk,NBHLen+TCPOBf	; save the checksum in the leader.
+>
+ife FtChck,<	; not doing checksums
+	zero.	t1,TCPChk,NBHLen+TCPOBf	; flag that we aren't checksumming
+>
+	pjrst	IpMake##		; call next level of protocol
+	subttl	TCPRsp ;⊗ TCPRsp RspEnd
+
+;++
+; Functional description:
+;
+;	routine to send a TCP response which is out of sequence from
+;	the TCP stream.  for example, it could be a RESET or an
+;	ACK to correct a bad sequence field.
+;
+;
+; Calling sequence:
+;
+;		move	t1,<sequence to use>
+;		move	t2,<bits>
+;		move	f,<ddb>
+;		pushj	p,TCPRsp
+;		<always returns here>
+;
+; Input parameters:
+;
+;	T1 - sequence number to put on the message
+;	T2 - bits which should be set in message
+;	F - DDB
+;
+; Output parameters:
+;
+;	none.
+;
+; Implicit inputs:
+;
+;	DDB
+;
+; Implicit outputs:
+;
+;	none.
+;
+; Routine value:
+;
+;	none.
+;
+; Side effects:
+;
+;	put a message in the output queue.
+;--
+
+
+TCPRsp:	
+	scnoff				; STOP!
+
+	push	p,ObfByt(f)		; save
+	setzm	OBfByt(f)		; no bytes in message
+	pushj	p,OutPre##		; enough buffer space for this?
+	  jrst	RspEnd			; no.  forget it.
+
+	push	p,t2			; save bits
+	push	p,t3			; and t3 for passing to TCPMa1
+	push	p,p3			; save lots of other things
+	push	p,ObfFst(f)		; save
+	push	p,ObfThs(f)		; save
+	push	p,ObfBC(f)		; save
+
+	; make sure to clear the TCP leader, using a safe AC.
+	setzm	TCPOBf+NBHLen		; zero first word of leader.
+	move	p3,[TCPOBf+NBHLen,,TCPOBf+NBHLen+1]	; set up blt
+	blt	p3,TCPOBf+TCPLen+NBHLen-1	; clear to end
+
+	setzb	p3,OBfFst(f)		; pretend no first message
+	stor.	t1,TCPSeq,TCPObf+NBHLen	; set desired sequence number
+	move	t3,t2			; position bits in correct register
+	pushj	p,TCPMa1		; call TCPMak properly
+
+	pop	p,OBfBC(f)		; restore
+	pop	p,OBfThs(f)		; restore
+	pop	p,OBfFst(f)		; restore
+	pop	p,p3			; restore
+	pop	p,t3			; restore
+	pop	p,t2			; restore
+
+RspEnd:	pop	p,OBfByt(f)		; restore
+	pjrst	sonppj##		; return to caller
+	subttl	TCPIFn ;⊗ TCPIFn TCPIF1
+
+;++
+; Functional description:
+;
+;	check to see if this input stream has received a legitimate
+;	FIN.  called after data is exhausted to see if there's any
+;	more data coming or if this is EOF.  if we have received a FIN
+;	for this connection, close it now.
+;
+;
+; Calling sequence:
+;
+;		move	f,DDB
+;		scnoff
+;		pushj	p,TCPIFn
+;		  <return here if EOF, FIN seen, connection closed,
+;				interrupts on>
+;		<return here if not EOF, FIN not yet seen,
+;				interrupts still off>
+IFWAITS<
+;Skips if no EOF, but doesn't touch connection if EOF seen (see below).
+>;IFWAITS
+;
+; Input parameters:
+;
+;	F - DDB
+;
+; Output parameters:
+;
+;	none.
+;
+; Implicit inputs:
+;
+;	DDB
+;
+; Implicit outputs:
+;
+;	none.
+;
+; Routine value:
+;
+;	returns non-skip if this connection is done doing input
+;	(i.e., FIN received), else skip returns.  in non-skip return,
+;	interrupts are enabled.
+;
+; Side effects:
+;
+;	will close the connection if a FIN has been seen.  turns
+;	on interrupts if return is non-skip, else leave them off.
+;
+;--
+
+TCPIFn::
+NOWAITS<
+	skipn	RcvFin(f)		; seen a FIN
+	  pjrst	cpopj1##		; no.  still open for action.
+	pushj	p,save1##		; get a scratch
+	skiple	p1,State(f)		; state some kind of closed?
+	  jrst	TCPIF1			; no.  check to see if we
+					;  should release it, though.
+	scnon				; allow DDBFls to handle interrupts
+	pushj	p,DDBFls##		; clear this DDB
+	pjrst	DDBRel##		; and let someone else use it.
+
+TCPIF1:	scnon				; interrupts are ok again.
+	; detach IMP from terminal now.
+	pushj	p,ItyRel##		; ditch ITY, if any.
+	pushj	p,TTIDet##		; disconnect crosspatched IMP.
+	popj	p,			; return.
+>;NOWAITS
+IFWAITS<
+	;JJW - Above code does more than we want.  We may still want
+	;to output to the connection.
+	SKIPN RCVFIN(F)		;Seen a FIN?
+	AOS (P)			;No, skip return
+	POPJ P,
+>;IFWAITS
+	subttl	TCPICK ;⊗ TCPICK
+
+;++
+; Functional description:
+;
+;	check a connection to see if it is in a state where input is legal.
+;
+;
+; Calling sequence:
+;
+;		move	f,DDB
+;		pushj	p,TCPICK
+;		<always returns here>
+;
+; Input parameters:
+;
+;	f - ddb
+;
+; Output parameters:
+;
+;	none.
+;
+; Implicit inputs:
+;
+;	none.
+;
+; Implicit outputs:
+;
+;	none.
+;
+; Routine value:
+;
+;	returns non-skip if the connection is NOT open for input.
+;	returns skip if input is possible.
+;
+; Side effects:
+;
+;	none.
+;--
+
+
+TCPICK::
+	pushj	p,save1##		; get p1
+	move	p1,state(f)		; get state from DDB
+	cain	p1,S%Estb		; is it well established?
+	  pjrst	cpopj1##		; yes.  that's legal
+	caie	p1,S%Fin1		; FIN wait 1?
+	 cain	p1,S%Fin2		; or FIN wait 2?
+	  aos	(p)			; yes.  he hasn't closed yet.
+	popj	p,			; return.
+	subttl	TCPOCK ;⊗ TCPOCK
+
+;++
+; Functional description:
+;
+;	check a connection to see if it is in a state where output
+;	is legal.
+;
+;
+; Calling sequence:
+;
+;		move	f,DDB
+;		pushj	p,TCPOCK
+;		<always returns here>
+;
+; Input parameters:
+;
+;	f - ddb
+;
+; Output parameters:
+;
+;	none.
+;
+; Implicit inputs:
+;
+;	none.
+;
+; Implicit outputs:
+;
+;	none.
+;
+; Routine value:
+;
+;	returns non-skip if the connection is NOT open for output.
+;	returns skip if output is possible.
+;
+; Side effects:
+;
+;	none.
+;--
+
+
+TCPOCK::
+	pushj	p,save1##		; get p1
+	move	p1,state(f)		; get state from DDB
+	caie	p1,S%Estb		; is it well established?
+	 cain	p1,S%ClsW		; or in close wait?
+	  aos	(p)			; yes.  he hasn't closed yet.
+	popj	p,			; return.
+	subttl	TCPTCk ;⊗ TCPTCk
+
+;++
+; Functional description:
+;
+;	check to see if there's any room left in the window.  if
+;	there is enough real window available, it's ok to send more
+;	data, otherwise (non-skip), avoid sending data until more
+;	window appears.
+;
+;
+; Calling sequence:
+;
+;		move	f,<ddb>
+;		pushj	p,TCPTCk
+;		  <returns here if not enough window>
+;		<returns here if enough window to warrent sending more>
+;
+; Input parameters:
+;
+;	F - DDB
+;
+; Output parameters:
+;
+;	none.
+;
+; Implicit inputs:
+;
+;	DDB
+;
+; Implicit outputs:
+;
+;	none.
+;
+; Routine value:
+;
+;	returns skip if there is enough window to allow sending more
+;	data, else non-skip.
+;
+; Side effects:
+;
+;	none.
+;--
+
+
+TCPTCk::
+	pushj	p,save1##		; get p1
+	skipg	SndWnd(f)		; any window?
+	  popj	p,			; no: avoid sending
+	move	p1,State(f)		; get the connection state
+	cail	p1,S%Estb		; at least established?
+	  aos	(p)			; yes.  set for skip, is ok
+	popj	p,			; no: pretend there's no window
+					;  until we get into an
+					;  established state.
+	subttl	TCPWUp ;⊗ TCPWUp
+
+;++
+; Functional description:
+;
+;	update a window if the user has read some of the data waiting.
+;
+;
+; Calling sequence:
+;
+;		move	f,DDB
+;		scnoff
+;		pushj	p,TCPWUp
+;		<always returns here>
+;
+; Input parameters:
+;
+;	f - DDB
+;
+; Output parameters:
+;
+;	none.
+;
+; Implicit inputs:
+;
+;	DDB data
+;
+; Implicit outputs:
+;
+;	DDB data
+;
+; Routine value:
+;
+;	none.
+;
+; Side effects:
+;
+;	none.
+;--
+
+
+TCPWUp::
+	skipn	t1,IBfByt(f)		; get byte count read since
+					;  last update
+	  popj	p,			; none:  nothing to do.
+	setzm	IBfByt(f)		; clear read byte count.
+	addm	t1,RcvRed(f)		; update sequence number of
+					;  bytes read.
+	addb	t1,RcvHld(f)		; add up bytes we're holding
+					;  back from window.
+	camge	t1,RcvThr(f)		; are we over our threshhold?
+	  popj	p,			; nope.  keep waiting
+	setzm	RcvHld(f)		; not holding any now.
+	addm	t1,RcvWnd(f)		; add freed bytes into window
+	pushj	p,SndMsg##		; send the message
+	  jfcl				; can't do much here
+	popj	p,			; and return
+	subttl	SetUrg ;⊗ SetUrg
+
+;++
+; Functional description:
+;
+;	set up TCP data to send an URG message next time out.
+;	computes the current SndNxt (the value in DDB may be
+;	out of date) and store is in SndUrg, then sets the URG
+;	bit in the DDB.  note that we NEVER want to send this
+;	now, because we want to add a data mark (for telnet) and
+;	have it in this message.
+;
+;
+; Calling sequence:
+;
+;		move	f,ddb
+;		pushj	p,SetUrg
+;		<always return here>
+;
+; Input parameters:
+;
+;	f - ddb
+;
+; Output parameters:
+;
+;	none.
+;
+; Implicit inputs:
+;
+;	DDB data
+;
+; Implicit outputs:
+;
+;	SndUrg in DDB
+;
+; Routine value:
+;
+;	none.
+;
+; Side effects:
+;
+;	none.
+;--
+
+
+
+SetUrg::
+	move	t1,SndNxt(f)		; get next sequence number
+	add	t1,OBfByt(f)		; find real current sequence number
+	movem	t1,SndUrg(f)		; make this the urgent pointer
+	movx	t1,TC%Urg		; set urgent bit
+	iorm	t1,SndBts(f)		; in DDB
+	popj	p,			; and let it be sent with next
+					;  message out.
+	subttl	TCPCls ;⊗ TcpCls
+
+;++
+; Functional description:
+;
+;	mark DDB for a push on the last buffer we send.
+;
+;
+; Calling sequence:
+;
+;		move	f,ddb
+;		pushj	p,TCPCls
+;		<always return here>
+;
+; Input parameters:
+;
+;	f - ddb
+;
+; Output parameters:
+;
+;	none.
+;
+; Implicit inputs:
+;
+;	none
+;
+; Implicit outputs:
+;
+;	SndPsh in DDB
+;
+; Routine value:
+;
+;	none.
+;
+; Side effects:
+;
+;	none.
+;--
+
+
+
+TcpCls::
+	setom	SndPsh(f)		; mark for push.
+	popj	p,			; return
+
+;JJW - If this ever does something fancier, check to see if CLSO in IMPSER
+;has to be modified.
+	subttl	TCPPsh ;⊗ TcpPsh
+
+;++
+; Functional description:
+;
+;	called just before each normal output buffer is sent to
+;	see if it should be pushed.
+;
+;
+; Calling sequence:
+;
+;		move	f,ddb
+;		pushj	p,TCPPsh
+;		<always return here>
+;
+; Input parameters:
+;
+;	f - ddb
+;
+; Output parameters:
+;
+;	none.
+;
+; Implicit inputs:
+;
+;	DDB data.
+;
+; Implicit outputs:
+;
+;	DDB data.
+;
+; Routine value:
+;
+;	none.
+;
+; Side effects:
+;
+;	none.
+;--
+
+
+
+TcpPsh::
+	push	p,t1			; save a scratch
+	setz	t1,			; clear for clearing SndPsh
+	exch	t1,SndPsh(f)		; get push flag and reset it
+	pjumpe	t1,tpopj##		; not set.  just return
+	movx	t1,TC%Psh		; get bit
+	iorm	t1,SndBts(f)		; set the bit for the next packet.
+	pjrst	tpopj##			; and return
+	subttl	TcpChk ;⊗ TCPChk EndWt TCPCRT TCPRTR RtLoop RtZero RtNxt TCPCUT TCPUTO
+
+;++
+; Functional description:
+;
+;	subroutine to do various once a second checks to an IMP DDB.
+;
+;
+; Calling sequence:
+;
+;		move	f,DDB
+;		pushj	p,TCPChk##
+;		<always returns here>
+;
+; Input parameters:
+;
+;	f - DDB of an IMP device.
+;
+; Output parameters:
+;
+;	none.
+;
+; Implicit inputs:
+;
+;	DDB and queues
+;
+; Implicit outputs:
+;
+;	DDB and queues
+;
+; Routine value:
+;
+;	none.
+;
+; Side effects:
+;
+;	may didle with output queues if it finds it needs to retransmit.
+;	may delete DDB altogether, although DevSer will still have the
+;	link to the next DDB.  (HINT: call this after doing everything else.)
+;--
+
+
+TCPChk::
+	scnoff				; get a clean picture
+	skiple	GTimer(f)		; general timer set to run?
+	 sosle	GTimer(f)		; yes. has it expired?
+	  jrst	TCPCRT			; no.  don't worry about it
+
+	skiple	t1,State(f)		; get the state: ok if closed or error
+	 cain	t1,S%TimW		; is it time-wait?
+	  jrst	EndWt			; time wait is over.
+
+	; just timed out for a spontaneous ACK.  send one to see if it
+	;  gets reset.
+IFWAITS<
+	;First check if we have someone to send to.
+	SKIPE RMTADR(F)		;Is there a destination?
+	JRST TCPCH1		;Yes, good
+	PUSHACS			;Save ACs clobbered by printing routines
+	PUSHJ P,DISUSR##
+	 SIXBIT/TCP/
+	PUSHJ P,DISERR##
+	 [ASCIZ/Trying spontaneous ACK with no destination.  DDB = /]
+	 DISARG LOC,<F-20(P)>
+	 [ASCIZ/, state = /]
+	 DISARG OHS,<T1-20(P)>
+	 [ASCIZ/
+/]
+	 -1
+	POPACS
+	POPJ P,			;Don't send the ACK
+TCPCH1:
+>;IFWAITS
+ifn debug,<	; check for a situation that should never come up.
+	skipe	RetrnQ(f)		; retransmitting?
+	 stopcd	TCPRTR,DEBUG,RSA,	;++ retransmitting at spontaneous ACK time
+					; (join retransmit code, interrupts off)
+>
+	pushj	p,SndMsg##		; send off an up to date ACK.
+	  jfcl
+	movx	t1,AckTst		; get time 'til next spontaneous ack
+	movem	t1,GTimer(f)		; reset timer.
+	pjrst	sonppj##		; interupts back on and go, since
+					;  we known we aren't retransmitting.
+
+
+EndWt:	movx	t1,S%Clos		; set close state
+	movem	t1,State(f)		; in DDB
+IFWAITS<
+	PUSHJ P,IMSINT##		;Set up state-change interrupt
+					;(probably not needed - JJW)
+>;IFWAITS
+; legally, the following two lines should be in, but experience shows that
+;  the user (well, me, anyway) expects the DDB to disappear at this point.
+;	skipe	IBfThs(f)		; anything left to input?
+;	  pjrst	sonppj##		; yes.  let input handle
+;					;  releasing DDB.
+	scnon				; interrupts back
+	pushj	p,DDBFls##		; clear out the DDB
+	pjrst	DDBRel##		; return DDB to free pool
+
+
+; here if not time-wait time-out
+TCPCRT:	skipe	RetrnQ(f)		; anything waiting to retranmit?
+	 skipg	t1,State(f)		; and is it some kind of active state?
+	  pjrst	sonppj##		; no.  don't count if closed or idle.
+
+; here if we need to retransmit for this DDB
+TCPRTR:
+	pushj	p,save3##		; get some scratches
+	hrrz	p1,RetrnQ(f)		; get first BIB in
+					;  retransmission queue.
+	move	p3,UpTime##		; get current uptime
+	sub	p3,RtTime(f)		; subtract RTTime to get the time
+					;  of latest which should be
+					;  retransmitted now.
+RtLoop:	jumpe	p1,TCPCUT		; end of queue.  check user timeout
+ifn debug,<	; debugging
+	move	t1,p1			; position BIB
+	pushj	p,BIBChk##		; consistency check
+>
+	skip.	t2,BIBTQ,(p1),n		; is this BIB already in the
+					;  transmission queue?
+	 skip.	p2,BIBTim,(p1),g	; no.  are we timed?
+	  jrst	RtNxt			; not counting or already in TQ
+
+	camle	p2,p3			; was this one sent early enough to
+					;  be retranmitted now?
+	  jrst	RtNxt			; no
+
+NOWAITS<
+	aosa	TCPPRT##		; count a packet we had to retransmit.
+RtZero:	  aos	TCPZRT##		; count packets we forced
+					;  retransmission on because of a
+					;  zero send window.
+	move	t1,p1			; position BIB pointer
+	pushj	p,Go1822##		; put it in the transmission
+					;  queue again.
+	  jfcl				; can't do nothin'
+>;NOWAITS
+IFWAITS<
+	AOS TCPPRT##		;Count a retransmission
+	MOVE T1,P1
+	LOAD. W,BIBNET,(T1)	;Get network interface
+	PUSHJ P,RETFIX		;Update its headers
+	PUSHJ P,@NI.OUT##(W)	;Put it in transmission queue
+	 JFCL			;We tried
+>;IFWAITS
+ifn debug,<	; debugging
+	move	t1,p1			; position BIB
+	pushj	p,BIBChk##		; consistency check
+>
+RtNxt:	load.	p1,BIBRTQ,(p1)		; get next
+	jrst	RtLoop			; and loop
+
+TCPCUT:	scnon				; interrupts safe now
+	sosg	UTTimr(f)		; user time-out expired?
+	  jrst	TCPUTO			; yes.  go delete all queues in
+					;  DDB and flag error.
+	popj	p,			; no.  nothing timed out.
+
+; here if user's timer time's out.
+TCPUTO:
+NOWAITS<
+	movei	s,IODTER		; set data error
+>;NOWAITS
+IFWAITS<
+	movei	s,IODERR!TMO		; set timeout error
+>;IFWAITS
+	iorm	s,DevIOS(f)		; set that in DDB
+	pjrst	ClsIOD			; flush the IMP, wake anyone waiting
+IFWAITS<
+
+;Fix up a packet before retransmission.  This includes the following:
+;
+;1. Puts the current NETADR(F) into link-level header in case it was
+;   changed by an ICMP redirect.
+;2. Puts the current RCVNXT(F) and RCVWND(F) into the TCP header to
+;   avoid presenting the remote TCP with stale information.
+;
+;Call:	MOVE T1,<BIB for packet to retransmit>
+;	MOVE W,<network interface>
+;	<ensure packet not in transmission queue>
+;	PUSHJ P,RETFIX
+;	<return here>
+;Preserves all ACs.
+
+RETFIX:	PUSHJ P,SAVT##		;Save T1-T4
+	PUSHJ P,@NI.FNA##(W)	;Fix NETADR(F) in link-level header
+	;NI.FNA(W) returns with T2 pointing to IP header of packet.
+	;Still need to write code for (2)
+	POPJ P,
+
+>;IFWAITS
+NOWAITS< ;Not needed ;⊗ TCPRst TCPRs1
+	subttl	TcpRst
+
+;++
+; Functional description:
+;
+;	subroutine to do various things for a job that just did
+;	a RESET UUO.
+;
+;
+; Calling sequence:
+;
+;		move	j,<job number>
+;		pushj	p,TCPRst
+;		<always returns here>
+;
+; Input parameters:
+;
+;	j - job number reseting
+;
+; Output parameters:
+;
+;	none.
+;
+; Implicit inputs:
+;
+;	perpetual listen tables.
+;
+; Implicit outputs:
+;
+;	perpetual listen tables.
+;
+; Routine value:
+;
+;	none.
+;
+; Side effects:
+;
+;	will clear out the PID for any entry set last by this job.
+;--
+
+
+TCPRst::
+	movei	t1,PlsLen-1		; point at last entry in tables
+
+TCPRs1:	camn	j,PlsJob(t1)		; is this me?
+	  setzm	PlsPID(t1)		; yes.  clear it by clearing the PID
+	sojge	t1,TCPRs1		; try the next.
+
+	popj	p,			; all done.
+>;NOWAITS
+SUBTTL USER INTERFACE (IMPUUO) ;⊗ CALL FLAGS IF.NWT IF.PRV IF.ALS TIMEOUT E .UUDEV .UUSTT .UUSKT .UUHST .UURMT .UULST PUUTIM sk.lcl FreOvr FreLsh FrePrt FreMin FreMch
+
+COMMENT \
+PROVIDES ABILITY FOR THE USER TO INITIATE IMP CONNECTIONS
+UNDER PROGRAM CONTROL.
+
+CALL:
+	MOVE AC,[BYTE (8)FLAGS, (3)TIMEOUT, (7)CODE, (18)E ]
+	CALL AC,[SIXBIT /IMPUUO/]
+	  ERROR RETURN  --  CODE IN E+1
+	OK RETURN
+
+;NOTE THE CORRESPONDING CALLI UUO IS -5 AT HARVARD, -17 AT CMU,
+; AND -4 AT AFAL SO DON'T USE IT.
+
+FLAGS:	\
+	IF.NWT==1B0	;IF SET, DON'T GO INTO IO WAIT FOR NCP ACTIVITY
+	IF.PRV==1B1	;IF SET, ALLOW THE OPERATION EVEN IF THE USER
+			;  DOESN'T OWN THE DEVICE (PRIVILEGED)
+	IF.ALS==1B2	;IF SET, LOCAL SOCKET IS ABSOLUTE RATHER THAN
+			;  JOB- OR USER-RELATIVE (PRIVILEGED)
+
+COMMENT \
+TIMEOUT:3 BIT CODE(T) STARTS A TIMEOUT OF M SECONDS
+		M = 4 * 2↑T
+		THUS, THE USER MAY SPECIFY A TIMEOUT FROM 8 TO 512 SECONDS.
+		IF T = 0, THEN THE DEFAULT IS 30 SECONDS.
+
+
+FORMAT OF THE ARGUMENT LIST: (EXCEPT AS OTHERWISE NOTED)
+
+E:	SIXBIT /LOGICAL NAME/
+	EXP STATUS/ERROR CODES
+	EXP SOCKET NUMBER
+	exp Foreign network/host/imp number		;[96bit]
+	EXP FOREIGN SOCKET NUMBER
+\
+
+	.UUDEV==0
+	.UUSTT==1
+	.UUSKT==2
+	.UUHST==3
+	.UURMT==4
+
+	.UULST==4		; length of block
+
+NOWAITS<
+PUUTIM:	POINT 3,P1,10		;POINTER TO GET TIMEOUT FIELD
+>;NOWAITS
+
+; socket constants:
+;	bottom 3 bits of a port are user controlled, that leaves 13 bits for
+;	the program controlled part.  high bit is used to detect overflow.
+	sk.lcl==7			; low 3 bits are user controlled
+	FreOvr==10000			; how to detect wrap around
+	FreLsh==3			; make room for low 3 bits
+	FrePrt==400			; 0-377 are assigned.
+	FreMin==FrePrt			; add on the value of the last ARPA
+					;  assigned port to avoid these.
+	FreMch==177770			; what bits are important for
+					;  detecting ports in the same
+					;  group of 8.
+NOWAITS< ;⊗ IMPUUO IMPUU1 ImpUU2 ImpUU3 ImpUU4
+IMPUUO::PUSHJ	P,SAVE4##	;SAVE P1, P2, P3, P4
+	MOVE	P1,T1		;PERMANENT COPY OF USER STUFF
+	HRR	M,P1		;REL ADDRESS OF ARG BLOCK
+	LDB	T3,[POINT 7,P1,17] ;GET THE FUNCTION CODE
+	MOVSI	T1,-UUOLEN	;SEARCH UUO TABLE
+	MOVE	p4,UUOTAB(T1)	;GET THE TABLE ENTRY
+	LDB	T2,[POINT 7,p4,17];GET THE CODE
+	CAME	T2,T3		;THIS IT?
+	AOBJN	T1,.-3		;NO
+	JUMPGE	T1,ERRILU	;JUMP IF NOT THERE
+	MOVEI	T1,JP.IMP	;TEST PRIVILEGES
+	PUSHJ	P,PRVBIT##	;SUPER IMP?
+	  JRST	IMPUU1		;YES
+	TLZ	P1,(IF.PRV)	;NO--DISABLE PRIVILEGED IMPUUO FLAGS
+	TLNE	p4,UU.PVI	;REQUIRED?
+	JRST	ERRPRV		;YES--ERROR
+	MOVEI	T1,JP.NET	;SETUP TO TEST NETWORK ACCESS PRIVILEGES
+	TLNE	p4,UU.PVN	;NET PRIVILEGES REQUIRED?
+	PUSHJ	P,PRVBIT##	;YES, GOT THEM?
+	  JRST	IMPUU1		;YES OR NOT NEEDED
+	JRST	ERRPRV		;NO
+
+;HERE TO GO AHEAD WITH THE UUO DISPATCH
+IMPUU1:	HRRZ	T1,P1		;ADDRESS CHECK THE ARGUMENTS
+	CAIGE	T1,↑D16-.UULST	;IN ACS?
+	JRST	ImpUU2		;YES, OK.
+	PUSHJ	P,IADRCK##
+	  JRST	ERRADR		;ADDRESS CHECK
+	MOVEI	T1,.UULST(P1)
+	PUSHJ	P,IADRCK##
+	  JRST	ERRADR
+ImpUU2:	tlnn	p4,uu.NUp	;(260) must have a working network?
+	  jrst	ImpUU3		;(260) no.  don't check.
+	skipe	OKFlag##	;(260) is it working?
+	 skipe	StopFl##	;(260) yes.  are we coming down?
+	  jrst	ErrNNU		;(260) either not up or going down
+ImpUU3:	TLNE	p4,UU.DNU	;NEED TO SETUP DDB?
+	  JRST	ImpUU4		;NO
+	PUSHJ	P,SETDDB	;YES, DO IT
+	  popj	p,		;ERROR
+ImpUU4:	TLNN	p4,UU.INT	;INTERRUPTS ALLOWED?
+	  ScnOff		;NO.  LET NOTHING INTERFERE
+	PUSHJ	P,(p4)		;CALL THE ROUTINE
+	 skipa			; non-skip return, please.
+	  aos	(p)		; pass back the good return.
+	tlnn	p4,uu.int	; did we shut down dangerous interrupts?
+	  ScnOn			; yes.  allow them again.
+	popj	p,		; return as set up
+
+; register setup at the time of UUO dispatch:
+;	f - IMPDDb
+;	w - PDB
+;	p2 - local port, if any
+;	p4 - dispatch bits.  these must be preserved.
+>;NOWAITS
+;MACRO FOR BUILDING THE DISPATCH TABLE ;⊗ ZZ ZZ ZZ ZZ UU.PVN UU.PVI UU.ASD UU.NDB UU.INT UU.DNU uu.NUp
+
+NOWAITS<
+DEFINE U(C,DD,F)<
+	ZZ==0
+	IRP F,<
+	ZZ==ZZ!UU.'F
+	>
+
+	.U'DD==↑D'C
+	ZZ+↑D<C>  ,,  DD'S
+>
+>;NOWAITS
+
+IFWAITS<
+;JJW - generate external symbols giving table words for each code.
+DEFINE U(C,DD,F)<
+	ZZ==0
+	IRP F,<
+	ZZ==ZZ!UU.'F
+	>
+	.W'DD==:<ZZ+↑D<C>  ,,  DD'S>
+>
+>;IFWAITS
+
+;THE DEFINITIONS OF THE VARIOUS BITS AND FIELDS
+UU.PVN==(1B1)		;NETWORK PRIVILEGES REQUIRED
+UU.PVI==(1B2)		;SUPER IMP PRIVILEGES REQUIRED
+UU.ASD==(1B3)		;MUST CONSOLE ASSIGN AN IMP DEVICE
+UU.NDB==(1B4)		;ALLOWED TO GET A FREE DDB
+UU.INT==(1B5)		;INTERRUPTS NEED NOT BE DISABLED
+UU.DNU==(1B6)		;DDB NOT USED (DON'T CALL SETDDB BEFOREHAND)
+uu.NUp==(1b7)		;(260) network must be up to perform this UUO.
+
+IFWAITS<INTERN	UU.PVN,UU.PVI,UU.ASD,UU.NDB,UU.INT,UU.DNU,UU.NUP>
+;THE DISPATCH TABLE ;⊗ UUOTAB UUOLEN
+
+IFWAITS<INTERN	UUOTAB>
+UUOTAB:
+
+NOWAITS<
+	U 00,STAT,<>
+;	U 01,CONN,<PVN,ASD,NDB>
+>;NOWAITS
+	U 02,Abor,<PVN,ASD,Int,NUp>	;[tcp] add an abort function
+	U 03,CONN,<PVN,ASD,NDB,NUp>	;(260)
+	U 04,CLOS,<PVN,ASD,Int,NUp>	;(260)
+	U 05,LIST,<PVN,ASD,NDB,NUp>	;(260)
+	U 06,REQU,<PVN,ASD,NDB,NUp>	;(260)
+NOWAITS<
+	U 07,TALK,<PVN,ASD,NUp>		;(260)
+;	U 08,TRAN,<PVN,ASD>
+;(temp)	U 09,PINT,<PVN,ASD,NUp>		;(260)
+;(temp)	U 10,AINT,<PVN,ASD,NUp>		;(260)
+	U 11,VERS,<INT,DNU>
+	U 12,DEAS,<PVN,ASD,Int>
+	U 13,PHST,<INT,DNU>
+;	U 14,CDDB,<>
+;	U 15,PGVB,<PVN,ASD,NUp>		;(260)
+	U 16,ITTY,<DNU>
+	U 17,XPWT,<PVN,ASD,INT,NUp>	;(260)
+	U 18,PESC,<INT,DNU>
+	U 19,RESC,<INT,DNU>
+	U 20,PPAR,<PVN,ASD>
+	U 21,RPAR,<PVN,ASD>
+	U 22,XSTS,<DNU,Int>	; we turn off interrupt when we want
+;(temp)	U 23,TRAC,<PVN,ASD>
+;(temp)	U 24,PIAL,<PVN,ASD>
+
+;(temp)	U 64,PNOP,<PVI,DNU,NUp>		;(260)
+;(temp)	U 65,RSET,<PVI,DNU,NUp>		;(260)
+;	U 66,PALL,<PVI,ASD,NUp>		;(260)
+	U 67,PLst,<PVI,DNU>		;[tcp] perpetual listen
+;	U 69,PECO,<PVI,DNU,NUp>		;(260)
+	U 70,INIS,<PVI,Int,DNU>
+	U 71,KILL,<PVI,INT,DNU>
+	U 72,RAIS,<PVI,INT,DNU>
+;	U 73,ERRO,<PVN,DNU>
+repeat 0,<		; old IFN FTAIMP	;DK/OCT 75
+;DO IMP IACCOUNTING
+	U 81,IACT,<PVI,DNU>
+>
+>;NOWAITS
+
+	UUOLEN==.-UUOTAB
+;	ERROR CODES   --  RETURNED IN E+1 ON NON-SKIP RETURN ;⊗ ERRLST ERRLST ERRXIT ErrSet DURErr
+
+	DEFINE	ERRCOD(M,C) <
+IFWAITS<INTERN	E.'M>
+	E.'M==	.-ERRLST
+ERR'M:	JSP	T1,ERRXIT
+>
+
+NOWAITS<
+ERRLST:
+	errcod	ILU,		ILLEGAL(UNIMPLEMENTED) UUO
+	errcod	NSD,		NO SUCH DEVICE
+	errcod	DNA,		DEVICE NOT AVAILABLE
+	errcod	LNU,		LOGICAL NAME ALREADY IN USE
+	errcod	STT,		STATE ERROR (WRONG STATE FOR THIS FUNCTION)
+	errcod	CWR,		connection was reset
+	errcod	SYS,		SYSTEM ERROR
+;	errcod	ABT,		A RFC WAS ABORTED
+	ErrCod	CGT,		Can't get there from here
+;	errcod	REQ,		THE REQUEST DOESNT MATCH YOUR RFC
+	errcod	NES,		not enough internal buffer space
+	errcod	SKT,		SOCKET NUMBER IN USE
+	errcod	HST,		ILLEGAL HOST NUMBER
+	errcod	DWN,		REMOTE HOST DOWN OR NOT ON NET
+	errcod	ADR,		ADDRESS CHECK IN CALLI ARG LIST
+	ERRCOD	TIM,		TIMEOUT
+	ERRCOD	PAR,		PARAMETER SPECIFICATION ERROR
+	ERRCOD	NCI,		TTY NOT CONNECTED TO IMP
+	ERRCOD	QUO,		QUOTE OR ESCAPE ILLEGAL OR NOT DISTINCT
+	ERRCOD	PRV,		NOT PRIVILEGED TO DO OPERATION
+	ErrCod	NAI,		device is not an IMP
+	ErrCod	NNU,		;(260) Network Not Up
+	ErrCod	DUR,		destination unreachable (code in <lh>)
+>;NOWAITS
+
+IFWAITS<
+;Some of the early code numbers are for errors that can't happen, just to
+;maintain compatibility with the old WAITS NCP error codes.  TOPS-10 error
+;codes that are only in NOWAITS code have been removed from this list.
+ERRLST:
+	errcod	ILU,		ILLEGAL(UNIMPLEMENTED) UUO	(0)
+	errcod	SKT,		SOCKET NUMBER IN USE		(1)
+	errcod	CCS,		Can't change socket numbers	(2)
+	errcod	SYS,		SYSTEM ERROR			(3)
+	errcod	NLA,		No link available (won't happen)(4)
+	errcod	ILB,		Illegal byte size		(5)
+	ErrCod	NNU,		(260) Network Not Up		(6)
+	errcod	GMM,		Gender mismatch (won't happen)	(7)
+	errcod	STT,		STATE ERROR (WRONG STATE FOR THIS FUNCTION)  (10)
+	ErrCod	CGT,		Can't get there from here	(11)
+	errcod	NES,		not enough internal buffer space(12)
+	errcod	HST,		ILLEGAL HOST NUMBER		(13)
+	ErrCod	DU0,		Destination net unreachable 	(14)
+	ErrCod	DU1,		Destination host unreachable 	(15)
+	ErrCod	DU2,		Dest. protocol unreachable 	(16)
+	ErrCod	DU3,		Destination port unreachable 	(17)
+	ErrCod	DU4,		Fragmentation needed and DF set	(20)
+	ErrCod	DU5,		Source route failed		(21)
+	ERRCOD	DUX,		Dest. unreachable: unknown code	(22)
+>;IFWAITS
+
+ERRXIT:	SUBI	T1,ERRLST+1
+	ANDI	T1,-1		;GET RID OF LEFT HALF JUNK
+; here to store an error code
+ErrSet:
+NOWAITS<
+	HRRI	M,.UUSTT(P1)	;PUT ERROR CODE HERE
+	PUSHJ	P,PUTWRD##
+	  JRST	ADRERR##
+>;NOWAITS
+IFWAITS<
+	DPB	T1,[POINT 6,STB(F),35]	;JJW - store error in DDB
+>;IFWAITS
+	POPJ	P,
+
+; here for some kind of destination unreachable message.
+DURErr:
+NOWAITS<
+	hrlzs	t1			; get unreachable type in left half
+	hrri	t1,errDUR-errLst	; get the proper error code in
+					;  the right half.
+>;NOWAITS
+IFWAITS<
+	MOVEI T1,ERRDU0-ERRLST(T1)	;Convert unreachable type to error code
+	CAILE T1,ERRDUX-ERRLST		;Skip if in range
+	 MOVEI T1,ERRDUX-ERRLST		;Unknown types get this code
+>;IFWAITS
+	pjrst	ErrSet			; go put the code in place and return
+NOWAITS< ;⊗ TRANS RAISS KILLS VERSS INISS IFRSTR
+	TRANS==	ERRILU		;ILLEGAL CODE
+
+
+;SUBROUTINE TO PUT THE TEN ON THE NETWORK (PRIVILEGED)
+RAISS:	TROA	T1,-1		;SET FLAG
+
+;SUBROUTINE TO TAKE THE TEN OFF THE NETWORK SOFTLY. (PRIVILEGED)
+KILLS:	MOVEI	T1,1		;SET FLAG
+	HRREM	T1,IMPUP##
+repeat 0,<	; old IFN FTAIMP
+	JRST	IFRSTR		;INDICATE RESTART IN ACCT DATA
+>
+	JRST	CPOPJ1##
+
+
+;SUBROUTINE TO RETURN THE CURRENT SOFTWARE VERSION NUMBERS
+VERSS:	MOVE	T1,[VIMPSR##,,VIPSer##]	; IMP (1822) and IP versions
+	pushj	p,PutWdu##		; store for user
+	hrlzi	t1,VTCPSr		; TCP version
+	pjrst	pw1pj1			; store that and skip return
+
+
+;SUBROUTINE TO WIPE EVERYTHING (PRIVILEGED)
+INISS:	PUSHJ	P,DINI+IMPDSP##	;DO 400 RESTART STUFF
+repeat 0,<	; old FTAIMP
+IFRSTR:	SETZ	T1,		;PREPARE ENTRY FOR ACCTNG
+	MOVEI	T2,17		;IDNICATE RESTART
+	DPB	T2,IFTCOD	;IN T1
+	PUSHJ	P,IFENTR	;MAKE ENTRY
+>
+	JRST	CPOPJ1##
+;Still NOWAITS
+;SUBROUTINE TO RETURN EXTENDED STATUS OF AN IMP DEVICE.  MORE
+;  ARGUMENTS MAY BE ADDED WITHOUT INVALIDATING EXISTING PROGRAMS.
+;	MOVE	P1,[REL ADR OF ARGUMENT BLOCK]
+;	PUSHJ	P,XSTSS
+;	  ERROR--CODE IN T1
+;	NORMAL RETURN--ARGUMENT BLOCK FILLED WITH STATUS INFO.
+
+;BLOCK:	N		;NUMBER OF LOCATIONS THAT FOLLOW IN ARG BLOCK
+			;  (0 IS SAME AS ↑O12)
+;	SIXBIT	/DEV/
+;	N-1 LOCATIONS FOR DATA TO BE RETURNED IN.  (IF N IS GREATER THAN
+;		THE NUMBER OF WORDS PROVIDED BY THE MONITOR, THE REMAINDER
+;		OF THE BLOCK WILL BE ZEROED).
+
+; note: this UUO was massively changed by TCP
+;CURRENTLY-DEFINED INDICES ARE:
+;	0	.XSNUM	NUMBER OF WORDS THAT FOLLOW
+;	1	.XSDEV	DEVICE NAME
+;	2	.XSJob	owning job number
+;	3	.XSIST	STATE of connection
+;	4	.XSILS	LOCAL port NUMBER
+;	5	.XSIHS	HOST
+;	6	.XSIRS	REMOTE port NUMBER
+;	7	.XSPrt	protocol
+;	7	.XSRWn	INPUT window (how much we are giving him)
+;	10	.XSSWn	OUTPUT window (how much he is giving us)
+;	11	.XSIOS	RH I/O STATUS WORD (DEVIOS)
+;	12	.XSRTT	current retranmission timeout time.
+;	13	.xsrcv	next sequence number to be received
+;	14	.xssnd	next sequence number to be sent
+;	15	.xsuna	next sent sequence number to be acknowledged
+;Still NOWAITS ;⊗ XSTSS XSTSS0 XSTSS1 XSTSTB XSTBLN XSTSS
+XSTSS:	PUSHJ	P,GETWDU##	;RETURN NUMBER OF USER ARGS
+	CAIGE	T1,2*<.UULST+1>	;WANT MORE THAN MINIMUM BLOCK?
+	MOVEI	T1,2*<.UULST+1>	;NO, SUPPLY MINIMUM INFO
+	ADDI	T1,(M)		;COMPUTE USER ADR OF LAST WORD OF BLOCK
+	TRNN	T1,777760	;STILL IN AC'S?
+	JRST	XSTSS0		;YES, IT'S OK
+	TRNE	M,777760	;NO, ERROR IF STARTED IN AC'S
+	PUSHJ	P,IADRCK##	;  OR IF WENT OUT OF BOUNDS
+	  AOJA	P1,ERRADR
+XSTSS0:	PUSH	P,T1		;SAVE USER ADR OF LAST WORD
+	AOS	M,P1		;POINT TO DEVICE ARGUMENT
+	PUSHJ	P,SETDDB	;SETUP IMP DDB
+	  pjrst	tpopj##			; restore T1 for failure
+	ScnOff			; make sure to get a consistent picture
+	PUSHJ	P,STATS0	;RETURN SHORT STATUS, INCL. DEVICE NAME
+	POP	P,P1		;GET BACK FINAL USER ADR
+	movei	p2,1			; start with first entry in block.
+
+;LOOP TO PLACE EXTENDED VALUES IN USER BLOCK
+XSTSS1:	CAIG	P1,(M)		;ANY MORE SPACE IN USER BLOCK?
+	  JRST	sonpj1##	;NO, SKIP RETURN TO USER
+	CAILE	P2,XSTBLN	;YES, REACHED END OF STATUS INFO?
+	TDZA	T1,T1		;YES, RETURN ZERO FOR REST OF BLOCK
+	XCT	XSTSTB-1(P2)	;NO, GET NEXT ITEM
+	PUSHJ	P,PUTWD1##	;STORE IN NEXT CELL IN USER BLOCK
+	AOJA	P2,XSTSS1	;BACK FOR MORE
+
+;TABLE FOR FETCHING EXTENDED STATUS INFORMATION.  NOTE THAT IT MAY BE
+;  APPENDED TO, BUT MAY NOT BE REARRANGED OR ENTRIES DELETED WITHOUT
+;  INVALIDATING EXISTING PROGRAMS
+
+XSTSTB:	move	t1,Protcl(f)	; .XSPrt  protocol of this connection
+	MOVE	T1,RcvWnd(F)	; .XSRWn  receive window size
+	MOVE	T1,SndWnd(F)	; .XSSWn  send window size
+	HRRZ	T1,DEVIOS(F)	; .XSIOS  DEVICE STATUS BITS
+	move	t1,RTTime(f)	; .XSRTT  retransmission time
+	move	t1,RcvNxt(f)	; .xsrcv  next number to be received
+	move	t1,SndNxt(f)	; .xssnd  next number to be sent
+	move	t1,SndUna(f)	; .xsuna  sent but unacknowledged
+
+	XSTBLN==.-XSTSTB	;NUMBER OF EXTENDED STATUS ENTRIES
+;Still NOWAITS ;⊗ STATS STATS0 STATS9 STATS1
+;SUBROUTINE TO RETURN THE STATUS OF A SIMPLEX CONNECTION
+;  LOOKS AT IMPDEV(P1) AND LOW BIT OF IMPSKT(P1).
+;CALL:
+;	MOVE	P1,[REL ADDRESS OF ARGUMENT LIST
+;	PUSHJ	P,STATS
+;	  ERROR RETURN	...CODE IN T1
+;	OK RETURN
+STATS:	AOS	(P)		;PRESET SKIP RETURN
+
+;CALLED FROM XSTSS (EXTENDED STATUS) ALSO.
+STATS0:	HRRI	M,.UUDEV(P1)	;ADDRESS OF DEVICE NAME
+	TLNE	P1,(IF.PRV)	;IF IMPORTANT PERSON,
+	JRST	STATS9		;  GIVE HIM LOGICAL NAME
+	LDB	T1,PJOBN##	;GET OWNERS JOB NUMBER
+	MOVEI	T2,ASSCON
+	TDNE	T2,DEVMOD(F)	;OWNED?
+	CAME	T1,.CPJOB##	;BY THIS USER?
+	  JRST	STATS1		;NO
+STATS9:	SKIPE	T1,DEVLOG(F)	;LOGICAL NAME ASSIGNED?
+	PUSHJ	P,PUTWDU##	;YES, RETURN IT
+
+STATS1:	skipge	t1,state(f)		; get state (or negative
+					;  unreachable type).
+	  tro	t1,(1b0)		; was unreachable: indicate by
+					;  setting the high bit.
+	LDB	T2,PJOBN##	;GET JOB NUMBER
+	HRL	T1,T2			; put that in left half
+	PUSHJ	P,PUTWD1##	;RETURN IT TOO
+	move	t1,LclPrt(f)		; get local port
+	PUSHJ	P,PUTWD1##	;RETURN THE port NUMBER
+	move	t1,RmtAdr(f)		; get his address
+	pushj	p,PutWd1##		; store it
+	move	t1,RmtPrt(f)		; get his port
+	PJRST	PUTWD1##	;GIVE IT TO THE USER AND RETURN
+;Still NOWAITS ;⊗ ITTYS ITTYS1 ITTYS2
+;SUBROUTINE TO TRANSLATE BETWEEN IMPS AND CONTROLLING OR CONTROLLED TTYS.
+;	MOVE	M,[REL ADR OF ARG BLOCK]
+;	MOVE	P1,M
+;	PUSHJ	P,ITTYS
+;	  ERROR RETUR--CODE IN T1
+;	OK RETURN
+
+;THE RESULTS DEPEND ON THE CONTENTS OF THE BLOCK, AS FOLLOWS:
+;	BEFORE				AFTER
+;	------				-----
+;BLOCK:	SIXBIT	/IMPN/		BLOCK:	SIXBIT	/IMPN/
+;	0				FLAGS,,	TTY LINE #
+
+;BLOCK:	0			BLOCK:	SIXBIT	/IMPN/
+;	0,,	TTY LINE #		FLAGS,,	LINE # OF TTY CROSSPATCHED
+;						TO IMPN.
+
+;BLOCK:	0			BLOCK:	SIXBIT	/IMPN/
+;	-1,,	TTY LINE #		FLAGS,,	LINE # OF TTY CONTROLLED
+;						BY IMPN.
+
+;FLAGS ARE:	BIT 0:	IMP CONTROLS TTY (I.E. TTY IS AN ITY)
+;		BIT 1:	TTY PRINTER CROSSPATCHED TO IMP
+;		BIT 2:	TTY KEYBOARD CROSSPATCHED TO IMP
+
+ITTYS:	PUSHJ	P,GETWDU##	;GET FIRST ARGUMENT FROM USER
+	JUMPE	T1,ITTYS1	;JUMP IF BLANK
+	ScnOn			; let DDB stuff do it's stuff
+				;  without these problems
+	PUSHJ	P,SETDDB	;SETUP FOR DDB WORK
+	  jrst	[		; error, not an IMP DDB
+		ScnOff		; dispatch expects these off
+		jrst	ErrNAI	; give the Not An Imp return
+		]
+	ScnOff			; shut down interrupts again
+	JRST	ITTYS3		;OK, GO PROCESS USING THIS IMP
+
+;HERE IF DEVICE NAME IS BLANK.  USE TTY NUMBER ARGUMENT.
+ITTYS1:	PUSHJ	P,GETWD1##	;GET NEXT ARGUMENT
+	MOVEI	T3,(T1)		;ISOLATE LINE NUMBER
+	CAIL	T3,TTPLEN##	;LEGAL?
+	JRST	ERRPAR		;NO
+	HRRZ	U,LINTAB##(T1)	;YES, GET LDB POINTER FOR THAT LINE
+	JUMPGE	T1,ITTYS2	;JUMP IF USER ASKING FOR CROSSPATCHED IMP
+	CAIL	T3,ITYFST##	;NO, WANT CONTROLLING IMP.  IS THIS
+	CAIL	T3,ITYFST##+ITYN## ;  AN ITY?
+	JRST	ERRNCI		;NO
+	SKIPA	F,ITYOFS##(T1)	;YES, GET ADR OF IMP CONTROLLING ITY
+ITTYS2:	HRRZ	F,LDBIMP##(U)	;HERE TO GET ADR OF CROSSPATCHED IMP
+	JUMPE	F,ERRNCI	;ERROR IF NO IMP CONNECTION TO TTY
+
+	; fall into next page
+;Still NOWAITS ;⊗ ITTYS3
+;HERE WITH DESIRED IMP DDB POINTED TO BY F
+ITTYS3:	MOVSI	U,TTYJOB+TTYPTR+TTYKBD ;BITS TO TEST FOR IMP CONNECTION
+	TDON	U,TTYLIN(F)	;ARE ANY SET?  IF SO, SET U TO LDB
+	JRST	ERRNCI		;NO--ERROR
+	HRRI	M,(P1)		;RESET TO START OF USER ARGLIST
+	MOVE	T1,DEVNAM(F)	;FETCH PHYSICAL IMP NAME
+	PUSHJ	P,PUTWDU##	;RETURN IT
+	LDB	T1,LDPLNO##	;FETCH LINE NO OF CONNECTED TTY
+	HLL	T1,TTYLIN(F)	;RETURN FLAGS
+	PJRST	PW1PJ1		;RETURN SECOND ARG AND SKIP
+;Still NOWAITS ;⊗ PIALS
+repeat 0,<	; should be simple
+;ROUTINE TO SET DESIRED ALLOCATION FOR AN OPEN INPUT CONNECTION
+;	MOVE	P1,[ADDRESS OF ARGUMENT LIST]
+;	PUSHJ	P,PIALS
+;	  ERROR--CODE IN T1
+;	NORMAL RETURN
+;  THE .IBHST AND .IBRMT WORDS SPECIFY THE MESSAGE AND BIT ALLOCATIONS
+;  TO BE USED SUBSEQUENTLY ON THE CONNECTION.  NOTE THAT THESE ARE
+;  RESET TO SMALL VALUES BY THE 'TALK' OPERATION, SO 'PIAL' SHOULD
+;  BE EXECUTED AFTER 'TALK'
+
+PIALS:	PUSHJ	P,GETWD1##	;GET DESIRED MESSAGE ALLOCATION IN .IBHST
+	CAIGE	T1,1		;AT LEAST 1?
+	MOVEI	T1,1		;NO, MAKE IT 1
+	CAILE	T1,.ALMSX	;WITHIN LIMIT?
+	MOVEI	T1,.ALMSX	;NO, USE LIMIT
+	DPB	T1,PIALMS	;STORE DESIRED ALLOCATION
+	PUSHJ	P,GETWD1##	;NOW GET BIT ALLOCATION IN .IBRMT
+	LDB	T2,PIBYTE	;GET CONNECTION BYTESIZE
+	CAIGE	T1,(T2)		;AT LEAST ONE BYTE'S WORTH?
+	MOVEI	T1,(T2)		;NO, MAKE IT SO
+	CAILE	T1,.ALBTX	;WITHIN LIMIT?
+	MOVEI	T1,.ALBTX	;NO, USE LIMIT
+	DPB	T1,PIALBT	;STORE DESIRED BIT ALLOCATION
+	JRST	CPOPJ1##	;OK RETURN
+> ; end of repeat 0
+;Still NOWAITS ;⊗ XPWTS PPARS RPARS
+;ROUTINE TO WAIT UNTIL THE CONNECTION BETWEEN A LOCAL TTY AND
+;   A CROSSPATCHED IMP IS BROKEN, EITHER BY THE ESCAPE HAVING BEEN TYPED
+;   OR BY THE CONNECTION BEING CLOSED OR RESET.
+;	MOVE	M,[REL ADR OF ARGUMENT BLOCK]
+;	PUSHJ	P,XPTWS
+;	  ERROR RETURN--CODE IN T1
+;	OK RETURN AFTER WAITING FOR CROSSPATCH TO BE BROKEN
+
+XPWTS:	MOVSI	t1,TTYXWT	;SETUP WAITING-FOR-CROSSPATCH BIT
+	IORM	t1,TTYLIN(F)	;SET IN DDB
+	DPB	t1,PDVTIM##	;SET TIMER TO INFINITY
+	scnoff			; protection
+	MOVE	S,DEVIOS(F)	;GET I/O STATUS
+	PUSHJ	P,SETACT##	;SET IOACT SO WSYNC WILL WORK
+	scnon			; end protection
+	MOVSI	T1,TTYKBD!TTYPTR ;BITS THAT MARK TTY-IMP CROSSPATCH
+	TDNE	T1,TTYLIN(F)	;IS THE IMP CROSSPATCHED?
+	PUSHJ	P,WSYNC##	;YES, WAIT UNTIL CROSSPATCH BROKEN
+
+	MOVSI	t1,TTYXWT	;SETUP WAITING-FOR-CROSSPATCH BIT
+	ANDCAM	t1,TTYLIN(F)	;CLEAR WAITING-FOR-CROSSPATCH BIT
+	scnoff			; protect devios
+	move	s,DevIOS(f)	; get current DEVIOS
+	PUSHJ	P,CLRACT##	;MAKE SURE IOACT IS CLEAR
+	move	t1,State(f)		; get state
+	move	t2,ImpIOS(f)		; get host down flag
+	scnon				; interrupts back on
+	pjumpl	t1,DURErr		; report destination unreachable
+	trne	s,IODErr		; dev error?
+	  pjrst	ErrCWR			; yes.  mean connection reset
+	trne	s,IODTer		; data error?
+	  pjrst	ErrTim			; yes.  user (TCP) timout
+	trne	t2,TrgDwn		; target done dead?
+	  pjrst	ErrDwn			; yes.  report host dead
+	pjrst	cpopj1##		; otherwise it's OK.
+
+
+;ROUTINES TO SET AND READ THE USER-DEFINED CONNECTION PARAMETER WORD.
+;   THIS WORD IS INTENDED FOR USE BY IMPCOM TO SAVE AND RESTORE ECHOING
+;   CHARACTERISTICS, ETC.
+;	MOVE	M,[REL ADR OF ARG BLOCK]
+;	PUSHJ	P,PPARS (TO SET) OR RPARS (TO READ)
+;	  ERROR--CODE IN T1
+;	OK
+
+;BLOCK:	SIXBIT	\IMPN\
+;	EXP	PARAMETER WORD
+
+PPARS:	HRRI	M,1(P1)		;GET USER PARAMETER
+	PUSHJ	P,GETWDU##
+	MOVEM	T1,USRPAR(F)	;STORE IN DDB
+	JRST	CPOPJ1		;OK RETURN
+
+RPARS:	HRRI	M,1(P1)		;POINT TO 2ND WORD OF PARAMETER BLOCK
+	MOVE	T1,USRPAR(F)	;PICK UP PARAMETER WORD
+	PJRST	PWUPJ1		;RETURN IT TO THE USER AND SKIP
+;Still NOWAITS ;⊗ PESCS RESCS ALLQUO ALLQU1
+;ROUTINES TO SET AND READ THE VARIOUS QUOTE AND ESCAPE CHARACTERS
+;   FOR THE CONTROLLING TTY.
+;	MOVE	M,[REL ADR OF ARG BLOCK]
+;	PUSHJ	P,PESCS (TO SET) OR RESCS (TO READ)
+;	  ERROR RETURN--CODE IN T1
+;	OK RETURN
+
+;BLOCK:	EXP	QUOTE CHARACTER
+;	EXP	SHIFT CHARACTER
+;	EXP	LOCAL ESCAPE CHARACTER
+;	EXP	NETWORK ESCAPE CHARACTER
+
+PESCS:	JSP	P2,ALLQUO	;DO THE FOLLOWING FOR EACH ARGUMENT
+	PUSHJ	P,GETWDU##	;GET THE NEXT USER ARGUMENT
+	HRRZ	T3,T1		;COPY THE CHARACTER
+	PJRST	QUOCHK		;CHECK IF LEGAL AND STORE IN LDB IF SO
+
+
+RESCS:	JSP	P2,ALLQUO	;DO THE FOLLOWING FOR EACH ARGUMENT
+	LDB	T1,LDPQTB(T4)	;FETCH A QUOTE OR ESCAPE CHAR FROM THE LDB
+	PJRST	PWUPJ1		;GIVE IT TO THE USER AND SKIP RETURN
+
+
+;AUXILIARY ROUTINE TO CALL ANOTHER ROUTINE FOR EACH QUOTE OR ESCAPE
+;   CHARACTER ARGUMENT
+;	MOVE	P2,[ADDRESS OF ROUTINE TO CALL]
+;	PUSHJ	P,ALLQUO
+;	  ERROR RETURN--CODE IN T1
+;	OK RETURN--CALL SUCCESSFULLY ITERATED OVER ALL CHARACTERS
+
+;THE CALLEE IS PROVIDED WITH THE FOLLOWING AC'S SETUP:
+;	U	THE TTY LDB ADDRESS
+;	T4[RH]	THE QUOTE INDEX (INTO THE QUOTE POINTER TABLE)
+;	M	UPDATED TO POINT TO NEXT USER ARGUMENT
+
+ALLQUO:	SKIPE	U,TTYTAB##(J)	;FETCH THIS USER'S TTY DDB ADDRESS
+	HRRZ	U,DDBLDB##(U)	;FOLLOW LINK TO LDB
+	JUMPE	U,ERRDNA	;ERROR IF DETACHED OR NONEXISTENT
+	MOVSI	T4,-NQupts	;SETUP -# OF QUOTE POINTERS,,0
+ALLQU1:	PUSHJ	P,(P2)		;CALL GIVEN ROUTINE
+	  JRST	ERRQUO		;ERROR RETURN--RETURN CODE
+	AOBJP	T4,CPOPJ1	;INCREMENT INDEX.  DONE?
+	AOJA	M,ALLQU1	;NO, DO ANOTHER ARGUMENT
+>;NOWAITS
+;SUBROUTINE FOR SETTING UP A SIMPLEX CONNECTION. ;⊗ CONNS GotArp
+;CALL:
+;	MOVE	P1,[CODE,,RELATIVE ADDRESS OF ARGUMENT BLOCK]
+;	MOVE	M,[REL ADDRESS OF ARGS (R) ]
+;	PUSHJ	P,CONNS
+;	ERROR RETURN	...CODE IN T1
+;	OK RETURN
+CONNS:	skiple	t1,State(f)		; get the state.  is it closed state?
+	 cain	t1,S%List		; or listen?
+	  skipa				; yes.
+	   jrst	ErrStt			; wrong state for this.
+
+	; set up DDB
+NOWAITS<
+	pushj	p,GetWd1##		; get host number (can be 32 bits)
+	jumpe	t1,ErrHst		; can't be zero
+	move	t2,IpAddr##		; get our address
+	andx	t2,NetMsk		; clear all but network
+	txnn	t1,NetMsk		; is there a network set?
+	  tdo	t1,t2			; no.  set network address
+	movem	t1,RmtAdr(f)		; store remote address
+	skipe	NetAdr(f)		; need an arpanet address?
+	  jrst	GotArp			; nope.  already read one off incoming
+>;NOWAITS
+IFWAITS<
+	XCTR XR,[MOVE T1,HLOC##(M)]	;Get host number
+	TXNN T1,NETMSK		;Is there a network set?
+	 JRST ERRHST		;No, error
+	MOVEM T1,RMTADR(F)	;Store remote address
+>;IFWAITS
+	pushj	p,Target		; find an ARPAnet address to
+					;  try to get this sent.
+	  jrst	ErrCGT			; can't get there from here:
+					;  couldn't find a route.
+	movem	t1,NetAdr(f)		; save that in DDB
+IFWAITS<
+	MOVEM W,NETWRK(F)		;Save network interface
+	XCTR XR,[MOVE T1,FSLOC##(M)]	;Get remote port
+>;IFWAITS
+NOWAITS<
+GotArp:	pushj	p,GetWd1##		; get remote port
+>;NOWAITS
+	andx	t1,<1←↑d16>-1		; trim down to 16 bits
+	movem	t1,RmtPrt(f)		; save it in DDB
+	PUSHJ	P,MAKMYS	;MAKE SOCKET
+	  JRST	ERRSKT		;ILLEGAL
+	pushj	p,prpDDB		; set required areas of DDB
+	pushj	p,GetISS		; get an initial send sequence number
+	movem	t1,SndISS(f)		; save it in the DDB
+	movem	t1,SndNxt(f)		; and make it the current
+					;  sequence number
+NOWAITS<			;Updated T1 never used (TCPMAK accounts for SYN)
+	aos	t1			; account for SYN
+>;NOWAITS
+	setzm	SndWnd(f)		; we have no idea how much we
+					;  can send until we hear.
+	setom	SndLWd(f)		; make last window non-zero.
+	setzm	SndLst(f)		; no last message yet (force
+					;  this into retransmission queue)
+	movx	t1,TC%Syn		; get SYN bit and ACK the SYN we got
+	iorm	t1,SndBts(f)		; set it in bits to be sent
+	pushj	p,SndMsg##		; send message now.
+	  jrst	errNES			; give not enough space return
+
+IFWAITS<
+	PUSHJ P,IMSINT##		;Set up state-change interrupt
+>;IFWAITS
+	movei	t1,S%SynS		; we've sent a SYN
+	movem	t1,State(f)		; save our new state
+IFWAITS<
+	JUMPL P1,CPOPJ1##		;No wait if flag on
+>;IFWAITS
+	pjrst	EstbWt			; wait for established (T1 is loaded)
+					;  and return.  user is responsible
+					;  to release DDB (it may contain
+					;  valuable information!)
+					; (interrupts are still off after
+					;  ESTBWt.)
+;SUBROUTINE TO DROP A CONNECTION. ;⊗ CLOSS PCLSSD ClsFls ClsCls ClsEst ClosUp ClosWt
+;CALL:
+;	PUSHJ	P,CLOSS
+;	ERROR RETURN --  CODE IN T1
+;	OK RETURN
+IFWAITS<ENTRY CLOSS>		;Called from IMPMAC.MAC
+CLOSS:
+NOWAITS<
+	SKIPGE	TTYLIN(F)	;JOB CONTROL?
+	 TLNE	P1,(IF.PRV)	;YES, ENABLED SUPER-IMP PRIVILEGES?
+	  JRST	PCLSSD		;NO JOB CONTROL OR CORRECT PRIVILEGES
+	PUSHJ	P,PRVJ##	;TEST FOR LOGIN, LOGOUT
+	  jrst	PCLSsd		;OK TO SUICIDE
+	JRST	ERRDNA		;NOT AVAILABLE TO CASUAL PROG.
+>;NOWAITS
+
+PCLSSD:	scnoff				; make sure the state stays
+	move	t1,State(f)		; get state of the connection
+	dispat	(t1,sonpj1##,<<S%Clos,<jrst	ClsCls>>	; fresh DDB?
+			     ,<S%List,<jrst	ClsFls>>
+			     ,<S%SynS,<jrst	ClsFls>>
+			     ,<S%SyRP,<jrst	ClsEst>>
+			     ,<S%SyRA,<jrst	ClsEst>>
+			     ,<S%Estb,<jrst	ClsEst>>
+			     ,<S%ClsW,<jrst	ClsEst>>
+			     ,<S%Fin1,<jrst	ClosUp>>
+			     ,<S%Fin2,<jrst	ClosUp>>
+			     ,<S%Clsn,<jrst	ClosUp>>
+			     ,<S%LAck,<jrst	ClosUp>>
+		    >)
+
+; here if no other site is known to know about this connection.  flush.
+ClsFls:	scnon				; no danger, then
+	pushj	p,ClsIOD		; flush DDB and wake user
+					; (we may be a prived job closing
+					;  someone elses IMP.)
+	pjrst	cpopj1##		; legal return
+
+; here if connection was already closed.  it turns out that this can
+;	only happen if we just assigned this DDB to do this UUO.
+ClsCls:	scnon				; we're safe
+; this should be here, just in case, but let's see when it happens, first.
+;	pushj	p,DDBFls##		; just in case this DDB has
+;					;  been to outerspace a picked
+;					;  up some buffers there.
+	pushj	p,DDBRel##		; return it to free pool
+	pjrst	cpopj1##		; and give a good return
+
+; here if the other site has to be told about the close
+ClsEst:					; continue with no interrupts
+	; (change state first, since the error doesn't mean the close
+	;  won't happen eventually.)
+IFWAITS<
+	PUSHJ P,IMSINT##		;Set up state-change interrupt
+>;IFWAITS
+	move	t2,State(f)		; get state again
+	movei	t1,S%FIN1		; assume it's estabblished or SYNing:
+					;  we're going to FIN-wait-1
+	cain	t2,S%Clsw		; is this close wait state?
+	  movei	t1,S%LAck		; yes.  it goes to last-ACK
+	movem	t1,State(f)		; save the new state
+	movx	t1,TC%Fin		; set FIN bit
+	iorm	t1,SndBts(f)		; set it in bits to be sent
+	pushj	p,SndMsg##		; send message now.
+	  jrst	[			; failed
+		 scnon			; enable interrupts
+		 pjrst	errNES		; not enough buffer space for message
+		]
+	; fall into ClosUp
+
+ClosUp:	; here to wait for a connection to be closed, current state in T1.
+	scnon				; interrupts ok again
+NOWAITS<
+	TLNE	P1,(if.Nwt!IF.PRV)	; neither no-wait nor prived?
+	  pjrst	cpopj1##		; one or the other.  don't wait.
+ClosWt:
+>;NOWAITS
+IFWAITS<
+	TLNE P1,(IF.NWT)	;No wait?
+	JRST CPOPJ1##		;Then return now
+ClosWt:	LDB T2,CLSTP##		;Timeout time for STWAIT
+	MOVE T1,STATE(F)	;State for STWAIT
+>;IFWAITS
+	pushj	p,StWait		; wait for the state to change
+	jumpe	t1,cpopj1##		; if closed, we are done
+	cain	t1,S%TimW		; time-wait is also close enough
+	  jrst	cpopj1##		; so skip return
+	jumpl	t1,DURErr		; destination unreachable if state
+					;  is negative.
+NOWAITS<
+	MOVEI	T3,TIMFLG		; timeout flag
+	scnoff				; make sure the picture isn't blurred.
+	MOVE	T2,IMPIOS(F)		; get flags
+	ANDCAM	T3,IMPIOS(F)		; CLEAR TIMFLG
+	move	t3,DevIOS(f)		; get error flags
+	scnon				; got a consistent picture
+	TRNe	T2,TIMFLG		; CHECK FOR TIMEOUT...
+	  pJRST	ErrTim			; timeout it is.  return error.
+	trne	t3,IODtEr		; IO data error?
+	  pjrst	ErrTim			; yes.  this is a timeout
+					;  detected by data level (user
+					;  timeout).
+; can't be here: we'd already be closed.
+;	trne	t3,IODErr		; "device" error?
+;	  pjrst	ErrCWR			; yes.  connection was reset.
+	  
+	txne	t2,TrgDwn		; target host down?
+	  pjrst	ErrDwn			; target down error
+>;NOWAITS
+IFWAITS<
+	MOVE T2,DEVIOS(F)		;Check flags
+	TRNE T2,IODERR!TMO!RSET!HDEAD	;Any errors?
+	POPJ P,				;Yes, return
+>;IFWAITS
+
+	; nothing is wrong with this.  still waiting for it to
+	;  get closed, though.
+	jrst	ClosWt			; wait to leave the new state.
+;⊗ Abors NoRst
+; subroutine to flush a connection, sending a reset if it was
+;	in a syncronized state.
+Abors:
+	push	p,State(f)		; save the state for later
+	pushj	p,DDBFls##		; clear out the buffers attached
+					;  to this DDB.
+	pop	p,t1			; get the state back
+	; skip this section if not one of these states
+	dispat	(t1,NoRst,<<S%SyRP,<jfcl>>
+			  ,<S%SyRA,<jfcl>>
+			  ,<S%Estb,<jfcl>>
+			  ,<S%Fin1,<jfcl>>
+			  ,<S%Fin2,<jfcl>>
+			  ,<S%ClsW,<jfcl>>
+		    >)
+
+	movx	t1,TC%Rst		; get the reset bit
+	movem	t1,SndBts(f)		; set as the bits to send.
+	scnoff				; shut down interrupts
+	pushj	p,SndMsg##		; go send it
+	  jfcl				; we couldn't send the reset, but
+					;  we did everything we could, so
+					;  don't consider this an error.
+	scnon				; bring interrupts back.
+
+NoRst:	pushj	p,ClsIOE		; release the DDB, wake user if waiting
+					; (we may not be the user).
+	pjrst	cpopj1##		; skip return
+NOWAITS< ;⊗ DEASS
+;SUBROUTINE TO DEASSIGN A DEVICE AFTER IT HAS HAD
+;  BOTH SIDES CLOSED.
+;CALL:
+;	PUSHJ	P,DEASS
+;	  ERROR RETURN	...CODE IN T1
+;	OK RETURN...	DEVICE DEASSIGNED
+DEASS:	skiple	t1,State(f)		; get state
+	  jrst	ERRSTT			; not a closed state.  not allowed.
+	PUSHJ	P,DDBFls##	;NOW RELEASE IT
+	pushj	p,DDBRel##		; back to free pool
+	JRST	CPOPJ1##	;SKIP RETURN
+;Still NOWAITS ;⊗ PLsts PLsts1 PLsts2 PLsts3
+; subroutine to set up a perpetual listen on a local port
+
+PLsts:	hrri	m,.uuDev(p1)		; point at device slot for PID
+	pushj	p,GetWdu##		; get the PID.
+	move	t3,t1			; save it out of the way.
+	hrri	m,.uuskt(p1)		; point at local port
+	pushj	p,GetWdu##		; get it.
+	jumpe	t1,ErrPar		; can't be zero
+	movei	t2,PLsLen-1		; point at last table entry
+PLsts1:	came	t1,PLsPrt(t2)		; this one?
+	  sojge	t2,PLsts1		; no.  try next
+	jumpge	t2,PLsts3		; ok if found one.
+	pjumpe	t3,cpopj1##		; ok return if trying to clear PID.
+	movei	t2,PLsLen-1		; reset pointer
+PLsts2:	skipe	PLsPid(t2)		; is this PID zero (cleared entry)
+	  sojge	t2,PLsts2		; no.  keep looking
+	jumpl	t2,ErrNES		; say there isn' enough space
+	movem	t1,PlsPrt(t2)		; save this in the port slot
+PLsts3:	came	j,PLsJob(t2)		; do we own this?
+	  jumpe	t3,ErrSkt		; no.  if we're trying to reset,
+					;  give a socket number in use error
+	movem	t3,PlsPID(t2)		; save the PID
+	movem	j,PlsJob(t2)		; remember who set it
+	pjrst	cpopj1##		; return happy.
+>;NOWAITS
+;SUBROUTINE TO PUT A SOCKET IN THE LISTENING STATE ;⊗ LISTS Lists2 LISTS1
+;THE SOCKET MUST BE CLOSED, LISTENING, OR IN RFC IN STATE.
+;CALL:
+;	PUSHJ	P,LISTS
+;	ERROR RETURN --  CODE IN T1
+;	OK RETURN
+
+LISTS:
+NOWAITS<
+	PUSHJ	P,GETWD1##	;GET remote host
+	jumpe	t1,Lists2		; don't munge it if he wants default.
+	move	t2,IpAddr##		; get our address
+	andx	t2,NetMsk		; clear all but network
+	txnn	t1,NetMsk		; is there a network set?
+	  tdo	t1,t2			; no.  set network address
+>;NOWAITS
+IFWAITS<
+	XCTR XR,[MOVE T1,HLOC##(M)]
+	JUMPE T1,LISTS2		;Zero means any host
+	TXNN T1,NETMSK		;Is there a network set?
+	 JRST ERRHST		;No, error
+>;IFWAITS
+Lists2:	movem	t1,RmtAdr(f)		; and save it
+NOWAITS<
+	PUSHJ	P,GETWD1##	;GET REMOTE SOCKET NUMBER
+>;NOWAITS
+IFWAITS<
+	XCTR XR,[MOVE T1,FSLOC##(M)]
+>;IFWAITS
+	andx	t1,<1←↑d16>-1		; trim down to 16 bits
+	movem	t1,RmtPrt(f)		; and save it
+	move	t1,State(f)		; get current state
+	cain	t1,S%List		; already listening?
+	  JRST	LISTS1			; YES.  don't clobber port we have.
+	caie	t1,S%Clos		; closed?
+	  jrst	ErrStt			; nope.  must have slipped to
+					;  a more advanced state while
+					;  he wasn't looking (that's
+					;  what he gets for using
+					;  Listen instead of Request).
+	PUSHJ	P,MAKMYS	;MAKE A port
+	  JRST	ERRSKT		;ILLEGAL
+LISTS1:
+IFWAITS<
+	MOVE W,NILIST##		;Set network index so LclAdr(f)
+	MOVEM W,NETWRK(F)	;gets set to something (it may change).
+>;IFWAITS
+	pushj	p,PrpDDB		; prepare DDB for action
+	MOVEI	T1,S%List		; this is Listen state now
+	movem	t1,State(f)		; new state
+IFWAITS<
+	PUSHJ P,IMSINT##		;Set up state-change interrupt
+>;IFWAITS
+	JRST	CPOPJ1##
+;SUBROUTINE TO GET A SOCKET REQUEST ;⊗ REQUS PW1PJ1
+;IF THERE IS NONE IN YET, THE JOB WAITS FOR ONE.
+;CALL:
+;	PUSHJ	P,REQUS
+;	ERROR RETURN -- CODE IN T1
+;	OK RETURN
+
+REQUS:	PUSHJ	P,LISTS		;MAKE SURE LISTENING OR RFC IN
+	  POPJ	P,		;ERROR!!
+	JUMPL	P1,CPOPJ1	;NO WAIT IF FLAG ON
+	movei	t1,S%List		; waiting to get out of listen state
+	PUSHJ	P,EstbWt		; wait to get into established
+					;  or better. (returns still SCNOFFed)
+	  jrst	[			; failed.
+		 scnon			; let IMPSer have interrupts
+		 pushj	p,DDBRel##	; deassign DDB.
+		 scnoff			; get interrupts back
+		 popj	p,		; error code already given to user.
+		]
+NOWAITS<
+	hrri	m,.uuhst(p1)		; point at host word
+	move	t1,RmtAdr(f)		; get host we accepted
+	pushj	p,PutWdu##		; store host
+>;NOWAITS
+IFWAITS<
+	move	t1,RmtAdr(f)		; get host we accepted
+	XCTR XW,[MOVEM T1,HLOC##(M)]
+>;IFWAITS
+	move	t1,RmtPrt(f)		; get remote port number
+
+NOWAITS<
+;HERE TO STORE IN THE NEXT WORD OF THE USER'S BLOCK, THEN SKIP RETURN
+PW1PJ1:	PUSHJ	P,PUTWD1##	;RETURN IT
+	JRST	CPOPJ1##	;OK RETURN
+>;NOWAITS
+IFWAITS<
+	XCTR XW,[MOVEM T1,FSLOC##(M)]
+	JRST CPOPJ1##
+>;IFWAITS
+NOWAITS< ;No crosspatching in WAITS ;⊗ TALKS TalkOK
+;SUBROUTINE TO CONNECT A DUPLEX IMP CONNECTION TO
+;  THE USER'S LOCAL TELETYPE.
+;CALL:
+;	MOVE	P1,[ADDRESS OF ARGUMENT LIST]
+;	PUSHJ	P,TALKS
+;	  ERROR RETURN	...CODE IN T1
+;	OK RETURN...	TELETYPE CONNECTED
+TALKS:
+	skipe	IBfThs(f)		; anything waiting to be read?
+	  jrst	TalkOK			; yes.  always legal to crosspatch.
+	move	t1,State(f)		; get state
+	CAIE	T1,S%Estb		; established?
+	 cain	t1,S%ClsW		; or close wait?
+	  jrst	TalkOK			; yes.  data can still flow
+	caie	t1,S%Fin1		; Fin-1?
+	 cain	t1,S%Fin2		; or 2?
+	  jrst	TalkOK			; yes.  he can still send to us
+	JRST	ERRSTT			; bad state to crosspatch
+
+TalkOK:	SKIPGE	TTYLIN(F)	;JOB-CONTROLLING IMP?
+	   JRST	ERRDNA		;YES, DON'T ALLOW, ELSE WIERD LOOP
+	MOVSI	T1,(IECHO)	;SET UP FOR TWEAK
+	MOVE	T2,[ANDCAM T1,TELOWD(F)];NORMALLY A CLEAR
+	skipGE	P1		;BUT SOMETIMES NOT IF /ECHO SWITCH USED
+	  HRLI	T2,(IORM T1,(F));  (ASSUMING HERE FROM IMPCOM)
+	XCT	T2		;DO IT
+	PUSHJ	P,IMPTTY##	;SET UP THE CONNECTION
+;	PUSHJ	P,TLNSET	;SPECIFY SMALL ALLOCATIONS FOR TTY'S
+	JRST	CPOPJ1##	;  AND RETURN
+;Still NOWAITS ;⊗ TRACS TRCTAB PINTS AINTS PECOS
+repeat 0,<	; might be fun to do sometime.....
+
+;SUBROUTINE TO ENABLE/DISABLE SENDING THE TRACE BIT ON ALL OUTPUT
+;  MESSAGES THRU THIS SOCKET.
+;	MOVE	P1,[ADDRESS OF USER ARGUMENT LIST]
+;	PUSHJ	P,TRACS
+;	  ERROR--CODE IN T1
+;	OK RETURN -- TRACE ENABLED OR DISABLED
+
+;BLOCK:	SIXBIT	/DEV/
+;	EXP	SWITCH (0 TO DISABLE, NONZERO TO ENABLE)
+
+TRACS:	TRNN	P2,1		;CAN ONLY DO THIS FOR OUTPUT CONNECTIONS
+	JRST	ERRPAR		;OOP
+	HRRI	M,.UUSTT(P1)	;OK, POINT TO TRACE SWITCH
+	PUSHJ	P,GETWDU##	;GET IT FROM USER CORE
+	JUMPE	T1,.+2		;JUMP IF TURNING OFF
+	MOVEI	T1,1		;ON
+	MOVSI	T2,(TRCENB)	;SET OR CLEAR TRACE ENABLE BIT IN DDB
+	XCT	TRCTAB(T1)	;ANDCAM OR IORM
+	JRST	CPOPJ1##	;SKIP RETURN TO USER
+
+TRCTAB:	ANDCAM	T2,ostat(F)	;[96bit] DISABLE
+	IORM	T2,ostat(F)	;[96bit] ENABLE
+
+;still in repeat 0
+;SUBROUTINE TO SEND AN INTERRUPT ON THE SPECIFIED SOCKET
+;CALL:
+;	MOVE	P1,[ADDRESS OF ARGUMENT LIST]
+;	PUSHJ	P,PINTS
+;	ALWAYS RETURN HERE
+PINTS:	PUSHJ	P,GETSTT	;GET THE STATE
+	CAIE	T1,.ISOPN	;OPEN?
+	JRST	ERRSTT		;NO
+	PUSHJ	P,GETHST	;GET THE HOST NUMBER
+	PUSHJ	P,NDBSTU	;SET UP NCP UUO DDB
+	TRNN	P2,1		;MY RECEIVE SOCKET?
+	PUSHJ	P,PINR		;YES, SEND "INR"
+	TRNE	P2,1
+	PUSHJ	P,PINS		;NO, SEND "INS"
+	PUSHJ	P,OUTXX		;SEND IT
+	JRST	CPOPJ1##	;OK RETURN
+
+> ; end of one repeat 0
+REPEAT 0,<
+;SUBROUTINE TO SPECIFY THE USERS TRAP ADDRESS FOR INCOMING
+;  INTERRUPTS.(NOT FULLY IMPLEMENTED)
+;CALL:
+;	MOVE	P1,[ADDRESS OF ARGUMENT LIST]
+;	PUSHJ	P,AINTS
+;	  ERROR RETURN	...CODE IN T1
+;	OK RETURN...	ADDRESS DEPOSITED IN DDB
+AINTS:	PUSHJ	P,GETSTT	;GET STATE
+	CAIE	T1,.ISOPN	;BETTER BE OPEN
+	JRST	ERRSTT		;IT ISNT
+	PUSHJ	P,GETWD1##	;GET HOST NUMBER FIELD(DISPATCH ADDRESS)
+
+	HRRZS	T1
+	PUSHJ	P,SETINT	;SET IT IN THE DDB
+	JRST	CPOPJ1##	;OK RETURN
+
+;STILL IN REPEAT 0
+;SUBROUTINE TO SEND A "ECO" MESSAGE AT UUO LEVEL(PRIVILEGED)
+PECOS:	PUSHJ	P,GETHS1	;GET, TEST HOST NUMBER
+	  JRST	ERRHST		;FOUL-UP
+	PUSHJ	P,NDBSTU	;SET UP UUO DDB FOR NCP
+	PUSHJ	P,PECO		;SEND IT
+	PUSHJ	P,OUTXX
+	JRST	CPOPJ1##
+> ;END REPEAT 0
+;Still NOWAITS ;⊗ PHSTS PWUPJ1
+;SUBROUTINE TO RETURN THE LOCAL HOST AND IMP PARAMETERS
+;	PARAMETERS:
+;	    In .IbDev (.UUDev):
+;		bits 1-8:	# OF ITY'S IN SYSTEM
+;		bits 9-17:	# OF IMPS
+;(246)		right half:	tty number of first ITY.
+;	    In .IbStt (.UUStt):
+;		BIT 0:	1 IF IMP IS NOT READY
+;	    In .IbHst (.UUHst)	LOCAL HOST'S NETWORK ADDRESS
+PHSTS:
+	hrlzi	t1,<<ItyN##&777>←9>!<ImpN##&777>;[96bit] get the ity/imp count
+	hrri	t1,ityfst##	;(246) and the first ITY number.
+	pushj	p,putwdu##	;[96bit] put in first word of block
+	setz	t1,		;[96bit] (more imp status can go in
+				;	  around here somewhere.)
+	skipn	okflag##	;[96bit] imp up?
+	  tlo	t1,400000	;[96bit] no: set flag
+	pushj	p,putwd1##	;[96bit] put that in the second word
+	move	t1,IPAddr##	;[96bit] get my site number
+	hrri	m,.uuhst(p1)	;[96bit] point to host word
+
+;HERE TO RETURN A WORD TO THE USER'S BLOCK, THEN SKIP RETURN
+PWUPJ1:	PUSHJ	P,PUTWDU##	;RETURN IT
+	JRST	CPOPJ1		;OK RETURN
+;Still NOWAITS ;⊗ PALLS PALLS1 PGVBS RSETS PNOPS PNOPS1 GETHS1
+REPEAT 0,<		;THESE FUNCTIONS WERE NEVER DEBUGGED
+;HERE TO SEND AN "ALL" TYPE MESSAGE(PRIVILEGED)
+PALLS:	PUSHJ	P,GETSTT	;GET STATE
+	CAIE	T1,.ISOPN	;OPEN?
+	JRST	ERRSTT		;NO
+	PUSHJ	P,GETWD1##	;GET MESSAGES
+	MOVE	P3,T1
+	PUSHJ	P,GETWD1##	;GET BITS
+	MOVE	T2,P3
+	TRNN	P2,1		;MY SEND?
+	JRST	PALLS1		;NO
+	ADDM	T1,OALBIT(F)
+	ADDM	T2,OALMES(F)
+	PUSHJ	P,IMPALL##	;TELL IMP SERVICE
+	JRST	CPOPJ1##
+
+;HERE TO SEND "ALL" TO REMOTE HOST
+PALLS1:	MOVNS	T1
+	ADDM	T1,IALBIT(F)	;DECREMENT INPUT ALLOCATION COUNTERS
+	MOVNS	T2		;  SO THEY WILL BE INCREASED AT CLOCK
+	ADDM	T2,IALMES(F)	;  OR INTERRUPT LEVEL.
+	JRST	CPOPJ1##
+
+;STILL IN REPEAT 0
+;HERE TO SEND A "GVB" MESSAGE TO RE-INITIALIZE ALLOCATION.
+PGVBS:	LDB	T1,PIHOST	;GET HOST NUMBER
+	PUSHJ	P,NDBSTU	;SET UP AN NCP DDB
+	PUSHJ	P,PGVB		;BUILD THE MESSAGE
+	PUSHJ	P,OUTXX		;SEND IT
+	JRST	CPOPJ1##
+> ;END REPEAT 0
+
+repeat 0,<	; can't do this in TCP
+;ROUTINE TO RESET A SPECIFIED HOST (PRIVILEGED)
+RSETS:	PUSHJ	P,GETHS1	;GET AND TEST HOST NUMBER
+	  JRST	ERRHST		;NO GOOD
+	PUSH	P,T1		;SAVE IT
+	PUSHJ	P,HSTCLR	;WIPE THE HOST LOCALLY
+	POP	P,T1		;GET BACK HOST NUMBER
+	PJRST	PNOPS1		;CAUSE 'RST' TO BE SENT BY QUEUEING A NOP
+
+;HERE TO SEND A "NO-OP" TO THE SPECIFIED HOST
+PNOPS:	PUSHJ	P,GETHS1	;GET AND TEST HOST NUMBER
+	  JRST	ERRHST		;ERROR
+PNOPS1:	PUSHJ	P,NDBSTU	;SET UP A DDB
+	PUSHJ	P,PNOP		;FORM THE MESSAGE
+	PUSHJ	P,OUTXX		;SEND IT
+	JRST	CPOPJ1##	;RETURN
+
+;SUBROUTINE TO GET THE HOST FIELD  AND TEST IT.
+GETHS1:
+	hrri	m,.uuhst(p1)	;[96bit] set to host word
+	pushj	p,g.uuht	;[96bit] get host word
+	jumpg	t1,cpopj1##	;[96bit] greater than 0 is OK.
+	popj	p,		;[96bit] 0 is not OK.
+
+> ; end of repeat 0
+;Still NOWAITS ;⊗ SETDDB SETDD3 SETDD0 SETDD2 SETDD1 SetDD4
+;SET UP A DDB FOR UUO WORK
+;CALL:
+;	MOVE	P1,[ XWD CODE, REL ADDRESS OF ARGUMENT LIST]
+;	MOVE	M,[RELADR(R)]
+;	MOVE	J,JOB NUMBER
+;	PUSHJ	P,SETDDB
+;	ERROR RETURN -- CODE IN T1
+;	OK RETURN
+
+SETDDB:	PUSHJ	P,GETWDU##	;GET UUO DEVICE NAME
+	JUMPE	T1,SETDD1	;JUMP IF NONE
+	PUSHJ	P,DEVSRG##	;FIND DEVICE
+	  JRST	SETDD1		;NO SUCH DEVICE
+	HLRZ	T1,DEVNAM(F)	;PHYSICAL DEVICE NAME
+	CAIE	T1,(SIXBIT -IMP-);AN IMP?
+	  JRST	SETDD2		;NO
+	LDB	T1,PJOBN##	;GET OWNER'S JOB NUMBER
+	CAMN	T1,J		;SAME?
+	  JRST	SETDD3		;YES
+	TLNE	P1,(IF.PRV)	;NO, SPECIAL ACTION?
+	 TLOA	P1,(IF.NWT)	;YES, FORCE NOWAIT OPTION
+SETDD3:	  TLNN	p4,UU.ASD	;MUST ASSIGN DEVICE?
+	   JRST	SETDD0		;NO. DON'T ASSIGN IT
+	PUSHJ	P,GETWDU##	;GET DEVICE NAME FOR ASSASG		DK/MAR 75
+	MOVEI	T2,ASSCON	;ASSIGN BY CONSOLE
+	PUSHJ	P,ASSASG##
+	  JRST	ERRDNA		;CANT HAVE IT
+	skipg	State(f)		; is it a closed DDB?
+	  PUSHJ	P,CLRIMP##		; yes.  CLEAR THE DDB
+SETDD0:	HRRI	M,.UUSKT(P1)	;POINT AT LOCAL SOCKET NUMBER
+	PUSHJ	P,GETWDU##	;GET IT
+	andx	t1,<1←↑d16>-1		; trim down to 16 bits
+	MOVE	P2,T1		;PUT IN PROPER AC
+	JRST	CPOPJ1##	;RETURN
+
+;HERE WHEN THE DEVICE IS NOT AN IMP
+SETDD2:	PUSHJ	P,GETWDU##	;GET DEVICE NAME AGAIN
+	CAMN	T1,DEVLOG(F)	;WAS IT THE LOGICAL NAME FOR THIS IMP?
+	  JRST	ERRLNU		;YES, CAN'T ALLOW IT.
+
+;HERE WHEN CANT FIND THE SPECIFIED DEVICE
+SETDD1:	TLNE	p4,UU.NDB	;ALLOWED TO GET FREE DDB?
+	PUSHJ	P,DDBGET##	;GET A DDB
+	  JRST	ERRNSD		;NO OR NONE
+	PUSHJ	P,GETWDU##	;GET DEVICE NAME AGAIN
+	JUMPE	T1,SetDD4		;SPECIFIED?
+	CAME	T1,[SIXBIT\IMP\] ;AND NOT 'IMP'?
+	  MOVEM	T1,DEVLOG(F)	;YES, ASSIGN LOGICAL NAME
+SetDD4:	PUSHJ	P,SETDVL##	;MARK DDB AS BELONGING TO JOB (J)	DK/MAR 75
+				;AND ADD TO LOGICAL NAME TABLE		DK/MAR 75
+	MOVE	T1,DEVNAM(F)	;PICK UP PHYSICAL NAME
+	PUSHJ	P,PUTWDU##	;GIVE HIM THE PHYSICAL NAME
+	JRST	SETDD0		;AND SET IT UP
+>;NOWAITS
+; subroutine to set up essential areas of a DDB ;⊗ PrpDDB
+PrpDDB:	movei	t1,IODEnd!IOBkTL!IODTEr!IODErr!IOImpM	; get a handfull
+	andcam	t1,DevIOS(f)		; make sure they are clear
+NOWAITS<
+	setzm	IMPIOS(f)		; and clear this word altogether
+>;NOWAITS
+	movei	t1,.iptcp		; get TCP protocol number for IP
+	movem	t1,Protcl(f)		; save in DDB
+NOWAITS<
+	move	t1,IPAddr##		; get my site number
+>;NOWAITS
+IFWAITS<
+	MOVE T1,NI.IPA##(W)		; Depends on which network
+>;IFWAITS
+	movem	t1,LclAdr(f)		; that's the source address
+	movei	t1,TCPRTT		; get standard retransmission time
+	movem	t1,RTTime(f)		; save that in DDB
+NOWAITS<
+	movei	t1,TCPUTT		; get user timeout time (can't
+					;  be set by user yet).
+	movem	t1,UTTime(f)		; put that in DDB as timeout set.
+>;NOWAITS
+IFWAITS<
+	LDB T1,ALLTP##			;Get user timeout time
+	LSH T1,1			;Convert to seconds
+	SKIPN T1			;Skip unless zero
+	MOVEI T1,TCPUTT			;Use default
+>;IFWAITS
+	movem	t1,UTTimr(f)		; and set timeout time now.
+	movei	t1,WndSiz		; get size of standard window.
+					; (this should be more flexible.)
+	movem	t1,RcvWnd(f)		; initialize window size.
+	lsh	t1,-1			; get 1/2 of size
+	movem	t1,RcvThr(f)		; that's our window treshhold
+	setzm	RcvHld(f)		; we're not holding back any bytes yet
+NOWAITS<
+	; load the suggested maximum number of bytes for IP, including
+	;  the fact that the imp-10 sends 36 bit chunks.
+	movei	t1,<<IPMax##-4*IPLen##-4*TCPLen>/ful.wd>*ful.wd
+>;NOWAITS
+IFWAITS<
+	;JJW - Wrong.  See comment at OPTSEG.
+	MOVEI T1,IPMAX##-4*IPLEN##-4*TCPLEN
+>;IFWAITS
+	movem	t1,SndMax(f)		; send no more than that unless told.
+	popj	p,			; return
+;ROUTINE TO MAKE A LOCAL SOCKET NUMBER FOR A USER'S IMPUUO. ;⊗ MAKMYS MAKMY0 MakM00 MakMy1 MakNxt MakFre
+;	MOVE	P1,[IMPUUO ARGUMENT WORD]
+;	MOVE	P2,[LOCAL SOCKET AS SUPPLIED BY USER]
+;	MOVE	J,[JOB NUMBER]
+;	MOVE	F,[IMP DDB ADDRESS]
+;	PUSHJ	P,MAKMYS
+;	  ERROR--DUPLICATE OR UNAVAILABLE LOCAL SOCKET NUMBER
+;	OK--FULL LOCAL SOCKET NUMBER IN LclPrt(f)
+; call with SCNOFF.
+
+MAKMYS:	TLNN	P1,(IF.ALS)		;USER WANT ABSOLUTE LOCAL SOCKET?
+	  jrst	MakFre			; no.  grab a free socket
+	pushj	p,save4##		; get lots of registers
+	move	p3,RmtPrt(f)		; target port
+	move	p4,RmtAdr(f)		; target host
+	PUSH	P,F		;SAVE DDB POINTER
+	MOVEI	T4,(F)		;MAKE A COPY AND CLEAR SOCKET USE FLAG
+NOWAITS<
+	HRRZ	F,TTYTAB##(j)	;GET TTY DDB FOR THIS JOB
+>;NOWAITS
+	PUSHJ	P,CTLJBD##	;FIND CONTROLLING JOB
+	move	t2,t1			; save controlling job number
+	MOVEI	F,IMPDDB##	;SEARCH ALL DDB'S
+NOWAITS<
+	MOVEI	T3,IMPN##
+>;NOWAITS
+MAKMY0:	skiple	State(f)		; ignore closed DDBs
+	 CAIN	F,(T4)			; mustn't be our DDB
+	  jrst	MakNxt			; try next one
+	came	p4,RmtAdr(f)		; is this aimed at the target site?
+	  jrst	MakNxt			; this isn't very informative
+	camn	p2,LclPrt(f)		; does the local port match ours?
+	 came	p3,RmtPrt(f)		; and does the remote port match, too?
+	  jrst	MakM00			; no.  check for a relative.
+	; yes.  socket is in use.  make a couple more checks, though.
+	move	t1,State(f)		; get the state
+	caie	t1,S%TimW		; is it time wait?
+	  jrst	FPopj##			; no.  this is a functioning
+					;  connection, in use.
+	ldb	t1,PJobN##		; get the owning job
+	caie	t1,(j)			; do we own it?
+	  jumpn	t1,FPopj##		; no, someone else does
+	push	p,t3			; save imp DDB count
+	scnon				; let IMPSer have the inerrupts
+	pushj	p,DDBRel##		; flush the one which is
+					;  waiting to time out.  this
+					;  isn't quite legal, but
+					;  someone knows she wants to
+					;  reuse this connection, so go
+					;  ahead and let her.  chances
+					;  are she's reusing it
+					;  because they know they can.
+	scnoff				; get back interrupts
+	pop	p,t3			; restore imp DDB count
+	jrst	MakNxt			; but we still need to check
+					;  for a related socket before
+					;  we approve this connection.
+
+MakM00:	MOVE	T1,LclPrt(F)		; get local port
+	cain	t1,1(p2)		; are the local sockets related?
+	  JRST	MakMy1			; yes.  check to see if it's us.
+	xor	t1,p2			; compare the bits of the local ports.
+	caxl	p2,FrePrt		; are we examining an exec port?
+	 txne	t1,FreMch		; or is this port in the same group?
+	  jrst	MakNxt			; this doesn't point at ownership of
+					;  the requested port's group.
+MakMy1:	LDB	T1,PJOBN##		; get owning job
+	CAIe	T1,(J)			; is it ours?
+	 cain	t1,(t2)			; or our parent's?
+	  tlo	T4,-1			; yes.  mark we saw a related
+					;  socket that belongs to us.
+MakNxt:	HLRZ	F,DEVSER(F)		;CHAIN TO NEXT DDB
+NOWAITS<
+	SOJG	T3,MAKMY0		;MORE?
+>;NOWAITS
+IFWAITS<
+	CAIE F,IMP.NX##			;MORE?
+	 JRST MAKMY0
+>;IFWAITS
+
+	TLNn	P1,(IF.PRV)		; is he prived?
+	 pjmpge	t4,FPopj##		; no.  does he own a relative?
+					;  if not, give error return.
+	movem	p2,LclPrt(t4)		; save this port in the DDB
+	pjrst	FPopj1##		; skip return: either has privs
+					;  to do anything, or knows a
+					;  related socket.
+
+;JJW - The following 2 comment lines appear to be out-of-date.
+;HERE IF USER-SUPPLIED ARGUMENT IS NEGATIVE, MEANING WANT A FREE SOCKET
+;  RANGE ALLOCATED.
+MakFre:	PUSHJ	P,FRESKT	;FIND A FREE SOCKET
+	ANDI	P2,SK.LCL	;MASK USER-SPECIFIED PORTION
+	IORb	P2,T1		;BUILD COMPLETE SOCKET
+	movem	p2,LclPrt(f)		; save this port in the DDB
+NOWAITS<				;JJW - this is done in IMPSER
+	hrri	m,.uuSkt(p1)		; point at local port word
+	pushj	p,PutWdu##		; tell user what the local port
+					;  we assigned is (it's in T1)
+>;NOWAITS
+	JRST	CPOPJ1##	;GIVE NORMAL RETURN
+;ROUTINE TO ALLOCATE A FREE SOCKET RANGE ;⊗ FRESKT FRESK1
+;	PUSHJ	P,FRESKT
+;	ALWAYS RETURN HERE, WITH FIRST SOCKET IN RANGE IN T1.
+
+IFWAITS<ENTRY FRESKT>
+FRESKT:	AOS	T1,SKTNUM	;ADVANCE SOCKET NUMBER GENERATOR
+	txne	t1,FreOvr		; overflowing out of field?
+	  setzb	t1,SktNum		; yes.  zero it.
+	LSH	T1,FRELSH	;POSITION THE BITS
+	ADDx	T1,FREMIN	;OFFSET FROM START
+	MOVE	T2,T1		;MAKE A COPY
+NOWAITS<
+	MOVEI	T3,IMPN##	;START IMP COUNTER
+>;NOWAITS
+	MOVEI	T4,IMPDDB##	;SEARCH ALL IMP DDB'S
+FRESK1:	xor	t2,LclPrt(t4)		; compare with local port
+	txnn	t2,FreMch		; is it a match?
+	  JRST	FRESKT		;YES, DISCARD AND TRY AGAIN
+	HLRZ	T4,DEVSER(T4)	;LOOP THRU ALL DDB'S
+NOWAITS<
+	SOJG	T3,FRESK1
+>;NOWAITS
+IFWAITS<
+	CAIE T4,IMP.NX##
+	 JRST FRESK1
+>;IFWAITS
+	POPJ	P,		;HERE WHEN FOUND FREE SOCKET RANGE.
+NOWAITS< ;⊗ Target
+; subroutine to decide where to send a message on the local net to get
+;  it to some host in the internet.
+; call:
+;	move	t1,<IP network address>
+;	pushj	p,Target
+;	  <return here if we couldn't figure out a way>
+;	<return here with T1 = local net address>
+
+Target::
+	pushj	p,save1##		; get p1
+	move	p1,t1			; position for clobber
+	xor	p1,IpAddr##		; compare against our address
+	txne	p1,NetMsk		; is it in our network?
+	  move	t1,@PrGate##		; no.  send to this site's favorite
+					;  gateway.  if this gateway's nice
+					;  enough, it'll correct our aim.
+	txz	t1,NetMsk!LogMsk	; flush the network number and the
+					;  "logical host" number to get
+					;  the for real and true 1822 address.
+	pjumpn	t1,cpopj1##		; and just return that as the target.
+	popj	p,			; just the network number was
+					;  on.  not funny.
+>;NOWAITS
+IFWAITS<
+	EXTERN	TARGET		;In IMPSER
+>;IFWAITS
+; subroutine to wait for state to arrive at an established state. ;⊗ EstbWt EstbW0 EstbCl EstbSF EstbCR EstbTm EstbEr EstbFl EstbW1
+;  Established and Close-Wait are both considered established.
+; call:
+;	move	f,DDB
+;	move	t1,<"current" wait state (what we're waiting to get out of)>
+;	pushj	p,EstbWt
+;	  <return here is failed to get to established state, T1 has state,
+;			DDB has been cleared out but not deassign>
+;	<here if in Established or in Close-Wait, T1 has state>
+; call with interrupts off.  returns with interrupts off.
+IFWAITS<ENTRY ESTBWT>
+EstbWt:	scnon				; let interrupts come
+IFWAITS<
+	LDB T2,RFCTP##			;Timeout time for STWAIT
+>;IFWAITS
+EstbW0:					; loop here with interrupts on.
+	pushj	p,StWait		; wait for a change in state.
+	caie	t1,S%Estb		; made it to being established?
+	 cain	t1,S%ClsW		; or even further: incoming closed?
+	  pjrst	[			; yes.  connection is established
+		 scnoff			; caller expects interrupt off
+		 pjrst	cpopj1##	; good return.
+		]
+	caie	t1,S%SyRA		; are we in SYN received?  (we've
+					;   been diverted from SYN sent.)
+	 cain	t1,S%SyRP		; either version is ok.
+	  jrst	EstbW1			; one or the other.  check again.
+
+	; failed.  decide why before junking the DDB
+	jumpl	t1,EstbEr		; ICMP got an error indication.
+NOWAITS<
+	MOVEI	T3,TIMFLG		; timeout flag
+	scnoff				; get a good picture
+	MOVE	T2,IMPIOS(F)		; get flags
+	ANDCAM	T3,IMPIOS(F)		; CLEAR TIMFLG
+	move	t3,DevIOS(f)		; get error flags
+	scnon				; we have a consistent picture
+	trne	t3,IODErr		; "device" error?
+	  pjrst	EstbCR			; yes.  connection was reset.
+	jumpe	t1,EstbCl		; closed can't be timeout
+
+	trnn	T2,TIMFLG		; CHECK FOR TIMEOUT...
+	 trne	t3,IODTer		; IO data error?  (user level timeout)
+	  JRST	EstbTm			; timeout it is.  return it to
+					;  user and non-skip to caller.
+EstbCl:	txnn	t2,TrgDwn		; target host down?
+	  jrst	EstbSF			; no.  some bizarre system failure
+	pushj	p,ErrDwn		; target down error
+	jrst	EstbFl			; flush DDB, etc.
+
+EstbSF:	pushj	p,ErrSys		; system failure error to user
+	jrst	EstbFl			; ditch the DDB and return bad
+					;  to caller.
+
+EstbCR:	pushj	p,ErrCWR		; tell user about the reset
+	jrst	EstbFl			; flush the DDB and return bad to user.
+
+EstbTm:	pushj	p,ErrTim		; report timeout error to user
+	jrst	EstbFl			; flush DDB and return to caller
+>;NOWAITS
+IFWAITS<
+	MOVE T2,DEVIOS(F)		;Check error bits
+	TRNN T2,TMO!HDEAD!RSET		;Is one of these set?
+	PUSHJ P,ERRSYS			;No, report system failure
+	JRST ESTBFL			;Give error return
+>;IFWAITS
+
+EstbEr:	pushj	p,DURErr		; destination unreachable.
+
+	; now flush the DDB and return to caller
+EstbFl:	pushj	p,DDBFls##		; zap buffers
+	scnoff				; reset interrupts as expected
+	popj	p,			; programs expect this to be still
+					;  assigned to them.
+;	pjrst	DDBRel##		; return DDB to free pool.
+
+EstbW1:
+NOWAITS<
+	MOVEI	T3,TIMFLG		; get the time out flag
+	ANDCAM	T3,IMPIOS(F)		; make sure it's cleared.
+>;NOWAITS
+IFWAITS<
+	MOVEI T3,TMO			;Similar, but different
+	ANDCAM T3,DEVIOS(F)
+>;IFWAITS
+	jrst	EstbW0			; yes.  wait to leave that state.
+
+NOWAITS< ;WAITS version below ;⊗ StWait StWai1 StWai2
+;SUBROUTINE TO WAIT FOR NCP ACTIVITY.
+;CALL:
+;  WAITS FOR A CHANGE IN THE STATE.  IT IS UP TO THE CALLING
+;  ROUTINE TO DETERMINE IF THE NEW CODE IS PROPER.
+;	MOVE	T1,STATE CODE
+;	MOVE	F,DDB ADDRESS
+;	PUSHJ	P,StWait
+;	RETURN HERE WITH NEW STATE IN T1
+; call with SCNON.
+StWait:	HRLM	T1,(P)		;SAVE THE CODE
+StWai1:	MOVSI	S,StatWT	; waiting for a change of state
+	scnoff			; make sure the picture isn't blurred.
+	IORM	S,IMPIOS(F)	;SET IO ACTIVE
+	IORB	S,DEVIOS(F)	;COPY FOR DEVIOS
+	HLRZ	T2,(P)		;GET TEST CODE
+	CAmE	T2,State(f)		; correct state?
+	  JRST	StWai2		;NO.  we're done.
+	MOVEI	T1,TIMFLG	;TIMED OUT?
+	TDNE	T1,IMPIOS(F)
+	  JRST	StWai2		;YES.
+	scnon			; allow interrupts while we wait
+	LDB	T1,PUUTIM	;GET USER WAIT CODE
+	CAIGE	T1,1		;NULL?
+	  MOVEI	T1,3		;YES--DEFAULT (30 SECONDS)
+	PUSHJ	P,IMPWAT##	;WAIT
+	JRST	StWai1		;TRY AGAIN
+
+;HERE IF WAIT SATISFIED
+StWai2:	ScnOn				; interrupts back
+	PUSHJ	P,IMPWK1##		;CLEAR FLAGS
+	move	t1,State(f)		; get state
+	popj	p,			; and return
+>;NOWAITS
+
+IFWAITS<
+;Subroutine to wait for a change in TCP state.  Call:
+;	MOVE T1,[current state]		;State waiting to get out of
+;	MOVE T2,[timeout interval]	;in 2-second units
+;	MOVE F,DDB ADDRESS
+;	PUSHJ P,StWait
+;	<return here with new state in T1>
+StWait:	HRL T2,T1		;State,,timeout
+	PUSH P,T2		;Save on stack
+StWai1:	MOVSI S,StatWT		;Waiting for a change of state
+	IORB S,DEVIOS(F)	;Set wait flag in DEVIOS
+	HLRZ T2,(P)		;Get test state
+	CAME T2,State(f)	;Same as before?
+	 JRST StWai2		;No. We're done.
+	TRNE S,TMO		;Timed out?
+	 JRST StWai2		;Yes
+	HRRZ T1,(P)		;Get timeout interval
+	PUSHJ P,IMPWAT##	;Wait
+	JRST StWai1		;Try again
+
+;Here if wait satisfied.
+StWai2:	ADJSP P,-1		;Fix up stack
+	PUSHJ P,IMPWK1##	;Clear flags
+	MOVE T1,STATE(F)	;Get new state
+	POPJ P,			;And return
+>;IFWAITS
+;SUBROUTINE TO SET TCP state WAIT DONE.  CALLED AT INTERRUPT LEVEL. ;⊗ TCPIOD ClsIOD ClsIOE
+;  CLOBBERS T1.   SAVES ALL OTHER ACS.
+;CALL:
+;	MOVE	F,[DATA BLOCK ADDRESS]
+;	PUSHJ	P,NCPIOD
+;	ALWAYS RETURNS HERE
+TCPIOD:	movsi	t1,StatWt	; state wait bit.
+NOWAITS<
+	TDNN	T1,IMPIOS(F) 	;WAITING?
+>;NOWAITS
+IFWAITS<
+	TDNN	T1,DEVIOS(F) 	;WAITING?
+>;IFWAITS
+	  POPJ	P,		;NO
+	PJRST	IMPWAK##	;WAKE THE JOB
+
+
+; routine to call when closing a connection which someone may be waiting
+;	for a state change on.  it flushes the DDB, then checks for someone
+;	waiting for this connection.  if someone is, it wakes them.
+;	if no one is, it releases the DDB.
+ClsIOD:	pushj	p,DDBFls##		; flush out buffers attached here
+
+; here to avoid flushing the DDB again.
+ClsIOE:
+IFWAITS<
+	LDB J,PJOBN##
+	JUMPE J,DDBREL##		;Make sure there's a job
+>;IFWAITS
+	movsi	t1,AllWat		; get wait flags
+NOWAITS<
+	tdnn	t1,ImpIOS(f)		; waiting for anything?
+>;NOWAITS
+IFWAITS<
+	tdnn	t1,DEVIOS(f)		; waiting for anything?
+>;IFWAITS
+	  pjrst	DDBRel##		; nope.  nothing to tell him,
+					;  so just make the DDB disappear.
+	pjrst	ImpWak##		; wake up this user and fly
+NOWAITS< ;⊗ LDPQTB LDPQUO LDPSFT LDPLCL LDPNET NQUPTS LQLQUO LQLSFT LQLDWN LQLNET LQPDwn LDPSMD INDSTM
+; table of byte ponters to the various bytes in LDBQUO for the network
+
+LDPQTB:			; TABLE OF POINTERS - INDEXED BY CODE
+LDPQUO:	POINT	7,LDBQuo##(U),35	; QUOTE CHAR	** DO NOT
+LDPSFT::POINT	7,LDBQuo##(U),28	; SHIFT CHAR	** CHANGE
+LDPLCL::POINT	7,LDBQuo##(U),21	; LOCAL ESC	**  THIS
+LDPNET:	POINT	7,LDBQuo##(U),14	; NETW ESC	** ORDER
+NQUPTS==.-LDPQTB		; NUMBER OF POINTERS
+
+; spare bits in high part of word.
+LQLQUO==400000	; PREVIOUS CHARACTER WAS QUOTE (SIGN BIT)
+LQLSFT==200000	; PREVIOUS CHARACTER WAS SHIFT		**KEEP IN
+LQLDWN==:100000	; SHIFT MODE (0=UP, 1=DOWN)		** ORDER
+LQLNET==40000	; NETWORK ESCAPE TYPED
+
+LQPDwn==↑l<LQLDwn,,0>	; get bit position for the shift mode bits.
+			; (do it outside the POINT to avoid MACRO bug.)
+
+LDPSMD:	POINT	2,LDBQuo##(U),LQPDwn	; POINTER TO SHIFT/MODE BITS
+
+INDSTM==:1B26	; DISABLE IMAGE MODE TIMEOUT - SET BY SETSTS
+;Still NOWAITS (no crosspatching in WAITS) ;⊗ RECQUO LTRCHK RECQU2 SFTTAB
+; (can never be here if not crosspatched)
+; here to check for some sort of network function character.
+; called from RECINT and from PTYPUT.
+; returns:
+;	  +1	<we know the character and have dealt with it>
+;	  +2	<we don't know this character.  continue processing>
+; call with character in T3.  clobbers T1,T2 and T4.  T3 set as
+;		this routine thinks it should be.
+RECQUO::
+	skipn	t1,LDBQuo##(u)	; any quotes or anything enabled?
+	  pjrst	cpopj1##	; no.  we don't know this characrter, then
+	JUMPL	T1,QUOIMI	; JUMP IF QUOTE WAS PREVIOUS CHAR
+	TLZE	T1,LQLNET	; DID NETWORK ESCAPE PRECEDE?
+	  JRST	NETQUO		; YES - TRANSLATE TO TELNET CODE
+	LDB	T2,LDPQUO	; get THE QUOTE CHAR.
+	CAIN	T2,(T3)		; is this the quote char?
+	  JUMPN	T2,QUOSET	; YES (IF ONE IS DEFINED)
+	LDB	T2,LDPLCL	; IS IT THE LOCAL ESCAPE CHARACTER?
+	CAIN	T2,(T3)		; (LET'S PLAY 20 QUESTIONS)
+	 PJUMPN	T2,TTIDET##	; YES - BREAK THE CROSSPATCH
+	LDB	T2,LDPNET	; NO - HOW ABOUT NETWORK ESCAPE?
+	CAIN	T2,(T3)		; ...
+	  JUMPN	T2,NETSET	; YES - IF ONE IS DEFINED
+
+; HERE IF NOT A SPECIAL CHARACTER
+LTRCHK:	LDB	T2,LDPSFT	; GET SHIFT CHAR
+	JUMPE	T2,RECQU2	; EXIT IF NO SHIFT CHAR DEFINED
+	CAIN	T2,(T3)		; IS THAT WHAT WAS TYPED?
+	  jrst	SFTSET		; yes.  handle shifting.
+	MOVEI	T2,(T3)		; SHIFTING IN EFFECT - COPY CHARACTER
+	ANDI	T2,137		; CLEAR U/L CASE BIT
+	CAIL	T2,"A"		; IS IT A LETTER?
+	 CAILE	T2,"Z"		; ....
+	  JRST	RECQU2		; NO - DON'T SHIFT
+	LDB	T1,LDPSMD	; GET CURRENT SHIFT MODE INDEX
+	XCT	SFTTAB(T1)	; SHIFT LETTER APPROPRIATELY
+RECQU2:	MOVSI	T1,LQLSFT	; CLEAR SHIFT BIT
+	ANDCAM	T1,LDBQuo##(U)	; ....
+	pjrst	cpopj1##	; not a character we care about.
+
+; CASE TRANSLATION TABLE.
+
+SFTTAB:	TRO	T3,40		; UPSHIFT MODE, NO SHIFT CHAR - TO LC
+	TRZ	T3,40		; DOWNSHIFT, NO SHIFT CHAR - TO UC
+	TRZ	T3,40		; UPSHIFT, SHIFT CHAR SEEN - TO UC
+	TRO	T3,40		; DOWNSHIFT, SHIFT CHAR SEEN - TO LC
+;Still NOWAITS ;⊗ NETQUO NETQ01 QUOIMI NETSET QUOSET SFTSET LQLSTO
+; HERE WHEN PREVIOUS CHAR WAS NETWORK ESCAPE
+
+NETQUO:	ANDI	T3,177		; DISCARD PARITY
+	CAIG	T3,"Z"+40	; LOWER CASE RANGE?
+	 CAIGE	T3,"A"+40	; ....
+	  CAIA			; no.  skip on.
+	   TRZ	T3,40		; WAS LOWER CASE LETTER, MAKE INTO UPPER
+	MOVE	T4,TELTAB##	; GET AOBJN WORD TO TELNET CONVERSION TABLE
+NETQ01:	MOVE	T2,(T4)		; GET AN ENTRY
+	CAIE	T3,(T2)		; MATCH?
+	  AOBJN	T4,NETQ01	; OLD COLLEGE TRY...
+	JUMPG	T4,LQLSTO	; NO MATCH IF POSITIVE
+	MOVEM	T1,LDBQuo##(U)	; SAVE WHILE WE CAN - THIS TURNS OFF THE
+				; NETWORK-ESCAPE-PRECEDE FLAG (LQLNET)
+				; BY PRIOR TLZE AT RECQUO+3
+	HLLM	T2,(P)		; SAVE TELNET CODE
+	MOVEI	T3,.TNIAC	; PRECEDE WITH TELNET FLAG
+	IORI	T3,400		; SEND THRU AS IMAGE CHAR
+	PUSHJ	P,RECNXI##	; SEND IT
+	HLRZ	T3,(P)		; GET TELNET CONTROL BACK.
+	CAIN	T3,.TNAO	; IF IT IS ABORT OUTPUT FUNCTION...
+	  PUSHJ	P,TSETBO##	; ...DO OUR PART HERE.
+	HLRZ	T3,(P)		; GET TELNET CONTROL BACK once more.
+	IORI	T3,400		; MARK AS IMAGE CHAR
+	PJRST	RECNXI##	; SEND TELNET CONTROL AND RETURN
+
+; HERE WHEN PREVIOUS CHARACTER WAS QUOTE. PASS LITERALLY
+
+QUOIMI:	TLZ	T1,LQLQUO!LQLNET!LQLSFT ; CLEAR SHIFT/QUOTE BITS
+	MOVEM	T1,LDBQuo##(U)	; AND STORE IN LDB
+	IORI	T3,400		; MARK AS IMAGE CHAR
+	PJRST	RECNXI##	; PERFORM IMAGE PROCESSING
+
+NETSET:	TLOA	T1,LQLNET	; HERE WHEN NETWORK ESCAPE TYPED
+QUOSET:	  TLO	T1,LQLQUO	; HERE WHEN QUOTE TYPED
+	JRST	LQLSTO		; STORE BITS, DISCARD CHARACTER
+
+; UP SHIFT CREEK IN A LEAKY CHAR WITHOUT A BIT
+
+SFTSET:	TLCE	T1,LQLSFT	; COMPLEMENT SHIFT BIT. IF ALREADY SET,
+	  TLC	T1,LQLDWN	; ...THEN REVERSE THE TRANSLATION MODE
+LQLSTO:	MOVEM	T1,LDBQuo##(U)	; STORE THE REVISED STANDARD VERSION
+	POPJ	P,		; DISCARD CHARACTER
+;Still NOWAITS ;⊗ QUOCHK QUOCK0 QUOCK1 QUOTOK
+; ROUTINE TO ENSURE THAT A NEW QUOTE/ESCAPE CHARACTER IS REASONABLE
+;   AND DISTINCT FROM ALL OTHERS, ANDTOSTORE IT IF SO.
+; CALL:
+;
+; 	MOVEI	T3, ...7-BIT ASCII CHAR...
+; 	MOVEI	T4, CODE: 0=QUOTE, 1=SHIFT, 2=LCLESC, 3=NETESC
+; 	PUSHJ	P,QUOCHK
+; 	  ERROR RETURN - ILLEGAL CHAR OR NOT UNIQUE
+; 	NORMAL RETURN - T3 STORED APPROPRIATELY IN LDBQUO(U)
+
+; U SHOULD BE SET UP. T1, T2 USED.
+
+QUOCHK::JUMPE	T3,QUOTOK	; ALWAYS LEGAL TO CLEAR QUOTES
+	PUSHJ	P,SPCHEK##	; CHECK FOR SPECIAL CHARACTERS
+	 JFCL			;
+	CAIE	T3,15		; DON'T ALLOW CR
+	 TLNE	T1,CHBRK##	; OR ANY BREAK CHAR
+	  POPJ	P,		; BAD BOY!
+	CAIL	T3,"A"		; NOR ARE ALPHABETICS ALLOWED
+	 CAILE	T3,"Z"+40	; in some kind of alpha range?
+	  JRST	QUOCK0		; no.  OK SO FAR
+	CAILE	T3,"Z"		; ok to be between upper and lower case, too.
+	 CAIL	T3,"A"+40	; ...
+	  POPJ	P,		; IF EPFTO'U LOPX IJT BMQIBCFU
+QUOCK0:	MOVEI	T1,NQUPTS-1	; START THE COUNTER
+QUOCK1:	LDB	T2,LDPQTB(T1)	; GET AN EXISTING QUOTE/ESCAPE
+	CAIE	T1,(T4)		; IF NOT THE SAME AS THE ONE WE ARE SETTING,
+	 CAIE	T3,(T2)		; IS IT THE SAME AS THE GIVEN CHAR? (THIS
+				; ALLOWS USER TO SET QUOTE TO CURRENT VALUE -
+				; REDUNDANT, BUT HARMLESS - LIKE DEAD YEAST
+	  SOJGE	T1,QUOCK1	; TRY THEM ALL
+	JUMPGE	T1,CPOPJ##	; IF DIDN'T TRY ALL, NOT SO HARMLESS
+QUOTOK:	DPB	T3,LDPQTB(T4)	; OK - STORE AS NEW QUOTE/ESCAPE
+	JRST	CPOPJ1##	; "ESCAPE"
+>;NOWAITS
+;⊗ TCPDat SktNum TCPDDB PLsPrt PlsPID PlsJob TCPDCn
+
+NOWAITS<			;Data is in CACDAT
+	$low
+
+; storage i need
+
+TCPDat::	; where to start zeroing on INIT.
+
+SktNum:	block	1		; number of last free port assigned.
+
+
+; DDB used for random TCP hacking
+TCPDDB=.-IBfTop			; hypothetic start of this DDB
+	block	IBfBot-IBfTop+1	; allocate words needed
+
+
+; perpetual listen data area
+PLsPrt:	block	PlsLen		; the listen ports
+PlsPID:	block	PlsLen		; PIDs to be told when a connection comes in
+PlsJob:	block	PlsLen		; the job that set this last (owning job)
+
+TCPDCn==:TCPDat-.	; negative number of words to clear at init.
+>;NOWAITS
+IFWAITS<
+	EXTERN	SKTNUM,TCPDDB	;PLSxxx aren't used in WAITS
+>;IFWAITS
+
+	$high
+	$LIT
+	END

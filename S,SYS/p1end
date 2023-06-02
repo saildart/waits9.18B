@@ -1,0 +1,7 @@
+COMMENT ⊗   VALID 00002 PAGES
+C REC  PAGE   DESCRIPTION
+C00001 00001
+C00002 00002	P1END←←1	Tell HEAD to use different TITLE statement
+C00003 ENDMK
+C⊗;
+P1END←←1	;Tell HEAD to use different TITLE statement

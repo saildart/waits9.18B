@@ -1,0 +1,493 @@
+COMMENT ⊗   VALID 00010 PAGES
+C REC  PAGE   DESCRIPTION
+C00001 00001
+C00002 00002		title	UDPSer
+C00003 00003	\
+C00004 00004		subttl	defintions describing a UDP leader  UDPLen UDPIBH UDPIBf UDPObf UDPPnt
+C00006 00005		subttl	process incoming UDP message  UDPIn UDPNCk NewLst
+C00013 00006		subttl	process a connection which has no DDB  NewCon NewCo1 NowCon PLsSn NotExc NEWCON NEWCO1 UDPWKP UDPWKN UDPECH UDPTIM
+C00023 00007		subttl	returns  NoLead NoMess BadChk BufFls
+C00024 00008		subttl	UDPMak  UDPMak
+C00028 00009		subttl	UDPChk  UDPChk
+C00030 00010
+C00031 ENDMK
+C⊗;
+	title	UDPSer
+	subttl	provan
+
+	search	f,s
+NOWAITS<
+	search	NetDef		; network definitions
+>;NOWAITS
+IFWAITS<SEARCH NETMAC>
+	search	MacTen		; search only if symbol not found in NetDef
+
+	sall
+
+
+	$reloc
+	$high
+
+XP	VUDPSr,1		; UDP version
+comment	\
+
+this module contains the support routines for the User Datagram
+protocol as defined in RFC-768.
+
+\
+	subttl	defintions describing a UDP leader ;⊗ UDPLen UDPIBH UDPIBf UDPObf UDPPnt
+
+; see RFC-768 for details of this header.
+
+
+UDPLen==:2		; number of words in an UDP leader.
+
+NOWAITS<			;Data is in CACDAT
+	$low		; define the storage needed
+
+UDPIBH:	block	NBHLen			; buffer header.
+UDPIBf:	block	UDPLen			; words needed for header
+; the following block is used to create a UDP leader for output.
+;  it is filled and then converted to 36 bit buffers all under ScnOff.
+UDPObf:	block	NBHLen+UDPLen		; output buffer for forming leader
+>;NOWAITS
+IFWAITS<
+	EXTERN	UDPIBH,UDPIBF,UDPOBF
+>;IFWAITS
+
+	$high		; back to protected code
+
+UDPPnt:	point	8,UDPIBf		; pointer to start loading the
+					;  header block from the stream.
+
+; define the actual header fields.  position is the bit position of the
+;  left most bit.
+;
+; 	name   word  position width
+
+; UDP uses the standard ports, StdSP and StdDP.
+;DefFd.	UDPSP,	0,	0,	16	; source port of message
+;DefFd.	UDPDP,	0,	16,	16	; destination port
+DefFd.	UDPSiz,	1,	0,	16	; length of packet
+DefFd.	UDPChk,	1,	16,	16	; UDP checksum
+	subttl	process incoming UDP message ;⊗ UDPIn UDPNCk NewLst
+
+
+entry	UDPIn	; only load this module if IP calls this routine
+
+
+UDPIn::
+	move	p2,MsgLen(f)		; get length of message through IP
+ifn FtChck,<	; doing checksum
+	setz	p3,			; clear checksum
+	move	t1,p2			; make sure to checksum length
+					;  of UDP message before we
+					;  convert it to length of segment.
+	pushj	p,CSmHWd##		; checksum the length.
+>
+	caige	p2,UDPLen*4		; cut length by that amount
+	  jrst	NoLead			; not enough message to read in leader
+	movei	t1,UDPIBH		; get pointer to input leader
+	move	t2,ABfLst(f)		; get last buffer so far
+	stor.	t1,NBHNxt,(t2)		; make us their next
+	movem	t1,ABfLst(f)		; and make us last (for grins)
+	move	t1,UDPPnt		; point at the storage block
+	movei	t2,UDPLen*4		; length of leader in bytes
+	stor.	t2,NBHCnt,UDPIBH	; store in buffer header
+	pushj	p,GetLed##		; get the leader and checksum
+	  jrst	NoLead			; not enough bytes for leader.
+
+	load.	t1,UDPSiz,UDPIBf	; get length from our packet
+	camle	t1,p2			; IP at least as big as we need?
+	  jrst	NoMess			; nope.  forget it.
+	subi	t1,UDPLen*4		; cut length by amount of leader
+	movem	t1,MsgLen(f)		; save length of UDP message
+	pushj	p,GetMes##		; copy T1 bytes in.
+	  jrst	NoMess			; problem reading message
+
+	move	p1,t1			; save new stream pointer for later.
+
+ifn FtChck,<	; doing checksumming
+	load.	t1,UDPChk,UDPIBf	; get the checksum from the leader
+	jumpe	t1,UDPNCk		; this guy doesn't do checksums
+
+	move	t1,RmtAdr(f)		; get their address.
+	pushj	p,CSmWrd##		; add in that checksum.
+	move	t1,LclAdr(f)		; our address
+	pushj	p,CSmWrd##		; checksum it.
+	move	t1,Protcl(f)		; get the protocol
+	pushj	p,CSmHWd##		; checksum that half a word
+	
+
+	; bear in mind that the checksum we now have in P3 has, along with
+	;  all the right stuff, its own one's complement.  therefore, what
+	;  we really have is <checksum> + -<checksum>, which is 0.
+	;  further, since <checksum> has some bit on (otherwise the
+	;  sender isn't checksuming and we wouldn't be here), it can be
+	;  shown that the brand of one's complement 0 we must have is
+	;  the version with all 1's.  if that's what we have, we're ok.
+	;  if not, the checksum failed.
+	hrrzs	p3			; get just the checksum
+	caie	p3,<1←↑d16>-1		; magic explained above
+	  jrst	BadChk			; checksum is bad.
+
+UDPNCk:	; here to skip over the checksum checks because sender is not
+	;  checksumming the messages.
+>
+	aos	UDPMsg##		; count another UDP message seen
+
+	move	t1,RmtAdr(f)		; source (foreign host address)
+	load.	t2,StdSP,UDPIBf		; get his port
+	movem	t2,RmtPrt(f)		; and keep pseudo DDB up-to-date
+	load.	t3,StdDP,UDPIBf		; get my port
+	movem	t3,LclPrt(f)		; still keep pseudo DDB up-to-date
+	move	t4,Protcl(f)		; get protocol
+	move	p3,MsgLen(f)		; put length of this message
+					;  somewhere where we can get
+					;  it for the new DDB.
+	push	p,f			; save current DDB, in case we fail
+	pushj	p,FndDDB##		; scan network DDBs for the one
+					;  that matches.
+	  jrst	NewCon			; this is one we haven't heard of
+	pop	p,(p)			; don't want that F any more.
+
+NewLst:					; return here if we are now listening
+					;  for an unknown port (exec port).
+	movem	p3,MsgLen(f)		; remember the message length
+					;  in the new DDB.
+
+NOWAITS<
+	pass packet to owner
+>;NOWAITS
+IFWAITS<
+	;Fill in parameters in case not specified by MTAPE
+	MOVE T1,RMTADR+PSDDDB##
+	MOVEM T1,RMTADR(F)
+	MOVE T1,NETADR+PSDDDB##
+	MOVEM T1,NETADR(F)
+	MOVE T1,NETWRK+PSDDDB##
+	MOVEM T1,NETWRK(F)
+	MOVE T1,LCLADR+PSDDDB##
+	MOVEM T1,LCLADR(F)
+	LOAD. T1,STDSP,UDPIBF
+	MOVEM T1,RMTPRT(F)
+	LOAD. T1,STDDP,UDPIBF
+	MOVEM T1,LCLPRT(F)
+	SKIPLE STATE(F)		;Is he ready for it?
+	SKIPE IBFTHS(F)		;Has he read the previous message?
+	JRST BUFFLS		;No, flush it
+	HLRM P1,IBFTHS(F)	;Store buffer ptr in convenient place in DDB
+	PJRST IMPNEW##		;Tell job about new data and return
+>;IFWAITS
+	subttl	process a connection which has no DDB ;⊗ NewCon NewCo1 NowCon PLsSn NotExc NEWCON NEWCO1 UDPWKP UDPWKN UDPECH UDPTIM
+
+NOWAITS<
+
+; handle a connection to a port which is not listening.
+; port number is in T3.  old DDB (at this writing, always the pseudo
+;	DDB) is on the stack.  it STAYS on the stack through most of
+;	this routine, so watch your ass or you'll try to popj p, to it.
+NewCon:
+	; remember that we STILL have the old DDB on the stack.
+
+	; first check for a perpetual listen on that socket
+	movei	t4,PlsLen-1		; point at last entry
+NewCo1:	camn	t3,PlsPrt(t4)		; is this it?
+	  jrst	PLsSn			; yes.  a perptual listen seen.
+	sojge	t4,NewCo1		; count down
+
+	caxl	t3,FrePrt		; is it below freely assigned ports?
+	  jrst	NotExc			; yes.  not an exec port.
+
+	; now check for pemanent port services, handled through Telnet
+	skipe	t1,t3			; position our port number better
+					; (zero isn't legal)
+	 PUSHJ	P,WKPFND	;IS THIS SOCKET'S SERVICE IMPLEMENTED?
+	  jrst	NoPort			; remember this "error"
+	move	t4,t1			; save service offset
+	MOVEI	J,0		;NO JOB NUMBER YET
+	PUSHJ	P,DDBGET##	;TRY FOR FREE DDB
+	  jrst	NoDDB			; can't get one
+	PUSHJ	P,ITYGET##	;GET A PORT
+	  jrst	NoITY			; can't get one
+	MOVSI	u,TTYKBD!TTYPTR
+	IORb	u,TTYLIN(F)	; SET TTY BITS, get ITY's LDB into U
+	PUSHJ	P,TSETBI##	;CLEAR INPUT BUFFER
+	PUSHJ	P,TSETBO##	;CLEAR OUTPUT BUFFER
+	move	t1,t4			; position pointer to service.
+	HRRO	T2,WKPSRV(T1)	;FETCH POINTER TO LOGICAL NAME
+	POP	T2,DEVLOG(F)	;SET LOGICAL NAME INTO DDB
+	LDB	T1,WKPTFC	;FETCH TTY FORCED COMMAND INDEX
+	pushj	p,TTFORC##		;FORCE THE APPROPRIATE COMMAND
+
+; here from perpetual listen setup
+NowCon:	pushj	p,PrpDDB		; set essential DDB words
+
+	pop	p,t2			; get back the DDB which was used
+					;  while the message was arriving.
+
+	;now fill in the information we know
+	move	t1,RmtAdr(t2)		; get the foreign host address.
+	movem	t1,RmtAdr(f)		; and save it the real DDB
+	move	t1,NetAdr(t2)		; get ARPA address
+	movem	t1,NetAdr(f)		; save in the DDB
+	move	t1,RmtPrt(t2)		; get the source port (his port)
+	movem	t1,RmtPrt(f)		; save in DDB
+	move	t1,LclPrt(t2)		; get the destination port (my port)
+	movem	t1,LclPrt(f)		; save in DDB
+	movei	t1,S%List		; get state code "listen"
+	movem	t1,State(f)		; make it this DDB's state
+
+	pushj	p,NewLst		; go back a process this message
+					;  as if nothing has happened.
+	move	t2,State(f)		; now get the state
+	caie	t2,S%List		; still listening?
+	  popj	p,			; no.  just return.
+	pushj	p,DDBFls##		; clear out DDB
+	pjrst	DDBRel##		; and return it to free pool
+
+; here to deal with a perpetual listen found
+PLsSn:	move	j,PlsJob(t4)		; get job number listening
+	pushj	p,DDBGet##		; get a DDB and assign it to this job.
+	  jrst	NoDDB			; can't.  count and deny access
+	movei	t1,PlsPID(t4)		; point at the PID to notify
+	hrrzi	t2,DevNam(f)		; point at the device name in the
+					; DDB as the data to send.
+	hrli	t2,1			; just that one word, please.
+	setz	j,			; mark as being sent from interupt
+					;  level.
+	pushj	p,SendSI##		; send the IPCF packet to the user
+	  jrst	NoIPCF			; oops.  flush DDB and deny connection
+	jrst	NowCon			; now process this packet
+
+
+NotExc:	pop	p,f			; restore fake DDB.
+	movei	u,TCPIBf		; point at TCP leader
+	move	p3,TCPFlg(u)		; get the flags from leader.
+	jumpe	p2,TryRst		; just reset if no options
+	hlrz	t1,p2			; get the first buffer of options
+	pushj	p,RelBuf##		; free the options.
+	jrst	TryRst			; try to send a reset and
+					;  return the buffers and return.
+>;NOWAITS
+
+IFWAITS<
+NEWCON:	POP P,F			;Restore pseudo-DDB
+	MOVSI T4,-UDPWKN	;Set up for AOBJN
+NEWCO1:	HLRZ T1,UDPWKP(T4)	;Check a table entry
+	CAME T1,T3		;Match?
+	AOBJN T4,NEWCO1		;No, try another
+	JUMPGE T4,[AOS UDEPRT##	;If not in table, count a bad port
+		;We should probably return an ICMP for this
+		JRST BUFFLS]	;Flush message
+	HRRZ T1,UDPWKP(T4)	;Get dispatch addr and jump to it
+	JRST (T1)
+
+;Table of UDP well-known ports we serve.  LH=port, RH=dispatch addr
+UDPWKP:	 7,,UDPECH		;Echo
+	11,,BUFFLS		;Discard
+	45,,UDPTIM		;Time
+UDPWKN==.-UDPWKP
+
+;Echo a UDP packet received on the well-known port for Echo Protocol.
+;Switching the source and destination host and port numbers in the returned
+;packet doesn't change the UDP checksum (or the IP checksum), so we reuse the
+;UDP input header block for output.  It already has the right byte count.
+UDPECH:	PUSHJ P,OUTPRE##	;Preallocate output resources
+	 JRST BUFFLS		;Can't, so ignore message
+	MOVEI T1,UDPIBH		;Point to input buffer
+	MOVEM T1,OBFFST(F)	;Make it the first buffer
+	HLRZ T1,P1		;Point to the data stream
+	STOR. T1,NBHNXT,UDPIBH	;Store in header
+	STOR. T3,STDSP,UDPIBF	;Store my port
+	STOR. T2,STDDP,UDPIBF	;Store his port
+	MOVE T1,MSGLEN(F)	;Get byte count
+	ADDI T1,UDPLEN*4	;Account for UDP header
+	MOVEM T1,OBFBYT(F)	;Store as length of IP data
+	JRST IPMAKE##		;Send the message back
+
+;UDP Time Protocol (defined in RFC 868).
+UDPTIM:	PUSHJ P,BUFFLS		;Flush any incoming data
+	PUSHJ P,BUFGET##	;Get a buffer for reply
+	 POPJ P,		;Can't.  Ignore request
+	MOVEM T1,OBFFST(F)	;This is the output stream
+	MOVEI T2,4		;Byte count
+	STOR. T2,NBHCNT,(T1)	;Store in buffer
+	MOVEM T2,OBFBYT(F)	;And DDB
+	SETZ P3,		;No checksum yet
+	MOVE T2,PSTDAT##	;Get consistent PST date and time
+	;Save ACs used by DAYCNT
+IFN TAC-T1,<			;If DAYCNT's result is where we want it,
+	PUSH P,TAC		;then no need to save this
+>;IFN TAC-T1
+	PUSH P,TAC1
+	PUSH P,DAT
+	HLRZ TAC,T2		;System date
+	PUSHJ P,DAYCNT##	;Convert to number of days since 1/1/1964
+	POP P,DAT
+	POP P,TAC1
+IFN TAC-T1,<
+	MOVE T1,TAC		;Get result in T1
+	POP P,TAC
+>;IFN TAC-T1
+	ADDI T1,<↑D64*↑D365+↑D15>	;Add days from 1/1/1900 to 1/1/1964
+	IMULI T1,<↑D24*↑D60*↑D60>	;Now get seconds since 1/1/1900
+	ADDI T1,<↑D8*↑D60*↑D60>(T2)	;Add today's time, and convert to GMT
+	MOVE T3,OBFFST(F)		;Get our buffer address
+	DPB T1,[POINT 32,NBHLEN(T3),31]	;Store it there
+	PUSHJ P,CSMWRD##	;Checksum the word in T1
+	PUSHJ P,OUTPRE##	;Preallocate output resources
+	 SKIPA T1,OBFFST(F)	;Can't
+	JRST UDPMAK		;Send off the reply
+	JRST BUFREL##		;Release our buffer if we can't send
+>;IFWAITS
+	subttl	returns ;⊗ NoLead NoMess BadChk BufFls
+
+; message ended before leader was read in
+NoLead:	aos	UDELed##		; error with leader
+	popj	p,			; return
+
+; bytes ended before message or ran out of buffers while reading it
+NoMess:	aos	UDEMes##		; count error reading message in
+	popj	p,
+
+BadChk:	aos	UDEChk##		; checksum wrong.  count it
+	pjrst	BufFls			; flush out buffers and return
+
+; subroutine to release all the buffers in our message.
+BufFls:	hlrz	t1,p1			; get first buffer of chain.
+	pjrst	RelBuf##		; release the entire chain.
+	subttl	UDPMak ;⊗ UDPMak
+
+;++
+; Functional description:
+;
+;	put UDP leader (in 32 bit format) into fixed UDP output leader
+;	buffer.  then link the buffer to the beginning of the
+;	current output stream.  then send the message down to the
+;	next level of protocol for further processing.
+;
+;
+; Calling sequence:
+;
+;		move	f,DDB
+;		pushj	p,UDPMak
+;		<always returns here>
+;
+; Input parameters:
+;
+;	f - DDB for connection
+;
+; Output parameters:
+;
+;	none.
+;
+; Implicit inputs:
+;
+;	data in DDB
+;
+; Implicit outputs:
+;
+;	data in DDB
+;
+; Routine value:
+;
+;	returns non-skip if can't get a buffer
+;
+; Side effects:
+;
+;	adds a buffer to the beginning of the current output stream.
+;--
+
+
+UDPMak::
+IFWAITS<			;TOPS-10 should have this fixed
+	SETZM UDPOBF+2		;Clear word containing checksum
+>;IFWAITS
+	movei	t1,UDPOBf		; point at the output leader space
+	exch	t1,OBfFst(f)		; make us first, get old first
+	stor.	t1,NBHNxt,UDPOBf	; link old first to us.
+	move	t1,RmtPrt(f)		; get his port
+	stor.	t1,StdDP,NBHLen+UDPOBf	; that's the destination port
+	move	t1,LclPrt(f)		; get my port
+	stor.	t1,StdSP,NBHLen+UDPOBf	; that's the source port
+	movei	t1,UDPLen*4		; get length in bytes
+	stor.	t1,NBHCnt,UDPOBf	; save byte count for this buffer
+	addb	t1,OBfByt(f)		; get a grand total in bytes.
+	stor.	t1,UDPSiz,NBHLen+UDPOBf	; save in length word.
+
+	; one would add OPTIONS around here somewhere.
+
+ifn FtChck,<	; doing checksums?
+	move	t1,[point 16,NBHLen+UDPOBf]; starting pointer
+	movei	t2,UDPLen*4		; get length in bytes of leader
+	pushj	p,CSmWds##		; and checksum it.
+	move	t1,RmtAdr(f)		; get remote address
+	pushj	p,CSmWrd##		; add it to checksum
+	move	t1,LclAdr(f)		; local address, too
+	pushj	p,CSmWrd##		; add it in.
+	move	t1,Protcl(f)		; and get protocol
+	pushj	p,CSmHWd##		; and add it in as well
+	move	t1,OBfByt(f)		; get byte count of message
+					;  plus leader
+	pushj	p,CSmHWd##		; add that to checksum, too.
+
+	txc	p3,msk.hw		; send one's complement of the sum
+	txnn	p3,msk.hw		; if zero, make it...
+	  movei	p3,msk.hw		; ...the zero with all bits on
+	stor.	p3,UDPChk,NBHLen+UDPOBf	; save the checksum in the leader.
+>
+ife FtChck,<	; not doing checksums
+	zero.	t1,UDPChk,NBHLen+UDPOBf	; flag that we aren't checksumming
+>
+	pjrst	IpMake##		; call next level of protocol
+	subttl	UDPChk ;⊗ UDPChk
+
+;++
+; Functional description:
+;
+;	subroutine to do various once a second checks to an IMP DDB.
+;
+;
+; Calling sequence:
+;
+;		move	f,DDB
+;		pushj	p,UDPChk##
+;		<always returns here>
+;
+; Input parameters:
+;
+;	f - DDB of an IMP device.
+;
+; Output parameters:
+;
+;	none.
+;
+; Implicit inputs:
+;
+;	DDB and queues
+;
+; Implicit outputs:
+;
+;	DDB and queues
+;
+; Routine value:
+;
+;	none.
+;
+; Side effects:
+;
+;	may didle with output queues if it finds it needs to retransmit.
+;	may delete DDB altogether, although DevSer will still have the
+;	link to the next DDB.  (HINT: call this after doing everything else.)
+;--
+
+
+NOWAITS<
+UDPChk::
+	should need this
+>;NOWAITS
+
+	$high
+	$LIT
+	END

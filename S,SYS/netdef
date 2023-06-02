@@ -1,0 +1,195 @@
+COMMENT ⊗   VALID 00004 PAGES
+C REC  PAGE   DESCRIPTION
+C00001 00001
+C00002 00002	 IODMRK ICTRAN HDEAD CTROV RSET TMO BLOK ANYW IODTQD ANYC RFCS RFCR CLSS CLSR LONCE LGONCE RFCL EFTPO
+C00005 00003	 STLOC LSLOC WFLOC BSLOC FSLOC HLOC SIU CCS SYS NLA ILB IDD GMM CGT
+C00007 00004	IP/TCP defs  IPHOST IMPHST SUHOST  .IPTCP .IPUDP .TNIAC .TNSE .TNNOP .TNDM .TNBRK .TNIP .TNAO .TNAYT .TNEC .TNEL .TNGA .TNSB .TNWIL .TNWNT .TNDO .TNDNT .TOBIN .TOECH .TORCP .TOSGA .TOAMS .TOSTT .TOTIM .TORCT .TOXOL
+C00014 ENDMK
+C⊗;
+;⊗ IODMRK ICTRAN HDEAD CTROV RSET TMO BLOK ANYW IODTQD ANYC RFCS RFCR CLSS CLSR LONCE LGONCE RFCL EFTPO
+
+	SUBTTL Definitions for ARPANet and EtherNet
+
+; Special bits in RH of IOS
+
+IODMRK←←040000		;Mark seen (IOBKTL)
+ICTRAN←←004000		;Incomplete transmission (IOBOT)
+HDEAD←←002000		;Host dead (IOTEND)
+CTROV←←001000		;Host overflowed our allocation (IOPAR)
+RSET←←000400		;Host sent us a reset
+TMO←←000200		;Timeout on wait state occurred
+BLOK←←000100		;This link is blocked
+
+; LH bits of IOS
+
+DEFINE Z(SYM,VAL) <SYM←←VAL ↔ ANYW←←ANYW!VAL>
+
+ANYW←←0
+Z(INPW,200000)		; input wait
+Z(LNK0W,100000)		; control link wait
+Z(BLOKW,040000)		; waiting for link to become unblocked
+Z(ALLW,020000)		; allocation wait
+Z(RFCW,004000)		; wait for RFC - listening or connection requested
+Z(CLSW,002000)		; close wait.  One close has been sent
+;DEVSBB←←001000
+Z(INTSW,000400)		; waiting for previous interrupt to be acknowledged
+Z(RETRYW,000200)	; waiting for previous operation to be finished with retries
+IODTQD←←000100		; packet in DTE queue (PUP output, BSP)
+
+; Bits in LH of state word in IMPSTB
+
+ANYC←←400000		; any change of state
+RFCS←←200000		; RFC has been sent
+RFCR←←100000		; RFC has been received
+CLSS←←040000		; CLS sent
+CLSR←←020000		; CLS received
+LONCE←←010000		; HCLSS has been here once
+LGONCE←←004000		; LOGGER (user or exec) has been here once
+RFCL←002000		; RFC is listening type connection (PUPSER)
+			; Bits 377,,77700 are used for host dead reason;
+			; 77 bits are used for MTAPE error code
+EFTPO←←001000		; EFTP output has been done, must send EFTPEnd on CLOSE.
+;⊗ STLOC LSLOC WFLOC BSLOC FSLOC HLOC SIU CCS SYS NLA ILB IDD GMM CGT
+
+; Positions in user table of various quantities
+
+STLOC←←1	; Status word location
+LSLOC←←2	; Local socket location
+WFLOC←←3	; Wait flag location
+BSLOC←←4	; Byte size location
+FSLOC←←5	; Foreign socket location
+HLOC←←6		; Host number location
+
+; Error codes
+; Everyone who returns status bits may return an error code instead.
+
+SIU←←1		; Socket in use
+CCS←←2		; Can't change socket after RFC done
+SYS←←3		; Horrible system error (impossible)
+NLA←←4		; No link available (system IMP tables stuffed)
+ILB←←5		; Illegal byte size
+IDD←←6		; IMP or NCP dead
+GMM←←7		; Gender mismatch (Anita Bryant feature--sockets must
+		; be heterosocketual, ie. odd to even and even to odd)
+
+; Codes from here on followed the advent of TCP.  See ERRLST in
+; TCPSER.MAC for a complete list.
+
+STT←←10		; Improper state for this operation
+CGT←←11		; Can't get there from here
+;IP/TCP defs  IPHOST IMPHST SUHOST ;⊗ .IPTCP .IPUDP .TNIAC .TNSE .TNNOP .TNDM .TNBRK .TNIP .TNAO .TNAYT .TNEC .TNEL .TNGA .TNSB .TNWIL .TNWNT .TNDO .TNDNT .TOBIN .TOECH .TORCP .TOSGA .TOAMS .TOSTT .TOTIM .TORCT .TOXOL
+
+IFN FTIP,<
+.IPTCP←←=6			;TCP's protocol number according to IP
+.IPUDP←←=17			;UDP's protocol number according to IP
+
+;IP host number definitions for networks that we are on.
+;Rather than being hardwired, we really should get this from noop messages
+;from the IMP.  See MES4 in IMPMAC.MAC for a partial attempt at this.
+
+IFN FTAIP,<
+IFN FTSUAI,<
+↓ARPA.N↑←←=10			;SAIL
+↓ARPA.H↑←←0
+↓ARPA.I↑←←=11
+>;IFN FTSUAI
+IFN FTLLL,<
+↓ARPA.N↑←←=26			;S1-A is on MILNET starting October 4, 1983
+↓ARPA.H↑←←1
+↓ARPA.I↑←←=95
+>;IFN FTLLL
+IFE FTSUAI!FTLLL,<.FATAL Need net, host and IMP number definitions>
+
+;Host site number, so can identify self (used in TOPS-10 code)
+THSITE↑←←<<ARPA.H⊗=16>!ARPA.I>	;The host number on the network
+>;IFN FTAIP
+
+IFN FTEIP,<
+;Ethernet IP address for SU-NET and pointers into subfields.  If changing
+;this, also look at TARGET in TCPSER.MAC.
+IFE FTETHB,<
+↓IPENET↑←←=36			;SU-NET-TEMP
+↓IPENTP↑←←=24			;Number of bits to right of network
+↓IPENTS↑←←=8			;Number of bits in network
+>;IFE FTETHB
+IFN FTETHB,<
+↓IPENET↑←←=128⊗=8+=12		;SU-NET
+↓IPENTP↑←←=16			;Number of bits to right of network
+↓IPENTS↑←←=16			;Number of bits in network
+>;IFN FTETHB
+↓IPENTX↑←←<POINT IPENTS,,35-IPENTP>	;Byte ptr to network field
+↓IPESBP↑←←IPENTP-8		;Number of bits to right of subnet
+↓IPESBS↑←←=8			;Number of bits in subnet
+↓IPESBX↑←←<POINT IPESBS,,35-IPESBP>	;Byte ptr to subnet field
+↓IPEHSP↑←←0			;Number of bits to right of host
+↓IPEHSS↑←←=8			;Number of bits in host
+↓IPEHSX↑←←<POINT IPEHSS,,35-IPEHSP>	;Byte ptr to host field
+
+>;IFN FTEIP
+
+;Macros for constructing host numbers
+
+DEFINE IPHOST(A,B,C,D)<1*((A⊗=24)+(B⊗=16)+(C⊗=8)+D)>
+IFN FTAIP,<DEFINE IMPHST(A,B)<IPHOST(ARPA.N,A,0,B)>>
+
+IFN FTEIP,<
+    IFE FTETHB,<
+	DEFINE SUHOST(A,B)<IPHOST(=36,A,0,B)>		;SU-NET-TEMP
+    >;IFE FTETHB
+    IFN FTETHB,<
+	DEFINE SUHOST(A,B)<IPHOST(=128,=12,A,B)>	;SU-NET
+    >;IFN FTETHB
+>;IFN FTEIP
+
+IFN PUPNUM,<
+;PUP host number, in HOSTS3 "Unternet" format (for NETLST and HSTLST in CACDAT).
+DEFINE PUHOST(A,B)<<44400,,0>+(A⊗=8)+B>
+>;IFN PUPNUM
+
+;Several constants defined in NETMAC.MAC that must be available for FAIL, or
+;that tickle bugs in LOADER if made global (especially when used in expressions).
+;They are made globals here and in NETMAC so LOADER will check consistency.
+
+↓ful.wd↑←←=36			;the number of bits in a dec-10 word
+↓hlf.wd↑←←=18			;the number of bits in a half word
+↓net.wd↑←←=32			;the number of bits in a net word
+↓net.by↑←←=8			;the number of bits in a net byte
+↓wd2byt↑←←2			;how to shift from words to bytes
+↓byt2wd↑←←-wd2byt		;how to shift from bytes to words
+↓oct2by↑←←=3			;how to shift from an octet of bytes into bytes.
+↓byt2bt↑←←=3			;how to shift from bytes to bits.
+
+↓NBHLEN↑←←1			;Network Buffer Header length, in words
+↓MESDLN↑←←=16			;Table sizes
+↓ICMLEN↑←←=20
+
+;TELNET PROTOCOL STUFF
+.TNIAC←←=255			;INTERPRET FOLLOWING AS COMMAND
+.TNSE←←=241			;END SUBNEGOTIATION PARAMETERS
+
+.TNNOP←←=241			;NO-OP
+.TNDM←← =242			;DATA MARK
+.TNBRK←←=243			;BREAK (OR REVERSE BREAK)
+.TNIP←← =244			;INTERRUPT PROCESS
+.TNAO←←=245			;ABORT OUTPUT
+.TNAYT←←=246			;ARE YOU THERE
+.TNEC←← =247			;ERASE CHARACTER
+.TNEL←← =248			;ERASE LINE
+.TNGA←← =249			;GO AHEAD
+.TNSB←← =250			;SUB-NEGOTIATE
+.TNWIL←←=251			;WILL
+.TNWNT←←=252			;WON'T
+.TNDO←← =253			;DO
+.TNDNT←←=254			;DON'T
+
+.TOBIN←←0			;TRANSMIT BINARY OPTION
+.TOECH←←1			;ECHO OPTION
+.TORCP←←2			;RECONNECTION PROTOCOL OPTION
+.TOSGA←←3			;SUPPRESS GO-AHEAD OPTION
+.TOAMS←←4			;APPROXIMATE MESSAGE SIZE OPTION
+.TOSTT←←5			;STATUS OPTION
+.TOTIM←←6			;TIMING MARK OPTION
+.TORCT←←7			;REMOTE CONT. TRANS AND ECHOING
+.TOXOL←←=255			;EXTENDED OPTIONS LIST OPTION
+
+>;IFN FTIP

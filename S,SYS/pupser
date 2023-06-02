@@ -1,0 +1,5028 @@
+COMMENT ⊗   VALID 00066 PAGES
+C REC  PAGE   DESCRIPTION
+C00001 00001
+C00011 00002	PUP protocol Ethernet service		 $QMPHD $ENHDS $EECHO $PUP ETHIPT $ENHDS $ENHDS $PUP $XXARP ETHIPT $CHAOS $ADRES MAXBAL MAXMAL DEFBAL DEFMAL MINBAL MINMAL MAXHOP PUPSEC IQFDLY
+C00017 00003	Format of a QMP message block 		 QMP.BLOCK 
+C00023 00004	Format of a Ethernet Pup message (3 Mb)  PUP.BLOCK 
+C00029 00005	Format of a Ethernet Pup message (10 Mb)
+C00035 00006	Error macros				 SNDERR SNDER1 SNDER2 SNDER3 SNDER4 SNDABT EFTERR 
+C00037 00007	Diagnostic macros			 PUPMSG DATPSH DATPOP  ZZ WDCNT ZZ
+C00039 00008	Packet fields				 QMPTYP QMPWDC QMPNET PUP1PW ENDEST ENSRC ENTYPE PUP1HW PPBPHN PPBPHH PPBPHS PUP1HW PDSTNT PDSTHS PSRCN1 PSRCN2 PSRCHS E10TYP PUP1HW PUPLEN PUPTRN PUPTYP PUPTYL PUPID PUPIDL PUPDHN PUPDNT PUPDHS PUPDS1 PUPDS2 PUPSHN PUPSNT PUPSHS PUPSSK PUP1DW PUP1DB PUP1DA PUPRHN PUPRS1 PUPRS2 PUPERE PUPERH PUPES1 PUPES2 PUPERB PUPERT PUPAKM PUPAKP PUPAKB PUPFS1 PUPFS2 PUPLK1 PUPLK2 PKTMOD EFTMOD BSPMOD EXPMOD PUPCDS XXOP XXTONT XXTOHS XXTO3M XXFRNT XXFRHS XXFR3M Y.CTYPE Y.SH1A Y.SH1B Y.SH2A Y.SH2B Y.SNET Y.SSKT Y.DH1A Y.DH1B Y.DH2A Y.DH2B Y.DNET Y.DSKT YODEFS
+C00048 00009	Clock level				 PUPCLK puptc1 PUPTCK PUPTC2 PUPTC3 PUPTCE PUPDSC
+C00054 00010	Retry/Timeout routines			 SRETRY SRTRY1 SRTRY2 RRETRY RRTRY1 WRETRY WRETR1
+C00059 00011	  Retry/Timeout (cont'ed)		 CRETRY PUPHNG PUPHN1 PUPHN2 PUPHN3
+C00062 00012	Input from Ethernet			 ENINQ ENINQ2 ETHPU3 ETHFWD
+C00069 00013	  Process non-PUP packets		 NONPUP EECHO
+C00072 00014	Process experimental packet types	 YODCHK NONPP2 XPKSRC XPKSR1
+C00077 00015	  Dandimumble support (Xerox 1108)	 XXARP1 EECHO1 DMUMBLES MN1108 MX1108
+C00081 00016	Output to Ethernet			 ENOUTQ ENOUQE ENODSP ENODSZ EXPQ EXPQ2 PUPEXP PUPEX2 PUPEX3 PUPEX4 PUPEX5
+C00087 00017	PUP input - search link table		 PUPFLK PUPFLE PUPFL0 PUPFL2 PUPFL3
+C00093 00018	  PUP - protocol dispatch		 PUPBSP PUPBS1 PUPBS2 PUPBS3 PUPNSP PUPBSE
+C00097 00019	  PUP opcode dispatch/definition	 ANYMOD BSPTAB BS%ECH BS%IEC BS%BEC BS%ERR BS%RFC BS%ABT BS%END BS%ENR BS%DAT BS%ADA BS%ACK BS%MRK BS%INT BS%INR BS%AMA BS%EDA BS%EAC BS%EEN BS%EAB NBSPTY
+C00100 00020	  Diagnostic, Error packets		 PUPBEC PUPECH IPUPSN EECHO2 PUPERR PUPER0 PUPER1 PUPER2 PUPABS PUPIQF PUPABT PUPAB1 PUPAB2 PUPEOF PUPEO2
+C00109 00021	  Send error packets			 EFTERX SNDABX SNDER6 SNDER8 SNDER9 SNDERX
+C00112 00022	  Interrupt Pup received		 PUPINT PUPIN1 PUPIN2 PUPIN3 PUPINR PUPIN9 PUPIN7
+C00117 00023	  Request for Connection Pup received	 PUPRFC PUPRF1 PUPRF2 PUPRF3 PUPRF4 PUPRF5 PUPRF6 PUPRF7 PUPRFQ
+C00128 00024	  End Pup received			 PUPEND PUPENS PUPEE3 PUPENR PUPEN2 ENDRRT %ENDRR %EENRR IROUFA
+C00134 00025	  Mark, Data, AData, AMark packets	 PUPMRK PUPDAT PUPDA3 PUPAMA PUPADA PUPAD2
+C00138 00026	  Acknowledgement Pup received		 PUPACK PUPAC2 PUPAC3 PUPAC4 PUPAC5 PUPAC6 PUPAC7 PUPAC8 PUPAC9 PUPDCK
+C00150 00027	  Interrupt level for EFTP		 PUPEDA PUPED1 PUPED3 PUPED4 PUPED5 PUPEAC PUPED2 PUPEA2 PUPEA3 PUPEA5 PUPEA6 PUPEA7 PUPEA8 PUPEA9 PUPEEN PUPEAB PUPEB2 PUPEB3 PUPEB4 EFTSET
+C00162 00028	Queue packet on input list		 PUPIQ PUPIQ1 PUPIQ2 PUPIQ3 PUPIQ4 PUPIQ5 PUPLGR
+C00168 00029	Queue packet on output list		 PUPOQ PUPOQ1 PUPOQ2 PUPOQ3 PUPOQ4 PUPOFL PUPOF2 PUPOF3
+C00173 00030	Dump a losing Pup on the CTY		 PUPDMP Data PUPDM1
+C00175 00031	 PUPDSP
+C00177 00032	Initialization, create/destroy DDB	 PUPINI PUPSET PUPCLR PUPCR1
+C00180 00033	Set IOS, check connection type		 PUPIOS STSTYP STSTY2 ADRRT %ADRRT
+C00183 00034	INPUT UUO				 BUFI BUFI1 DMPI TMOCHK
+C00186 00035	OUTPUT UUO				 BUFO BUFO2 BUFO1 BUFO3 OUTDSP DMPO
+C00190 00036	BSP and EFTP mode input			 BSPIN EFTPI2 BSPIN1 EFTPIN BSPIN2 BSPIN3 BSPIN4
+C00195 00037	  Packet and experimental mode input	 PKTIN XPKTIN XPKin1
+C00198 00038	  Wait for input			 PKTIWT PKTIW1 PKTIW2 PKTIW3 %LSNRT %INPRT %BS2RT %NOPRT
+C00201 00039	  Remove packet from input list		 PUPREL PUPRE2 PUPRE3 XCTCHK XCTCH2
+C00206 00040	BSP mode output				 BSPOUT BSPOU2 BSPOU4 BSPORS
+C00212 00041	  Wait and retry routines for BSP output BSPOWF BSPOWT BSPOW2 BSPOW3 BSPOER PUPBQN BSPBQE BSPORT BSPOR2 PUPRTF PUPRT0 PUPRT1 %BSPORT BSPSRT BSPART %BSPART NULADA
+C00222 00042	  EFTP mode output			 EFTPOU EFTPO2 EFTCO2 EFTPWF EFTPOW RFCRT BS1CRT EFTORT EFTOR1 EFTOR2 %RFCRT %BS1CR %EFTOR
+C00230 00043	  Datagram mode output			 PKTOUT PKTOU2 PKTOU3 PKTOU4 PKTOU5 PKTOU6 ROUFAI NOELNK
+C00235 00044	  Experimental packet output		 XPKOUT XPKOQ1 XPKOQ2 XPKOQ3 xpkcbd YODOQ1
+C00239 00045	CLOSE UUO				 PUPCLS PUPCL1 PUPCLW PKTCLS XPKCLS XPKCL2 XPKCL3
+C00243 00046	  Close an BSP connection		 BSPCLS BSPCL1 BSPCL2 BSPCL3 BSPCL4 BSPCL5 BSPCL6
+C00249 00047	  Close an EFTP connection		 EFTPCL BSPCLW EFTCLW
+C00251 00048	RELEASE UUO				 PUPRLS PUPRL2 PUPRL3 PUPRL4 RLLINK RLLNK2 PUPONJ
+C00255 00049	MTAPE Dispatch				 PUPMTP ILGMTP UUODSP PUPMMT
+C00258 00050	  Connect/Listen			 PUPCON PUPCN1 PUPCN2 PUPCN3 PUPCN4 CONSYF PUPCN5 PUPCN6 EFTCN2 RFCWT1 PUPLSN CONHDD CONXST CONFAI CONTMO BADHSN
+C00270 00051	  Get status, Terminate, Wait, Tables	 MTSTAT MTTERM MTRETS PUPCWT PUPMTB PUPTBS NPUPTB WAKEMT
+C00274 00052	  Functions 7,10,12			 MTGADR MTGAD2 MTGAD3 MTGAD4 PUPSIP PUPENB
+C00277 00053	  Function 11 - Send interrupt		 PUPSIN PUPSI2 PUPSI3
+C00280 00054	  Test interrupts, Get/Set allocations	 PUPRIN UGETAL USETAL USETTB USETSP USETTM UGETTM
+C00285 00055	  Function 21 - Generate unique socket # UGNSYM GENSYM GENSY2 GENSY3
+C00287 00056	  Send/Read Mark			 PUPSMK PUPRMK PUPRM2
+C00290 00057	  Function 27 - Get routing table	 GETROU
+C00291 00058	  Function 30 - Set routing table	 SETROU SETRO2
+C00294 00059	  Function 31 - Set experimental mode	 SETEXP SETEX2 SETEX3 SETEX4 SETEX5
+C00298 00060	MKLINK - Make a link.			 MKLINK MKLNK1 MKLNKF MKLNK3
+C00301 00061	Make a PUP packet			 PUPMAK PUPMK2 PUPMKF PUPMKB PUPMKS PUPRCY PUPCY1 XPKMAK
+C00307 00062	Route a PUP packet			 PUPROU PUPRO3 PUPRO4 EXPNNM NPUPNT PUPRO5 PUPETH NT1108 ISLM2 PUPSLA PUPSL2 GROUTE GROUT2
+C00315 00063	Wait, Wake and check connection		 PUPWAI PUPWT1 PUPWAK PUPWK1 NULRT %NULRT
+C00319 00064	Set/Check PUP checksums			 PUPSXP PUPSXM PUPCXM PUPCX1
+C00322 00065	Trace packets			 PKTTRC PKTTR1 PKTTRE PKTTR2 PKTTR3 PKTTR4 PKTTR5
+C00327 00066	Bugtraps 				 PUPBUG PUPCHK CNTBUG CXSBUG PUPGIV GIVBUG
+C00331 ENDMK
+C⊗;
+SUBTTL PUP protocol Ethernet service		;⊗ $QMPHD $ENHDS $EECHO $PUP ETHIPT $ENHDS $ENHDS $PUP $XXARP ETHIPT $CHAOS $ADRES MAXBAL MAXMAL DEFBAL DEFMAL MINBAL MINMAL MAXHOP PUPSEC IQFDLY
+
+; "It's a dog"
+
+; Mark Crispin, CSD-CF
+; Basic support August '80
+; BSP/RTP support December '80
+; Revised May '81 (TVR)
+; Rewritten October '81 (TVR)
+
+; See PUPSER.FLO[SS,SYS] for flowcharts describing some of this code.
+
+IFN PUPNUM,<
+
+BEGIN PUPSER
+
+HISYS
+
+; Local AC definitions
+
+XD LNK,DAT			;Link index
+XD PKT,AC1			;Packet
+
+; Ethernet definitions
+
+↑$QMPHD←←4			;Size of QMP header in bytes
+
+
+; Packet types for different kinds of ethernet.
+;
+; Note different header size as well as different type codes.
+
+IFE FTF2,<	;3Mb
+↑$ENHDS←←4			;Size of an Ethernet header in bytes
+↑$EECHO←←700			;Ethernet message type "Echo Me"
+↑$PUP←←1000			;Ethernet message type for a PUP
+↑ETHIPT←←1001			;Ethernet message type for IP packet
+>;IFE FTF2
+
+IFN FTF2,<	;10Mb
+↑$ENHDS←←=16			;Real 10Mb header (i think?)
+↑$PUP←←1000			;Ethernet message type for a PUP
+↑$XXARP←←1001			;Xerox's address resolution protocol
+↑$XNS←←3000			;Xerox Network Services (or something like that)
+↑ETHIPT←←4000			;Ethernet message type for IP packet
+↑$CHAOS←←4004			;Ethernet message type for a Chaosnet
+↑$ADRES←←4006			;Ethernet message type for address resolution
+>;IFN FTF2
+
+XD $PUPMN,=22			;Mimimum PUP byte size
+XD $PUPMX,=554			;Maximum PUP byte size
+XD $PUPMD,<4*PUPBSZ>		;Maximum Pup byte size for a Data/AData PUP
+				;This restriction is so that one data packet
+				;will fit into one user buffer.  Perhaps this
+				;could be obtained from the users buffer header
+				;so that larger packets could be used.
+XD $PUPMS,1000			;Maximum Pup server socket
+XD $PUPMB,<<$PUPMN/2>+<$ENHDS/2>> ;Size of a minimum size message in PDP-11 words
+
+;Abort codes for EFTP
+;Note:  I have no official documentation for codes > 3.  -- TVR/Dec81
+
+XD EFXSAB,1			;EFTP External Abort
+XD EFRBSY,3			;Receiver busy
+XD EFOSYN,4			;Out of Sync. error
+XD EFNOSP,6			;Not spooling or not printing
+XD EFMDLY,7			;Request for medium length delay
+XD EFSUSP,=8			;Suspension request
+
+ifndef efsget,<define efsget<fsget>>	;CCRMA doesn't have most recent version of CORE
+
+;Allocation parameters
+
+MAXBAL←←=1024*=32	; maximum number of bits of allocation
+MAXMAL←←=32		; maximum message allocation
+DEFBAL←←8*$PUPMB	; default bit allocation
+DEFMAL←←DEFBAL/$PUPMB	; default message allocation
+MINBAL←←$PUPMB		; minimum bit allocation
+MINMAL←←2		; minimum message allocation
+
+;Max. hop count
+MAXHOP←←=15
+
+;Clock parameters
+PUPSEC←←=20		; number of times clock processes are checked per second.
+
+IQFDLY←←2*PUPSEC	; delay retry for 2 sec. on IQ FULL
+
+IFN JIFSEC-PUPSEC*(JIFSEC/PUPSEC),<
+.FATAL PUPSEC must be exactly divisible by JIFSEC
+>;IFN ...
+
+;Note that ethernet device runs at different priority levels, depending on the
+;processor it runs on.  On the KL-10, it runs in same channel as the scanner,
+;as the same mechanism that handles CTY output also handles ether packets.  On
+;a Foonly, it runs at a lower priority channel because it has to copy packets
+;in and out of the interface and the scanner channel drops characters alot as
+;it is.
+IFN PUPCHN-SCNCHN,<
+	DEFINE ONPUP <CONO PI,PUPON>
+	DEFINE OFFPUP <CONO PI,PUPOFF>
+>;IFN PUPCHN-SCNCHN
+IFE PUPCHN-SCNCHN,<
+	DEFINE ONPUP <PUSHJ P,SCNONJ>
+	DEFINE OFFPUP <PUSHJ P,SCNFFJ>
+	DEFINE PUPONJ <SCNONJ>
+>;IFE PUPCHN-SCNCHN
+
+ifndef fteth2,<↓fteth2←←0>	;If there is more than one ethernet interface
+ifndef ftethx,<↓ftethx←←-1>	;User job may take all packets of given type.
+;Format of a QMP message block 		; QMP.BLOCK ;⊗
+
+;	  0                              16  18                           32    35
+;	___________________________________________________________________________
+;	|                                    |                                    |
+;DTQ%LK	|                                    |  Link to next msg on q, or zero    |
+;	|____________________________________|____________________________________|
+;	|                                    |                                    |
+;DTQ%WC	|                                    |  Length of msg in PDP-11 words     |
+;	|____________________________________|____________________________________|
+;	|                                                                         |
+;DTQ%XC	|                 Instruction to execute upon message post                |
+;	|_________________________________________________________________________|
+;	|                                    |                                    |
+;DTQ%RT	|                                    |  Outgoing retry count              |
+;	|____________________________________|____________________________________|
+;       |                                    |                                    |
+;DTQ%OL |               PUPDDB ptr           |  Link to next in DDB's own queue   |
+;       |____________________________________|____________________________________|
+;       |                                    |                                    |
+;spare  |                                    |                                    |
+;	|____________________________________|____________________________________|
+;	|                                    |                                    |
+;spare	|                                    |                                    |
+;	|≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡|
+;	|                                |                                |*******|
+;DTQ%MS	|   %%ENMG (=3), Ethernet msg    |   11 word count of packet      |*******|
+;	|________________________________|________________________________|*******|
+;	|                                                                 |*******|
+;	|   Ethernet message, two 16-bit left justified words per word    |*******|
+;	|                                                                 |*******|
+;	|_________________________________________________________________|*******|
+;	|_________________________________________________________________________|
+;Format of a Ethernet Pup message (3 Mb) ; PUP.BLOCK ;⊗
+
+;	  0                             7  8                           15
+;	__________________________________________________________________
+;	|                                |                               |
+;2 bytes|      Ethernet Destination      |       Ethernet Source         |
+;	|________________________________|_______________________________|
+;	|                                                                |
+;2 bytes|            Ethernet message type = "Pup", = 512                |
+;	|                                                                |
+;	|================================================================|
+;	|                                                                |
+;2 bytes|                           Pup Length                           |
+;	|________________________________________________________________|
+;	|                                |                               |
+;2 bytes|       Transport Control        |            Pup Type           |
+;	|________________________________|_______________________________|
+;	|                                                                |
+;	|                                                                |
+;4 bytes|                         Pup Identifier                         |
+;	|                                                                |
+;	|________________________________________________________________|
+;	|                                |                               |
+;2 bytes|     Destination Network        |       Destination Host        |
+;	|________________________________|_______________________________|
+;	|                                                                |
+;	|                                                                |
+;4 bytes|                       Destination Socket                       |
+;	|                                                                |
+;	|________________________________________________________________|
+;	|                                |                               |
+;2 bytes|        Source Network          |          Source Host          |
+;	|________________________________|_______________________________|
+;	|                                                                |
+;	|                                                                |
+;4 bytes|                          Source Socket                         |
+;	|                                                                |
+;	|________________________________________________________________|
+; 0 to	|                                                                |
+; 532	|                                                                |
+; bytes	|                            Contents                            |
+;	|                                ................................|
+;	|                                .    Possible garbage byte      |
+;	|________________________________________________________________|
+;	|                                                                |
+;2 bytes|                          Pup Checksum                          |
+;	|________________________________________________________________|
+;Format of a Ethernet Pup message (10 Mb)
+
+;	  0                             7  8                           15
+;	__________________________________________________________________
+;	|                                                                |
+;2 bytes|      		  Ethernet Hardware Destination      		 |
+;	|________________________________________________________________|
+;	|                                                                |
+;2 bytes|      		     Ethernet Hardware Source			 |
+;	|________________________________________________________________|
+;	|                                                                |
+;2 bytes|            Packet type (different codes than 3 Mb)             |
+;	|                                                                |
+;	|================================================================|
+;	|                                                                |
+;2 bytes|                           Pup Length                           |
+;	|________________________________________________________________|
+;	|                                |                               |
+;2 bytes|       Transport Control        |            Pup Type           |
+;	|________________________________|_______________________________|
+;	|                                                                |
+;	|                                                                |
+;4 bytes|                         Pup Identifier                         |
+;	|                                                                |
+;	|________________________________________________________________|
+;	|                                |                               |
+;2 bytes|     Destination Network        |       Destination Host        |
+;	|________________________________|_______________________________|
+;	|                                                                |
+;	|                                                                |
+;4 bytes|                       Destination Socket                       |
+;	|                                                                |
+;	|________________________________________________________________|
+;	|                                |                               |
+;2 bytes|        Source Network          |          Source Host          |
+;	|________________________________|_______________________________|
+;	|                                                                |
+;	|                                                                |
+;4 bytes|                          Source Socket                         |
+;	|                                                                |
+;	|________________________________________________________________|
+; 0 to	|                                                                |
+; 532	|                                                                |
+; bytes	|                            Contents                            |
+;	|                                ................................|
+;	|                                .    Possible garbage byte      |
+;	|________________________________________________________________|
+;	|                                                                |
+;2 bytes|                          Pup Checksum                          |
+;	|________________________________________________________________|
+;Error macros				; SNDERR SNDER1 SNDER2 SNDER3 SNDER4 SNDABT EFTERR ;⊗
+
+;I don't understand how this macro works, so i don't expect you to.  If you
+;want to try, first look at the FAIL manual under 4.1.7, "Complex Example".
+;Good luck!  -- TVR
+	DEFINE SNDER1(SUBR,CODE,MSG)
+<	XLIST
+        DEFINE SNDER2 {0}
+↔	.CNT←←2
+	FOR Cε<MSG><SNDER3(\SNDER2,<"C",>)
+↔	.CNT←←.CNT+1
+>;FOR
+	SNDER4(SUBR,CODE,\.CNT,\SNDER2)
+	PUSHJ P,SUBR
+>;DEFINE
+        DEFINE SNDER3 '(A,B,C) {DEFINE SNDER2 {0,<B'C>}}
+        DEFINE SNDER4 (SUBR,CODE,LEN,A,B) {
+	LIST
+IFDIF <A><SNDERX>< 	HRROI AC2,[BYTE (16) CODE (8) B 0]	>;IFDIF
+IFIDN <A><SNDERX>< 	HRROI AC2,[BYTE (16) 0,CODE (8) B 0]	>;IFIDN
+	MOVEI AC3,LEN}
+
+	DEFINE SNDERR(CODE,MSG)< XLIST
+	SNDER1(SNDERX,CODE,MSG) >
+;
+;All of this foolishness just to cause
+;	SNDERR 123,<This is a test message>
+;to expand to
+;	HRROI AC2,[BYTE (16) 123 (8) "T","h","i","s"," ","i","s",... 0 ]
+;	MOVEI AC3,30
+;	PUSHJ P,SNDERX
+;Sigh!
+
+;Here are two simple variations
+	DEFINE SNDABT(CODE,MSG)< XLIST
+	SNDER1(SNDABX,CODE,MSG) >
+
+	DEFINE EFTERR(CODE,MSG)< XLIST
+	SNDER1(EFTERX,CODE,MSG) >
+
+;N.B.  I'm still not sure this stuff is right.   TVR/May86
+;Diagnostic macros			; PUPMSG DATPSH DATPOP ;⊗ ZZ WDCNT ZZ
+
+; Macro to log an interesting Pup occurance on the console.
+; Call:	PUPMSG (<statistic counter>,<...message...>,<optional datum>)
+; Increments PUP<statistic count> and prints message if not too many PUP
+; errors have occurred recently.
+;
+; This should become a subroutine, as it's a little expensive in memory.
+
+DEFINE PUPMSG'(CTR,DISP,MESS,WD,TXTP) <
+ JRST [	WDCNT←←0
+	%'CTR:
+	AOS PUP'CTR
+	AOSLE PPERCN
+	 JRST PUP'DISP
+	PUSHACS
+	IFDIF <WD><>,<
+	 FOR DATUM IN (WD) <
+	  DATPSH DATUM
+	 >;FOR
+	>;IFDIF WD
+	PUSHJ P,DISUSR
+	 SIXBIT/PUP/
+	PUSHJ P,DISERR
+	 [ASCIZ/CTR: MESS/]
+	 IFN WDCNT,<
+	  ZZ←←WDCNT
+	  FOR DATUM IN (WD) <
+	   DATPOP DATUM
+	  >;FOR
+	 >;IFN WDCNT
+	 -1
+	IFN WDCNT,<
+	 ADJSP P,-WDCNT
+	>;IFN WDCNT
+	PUSHJ P,DISCRLF
+	POPACS
+	JRST PUP'DISP]
+>;DEFINE PUPMSG
+
+; Helper macro for PUPMSG.  Pushes a datum on the stack, counts datums
+
+DEFINE DATPSH (NAME,DATUM) <
+ PUSH P,DATUM
+ WDCNT←←WDCNT+1
+>;DEFINE DATPSH
+
+; Helper macro for PUPMSG.  "Pops" a datum from the stack.
+
+DEFINE DATPOP (NAME,DATUM) <
+ [ASCIZ/, NAME=/]
+ DISARG LOC,<-ZZ(P)>
+ ZZ←←ZZ-1
+>;DEFINE DATPOP
+
+;Packet fields				;⊗ QMPTYP QMPWDC QMPNET PUP1PW ENDEST ENSRC ENTYPE PUP1HW PPBPHN PPBPHH PPBPHS PUP1HW PDSTNT PDSTHS PSRCN1 PSRCN2 PSRCHS E10TYP PUP1HW PUPLEN PUPTRN PUPTYP PUPTYL PUPID PUPIDL PUPDHN PUPDNT PUPDHS PUPDS1 PUPDS2 PUPSHN PUPSNT PUPSHS PUPSSK PUP1DW PUP1DB PUP1DA PUPRHN PUPRS1 PUPRS2 PUPERE PUPERH PUPES1 PUPES2 PUPERB PUPERT PUPAKM PUPAKP PUPAKB PUPFS1 PUPFS2 PUPLK1 PUPLK2 PKTMOD EFTMOD BSPMOD EXPMOD PUPCDS XXOP XXTONT XXTOHS XXTO3M XXFRNT XXFRHS XXFR3M Y.CTYPE Y.SH1A Y.SH1B Y.SH2A Y.SH2B Y.SNET Y.SSKT Y.DH1A Y.DH1B Y.DH2A Y.DH2B Y.DNET Y.DSKT YODEFS
+
+;------------------------------------------------------------------------------
+;
+;	Byte pointers to packet fields
+;
+;------------------------------------------------------------------------------
+
+; QMP field pointers
+
+↑QMPTYP:	POINT 16,DTQ%MS(PKT),15	;QMP type
+↑QMPWDC:	POINT 16,DTQ%MS(PKT),31	;QMP word count
+IFN FTETH2,<
+↑QMPNET:	POINT 4,DTQ%MS(PKT),35	;Destination net (not part of KLSER)
+>;IFN FTETH2
+
+; Ethernet field pointers
+;
+; These fields are independent of packet type and dependent on type of net.
+
+↑PUP1PW←←DTQ%MS+1		;First PUP word (ACTUALLY first Ethernet word)
+IFE FTF2,<
+↑ENDEST: POINT 8,PUP1PW(PKT),7		;Ethernet host destination
+↑ENSRC:	POINT 8,PUP1PW(PKT),15		;Ethernet host source
+↑ENTYPE: POINT 16,PUP1PW(PKT),31	;Ethernet message type
+↑PUP1HW←←PUP1PW+1
+>;IFE FTF2
+
+IFN FTF2,<
+↑PDSTNT: POINT 32,PUP1PW(PKT),31	;Physical destination network number
+↑PDSTHS: POINT 16,PUP1PW+1(PKT),15	;Physical destionation host number
+↑PSRCN1: POINT 16,PUP1PW+1(PKT),31	;Physical source network number
+↑PSRCN2: POINT 16,PUP1PW+2(PKT),15
+↑PSRCHS: POINT 16,PUP1PW+2(PKT),31	;Physical source host number
+↑E10TYP: POINT 16,PUP1PW+3(PKT),15	;Packet type
+↑PUP1HW←←PUP1PW+4
+>;IFN FTF2
+
+; PUP header pointers
+
+↑PUPLEN: POINT 16,PUP1HW(PKT),15	;PUP length
+PUPTRN:	POINT 8,PUP1HW(PKT),23		;Transport control
+PUPTYP:	POINT 8,PUP1HW(PKT),31		;PUP type
+PUPTYL:	POINT 16,PUP1HW(PKT),31		;PUP type + transport field
+PUPID:	POINT 32,PUP1HW+1(PKT),31	;PUP identifier
+PUPIDL:	POINT 16,PUP1HW+1(PKT),31	;Low order 16 byts of PUPID (for EFTP)
+	
+↑PUPDHN: POINT 16,PUP1HW+2(PKT),15	;Destination network/host
+↑PUPDNT: POINT 8,PUP1HW+2(PKT),7	;Destination network
+↑PUPDHS: POINT 8,PUP1HW+2(PKT),15	;Destination host
+↑PUPDS1: POINT 16,PUP1HW+2(PKT),31	;Destination socket (first part)
+↑PUPDS2: POINT 16,PUP1HW+3(PKT),15	;Destination socket (second part)
+;Caution: PUPDHN,PUPDS1,PUPDS2 are assembled into PKTOUT as XCTRs and ROTs
+;         instead of byte pointers when fetching from user space.
+
+PUPSHN:	POINT 16,PUP1HW+3(PKT),31	;Source network/host
+↑PUPSNT: POINT 8,PUP1HW+3(PKT),23	;Source network
+↑PUPSHS: POINT 8,PUP1HW+3(PKT),31	;Source host
+↑PUPSSK: POINT 32,PUP1HW+4(PKT),31	;Source socket
+
+; PUP data byte pointers
+
+↑PUP1DW←←PUP1HW+5		;First data word in packet block
+PUP1DB:	POINT 8,PUP1DW(PKT),7		;First 8-bit data byte
+PUP1DA:	POINT 16,PUP1DW(PKT),15		;First 16-bit data word
+
+; RFC packets
+PUPRHN←←PUP1DA				;RFC network/host number
+PUPRS1:	POINT 16,PUP1DW(PKT),31		;RFC socket (or send ID) first byte
+PUPRS2:	POINT 16,PUP1DW+1(PKT),15	;RFC socket (or send ID) second byte
+
+; ERR packets
+PUPERE: PUP1DW+4(PKT)			;End of copy of header
+PUPERH:	POINT 16,PUP1DW+2(PKT),15	;Destination of host original packet
+PUPES1:	POINT 16,PUP1DW+2(PKT),31	;Destination socket (first part)
+PUPES2:	POINT 16,PUP1DW+3(PKT),15	;Destination socket (first part)
+PUPERB:	POINT 16,PUP1DW+5(PKT),15	;Error type byte for ERR
+PUPERT:	POINT 8,PUP1DW+5(PKT),31	;Byte just before error text
+
+; ACK packets
+PUPAKM:	POINT 16,PUP1DW(PKT),15		;Max. number of bytes per PUP
+PUPAKP:	POINT 16,PUP1DW(PKT),31		;Number of PUPs
+PUPAKB:	POINT 16,PUP1DW+1(PKT),15	;Number of bytes
+
+; PUP link table pointers
+PUPFS1:	POINT 16,PUPFSK(LNK),19	; foreign socket first half
+PUPFS2:	POINT 16,PUPFSK(LNK),35	; foreign socket second half
+PUPLK1:	POINT 16,PUPLSK(LNK),19	; local socket first half
+PUPLK2:	POINT 16,PUPLSK(LNK),35	; local socket second half
+ 
+; Caution: PUPSxx (source) and PUPDxx (destination) refer fields in the PUP
+;	   packet, and are relative which the packet is being transmitted or
+;	   or received.
+;	   PUPFxx (foreign) and PUPLxx (local) refer to connection tables
+
+;Mode bits for connection (LH of PUPMOD)
+PKTMOD←←020000		;Bare packets
+EFTMOD←←040000		;EFTP
+BSPMOD←←100000		;BSP
+XPKMOD←←200000		;Experimental packets
+
+;Selects mode by index from following
+PUPCDS:	POINT 3,PUPMOD(DDB),3
+
+IFN FTCCRMA,<
+
+;10 Mb PUP stuff (for Xerox 1108's)
+XXOP:	POINT 16,PUP1HW-1(PKT),31
+XXTONT:	POINT 32,PUP1HW(PKT),31		;Requested 10 Mb network number
+XXTOHS:	POINT 16,PUP1HW+1(PKT),15	;	   10 Mb host number
+XXTO3M:	POINT 8,PUP1HW+1(PKT),23	;	   PUP host number
+XXFRNT:	POINT 32,PUP1HW+2(PKT),31	;Sender's ...
+XXFRHS:	POINT 16,PUP1HW+3(PKT),15
+XXFR3M:	POINT 8,PUP1HW+3(PKT),23
+
+>;IFN FTCCRMA
+
+IFN FTYODA,<
+Y.CTYPE:POINT 16,PUP1PW+12(PKT),23
+Y.SH1A:	POINT 16,PUP1PW+13(PKT),31
+Y.SH1B:	POINT 16,PUP1PW+14(PKT),15
+Y.SH2A:	POINT 16,PUP1PW+14(PKT),31
+Y.SH2B:	POINT 16,PUP1PW+15(PKT),15
+Y.SNET:	POINT 8,PUP1PW+15(PKT),23
+Y.SSKT:	POINT 8,PUP1PW+15(PKT),31
+Y.DH1A:	POINT 16,PUP1PW+16(PKT),31
+Y.DH1B:	POINT 16,PUP1PW+17(PKT),15
+Y.DH2A:	POINT 16,PUP1PW+17(PKT),31
+Y.DH2B:	POINT 16,PUP1PW+20(PKT),15
+Y.DNET:	POINT 8,PUP1PW+20(PKT),23
+Y.DSKT:	POINT 8,PUP1PW+20(PKT),31
+
+YODEFS←2	;Connection type = EFS
+>;IFN FTYODA
+;Clock level				;⊗ PUPCLK puptc1 PUPTCK PUPTC2 PUPTC3 PUPTCE PUPDSC
+
+;------------------------------------------------------------------------------
+;
+;	Clock level routines
+;
+;------------------------------------------------------------------------------
+
+; Here from clock level, to handle timeouts and other periodic tasks.  We have
+; to look at each connection periodically, but fortunately, not for every clock
+; tick.  On a Foonly, we also have to check for a hung interface and obtain new
+; packet buffers when we failed to get one at normal interrupt level.
+
+↑PUPCLK:
+ifn ftpupd,<
+	skipn ddb,pupexd
+	  jrst puptc1
+	movs tac,devnam(ddb)
+	caie tac,'pup'
+	  pushj p,pupbug
+puptc1:
+>;ifn ftpupd
+
+IFN FTF2,<
+	PUSHJ P,FNTCLK		;Do Foonlishness
+	OFFPUP
+	SKIPN XPUPIB		;Is buffer needed?
+	  PUSHJ P,PUPIGB	;  Yes, try again
+	ONPUP
+>;IFN FTF2
+
+	SOSLE PUPYET		; time to do periodic task yet?
+	 POPJ P,			; no, just dismiss
+	MOVEI TAC,JIFSEC/PUPSEC	; yes, set next interval
+	MOVEM TAC,PUPYET
+	MOVEI TAC,PUPSEC*2	; check hung timeouts every 2 seconds, like IMPSER
+	SOSGE PUPHYT		; time to reset?  (PUPHYT=0 means check PUPTMO)
+	  MOVEM TAC,PUPHYT	;   Yes.
+
+; Loop through all Pup DDBs, decrementing their retry counters and wake up
+; anybody whose retry counter has expired.
+
+; N.B.  If PUPTMO starts out being zero (e.g. user requests no timeout), it will
+; be counted to negative and never timeout.  Perhaps that's a feature, but under
+; some conditions (e.g. CLOSE), it can be a problem.  This needs to be fixed.
+	MOVEI DDB,PUPDDB	;PUP DDBs start here
+PUPTCK:	HLRZ DDB,DEVSER(DDB)	;Get next DDB in the chain
+	JUMPE DDB,CPOPJ		;Unlikely but let's be paranoid
+	MOVS TAC,DEVNAM(DDB)	;Get device name of this DDB
+	CAIE TAC,'PUP'		;Is it one of my DDBs?
+	  POPJ P,		;  No, return to CLKSER
+	SKIPN TAC,PUPHYT	;Time to decrement hung count?
+	SOSE TAC,PUPTMO(DDB)
+	  JRST PUPTC2		;  No, check retry counter
+	MOVE IOS,DEVIOS(DDB)	;Setup other AC's for PUPHNG
+	PUSHJ P,PUPHNG		;Hung timeout
+	  JFCL
+	JRST PUPTCK
+;	---
+PUPTC2:	HLRZ TAC,PUPCSB(DDB)	;Is it time to do a retry or their like?
+	SOJL TAC,PUPTCK		;  No, not active
+	HRLM TAC,PUPCSB(DDB)	;Store updated count
+	JUMPN TAC,PUPTCK	;Jump if not timed out
+	MOVE IOS,DEVIOS(DDB)	;Setup a few things
+	LDB J,PJOBN
+	HRRZ TAC,PUPCSB(DDB)
+	JUMPE TAC,PUPTCE	;Jump if PUPCSB got half-cleared
+	CAIE TAC,ADRRT		;Sigh...
+	SKIPL LNK,PUPLNK(DDB)	;Don't do anything if no connection
+	  PUSHJ P,(TAC)		;Execute code to do retry or whatever
+	HLRZ TAC,PUPCSB(DDB)	;Did retry expire?
+	JUMPN TAC,PUPTCK	;  No, it was reset
+PUPTC3:	OFFPUP			;Avoid races
+	MOVE IOS,DEVIOS(DDB)	;Make sure we have current IOS
+	PUSHJ P,CRETRY		;Yes, clear retry count
+	MOVEM IOS,DEVIOS(DDB)	;Make sure new IOS is saved.
+	ONPUP
+	JRST PUPTCK		;And look at next DDB
+
+PUPTCE:
+;;patched out 'cause it happens a lot, usually with the Dover spooler.
+ jfcl PUPTC3
+	PUSHACS
+	PUSHJ P,DISUSR
+	  SIXBIT/PUPSER/
+	PUSHJ P,DISERR
+	  [ASCIZ/At PUPTCK with only LH PUPCSB(DDB) non-zero.  Job: /]
+	  DISARG SIX,JOBNAM(J)
+	  [ASCIZ/(/]
+	  DISARG DEC,J
+	  [ASCIZ/.)
+/]
+	  -1
+IFN FTF2,<
+	PUSHJ P,DISFLUSH
+	PUSHJ P,WDDTCALL
+>;IFN FTF2
+	POPACS
+	JRST PUPTC3		;Attempt to continue by flushing retry stuff
+
+;	---
+;Packets which are no longer needed end up here.  This is a separate locations
+;from FSGIVE for debugging purposes.  It is also conceivable that someone may
+;want to place a bugtrap here in the future.  (Please do not "optimize" to
+;JRST FSGIVE)
+PUPDSC:	PUSHJ P,FSGIVE		; Pup is a loser, toss it out
+	POPJ P,
+;Retry/Timeout routines			;⊗ SRETRY SRTRY1 SRTRY2 RRETRY RRTRY1 WRETRY WRETR1
+
+;------------------------------------------------------------------------------
+; Set retry subroutine and timeout
+;	PUSHJ P,SRETRY
+;	  <retry word>
+;	  <byte pointer to timeout word>
+;
+; CAUTION:  Neither argument may be in TAC or TEM
+;------------------------------------------------------------------------------
+SRETRY:	CONSZ PI,77400		;UUO LEVEL?
+	  PUSHJ P,PUPBUG	;  Ooops
+	EXCH TEM,(P)		;Get at argument list.  Save TEM
+	PUSH P,TAC		;Save an AC for us to use
+	PUSH P,TAC1
+	MOVE TAC1,@(TEM)	;Get new retry word
+SRTRY1:	OFFPUP			;Interrupt level may muck with retry stuff
+	HRRZ TAC,PUPCSB(DDB)	;Is there any retry code already active?
+	JUMPE TAC,SRTRY2	;  No, OK to start some
+	CAIE TAC,NULRT		;Are we just checking for dead connections?
+	CAIN TAC,(TAC1)		;or the one we want anyway?
+	  JRST SRTRY2		;  Yes, these are fine
+	HLRZ TAC,PUPCSB(DDB)	;Has the old one expired?
+	JUMPE TAC,SRTRY2	;  Yes, OK to start some
+	MOVSI IOS,DEVSBB!RETRYW	;Wait until we clear the retry code.  Someone
+	IORB IOS,DEVIOS(DDB)	;is busy trying to get something thru to the
+	ONPUP			;other end.
+	PUSHJ P,PUPWT1
+	JRST SRTRY1		;Now, try again
+;	---
+SRTRY2:	ONPUP
+	POP P,TAC1		;Restore one of borrowed ACs
+	JRST RRTRY1
+
+;Reset retry and timeout
+;
+;No checking or waiting is done here; OK from interrupt level
+RRETRY:	EXCH TEM,(P)		;Get at argument list.  Save TEM
+	PUSH P,TAC
+;	\ /
+RRTRY1:	MOVE TAC,@(TEM)		;Get retry word
+	MOVEM TAC,PUPCSB(DDB)	;Save as new clock subroutine
+	LDB TAC,@1(TEM)		;Get timeout byte
+	MOVEM TAC,PUPTMO(DDB)
+	ADDI TEM,2		;Skip arguments
+	EXCH TEM,-1(P)		;Restore TEM, save return address
+	JRST TPOPJ		;Skip argument, restore TAC and return
+;	---
+
+;Wait to make sure retry routine is either finished and doing the same
+;thing we want to do.  This code is probably just boiler plating, since
+;normally one never waits for retry code, and the two places that call
+;this code do so to avoid losing FS if user ↑C's out.
+WRETRY:	PUSH P,TAC
+	OFFPUP
+	HRRZ TAC,PUPCSB(DDB)	;Is there any retry code already active?
+	JUMPE TAC,WRETR1	;  No, OK to start some
+	PUSH P,TAC1
+	MOVE TAC1,@-2(P)	;get retry pointer from word at return addr
+	HRRZ TAC1,(TAC1)	;get desired retry dispatch address
+	CAIE TAC,NULRT		;Are we just checking for dead connections?
+	CAIN TAC,(TAC1)		;or the one we want anyway?
+	  JRST[	ONPUP
+;;;		JRST TTPPJ1	;restore TAC1, TAC and skip return
+		POP P,TAC1	;There ain't no such animal at CCRMA.
+		POP P,TAC
+		AOS (P)
+		POPJ P,]
+	POP P,TAC1
+WRETR1:	ONPUP
+	POP P,TAC
+	PUSHJ P,SRETRY
+	  %NULRT
+	  IDLETP
+	JRST CPOPJ1
+;  Retry/Timeout (cont'ed)		;⊗ CRETRY PUPHNG PUPHN1 PUPHN2 PUPHN3
+;
+;Clear retry and timeout.  Wake anyone waiting to start a retry routine.
+;Assumes that we are called at interrupt level (or with valid IOS and
+;scanner turned off).  This code should be as short as possible
+;
+;Clobbers TAC
+CRETRY:	MOVE TAC,%NULRT		;Retry routine in absence of any other
+	MOVEM TAC,PUPCSB(DDB)
+	LDB TAC,IDLETP		;Set hung timeout for dead connection
+	MOVEM TAC,PUPTMO(DDB)
+	TLZE IOS,RETRYW		;Waiting for retry block?
+	  PUSHJ P,PUPWK1	;  Yes, wake up UUO level
+	POPJ P,
+
+;------------------------------------------------------------------------------
+;
+;	Hung Timeout
+;
+;------------------------------------------------------------------------------
+;We timed out for some reason
+PUPHNG:	AOS (P)			;We don't give hung message!
+	TLNN IOS,ANYW		;Waiting for anything?
+	  JRST PUPHN3		;  No, dead connection?
+	PUSHJ P,PUPWAK		;Wake any waiters
+PUPHN1:	SETZM PUPCSB(DDB)	;And suppress further retries
+PUPHN2:	MOVEI IOS,TMO		;Set timeout status
+	IORB IOS,DEVIOS(DDB)
+	POPJ P,
+;	---
+;;;Perhaps we should do more than just set TMO for timed out PUP connections.
+;;;Some sort of user interrupt might be in order here.
+PUPHN3:	HRRZ TAC,PUPCSB(DDB)	;Get retry word
+	CAIE TAC,NULRT		;Default retry?
+	  JRST PUPHN1		;  No, just set timeout status
+	MOVE TAC,PUPMOD(DDB)	;Get mode of connection
+	TLNN TAC,BSPMOD!EFTMOD	;Does this mode timeout idle connections?
+	  JRST PUPHN2		;  No, just set bit and leave for now
+	JRST PUPHN1		;Yes
+;	---
+;Input from Ethernet			;⊗ ENINQ ENINQ2 ETHPU3 ETHFWD
+
+;------------------------------------------------------------------------------
+;
+;	Input from Ethernet
+;
+; Called from KLSER (or FNTSER) with packet in PKT (i.e. AC1)
+;------------------------------------------------------------------------------
+; Look at the message and validate it for reasonability
+↑ENINQ:
+IFE FTCCRMA,<
+	SKIPL NETETH+NI.UP	;Are we taking input messages?
+>;IFE FTCCRMA
+IFN FTCCRMA,<
+	SKIPE ETHDIE
+>;IFN FTCCRMA
+	JRST PUPDSC		;No, not right now
+	MOVE TAC,[PUSHJ P,PUPDSC]	;No special action on normal packets
+	MOVEM TAC,DTQ%XC(PKT)		;(See PUPREL)
+IFE FTF2,<
+	AOS ENINQM		;Count another E/N message received
+	LDB TAC,QMPTYP		; check 10/11 message type
+	CAIE TAC,%%ENMG
+	 PUSHJ P,PUPBUG		; message on queue not an Ethernet msg?
+	LDB TAC,ENDEST		; now check host
+	LDB AC3,ENSRC		; get Ethernet source for debugging
+	SKIPN AC3
+	 PUPMSG (MH0,DMP,<Message from host 0>)
+printx Broadcast packets accepted by PUPSER, can be turned off on '11
+	JUMPE TAC,[AOS PUPBRD	; count up a broadcast packet
+		   JRST PUPDSC]
+	CAME TAC,ENHADR
+	  JRST[	SKIPN ENHADR	; do we have an address yet?
+		  JRST PUPDSC	;   No, flush until we get one.
+		PUPMSG (NML,DMP,<Bad dest addr>,<<Host,AC3>,<Dest,TAC>,<Us,ENHADR>>)]
+	LDB TAC,ENTYPE		; check Ethernet message type
+;	\ /
+>;IFE FTF2
+IFN FTF2,<
+	LDB TAC,E10TYP
+	LDB AC3,PSRCHS		;Give some sort of number, even if not complete
+>;IFN FTF2
+	CAIE TAC,$PUP		; Pup?
+	 JRST NONPUP		;  No, consider other things.
+	LDB TAC,QMPWDC		; check size from -11
+	LSH TAC,1		; convert -11 word count to byte count
+	CAIGE TAC,$ENHDS+$PUPMN	; En header + Pup header + Pup xsum
+	 PUPMSG (SMS,DMP,<Undersize Pup>,<<Host,AC3>,<Length,TAC>>)
+ENINQ2:
+IFN FTPKTL,<
+	PUSHJ P,PKTTRC		; Maybe trace packets
+>;IFN FTPKTL
+	LDB TAC1,PUPLEN		; check Pup length
+IFE FTF2,<
+	CAIE TAC,=4(TAC1)	; Pup length + En hdr length = message length?
+	 CAIN TAC,=5(TAC1)	; let's not let odd packets fool us, eh Ken?
+	  CAIA
+	   PUPMSG (B11,DMP,<Bad Pup size>,<<Host,AC3>,<MsgSz,TAC>,<PupSz,TAC1>>)
+>;IFE FTF2
+	CAILE TAC1,$PUPMX	; Pup too large?
+	 PUPMSG (LMS,DMP,<Oversize Pup>,<<Host,AC3>,<PupSize,TAC1>>)
+	PUSHJ P,PUPSXP		; get Pup's checksum
+	LDB TAC1,TAC1
+	CAIN TAC1,177777	; is it the null checksum?
+	 JRST ETHPU3		; yes, no need to validate it
+	PUSHJ P,PUPCXM		; compute checksum for this Pup in TEM
+	ILDB TAC1,TAC1		; get PUP's checksum again
+	CAIE TEM,(TAC1)		; checksums match?
+	 JRST[	LDB TAC,PUPTYP
+		CAIE TAC,BS%ECH		;Echo me?
+		  PUPMSG (BCK,DSC,<Bad Pup checksum>,<<Host,AC3>,<XSum,TAC1>,<Comp,TEM>>)
+		JRST PUPBEC ]		;Yes, ignore error and send bad echo reply
+ETHPU3:	LDB AC2,PUPSHN		; get source host number
+	SKIPN AC2
+	 PUPMSG (PH0,DSC,<Pup from host 0>,<<Host,AC3>>)
+	TRNN AC2,<377>⊗8	; network number specified?
+	 IORI AC2,SUENNM⊗8	; no, someone doesn't know what network they're on
+	LDB TAC,PUPDHN		; check destination for this Pup
+	CAME TAC,ENHADR		; match my host address?
+	 CAMN TAC,ENNADR	; or host/network address?
+	  JRST PUPFLK		; okay, go process the Pup
+	JUMPE TAC,PUPFLK	; accept broadcast packets for default net
+IFN FTETH2,<
+	CAMN TAC,ENNAD2		; alternate host address?
+	  JRST PUPFLK		;   oh, OK, that's alright...
+	CAME TAC,ENBAD2
+>;IFN FTETH2
+	CAMN TAC,ENBADR		; and also directly connected nets.
+	  JRST PUPFLK
+IFN FTETH2,<
+	XOR TAC,AC2		; same network as ours?
+	TLNN TAC,377⊗8
+>;IFN FTETH2
+;JJW - Changed from DSC to DMP to help debug bad packets from Coyote.
+	PUPMSG (WHS,DMP,<Pup Host mismatch>,<<Host,AC2>,<Dest,TAC>,<Us,ENNADR>>)
+IFN FTETH2,<
+;	\ /
+;Packet needs forwarding.
+ETHFWD:	LDB TAC,PUPTRN		;Get transport control byte
+	ADDI TAC,1
+	DPB TAC,PUPTRN
+	CAIGE TAC,MAXHOP	;Has it expired?
+	  PUSHJ P,PUPROU	;  No, try to route it
+	  JRST PUPDSC		;  Can't get there from here, or expired
+	PUSHJ P,PUPSXM		;Recalculate checksum
+	PUSHJ P,ENOUTQ		;Send to appropriate tranport mechanism
+	  JRST PUPDSC		;  No room.
+	POPJ P,
+>;IFN FTETH2
+
+;  Process non-PUP packets		;⊗ NONPUP EECHO
+
+;It's not a PUP, consider other types of packets.  Process them in approximate
+;order of likelihood.
+NONPUP:	CAIN TAC,ETHIPT		;Is it an IP packet?
+IFN FTEIP,<
+	  JRST ETHIPI↑		;  Jump to IP/TCP code
+>;IFN FTEIP
+IFE FTEIP,<
+IFN FTCCRMA,<
+	  JRST YODCHK		;  Contemplate possible Yodanet packet
+>;IFN FTCCRMA
+IFE FTCCRMA,<
+	  JRST PUPDSC		;  Flush it if no IP code
+>;IFE FTCCRMA
+>;IFE FTEIP
+IFE FTF2,<
+	CAIN TAC,$EECHO		;Is it an echo tester?
+	 JRST EECHO		;  Yes, try to do echoing.
+>;IFE FTF2
+IFN FTF2,<
+	CAIN TAC,$XXARP		;Dandimumble wants our address?
+	  JRST XXARP1		;  Maybe.  Do min. subset of their protocol
+IFN FTETHX,<
+	PUSHJ P,XPKSRC		;Check for experimental users
+	  JRST NONPP2		;  Found one!
+>;IFN FTETHX
+	CAIE TAC,$CHAOS		;Flush stuff from Symbolics
+	CAIN TAC,$ADRES		;And address resolution stuff for IP (for now)
+	  JRST PUPDSC
+	CAIN TAC,$XNS		;More Dandimumble junk?
+	  JRST PUPDSC		;  Yes, discard quietly
+>;IFN FTF2
+	PUPMSG (NPM,DMP,<Unk. Eth. msg>,<<Host,AC3>,<Type,TAC>>)
+;	---			;(Jumps to PUPDMP)
+
+IFE FTF2,<
+;Ethernet Echo packet
+EECHO:	ADDI TAC,1		;Make into "I am an Echo"
+	DPB TAC,ENTYPE
+	DPB AC3,ENDEST		;Swap source and destination
+	MOVE TAC,ENHADR		;We must know who we are by now
+	DPB TAC,ENSRC
+	MOVEI TAC,%%ENMG	;Set type of -11 message
+	DPB TAC,QMPTYP
+	JRST EECHO2		;Send it on its way
+>;IFE FTF2
+
+;Process experimental packet types	;⊗ YODCHK NONPP2 XPKSRC XPKSR1
+
+IFN FTETHX,<	;Whole page
+
+IFN FTCCRMA,<	;Yodanet only
+
+;IP packet.  Check for Yodanet before discarding or passing to IMPSER
+YODCHK:	LDB TAC1,[POINT 16,PUP1PW+5(PKT),31]
+	LDB TAC,[POINT 16,PUP1PW+10(PKT),31]
+	CAIN TAC1,377⊗8+21	;User defined protocol
+	CAIE TAC,=519		;  to particular port?
+IFE FTEIP,<
+	 JRST PUPDSC		;Yup, flush it unless we have IP up
+>;IFE FTEIP
+IFN FTEIP,<
+	 JRST ETHIPI↑		;Yes, jump to IP/TCP code
+>;IFN FTEIP
+IFN FTYODA,<
+;
+;Hash source address
+;
+;This allows us to share code with normal PUP stuff concerning establishment
+;and maintenence of Yodanet connections.  The assumption here is that if a
+;hashing a GENSYM socket happens to generate a collision with an existing
+;connection, the user code can come up with another GENSYM which will succeed.
+	LDB AC2,Y.SH1A		;Use as much of address will fit
+	LDB TAC,Y.SH2A
+	XOR AC2,TAC
+	LSH TAC,=36-2-=16
+	LDB TAC,Y.SH1B
+	LSH TAC,=16
+	XOR AC2,TAC
+	LDB TAC,Y.SNET		;Include 
+	LSH TAC,=16
+	XOR AC2,TAC
+	LDB TAC,Y.SH2B		;This is the most important
+	IOR AC2,TAC
+	LDB AC3,Y.SSKT		;Foreign socket number
+	LDB TAC,Y.DSKT		;Local socket number
+	TLO TAC,200000		;Special marker to distinguish from PUP address
+	SETO DDB,		;No DDB found yet
+	MOVE LNK,PUPLKS		;Start at the end and work back
+	SOJGE LNK,PUPFL0	;Search for connection
+	LDB TAC,Y.CTYPE		;Get connection type
+	CAIE TAC,YODEFS		;EFS connection?
+	  JRST PUPDSC		;  No, flush for now
+	MOVEI DAT,'EFS'
+	HRLI DAT,PUPLGR		; set up clock request word of Pup logger
+	PUSHJ P,PUPLGR		; invoke Pup logger
+	JRST PUPDSC		; toss out RFC, let server take a retry
+>;IFN FTYODA
+IFE FTYODA,<
+;If we're not running with the regular Yoda stuff, at least trea these as
+;experimental connections so at least the EFS server can run.
+	PUSHJ P,XPKSRC		;Anyone care about these things?
+	  SKIPA
+	  JRST PUPDSC		;No, forget it
+;	\ /
+>;IFE FTYODA
+NONPP2:	MOVE IOS,DEVIOS(DDB)
+	SETZ TAC1,		;Don't count bits
+	PUSHJ P,PUPIQ2
+	  JRST PUPDSC
+	POPJ P,
+
+>;IFN FTCCRMA
+
+;Search for experimental users of packet type TAC.  Clobbers TAC1
+XPKSRC:	SKIPN DDB,EFSDDB	;Any experimental users?
+	  JRST CPOPJ1		;  No
+	MOVE TAC1,(DDB)		;Setup device name for comparison
+;	\ /
+XPKSR1:	CAME TAC1,(DDB)		;Is there one of ours?
+	  JRST CPOPJ1		;  No, forget it.
+	CAMN TAC,PUPCID(DDB)	;Is this one it?
+	  POPJ P,		;  Yep, found it!
+	HLRZ DDB,DEVSER(DDB)	;Get next DDB
+	JUMPN DDB,XPKSR1	;and make sure it's there before looping
+	JRST CPOPJ1		;Curious...
+
+>;IFN FTETHX
+;  Dandimumble support (Xerox 1108)	;⊗ XXARP1 EECHO1 DMUMBLES MN1108 MX1108
+
+IFN FTCCRMA,<	;One whole page [i hope]
+;_______________________________________________________________________________
+;
+;	This page is dedicated to one Charles Smith, who supposedly had
+;	nothing to do with this.
+;_______________________________________________________________________________
+
+;Xerox's Address Resolution Protocol (for PUP)
+;
+;This is not to be confused with Symbolic's ARP, which is documented in RFC824
+;
+;Don't ask me to document this.  I figured it out from staring at lots of
+;octal numbers.  If you want to know, please ask Xerox.  Maybe you'll have
+;better luck getting detailed documentation out of them.  All i got was lots
+;of messages with little if anything i didn't already know.	TVR/Jan85
+XXARP1:	LDB TAC,XXOP		;Get opcode
+	CAIE TAC,10101		;Is this a request?
+	  JRST PUPDSC		;  No, just throw it away.
+	LDB TAC,XXTO3M		;Get host address
+	CAME TAC,ENHADR		;Is this us?
+	  JRST PUPDSC		;  No, it's for someone else
+	MOVE TAC,ENHADR		;Get our "physical" address
+	DPB TAC,XXTOHS		;Set ethernet address
+	LDB TAC,[POINT 8,ENNADR,35-8]
+	lsh tac,8		;Lucas compatibility...
+	DPB TAC,XXTONT
+	MOVEI TAC,7070		;Set reply code
+	DPB TAC,XXOP
+;	\ /
+;Copy physical source to physical destination and send packet.
+EECHO1:
+IFN FTETH2,<
+	SETZ TAC,		;Set local network number
+	DPB TAC,QMPNET
+>;IFN FTETH2
+	LDB TAC,PSRCHS		;Copy source address to destination
+	DPB TAC,PDSTHS
+	LDB TAC1,PSRCN1
+	LSH TAC1,=16
+	LDB TAC,PSRCN2
+	IOR TAC,TAC1
+	DPB TAC,PDSTNT
+	MOVE TAC,ENHADR
+	DPB TAC,PSRCHS
+	LDB TAC,[POINT 8,ENNADR,35-8]
+	lsh tac,8		;Lucas compatibility...
+	DPB TAC,PSRCN2
+	JRST EECHO2
+
+;Hardwired routing table for Xerox 1108's
+DMUMBLES:
+MN1108←←100
+	55517			;100
+	56124			;101
+	51741			;102
+	1371			;103
+	0
+	4625			;105
+MX1108←←MN1108+.-DMUMBLES-1
+
+>;IFN FTCCRMA	;One whole page [i hope]
+;Output to Ethernet			;⊗ ENOUTQ ENOUQE ENODSP ENODSZ EXPQ EXPQ2 PUPEXP PUPEX2 PUPEX3 PUPEX4 PUPEX5
+
+IFE FTETH2,<
+IFE FTPKTL,<
+	DEFINE ENOUTQ <DTEQ>	;Save one instruction
+>;IFE FTPKTL
+IFN FTPKTL,<
+ENOUTQ:	SKIPN PKLOGP
+	  JRST DTEQ
+	PUSH P,TAC
+	OFFPUP
+	PUSHJ P,PKTTRC
+	ONPUP
+	POP P,TAC
+	JRST DTEQ
+>;IFN FTPKTL
+>;IFE FTETH2
+
+IFN FTETH2,<
+
+ENOUTQ:	PUSH P,TAC		;Save an AC while doing this
+	LDB TAC,QMPNET		;Get internal network number
+	CAIL TAC,ENODSZ		;Bounds check
+	  JRST ENOUQE		;  BAD packet
+	PUSHJ P,ENODSP(TAC)
+	  SKIPA
+	  AOS -1(P)
+	POP P,TAC
+	POPJ P,
+
+ENOUQE:	PUSHJ P,PUPCHK
+	JRST TPOPJ
+
+;This table should parallel PUPRO4
+ENODSP:	JRST DTEQ		;KLSER or FNTSER
+	JRST EXPQ		;Queue for serial line
+ENODSZ←←.-ENODSP
+
+;The rest of this is probably a bad idea and could well be flushed.  The idea
+;was to send packets over a medium speed serial link, but while it might have
+;worked decently for machines connected to WAITS, PUPSER itself seemed to
+;constantly stumble over itself trying to maintain a BSP connection.  Maybe
+;now that a number of PUPSER problem have been corrected, this might work
+;(particularly if TTYSER were to participate), nowadays, it seems like a much
+;better thing for some cheap micro to do.  Indeed, that mechanism was used
+;for several months to connect some LM-2's to 10Mb while they were awaiting
+;an Interlan board.
+
+;Queue packet for transmission by job
+EXPQ:	PUSHACS			;Until we figure out how much to save
+	SKIPN DDB,PUPEXD	;Get DDB for serial output
+	  JRST EXPQ2		;Can't queue
+	MOVE IOS,DEVIOS(DDB)
+	pushj p,pupcxm
+	ildb tac,tac1
+	came tac,tem
+	  pushj p,cxsbug
+	SETZ TAC1,		;Don't count bits
+	OFFPUP
+	PUSHJ P,PUPIQ2		;Go queue it.  Skips if successful.
+	  JRST EXPQ2
+	ONPUP
+	POPACS
+	JRST CPOPJ1
+
+EXPQ2:	ONPUP
+	POPACS
+	POPJ P,
+
+;Called from PUPCHN to simulate receiption of Ethernet packets or to
+;process packets from serial line which expected to be handled at
+;interrupt level.
+↑PUPEXP: JSR PUPSAV		;Get some context
+	SETZM PUPEXF		;Clear special flag
+;	\ /
+;Take packet from serial line phantom and process it as ethernet input.
+;NOTE:  We must setup DDB each time as ENINQ2 can clobber any ACs.
+PUPEX2:	SKIPE DDB,PUPEXD	;Is there a serial line job running?
+	SKIPN PKT,PUPOLS(DDB)	;Is there input ready?
+	  JRST PUPEX4		;  No, try output side
+	HRRZ TAC,DTQ%OL(PKT)	;Get next packet, if any
+	HRRM TAC,PUPOLS(DDB)
+	JUMPN TAC,[SOSG PUPOCN(DDB)	;Should be at least one left
+		     PUSHJ P,CNTBUG	;  List count screwed up
+		   JRST PUPEX3]		;Pretend we received it from Ether.
+	SETZM PUPOLS(DDB)	;No input left
+	SOSE PUPOCN(DDB)	;Decrement and check count
+	  PUSHJ P,CNTBUG
+;	\ /
+PUPEX3:
+;;	LDB TAC,ENTYPE		; check Ethernet message type
+;;	CAIE TAC,$PUP
+;;	  JRST NONPUP
+	PUSHJ P,ENINQ2		;Simulate reception
+	JRST PUPEX2
+;	---
+;Take packet we couldn't handle at UUO level and deal with it here.
+;NOTE:  We call the packets special subroutine via DTQ%XC and thus
+;	we must setup DDB, IOS, etc. every time thru the loop.
+PUPEX4:	SKIPN PKT,PUPEXQ	;Get packet to process
+	  POPJ P,		;  None, we're done
+	MOVE IOS,DEVIOS(DDB)
+	HRRZ TAC,DTQ%LK(PKT)	;Set next packet
+	HRRM TAC,PUPEXQ
+	JUMPN TAC,[SOSG PUPEXC		;Check for count problems...
+		     PUSHJ P,CNTBUG
+		   JRST PUPEX5]
+	SETZM PUPEXQ		;Nothing left in queue
+	SOSE PUPEXC
+	  PUSHJ P,CNTBUG
+;	\ /
+PUPEX5:	XCT DTQ%XC(PKT)		;Now, dispose of packet.
+	JRST PUPEX4		;Go back for more
+
+>;IFN FTETH2
+;PUP input - search link table		;⊗ PUPFLK PUPFLE PUPFL0 PUPFL2 PUPFL3
+
+;------------------------------------------------------------------------------
+;
+;	PUP Input Processing
+;
+;------------------------------------------------------------------------------
+; We have received a PUP, and it has passed our marginal validity checks.
+; See if we can figure out who it's for.  Following ACs will be setup on
+; completion:
+;
+;	PKT	Packet block pointer
+;	TAC	Local socket number
+;	AC2	Foreign host number
+;	AC3	Foreign socket number
+;	LNK	Link index (if any, else -1)
+;	DDB	DDB address (if any, else -1).
+;
+; If we're dealing with an error packet, we may have to come through here
+; twice, once for packet as addressed, and if that fails to find anything,
+; a second time, using the addresses specified in the erroring packet header.
+;
+; Note: If PUP packets ever come from other networks, they would enter here.
+;	Yodanet packets also pass thru here starting at PUPFL0, with TAC
+;	having the 200000,,0 bit set, to distinguish from normal addresses
+;
+;       If a packet is not of type PUP or is a Yodanet packet, it will be
+;	shunted off early, and not go through here.
+
+PUPFLK:	LDB AC3,PUPSSK		; get foreign socket number in AC3
+	LDB TAC1,PUPDS1		; get local socket number in TAC
+	LSH TAC1,=16
+	LDB TAC,PUPDS2
+	IOR TAC,TAC1
+	JUMPE TAC,PUPNSP	; Refuse anything to socket 0!
+	SETO DDB,		; No DDB found yet
+;	\ /
+;Re-dispatching of error packets comes through here.
+PUPFLE:	MOVE LNK,PUPLKS		; Start at the end and work back
+	SOJL LNK,PUPFL2		; Convert to max. link and check for empty table
+PUPFL0:	CAME TAC,PUPLSK(LNK)	; Local socket correct?
+	  JRST[	SKIPL PUPLSK(LNK)	;Wild?
+		  JRST PUPFL2		;  No, unused
+IFN FTYODA,<
+		TLNE TAC,200000		;Yoda?
+		  JRST PUPFL2		;  Yes, keep its address space separate
+>;IFN FTYODA
+		JRST .+1 ]		;Yes, take anything (0 excluded above)
+	CAME AC2,PUPHST(LNK)	; Host correct?
+	  JRST[	SKIPL PUPHST(LNK)	;Wild?
+		  JRST PUPFL2		;  No, unused
+		JRST .+1 ]		;Yes, take anything (0 excluded above)
+	CAME AC3,PUPFSK(LNK)	; Foreign socket correct?
+	SKIPG PUPFSK(LNK)	; or wild?
+	  JRST PUPFL3		;   Yes, we found a match
+	MOVE DDB,PUPLDB(LNK)	; Save link number to indicate partial match
+;	\ /
+PUPFL2:	SOJGE LNK,PUPFL0	; try next link index
+IFN FTYODA,<
+	TLNE TAC,200000		; Yoda packet?
+	  JRST PUPDSC		;   Yes, toss it
+>;IFN FTYODA
+	SETO LNK,		; mark as no such link
+	SETZ IOS,		; and empty IOS
+	MOVEM TAC,PUPLSK(LNK)	; Setup link -1 to current unclaimed packet so we
+	MOVEM AC2,PUPHST(LNK)	; can use PUPMAK and friends for errors, etc.
+	MOVEM AC3,PUPFSK(LNK)
+	JRST PUPBSP		; do BSP processing
+
+;  Found link, see if dump mode (meaning datagrams) and if so just give it
+; to the user.  Otherwise do full BSP processing.
+
+PUPFL3:	HRRZS LNK		; flush left half of link
+	SKIPN DDB,PUPLDB(LNK)	; yes, get DDB for this link
+	 PUSHJ P,PUPBUG		; link missing a DDB?
+	MOVE IOS,DEVIOS(DDB)	; get IOS for PIOMOD
+	MOVE TAC1,PUPMOD(DDB)	; Get type of connection
+	TLNN TAC1,BSPMOD!EFTMOD	; EFTP or BSP?
+	  JRST[				;No, datagram mode.
+IFN FTYODA,<
+		TLNE TAC,200000		;Funny packet?
+		  JRST[	SETZ TAC1,	;   Don't count bits (for now)
+			PUSHJ P,PUPIQ2	;   Yes, let user deal with it
+			  JRST PUPDSC
+			POPJ P, ]
+>;IFN FTYODA
+		PUSHJ P,PUPIQ1		;Give user packet directly
+		  JRST PUPDSC		;  Too many packets queued, flush it
+		POPJ P,]
+	PUSHJ P,PUPBSP		; Process packet
+	MOVEM IOS,DEVIOS(DDB)	; Save updated IOS
+	POPJ P,
+;	---
+;  PUP - protocol dispatch		;⊗ PUPBSP PUPBS1 PUPBS2 PUPBS3 PUPNSP PUPBSE
+
+;------------------------------------------------------------------------------
+;
+; Protocol processing for BSP, EFTP, etc.
+;
+;------------------------------------------------------------------------------
+PUPBSP:	LDB TAC1,PUPTYP		;Get PUP type
+	CAIGE TAC1,NBSPTY	;PUP type within range?
+	 SKIPN TEM,BSPTAB(TAC1)	;  Get dispatch address
+	  JRST PUPBSE		;    Unknown PUP type
+	JUMPL LNK,PUPBS1	;If no link, only unconditionals allowed
+	TDNE TEM,PUPMOD(DDB)	;Is this message appropriate?
+	  JRST (TEM)		;  Yes, dispatch
+	PUPMSG (IPT,DSC,<Illegal BSP Pup type>,<<Type,TAC1>,<Host,AC2>>)
+;	---			;Jumps to PUPDSC
+PUPBS1:	JUMPGE TEM,PUPBS2	;Sign bit means unconditional dispatch
+	SETO DDB,		;Forget partial match
+	JRST (TEM)		;Now, dispatch
+;	\ /
+PUPBS2:	JUMPL DDB,PUPBS3	;Check to make sure DDB exists
+	MOVE IOS,DEVIOS(DDB)	;Get status of connection
+	TLNE IOS,RFCW		;RFC wait?
+	  JRST PUPDSC		;  Yes, disregard premature AData, etc., as
+				;	there is a race of sorts in protocol
+;	\ /
+PUPBS3:	AOS PUPNXL		;Count up the losing link
+;	\ /
+;We have a packet (other than an RFC or error) on a connection we don't know
+;about.  Send an error so the other end will shut up.
+PUPNSP:	MOVSI TAC1,400000	;First, check to see if this is a special socket
+	CAILE TAC,36		;First 36 are special
+	  TDZA TAC1,TAC1	;  It isn't one of those
+	ROT TAC1,(TAC)
+	TDNE TAC1,PSKMAP	;Is it special?
+	  JRST PUPRFQ		;  Yes, fire up a server for it.
+	LDB TAC1,PUPTYP		;Get type again
+	CAIL TAC1,BS%EDA	;EFTP?
+	CAILE TAC1,BS%EEN
+	  JRST[
+IFE FTCCRMA,<
+		SNDABT 2,<No Such Port>
+>;IFE FTCCRMA
+IFN FTCCRMA,<
+;The D'mumbles seem to expect an error instead of an abort.  I'm not sure
+;which is right, but this keeps them from screaming at us.
+		SNDERR 2,<No Such Port>
+>;IFN FTCCRMA
+		JRST PUPDSC ]          	; now discard the Pup
+	EFTERR EFOSYN,<No Such Port>	;According to EFTPSpec.Bravo, 4.B.2
+	JRST PUPDSC		; now discard the Pup
+
+;We got a PUP whose type we don't understand.  Log it if it's on a link we
+;know about.
+PUPBSE:	JUMPL LNK,PUPNSP	;Give an error if we don't know about this link,
+				;as this is usually just a stale response.
+repeat 0,< ;Let's see if just checking for a link keeps things quiet enough
+	CAIL TAC1,200		;unregistered Pup type?
+	  JRST PUPDSC		;  yes, just discard it
+>;repeat 0
+	PUPMSG (UNK,DSC,<Unknown BSP Pup type>,<<Type,TAC1>,<Host,AC2>>)
+
+;  PUP opcode dispatch/definition	;⊗ ANYMOD BSPTAB BS%ECH BS%IEC BS%BEC BS%ERR BS%RFC BS%ABT BS%END BS%ENR BS%DAT BS%ADA BS%ACK BS%MRK BS%INT BS%INR BS%AMA BS%EDA BS%EAC BS%EEN BS%EAB NBSPTY
+
+;  PUP dispatch table.  (For BSP, EFTP, and packets intended for system)
+;	400000 means dispatch if no connection
+;	100000 means dispatch if BSP connection (BSPMOD)
+;	040000 means dispatch if EFTP connection (EFTMOD)
+;	otherwise dispatch only if a DDB exists.
+ANYMOD←←400000!BSPMOD!EFTMOD
+
+BSPTAB:	PHASE 0
+	0			;  0 illegal
+BS%ECH::ANYMOD,,PUPECH		;  1 Echo Me
+BS%IEC::0			;  2 I'm An Echo (we never send Echo Me)
+BS%BEC::0			;  3 I'm A Bad Echo (ditto)
+BS%ERR::ANYMOD,,PUPERR		;  4 Error
+	0			;  5 illegal
+	0			;  6 illegal
+	0			;  7 illegal
+BS%RFC::400000!BSPMOD,,PUPRFC	; 10 Request for Connection
+BS%ABT::ANYMOD,,PUPABT		; 11 Abort
+BS%END::BSPMOD,,PUPEND		; 12 End
+BS%ENR::BSPMOD,,PUPENR		; 13 End Reply
+	0			; 14 illegal
+	0			; 15 illegal
+	0			; 16 illegal
+	0			; 17 illegal
+BS%DAT::BSPMOD,,PUPDAT		; 20 Data
+BS%ADA::BSPMOD,,PUPADA		; 21 AData
+BS%ACK::BSPMOD,,PUPACK		; 22 Acknowledgement
+BS%MRK::BSPMOD,,PUPMRK		; 23 Mark
+BS%INT::BSPMOD,,PUPINT		; 24 Interrupt
+BS%INR::BSPMOD,,PUPINR		; 25 Interrupt Reply
+BS%AMA::BSPMOD,,PUPAMA		; 26 AMark
+	0			; 27 Illegal
+BS%EDA::EFTMOD,,PUPEDA		; 30 EFTP Data
+BS%EAC::EFTMOD,,PUPEAC		; 31 EFTP Ack
+BS%EEN::EFTMOD,,PUPEEN		; 32 EFTP End
+BS%EAB::EFTMOD,,PUPEAB		; 33 EFTP Abort
+	DEPHASE
+NBSPTY←←.-BSPTAB		; # of BSP entries supported
+;  Diagnostic, Error packets		;⊗ PUPBEC PUPECH IPUPSN EECHO2 PUPERR PUPER0 PUPER1 PUPER2 PUPABS PUPIQF PUPABT PUPAB1 PUPAB2 PUPEOF PUPEO2
+
+; Echo Me Pup received - diddle its header and send it back!
+
+PUPBEC:	SKIPA TAC,[BS%BEC]	;Send "I'm a Bad Echo" reply
+PUPECH:	MOVEI TAC,BS%IEC	;Send "I'm an Echo" reply
+	LDB TAC1,PUPID
+	SETZ AC2,		;Don't change data
+	LDB AC3,PUPLEN		;Same count (better be!)
+	SUBI AC3,$PUPMN
+	PUSHJ P,PUPRCY		;Setup to return to sender
+IPUPSN:	PUSHJ P,PUPROU		;Route PUP to appropriate network
+	  JRST IROUFA		;  None!?? Forget it
+EECHO2:	MOVE TAC,[PUSHJ P,PUPGIV]	;Flush packet when sent
+	MOVEM TAC,DTQ%XC(PKT)
+	PUSHJ P,ENOUTQ		;Queue packet for sending
+	  PUSHJ P,PUPGIV	;  And don't worry about failure
+	POPJ P,
+
+
+; Error Pup received - log on CTY and maybe treat as ABORT
+
+; Note:  The error packet may have originated from some gateway and not the
+;	 destination host.  In this case, we shouldn't have a connection, and
+;	 we must pass the error packet through PUPFLK again, but this time
+;	 using the erroneous header.  If the erroneous header is the same
+;	 address as we dispatched on, then we either don't have a gateway error
+;	 or we don't have a connection.
+
+PUPERR:	JUMPGE LNK,PUPER0	;If proper address, then no problem
+	LDB AC3,PUPES1		;Get original socket from erroneous packet header
+	ROT AC3,=16
+	LDB AC2,PUPES2
+	IOR AC3,AC2
+	LDB AC2,PUPERH		;Get destination host
+	JUMPE AC3,PUPER0	;Forget it if no socket
+	CAMN AC2,PUPHST(LNK)	;Have we already tried this?
+	CAME AC3,PUPFSK(LNK)
+	  JUMPN AC2,PUPFLE	;  No, see if we can find a connection with
+				;	original destination
+;	\ /
+PUPER0:	LDB TAC1,PUPERB		;Get error type
+	CAIN TAC1,2		;"No Such Port" error?
+	  JRST PUPAB1		;  Yes, quietly treat as ABORT
+	CAIE TAC1,3		;"Port IQ full" error?
+	CAIN TAC1,=519		;"Gateway queue overflow" error?
+	  JRST PUPIQF		;  Not so much an error as a request to pause
+	AOSLE PPERCN		;Too many errors printed recently?
+	  JRST PUPDSC		;  Yes, forget it
+	PUSHACS
+	PUSH P,TAC1		;Save error code
+	LDB TAC1,PUPLEN		;Setup to print message
+	SUBI TAC1,$PUPMN+5*4+4
+	PUSH P,TAC1
+	PUSHJ P,DISUSR
+	  SIXBIT/PUPERR/
+	MOVEI AC1,@PUPERT	;Construct a proper type pointer
+	HLL AC1,PUPERT
+;	\ /
+;The following code is used to log both Abort and Error packets.
+;
+;Stack:
+;	-2(P) error code
+;	-1(P) length
+;	(P) string
+PUPER1:	TLZ AC1,37
+	PUSH P,AC1
+	PUSHJ P,DISERR
+	  [ASCIZ/Host /]
+	  DISARG LOC,AC2
+	  [ASCIZ/, error /]
+	  DISARG LOC,-2(P)
+	  [ASCIZ/: /]
+	  -1
+	POP P,AC1		;Get string address
+	POP P,TAC1		;Get count
+	POP P,(P)		;Flush error code
+	JUMPL TAC1,[PUSHJ P,DISMES
+		      ASCIZ/-- Bad error packet!!/
+		    JRST PUPER2]
+	PUSHJ P,DIS8TX		;Print 8 bit text
+PUPER2:	PUSHJ P,DISCRLF
+	POPACS
+	JRST PUPDSC
+
+;Print error message for PUP Abort and discard packet
+PUPABS:	PUSHACS			;To complement POPACS (immediately above)
+	PUSH P,TAC1		;Push error code on stack
+	LDB TAC1,PUPLEN		;Get length of string
+	SUBI TAC1,$PUPMN+2
+	PUSH P,TAC1
+	PUSHJ P,DISUSR
+	  SIXBIT/PUPABT/
+	MOVEI AC1,@PUP1DA
+	HRLI AC1,(<POINT 8,0,15>)
+	JRST PUPER1		;Print message from packet and discard
+
+; Port IQ full
+;
+; Let's trying delaying the retries and see if that helps.  It won't solve
+; the problem of lots of DATA packets (which use PUPBQN) but at least it
+; won't retry all of those packets quite as soon.  If we were really
+; determined, we could search the output list, and fixup the DTQ%XC field to
+; point to some special code, but that's alot to do at interrupt level.
+;
+; Also, if we're doing BSP output, then stop trying to resend data packets
+; and just send a null AData until we know how much the other end has taken.
+PUPIQF:	JUMPL DDB,PUPDSC	;If we don't know about this connection, forget it
+	SKIPN TAC,PUPCSB(DDB)	;Make sure there's some retry code pending.
+	  JRST PUPDSC		;  No, there's not much we can do, then.
+	HRLI TAC,IQFDLY		;Wait at least three seconds before trying again.
+	CAMN TAC,[XWD IQFDLY,BSPORT]	;BSP stream?
+	  HRRI TAC,BSPSRT	;  Yes, change retransmit strategy
+	MOVEM TAC,PUPCSB(DDB)
+	JRST PUPDSC
+
+; Abort Pup received - flush link
+
+PUPABT:	JUMPL LNK,PUPDSC	; do nothing if no link so not considered NXL
+	SKIPG DDB		; bug trap
+	 PUSHJ P,PUPBUG
+	LDB TAC1,PUP1DA		;Get error code
+PUPAB1:	MOVEI IOS,IODERR	;Set error
+	SKIPL LNK
+	  IORB IOS,DEVIOS(DDB)	;  If there's a connection to flag
+;;Let's avoid printing any PUPABTs on the CTY -- JJW
+;;	CAIN TAC1,2		;Suppress "no such port" messages.
+	  JRST[	PUSHJ P,PUPDSC
+		JRST PUPAB2 ]
+	PUSHJ P,PUPABS		;Print error message and discard packet
+PUPAB2:	JUMPL LNK,CPOPJ		;If no connection, then just print and ignore
+	PUSHJ P,PUPOFL		;Flush output
+	SETZM PUPCSB(DDB)	;Don't retry anymore
+;	\ /
+
+; Set EOF in IOS, give user IMS interrupt, wake up user if blocked
+
+PUPEOF:	MOVEI IOS,IODEND	; set EOF in IOS
+	IORB IOS,DEVIOS(DDB)
+	LDB J,PJOBN		; get job # of DDB's owner
+	JUMPE J,PUPEO2		; can't happen it says here
+	MOVSI TAC1,INTIMS	; feed it IMS interrupt
+	TDNN TAC1,JBTIEN(J)	; enabled for this job?
+	 JRST PUPEO2		; no, still wake up user
+	IORM TAC1,JBTIRQ(J)	; cause job to get interrupt
+	TDNE TAC1,JBTMSK(J)	; any bit masked on?
+	 SETOM INTREQ		; yes, run interrupts
+PUPEO2:	MOVSI IOS,ANYW		; clear any wait bits
+	ANDCAB IOS,DEVIOS(DDB)
+	PUSHJ P,PUPWAK		; wake up user
+	POPJ P,			; job woken up, done with this Pup
+
+;  Send error packets			;⊗ EFTERX SNDABX SNDER6 SNDER8 SNDER9 SNDERX
+
+;Send EFTP or Abort error message.  Called from macros EFTERR and SNDABO
+;Clobbers most ACs, but not PKT
+
+   printx This code sends broadcast packets for errors on a listening connection!
+EFTERX:	SKIPA TAC,[BS%EAB]
+SNDABX:	MOVEI TAC,BS%ABT
+	LDB TAC1,PUPID
+	PUSH P,PKT		;Save packet on stack while sending error
+	PUSHJ P,PUPMAK		;Make an error packet
+	  JRST SNDER9		;  No FS.  Forget it (they'll prob. do it again)
+SNDER6:	PUSHJ P,PUPROU		;Route PUP
+	  JRST SNDER8		;  No place for error to go!
+	MOVE TAC,[PUSHJ P,PUPGIV]
+	MOVEM TAC,DTQ%XC(PKT)	;Flush packet on completion
+	PUSHJ P,ENOUTQ		;Send it on down the line
+SNDER8:	  PUSHJ P,PUPGIV	;  Couldn't send packet.  Flush it.
+SNDER9:	POP P,PKT		;Restore old packet, if any
+	POPJ P,
+
+;Send Error packet.
+SNDERX:	SUBI AC2,5		;Offset to include copy of losing header
+	ADDI AC3,5*4
+	MOVEI TAC,BS%ERR	;Set error code
+	LDB TAC1,PUPID
+	PUSH P,PKT		;Save packet on stack while sending error
+	PUSHJ P,PUPMAK		;Make an error packet
+	  JRST SNDER9		;  No FS.  Forget it (they'll prob. do it again)
+	MOVE TAC,(P)		;Get offensive packet
+	MOVSI TAC,PUP1HW(TAC)	;Copy header into new packet
+	HRRI TAC,PUP1DW(AC1)
+	BLT TAC,PUP1DW+4(AC1)
+	PUSHJ P,PUPSXM		;Set PUP checksum
+	JRST SNDER6
+;  Interrupt Pup received		;⊗ PUPINT PUPIN1 PUPIN2 PUPIN3 PUPINR PUPIN9 PUPIN7
+
+; If we receive an interrupt PUP, check to see its ID to see if it is the one
+; we're expecting.  If we've already acknowledged it, acknowledge again (they
+; must not have gotten our reply).  If we're not ready for it (ID=RII+1), then
+; just discard it.  Otherwise, acknowledge it, and advance RII unless the user
+; already has an interrupt pending.
+
+;NOTE: Data portion of PUP interrupt packet is currently ignored.
+
+PUPINT:	LDB TAC1,PUPID		;Get ID of interrupt
+	CAME TAC1,PUPRII(DDB)	;Correct?
+	  JRST PUPIN3		;  No, try older old
+	LDB J,PJOBN		;Get job # of DDB's owner
+	JUMPE J,PUPIN2		;Can't happen it says here
+	MOVSI TAC,INTINS	;Feed it INS interrupt
+	TDNE TAC,JBTIRQ(J)	;Is there one of these already pending?
+	  JRST PUPIN1		;  No, OK to take another one
+	AOS TAC1,PUPRII(DDB)	;Now, finally advance ID
+	TLZE TAC1,740000	;Mod 2↑32
+	MOVEM TAC1,PUPRII(DDB)
+;	\ /
+PUPIN1:	TDNN TAC,JBTIEN(J)	;Enabled for this job?
+	  JRST PUPIN2		;  No, still acknowledge it
+	IORM TAC,JBTIRQ(J)	;Cause job to get interrupt
+	TDNE TAC,JBTMSK(J)	;Any bit masked on?
+	  SETOM INTREQ		;  Yes, run interrupts
+;	\ /
+;;;(Perhaps we should use PUPRCY here??)
+PUPIN2:	PUSHJ P,PUPDSC		;Flush interrupt packet, we don't use it anyway
+	SETZB AC2,AC3
+	MOVE TAC1,PUPRII(DDB)	;Make sure we have the right ID (shouldn't matter)
+	MOVEI TAC,BS%INR	;Type = InterruptReply
+	PUSHJ P,PUPMAK		;Make a PUP for it
+	  POPJ P,		;  No FS
+	JRST IPUPSN		;Send packet, if possible
+;	---
+PUPIN3:	ADDI TAC1,1		;See if they still haven't got our acknowledge
+	TLZ TAC1,740000		;Make mod 2↑32
+	CAMN TAC1,PUPRII(DDB)	;Correct?
+	  JRST PUPIN2		;  Yes, acknowledge duplicate
+	SUBI TAC1,2		;Are they one ahead of us?
+	TLZ TAC1,740000		;Make mod 2↑32
+	CAMN TAC1,PUPRII(DDB)	;Correct?
+	  JRST PUPDSC		;  Yes, ignore it until we're ready
+	SNDERR 0,<Int. out of sync>
+	JRST PUPDSC
+
+
+; Interrupt Reply Pup received
+
+PUPINR:	SKIPG DDB		;Bug trap
+	  PUSHJ P,PUPBUG
+	LDB TAC1,PUPID		;Check ID this Pup
+	PUSHJ P,PUPDSC		;ID is all we care about
+	CAME TAC1,PUPSII(DDB)	;Yes, match DDB's ID?
+	  POPJ P,		;  No, toss it out
+	SKIPN PKT,PUPOLS(DDB)	;Get first packet from output list
+	  JRST PUPIN7		;  No, not expecting one of these
+	LDB TAC,PUPTYP		;Get type of packet
+	CAIE TAC,BS%INT		;Is this an interrupt packet?
+	  JRST PUPIN7		;  No, complain!
+	HRRZ AC2,DTQ%OL(PKT)	;Get next packet in queue
+	HRRM AC2,PUPOLS(DDB)	;Next list head
+	SOSN PUPOCN(DDB)	;Last packet?
+	  SETZM PUPOLS(DDB)	;  Yes, empty list
+	PUSHJ P,PUPDSC		;Now, flush that packet
+;	\ /
+PUPIN9:	AOS TAC1,PUPSII(DDB)	;We succeeded, advance for next one.
+	TLZE TAC1,740000
+	MOVEM TAC1,PUPSII(DDB)
+	TLZE IOS,INTSW
+	PUSHJ P,PUPWK1		; Wait waiter in case this was the cause
+	POPJ P,
+
+;Received an Interrupt Reply, but we didn't send an Interrupt!
+PUPIN7:	SNDERR 0,<Unsolicited IntR>
+	PUPMSG(IRB,IN9,<Unsolicited IntR>,<<Host,AC2>>)
+				;  Jumps to PUPIN9
+;  Request for Connection Pup received	;⊗ PUPRFC PUPRF1 PUPRF2 PUPRF3 PUPRF4 PUPRF5 PUPRF6 PUPRF7 PUPRFQ
+;
+; RFC processing must deal with several cases:
+;
+;   ⊗  RFC sent from local host
+;   ⊗  RFC sent from remote host, with server already running
+;   ⊗  RFC sent from remote host, with no server running.
+;
+; In addition, there are two sets of address pairs, the contact sockets,
+; and the sockets that are actually used for communication.  These may
+; not even be the same host address!  Note that there is an intermediate
+; state where there may duplicate RFC's and AData in transit at the
+; same time, with different addresses involved.
+;
+; Connection table bits mean:
+;
+;   RFCR  We have received an RFC.  This can be a reply, in the case of
+;	  a locally initiated connection, or a request, in the case of
+;	  a server connection.  If we receive an RFC with this bits already
+;	  set, then it is a duplicate.  These may be discard by initiator,
+;	  but a matching RFC must be sent, as a duplicate indicates the
+;	  other end lost our earlier RFC reply.
+;   RFCS  We have sent an RFC.  Again, this can either be our user request,
+;	  or a reply we've sent to their request.  Note that we do not send
+;	  replies if there is no server running yet.
+;   RFCL  Connection is a listening connection (by virtue of accepting
+;	  any socket number and/or any host).
+;
+; DEVIOS bits used are:
+;
+;   RFCW  User job is waiting for RFC to complete.  This bit should be set
+;	  when an RFC is received.  As far as RFC processing, this is
+;	  largely just a bugtrap, but might be indicative of confusion at
+;	  UUO level.
+;
+; CAUTION: TAC must be preserved thru PUPRF4
+;
+; This code has been flow charted (see PUPSER.FLO[SS,SYS]), but it may be
+; helpful to note that the only branch that currently goes backwards is
+; from PUPRF5 to PUPRF4
+;
+PUPRFC:	JUMPL LNK,PUPRFQ	;No link means must create server
+	MOVE TEM,PUPSTB(LNK)	;Get status of connection
+	TLNE TEM,RFCR		;Have we received an RFC yet?
+	  JRST PUPRF5		;  Yes, look into duplicate situation
+	SKIPG DDB		;Is there a DDB for it?
+	  JRST PUPDSC		;  No, we're still waiting for a job for it
+repeat 0,<
+	TLZN IOS,RFCW		;In RFC wait?
+	  PUSHJ P,PUPCHK	;  No, we shouldn't get here then!
+>;repeat 0
+repeat 1,<
+	TLZE IOS,RFCW		;In RFC wait?
+	  JRST PUPRF1		;  yes, good
+	PUSHACS			;No.  Log it on CTY
+	PUSHJ P,DISUSR		;Print time of new msg on CTY
+	 SIXBIT/PUP/
+	PUSHJ P,DISMES
+	 ASCIZ/At PUPRFC but not in RFC wait.
+/
+	POPACS
+PUPRF1:
+>;repeat 1
+;;; Is this really the right thing to reset ID's when we receive duplicate
+;;; RFC's??  This could have bad effects if it somehow managed to pass
+;;; existing tests, and data transfers were already in progress.  Comparing
+;;; against PUPSID(DDB) provides sufficient security, this probably should
+;;; be changed.	 --TVR/May86
+	LDB TAC1,PUPID		;Get current Pup ID
+	TLNE TEM,RFCS		;Have we send one of these yet?
+	CAMN TAC1,PUPSID(DDB)	;Does this one the wrong ID?
+	  JRST PUPRF2		;  No, proceed.
+	SNDABT 0,<Bad ID on RFC>
+	JRST PUPDSC
+;	---
+PUPRF2:	MOVEM TAC1,PUPCID(DDB)	;Set connection ID
+	MOVEM TAC1,PUPRII(DDB)	;And interrupt IDs
+	MOVEM TAC1,PUPSII(DDB)
+	MOVEM TAC1,PUPRID(DDB)	;Set as expected Pup ID
+	LDB TAC1,PUPRS2		;Set foreign socket from PUP data
+	MOVEM TAC1,PUPFSK(LNK)
+	LDB TAC1,PUPRS1		;High order part.
+	DPB TAC1,PUPFS1
+	SKIPL PUPHST(LNK)	;Listening link?
+	  JRST PUPRF3
+	MOVE TAC1,PUPCID(DDB)	;  Yes, set send ID as well
+	MOVEM TAC1,PUPSID(DDB)
+	PUSHJ P,GENSYM		;Get new local socket
+	EXCH TAC,PUPLSK(LNK)	;Save it, restore old in TAC
+;	\ /
+PUPRF3:	LDB AC2,PUPRHN		;Use the host number they specified.
+	MOVEM AC2,PUPHST(LNK)	;Okay folks, set this up as a living link
+	TLO TEM,RFCR		;We have received an RFC
+	MOVEM TEM,PUPSTB(LNK)
+	PUSHJ P,PUPWK1		;Wake user
+	TLNE TEM,RFCS		;Have we sent one yet?
+	  JRST PUPRF6		;  Yes, this is their reply.  Flush it.
+;	\ /
+PUPRF4:	LDB TAC1,PUPLK1		;Set foreign socket from PUP data
+	DPB TAC1,PUPRS1
+	LDB TAC1,PUPLK2
+	DPB TAC1,PUPRS2
+	MOVE TAC1,ENNADR
+	DPB TAC1,PUPRHN
+	PUSH P,PUPLSK(LNK)	;Save new local socket
+	MOVEM TAC,PUPLSK(LNK)	;Still need old one to send RFC
+	MOVEI TAC,BS%RFC	;Packet type = RFC
+	MOVE TAC1,PUPCID(DDB)
+	SETZ AC2,		;Recycle data as well
+	MOVEI AC3,6		;Size of RFC in bytes
+	PUSHJ P,PUPRCY
+	POP P,PUPLSK(LNK)	;Restore new local socket number
+	PUSHJ P,PUPROU		;Route the PUP
+	  JRST IROUFA		;  Failed at interrupt level?
+	MOVE TAC,[PUSHJ P,PUPGIV]	;Flush packet upon transmission
+	MOVEM TAC,DTQ%XC(PKT)
+	PUSHJ P,ENOUTQ		;Queue it for transmission
+	  JRST PUPDSC		;  Oh, well.  Flush it after all
+	TLO TEM,RFCS		;We've now sent one
+	MOVEM TEM,PUPSTB(LNK)	;Set status bits in memory
+	POPJ P,
+;	---
+;We have an RFC that we've received once before.  Decide whether to acknowledge it
+PUPRF5:	TLNN TEM,RFCL		;Is this a listening link?
+	  JRST PUPDSC		;  No, just discard an extra reply
+	JRST PUPRF4		;Yes, they must not have gotten our reply soon
+;	---			;enough, if at all.
+;Received matching RFC.  Flush the one we've queued.
+PUPRF6:	PUSHJ P,PUPDSC		;Flush packet
+	HRRZ PKT,PUPOLS(DDB)	;Get first packet in queue
+	HLRZ TAC,PUPOLS(DDB)	;and last
+	SOSN PUPOCN(DDB)	;Is this the only thing in the queue?
+	CAME TAC,PKT		;and is this the only packet to flush?
+	  PUSHJ P,PUPBUG	;  No!!!
+	PUSHJ P,PUPDCK		;Is RFC is DTEQ?
+	  JFCL			;  Yes, flush now
+	  PUSHJ P,PUPGIV	;  Or later
+	SETZM PUPOLS(DDB)	;Clear out the queue
+	SETZM PUPOCN(DDB)
+;;Maybe we can just clear the retry here?
+;;(We should never be here with other than RFCRT)
+	HRRZ TAC,PUPCSB(DDB)	;Check type of retry
+	CAIN TAC,RFCRT		;OK to clear?
+	  JRST PUPRF7		;  Yes, no more retries for now.
+	SKIPE PUPCSB(DDB)	;Is there retry code setup?
+	  PUSHJ P,PUPRT1	;  Yes, do retry next tic to flush it.
+	POPJ P,			;And we're done.
+;	---
+PUPRF7:	PUSHJ P,CRETRY		;Don't optimize to JRST CRETRY
+	POPJ P,
+
+; Here when an RFC comes in and nobody is listening for it.  If on a public
+; socket, try to create a server for it.  Unfortunately, we don't know if
+; this server exists or not, so we have to trying to run non-ex server every
+; time they send us one of these things.  It would sure be nice if we could
+; know when to refuse.
+
+PUPRFQ:	CAIL TAC,1000		; is this a "public socket"?
+	  JRST PUPDSC		; sorry, just toss out the RFC then
+	LSHC TAC,-6		; convert socket number to sixbit
+	LSH TAC,3
+	LSHC TAC,3
+	LSH TAC,3
+	LSHC TAC,3
+	MOVEI DAT,'000'(TAC)
+	HRLI DAT,PUPLGR		; set up clock request word of Pup logger
+	PUSHJ P,PUPLGR		; invoke Pup logger
+	JRST PUPDSC		; toss out RFC, let server take a retry
+
+;  End Pup received			;⊗ PUPEND PUPENS PUPEE3 PUPENR PUPEN2 ENDRRT %ENDRR %EENRR IROUFA
+;
+;When an End packet is received, a matching EndReply should be sent.  Then
+;one is expected to wait ("dally") until an EndReply is seen or timeout
+;happens.  This is in case the other end does not get the EndReply packet
+;and sends another End packet.  The timeout is not considered an error,
+;since both ends of the connection are aware that it is closing.
+;
+;It is possible that the other end sent an End packet at the same time that
+;we did.  In that case, we should stop sending End packets and send an EndReply
+;
+;There is an additional wrinkle that one should wait for the output queue
+;to be empty before sending a close, so that both hosts agree on how much
+;data is sent.  Thus, this code ignore End packets while there is still
+;data in the output buffer.  When output times out, it will flush the output
+;queue and we can do something about the End.  In any case, we'll log 
+;remember was saw one.
+PUPEND:	SKIPG DDB		;Make sure a DDB exists
+	  PUSHJ P,PUPBUG
+	LDB TAC1,PUPID		;Get current Pup ID
+	CAME TAC1,PUPCID(DDB)	;Match connection ID?
+	  PUPMSG(BEN,DSC,<Bad BSP End>,<<Host,AC2>>)
+	MOVSI TAC,CLSR		;Remember we've seen an End, even if ignored
+	IORB TAC,PUPSTB(LNK)	;Get connection status
+	SKIPE PUPOLS(DDB)	;Is the output queue empty?
+	TLNE TAC,CLSS		;Or are we already sending a close?
+	  JRST PUPENS		;  Yes, send an EndReply
+	JRST PUPDSC		;No, wait until the output queue is empty
+;	---
+PUPENS:	SKIPE PUPOLS(DDB)	;Is there an End packet queued?
+	  PUSHJ P,PUPOFL	;  Yes, flush it.
+	PUSHJ P,RRETRY		;Reset retry code
+	  %ENDRR
+	  CLSTP
+	MOVEI TAC,BS%ENR	;Send an EndReply
+;	\ /
+;The following code is the same for BSP and EFTP End
+PUPEE3:	SETZB AC2,AC3		;No data for these packets
+	PUSHJ P,PUPRCY		;Turn this PUP into an EndReply
+	PUSHJ P,PUPROU		;Route this PUP
+	  JRST IROUFA		;  Failed at interrupt level!
+	MOVE TAC,[PUSHJ P,PUPGIV]	;Discard packet upon transmission
+	MOVEM TAC,DTQ%XC(PKT)
+	PUSHJ P,ENOUTQ		;Queue this packet
+	  JRST PUPDSC		;  Oh, well.  Better luck next time
+	POPJ P,			;And we're done
+
+
+; EndReply received
+;
+;There are two case here.  One is that the EndReply is in response to an
+;End we sent.  In this case, we send an EndReply as a courtesy to the other
+;host.  The second case, the EndReply their courtesy response to an EndReply
+;that we sent after seeing their End packet.  We should not respond in this
+;case.
+;
+;In either case, the connection is fully closed and we can wake UUO level
+;if necessary.
+PUPENR:	SKIPG DDB		; bug trap
+	  PUSHJ P,PUPBUG
+	LDB TAC1,PUPID		; get current Pup ID
+	CAME TAC1,PUPCID(DDB)	; match current Pup?
+	  PUPMSG(BER,DSC,<Bad BSP EndR>,<<Host,AC2>>)
+	MOVSI TAC,CLSR		;Have we received an End packet?
+	TDNE TAC,PUPSTB(LNK)
+	  JRST PUPEN2		;  Yes, no second EndReply needed.
+	IORB TAC,PUPSTB(LNK)	;Now we have
+	PUSHJ P,PUPENS		;Send an EndReply
+	SKIPA
+;	\ /
+;Following finishes closing a connection for both BSP and EFTP
+PUPEN2:	  PUSHJ P,PUPDSC	;Nothing to send in reply
+	MOVSI TAC,CLSS		;Indicate we've sent an EndReply
+	IORB TAC,PUPSTB(LNK)
+	JRST PUPEOF		;Set EOF and wake from any wait state
+
+;"Retry" routine for EndReply.  Actually, forces termination without
+;setting TMO where we don't get the second EndReply.
+;
+;Also, used for EFTPEnd
+ENDRRT:	PUSHJ P,CRETRY		;Clear hung timeout
+	JRST PUPEOF		;And just set EOF
+
+;Retry for EndReply
+%ENDRR:	=10*PUPSEC,ENDRRT
+%EENRR:	=10*PUPSEC,ENDRRT
+
+;Routing failed at interrupt level???
+;Perhaps we should log these, particularly from LNK=-1.
+IROUFA:	PUSHJ P,ROUFAI		;Set status
+	JUMPG DDB,PUPEOF	;Clear any wait state
+	POPJ P,
+
+;  Mark, Data, AData, AMark packets	;⊗ PUPMRK PUPDAT PUPDA3 PUPAMA PUPADA PUPAD2
+
+; Data and Mark packets are processed in a simple-minded fashion, with no attempt
+; to cope with out-of-order packets or to request selective retransmission.  At
+; present, any packet which is not expected is discarded.  This may be inadequate,
+; as our ethernet interfaces have a tendency to lose on large numbers back-to-back
+; packets.
+
+; Mark PUP received
+
+PUPMRK:	LDB TAC1,PUPLEN		; get length this Pup
+	CAIE TAC1,$PUPMN+1	; does Pup contain exactly one byte?
+	  PUPMSG (BMS,DSC,<Bad Mark size>,<<Host,AC2>,<Size,TAC1>>)
+;	\ /
+
+; Data PUP received
+
+;	\ /
+PUPDAT:	LDB TAC1,PUPID		;Get its Pup ID
+	CAME TAC1,PUPRID(DDB)	;Are we looking for this one?
+	  JRST PUPDA3		;  No, flush it quickly and take failure return
+	PUSHJ P,PUPIQ		;Try to queue it
+	  JRST PUPDA3		;  Too many packets already.  Flush it
+	LDB TAC1,PUPLEN		;Get size of Pup
+	SUBI TAC1,$PUPMN	;Minus overhead bytes
+	ADD TAC1,PUPRID(DDB)	;Add ID and length
+	TLZ TAC1,740000		;Make mod 2↑32
+	MOVEM TAC1,PUPRID(DDB)	;New PUP ID
+	POPJ P,
+;	---
+PUPDA3:	PUSHJ P,PUPDSC		;Discard this PUP, we can't use it.
+	POPJ P,			;Please don't optimize to JRST PUPDSC
+;	---
+
+; AMark or AData PUP received
+
+PUPAMA:	PUSHJ P,PUPMRK		;Process as Mark packet
+	SKIPA
+;	\ / (skips)
+PUPADA:	  PUSHJ P,PUPDAT	;Process as Data packet
+PUPAD2:	PUSH P,[BYTE (16) $PUPMD]
+	MOVE TAC,PUPNMA(DDB)	;Set message allocation
+	SUB TAC,PUPICN(DDB)
+	MOVEM TAC,PUPHMA(DDB)	;Remember for users 
+	DPB TAC,[POINT 16,(P),31]
+	MOVE TAC,PUPNBA(DDB)	;Set bit allocation
+	SUB TAC,PUPIBC(DDB)
+	MOVEM TAC,PUPHBA(DDB)	;Remember for users 
+	LSH TAC,=20-3		;Shift into position and convert bits to bytes
+	PUSH P,TAC
+	HRROI AC2,-1(P)		;Setup pointer to data
+	MOVEI AC3,6		;Size of Acknowledge packet
+	MOVEI TAC,BS%ACK	;Now, acknowledge either
+	MOVE TAC1,PUPRID(DDB)
+	PUSHJ P,PUPMAK		;Make an Ack, if possible
+	  SETZ AC1,		;  No FS, set flag
+	SUB P,[XWD 2,2]		;Flush stack
+	JUMPN AC1,IPUPSN	;Send PUP at interrupt level
+	POPJ P,			;Nothing to send
+
+;  Acknowledgement Pup received		;⊗ PUPACK PUPAC2 PUPAC3 PUPAC4 PUPAC5 PUPAC6 PUPAC7 PUPAC8 PUPAC9 PUPDCK
+
+; We have receive an ACK as a response to an AData or AMark packet we sent,
+; as ACK's may not come unsolicited.  Here we take the ID of that packet, and
+; dispose of any packets up to (but not including) the ID given.  Note that
+; only Data/Mark packets are disposed of here; others must be removed by other
+; routines.
+;
+; Once we've flushed any acknowledged packets, we calculate our new sending
+; allocation, by taking the values given in the ACK packet and subtracting
+; the space occupied by unacknowledged packets.  This is how much the user
+; may send.  Wake the user up if it is possible to send more data.
+;
+; It is worth noting here that various problems can crop up that appear to
+; involve ACKing of packets.  The first and most simple is that the sender
+; has no packet and/or byte allocation, and sends null AData packets to try
+; to get some.  As long as ACK's keep coming back as replies, that simply
+; means that the other end is not prepared to accept any more data yet.
+; The interesting variety is where there are packets pending, but they
+; aren't getting ACK'ed.  If the receiver can't read back-to-back packets,
+; then the ACK should be sent which reflects those packets which were
+; successfully received.  What is troublesome is where the AData (or AMark)
+; packet is being consistently (or even frequently) dropped, then you may
+; never get an ACK (at least, not before the connection times out).  Another
+; possibility is that the ACK is received, but that another packet (or
+; packets) is consistently being sent before the data/mark packets we're
+; trying to get an ACK for, and that packets is being dropped.  In this
+; case, the data flow will stop (until something breaks the logjam), but
+; the connection should remain intact, as the ACK's keep the connection
+; alive.  There are undoubtly other ways to lose, but these are the cases
+; to look for first.
+
+; Note:  See also flowchart on PUPSER.FLO
+
+PUPACK:	SKIPG DDB		;Bug trap
+	  PUSHJ P,PUPBUG
+	HRRZ TAC1,PUPCSB(DDB)	;Get retry subroutine
+	MOVE TAC,PUPTMO(DDB)	;First, assume we don't change timeout
+	CAIN TAC1,BSPORT	;BSP output?
+	  LDB TAC,RFNMTP	;  Reset output timeout interval
+	CAIN TAC1,NULRT		;Just checking connection?
+	  LDB TAC,IDLETP	;  Yes, they're alive.  Don't flush for awhile.
+	MOVEM TAC,PUPTMO(DDB)	;New timeout
+	LDB TAC1,PUPID		;Get ID we are acknowledging
+	PUSH P,PKT		;Save ACK packet on stack
+	PUSH P,TAC1		;Save ID on stack
+	MOVEI TAC,PUPOLS-DTQ%OL(DDB)
+;	\ /
+; Loop thru here for each packet on the transmit queue looking for Data/AData
+; packets that have been acknowledged.
+PUPAC2:	HRRZ PKT,DTQ%OL(TAC)	;Get packet(s) pending
+	JUMPE PKT,PUPAC6	;  None left, go recalculate allocation
+	LDB TAC1,PUPTYP		;Get type of packet
+	CAIE TAC1,BS%DAT	;Do we care?
+	CAIN TAC1,BS%ADA
+	  JRST PUPAC3		;  Yes (DATA or ADATA)
+	CAIE TAC1,BS%AMA	;AMARK? (We never send ordinary MARKs)
+	  JRST[	MOVE TAC,PKT	;  No, try next packet in output queue
+		JRST PUPAC2 ]
+;	\ /
+PUPAC3:	LDB TAC1,PUPID		;Calculate difference in IDs (roughly speaking)
+	SUB TAC1,(P)
+	TLNN TAC1,20000		;Is difference mod 2↑32 negative?
+	  JRST PUPAC6		;  Yes, this packet is more recent, we're done
+				;looking
+	SOSGE PUPOCN(DDB)	;Adjust count before removing packet from list
+	  PUSHJ P,PUPBUG	;  Ooops!
+	HRRZ TAC1,DTQ%OL(PKT)	;Next packet in list
+	HRRM TAC1,DTQ%OL(TAC)	;New next pointer
+	JUMPE TAC1,[CAIN TAC,PUPOLS-DTQ%OL(DDB)	;Is this the header?
+		      SETZM PUPOLS(DDB)		;  Yes, no list left
+		    JRST PUPAC4]
+;	\ /
+PUPAC4:	PUSHJ P,PUPDCK		;Skip return if packet is not on DTEQ, else
+				;execute next instruction immediately, then the
+				;second when packet leaves DTEQ.
+	  JRST PUPAC5		;  Not in queue
+	  PUSHJ P,PUPGIV	;  Release packet, now or perhaps later.
+	HLLZS DTQ%OL(PKT)	;Stop output list here
+	MOVSI IOS,IODTQD	;Packet no longer in output queue of DTEQ for
+	ANDCAB IOS,DEVIOS(DDB)	;  PUPSER's purpose.  Useless packet will be
+				;  sent anyway.
+	JRST PUPAC2		;Go back for more acknowledgements
+;	---
+PUPAC5:	PUSHJ P,PUPGIV		;Release storage in packet
+	JRST PUPAC2		;Back for more packets to acknowledge
+;	---
+; We've removed any acknowledged packets, now calculate allocation which user gets
+PUPAC6:	POP P,(P)		;Flush ACK's ID from stack
+	POP P,PKT		;Get back ACK packet
+	LDB TAC1,PUPAKM		;Get max. packet size
+	MOVEM TAC1,PUPPMX(DDB)	;Save it.  (We really should check to see if the
+				;  other end is trying to make it smaller.)
+	LDB TAC1,PUPAKP		;Get number of packets they've allocated
+	SUB TAC1,PUPOCN(DDB)	;Less the number pending
+	MOVEM TAC1,PUPMAL(DDB)	;Number of packets remaining (msg. allocation)
+	LDB AC2,PUPAKB		;Get number of bytes they've allocated
+	PUSHJ P,PUPDSC		;Flush the ACK packet
+	SKIPN PKT,PUPOLS(DDB)	;Get first packet, if any
+	  JRST PUPAC8
+;	\ /
+; For each unacknowledged packet, remove spaces used from allocation given to
+; us in the ACK packet.
+PUPAC7:	LDB TAC1,PUPLEN		;Get length of packet
+	SUBI TAC1,$PUPMN	;Subtract header part
+	SUB AC2,TAC1		;Decrement allocatation
+	HRRZ PKT,DTQ%OL(PKT)	;Get next element of output queue
+	JUMPN PKT,PUPAC7	;Repeat until end of output queue.
+;	\ /
+PUPAC8:	ASH AC2,3		;Convert to bits for ARPAnet compatability
+	MOVEM AC2,PUPBAL(DDB)	;Number of bits remaining
+	ASH AC2,-3
+	JUMPLE AC2,PUPAC9	;Don't wake if there is nothing left
+	CAML AC2,PUPPMX(DDB)	;There should be enough bytes for one packet
+	SKIPG PUPMAL(DDB)	;and a message to sent them in
+	  JRST PUPAC9
+	TLZE IOS,ALLW!BLOKW	;Waiting for allocation of some sort?
+	  PUSHJ P,PUPWK1	;  Yes, wake up UUO level
+	HRRZ TAC,PUPCSB(DDB)	;Check type of retry
+	CAIN TAC,BSPART		;OK to clear?
+	  PUSHJ P,CRETRY	;  Yes, no more retries for now.
+	CAIN TAC,BSPSRT		;Gateway retry mode?
+	  JRST[	MOVE TAC,[XWD 1,BSPORT]	;Yes, switch back to normal
+		MOVEM TAC,PUPCSB(DDB)
+		JRST PUPAC9 ]
+	SKIPE PUPOLS(DDB)	;Is there something else to send?
+	CAIE TAC,BSPORT		;Output retry
+	  JRST PUPAC9		;  No, done.  [Please don't optimize to POPJ P,]
+;	\ /
+;Restart output very soon, but not so soon that we starting sending packets
+;that whose acknowledgement might appear in the next few milliseconds.
+IFN PUPSEC/=10,<
+	MOVEI TAC,PUPSEC/=10	;Wait a bit before restarting output for
+				;other ACK's to arrive.
+>;IFN PUPSEC/=10
+IFE PUPSEC/=10,<
+	MOVEI TAC,1		;Wait minimal amount of time, then restart
+				;transmission.
+>;IFE PUPSEC/=10
+	HRLM TAC,PUPCSB(DDB)
+PUPAC9:	POPJ P,
+
+; Check to see if packet is on DTEQ.  If not, take normal return.
+; If it is, then execute second instruction, and queue third for execute
+; when transmission of packet is completed.
+;
+;	PUSHJ P,PUPDCK
+;	  JRST <not in DTEQ>
+;	  <instruction for packet in DTEQ>
+;
+; DTE PI must be off when calling this routine!
+
+PUPDCK:	SKIPN TAC1,DTQ%XC(PKT)	;Is packet in DTEQ?
+	  POPJ P,		;  No, this is easy
+	AOS (P)			;Skip over special instruction
+	MOVE TAC1,@(P)		;Get delayed instruction
+	EXCH TAC1,DTQ%XC(PKT)	;New thing to do when packet is transmitted
+	AOS (P)			;Skip over delayed instruction.
+	POPJ P,			;(JRST CPOPJ1 will take an extra instruction 
+				; with scanner possibly turned off).
+
+;  Interrupt level for EFTP		;⊗ PUPEDA PUPED1 PUPED3 PUPED4 PUPED5 PUPEAC PUPED2 PUPEA2 PUPEA3 PUPEA5 PUPEA6 PUPEA7 PUPEA8 PUPEA9 PUPEEN PUPEAB PUPEB2 PUPEB3 PUPEB4 EFTSET
+
+;EFTP data received
+PUPEDA:	LDB TAC1,PUPID		;Get ID of this packet
+	SKIPLE PUPHST(LNK)	;Is this a wild connection?
+	SKIPG PUPFSK(LNK)
+	  PUSHJ P,EFTSET	;  Yes, make it specific
+	SUB TAC1,PUPRID(DDB)	;Compare against what we're expecting
+	JUMPE TAC1,PUPED3	;Jump if correct ID
+;	\ /
+PUPED1:	TRNN TAC1,010000	;Is this a stale acknowledge?
+	  JRST PUPED2		;  No, in future.  Barf!
+	PUSHJ P,PUPDSC		;We don't want this one because its ID
+				;doesn't match
+	MOVE TAC1,PUPRID(DDB)	;Get what we expect
+	JRST PUPED4		;Send EFTPAck, if we can
+;	---
+PUPED3:	PUSHJ P,PUPIQ1		;Attempt to queue this packet
+	  JRST[	PUSHJ P,PUPDSC		;Failed.  Flush it. (DON'T optimize yet)
+		POPJ P,]		;And wait for them to retry
+	AOS TAC1,PUPRID(DDB)	;Advance ID
+	DPB TAC1,[POINT 16,PUPRID(DDB),35]	;MOD 2↑16 for EFTP
+PUPED4:	SUBI TAC1,1		;Less one for last packet we received from them
+	MOVEI TAC,BS%EAC	;EFTPAck
+	SETZB AC2,AC3		;No data.
+	PUSHJ P,PUPMAK		;Make an acknowledge packet
+	  POPJ P,		;  No FS.  They're retry
+	PUSHJ P,PUPROU		;Route it
+	  JRST PUPED5		;  Flush it
+	MOVE TAC,[PUSHJ P,PUPGIV]	;Flush packet upon transmission
+	MOVEM TAC,DTQ%XC(PKT)
+	PUSHJ P,ENOUTQ		;Send it on its way.
+PUPED5:	  PUSHJ P,PUPGIV	;  Can't.  Flush packet.  (Don't optimize
+				;    to JRST FSGIVE!)
+	POPJ P,
+;	---
+
+;EFTP acknowledge received
+PUPEAC:	LDB TAC1,PUPID		;Get ID of this packet
+	PUSHJ P,PUPDSC		;Which is all that we care about.
+	SKIPN PKT,PUPOLS(DDB)	;Get first packet in output queue
+	  SKIPA TAC,PUPSID(DDB)	;None, use ID of last packet sent
+	LDB TAC,PUPID		;Get ID of transmitted packet
+	SUB TAC,TAC1		;Difference (which should be MOD 2↑32)
+	JUMPE TAC,PUPEA2	;Jump if this is the right packet
+;	\ /
+;ID's don't match.  Discard if it's just stale.  Complain if it's too soon
+	TLNN TAC,010000		;Is this a stale acknowledge?
+	  POPJ P,		;  Yes, just ignore it.
+;	\ /
+PUPED2:	EFTERR EFOSYN,<Out of sync.>	;Generate error
+	POPJ P,
+;	---
+
+;EFTP acknowledge for packet we're currently transmitting.  We can now flush
+;that packet and start sending the next one.
+PUPEA2:	JUMPE PKT,CPOPJ		;If nothing in output queue, ignore.
+	LDB TAC,PUPTYP		;Get packet type
+	CAIE TAC,BS%EDA		;Data?
+	  JRST PUPEA5		;  No, must be END.  Do final handshake
+	HRRZ TAC,DTQ%OL(PKT)	;Get next thing in user's output queue
+	HRRZ PKT,PKT		;Don't left left half confuse FSGIVE
+	SKIPE DTQ%XC(PKT)	;Is current packet in the DTQ queue
+	  JRST[	MOVE TAC1,[PUSHJ P,PUPGIV]	;Yes, arrange for it to be
+		MOVEM TAC1,DTQ%XC(PKT)	;discarded after being uselessly sent
+		JRST PUPEA3 ]
+	PUSHJ P,PUPGIV		;Discard packet we got acknowledge for
+;	\ /
+PUPEA3:	SKIPN PKT,TAC		;See if this is the last packet.
+	  JRST PUPEA8		;  Yup.  Flush list pointer and wake user
+	HRRM PKT,PUPOLS(DDB)	;It isn't.  Update front of queue
+	SOSG PUPOCN(DDB)
+	  PUSHJ P,CNTBUG
+;	TRNE IOS,TMO		;Have we timed out?
+;	  POPJ P,		;  Yes, don't start another packet
+	LDB TAC,RFNMTP		;Reset timeout
+	MOVEM TAC,PUPTMO(DDB)
+	MOVE TAC,PUPNMA(DDB)	;Max message allocation
+	SUB TAC,PUPOCN(DDB)	;Less number queued gives number we can add to queue
+	ASH TAC,1		;Divide (sic) by free space fraction required
+	CAML TAC,PUPNMA(DDB)	;Do we have enough free space?
+	  PUSHJ P,PUPWK1	;  Yes, let user proceed.
+	JRST EFTOR1		;Queue packet and reset retry interval
+;	---
+
+;This is an ACK for an EFTPEnd packet.  Send second courtesy End
+PUPEA5:	CAIE TAC,BS%EEN		;Better be an EFTPEnd
+	  PUSHJ P,PUPBUG	;  Ooops!
+	HRRZ TAC,DTQ%OL(PKT)	;Check for more list
+	JUMPE TAC,PUPEA6
+	PUSHJ P,PUPBUG		;Something past EFTPEnd in PUPOLS(DDB)
+PUPEA6:	LDB TAC,PUPID		;Increment PUPID
+	ADDI TAC,1
+	DPB TAC,PUPIDL		;Just change ID and nothing else
+	PUSHJ P,PUPSXM		;Recompute checksum of previous EFTPEnd packet
+	MOVE TAC,[PUSHJ P,PUPGIV]	;Discard upon completion
+	EXCH TAC,DTQ%XC(PKT)	;Get old one to see if we're already enqueued
+	JUMPN TAC,PUPEA7	;Don't queue it twice!!!
+	PUSHJ P,ENOUTQ		;Queue another END
+	  PUSHJ P,PUPGIV	;  Forget about it the courtesy
+PUPEA7:	TDO IOS,[XWD IOEND,IODEND]	;Set EOF
+	MOVSI TAC,CLSR
+	IORB TAC,PUPSTB(LNK)
+	TDZ IOS,[XWD CLSW!BLOKW,0*BLOK]	;Clear two possible wait conditions
+	JRST PUPEA9		;Now, wake user
+;	---
+;This is the last packet in output list for EFTP.  Wake user
+PUPEA8:	TDZ IOS,[XWD BLOKW,0*BLOK]	;No longer blocking on output
+PUPEA9:	SETZM PUPOLS(DDB)	;No longer have an output list
+	SOSE PUPOCN(DDB)
+	  PUSHJ P,CNTBUG
+	PUSHJ P,PUPWK1		;Now, wake user if needed
+	POPJ P,			;Please don't optimize to JRST PUPWK1
+;	---
+
+;EFTP End received
+PUPEEN:	LDB TAC1,PUPID		;Get ID of this packet
+	SUB TAC1,PUPRID(DDB)	;Compare against what we're expecting
+	JUMPN TAC1,PUPED1	;Go discard it, it doesn't match
+	MOVSI TAC,CLSR		;Indicate we've received an End
+	TDNE TAC,PUPSTB(LNK)	;Is this the second End?
+	  JRST PUPEN2		;  Yes, we're done (code shared w/ BSP EndReply)
+	IORB TAC,PUPSTB(LNK)
+	PUSHJ P,RRETRY		;Reset retry code.  Don't worry about old retry
+	  %EENRR		;  code, it will be woken by IODEND anyway.
+	  CLSTP
+	MOVEI TAC,BS%EAC	;Send an EFTPAck
+	AOS TAC1,PUPRID(DDB)	;Advance ID
+	DPB TAC1,[POINT 16,PUPRID(DDB),35]	;MOD 2↑16 for EFTP
+	LDB TAC1,PUPID		;Now, back to first for Ack
+	JRST PUPEE3		;The rest is the same as BSP End
+
+;Abort received.  Flush output queue and set error
+PUPEAB:	LDB TAC,PUP1DA		;Pickup error code
+	SETO TAC1,		;Assume not a delaying function
+	CAIN TAC,EFMDLY		;Medium length delay?
+	  MOVEI TAC1,24		;  Wait 20 sec. (Note: This stuff isn't documented.)
+	CAIN TAC,EFSUSP		;Suspend transmission?
+	  MOVEI TAC1,50		;  Wait 40 sec.
+	JUMPL TAC1,PUPEB2	;Jump if not just a delay
+	IMULI TAC1,PUPSEC
+	HRRZ TAC,PUPCSB(DDB)	;Is this the expected retry routine?
+	CAIN TAC,EFTORT
+	  HRLM TAC1,PUPCSB(DDB)	;  Yes, reset retry code
+	JRST PUPEB4		;Let user know what happened.
+;	---
+PUPEB2:	TRO IOS,IODERR!IODEND	;Set end and error
+	PUSHJ P,PUPWK1
+	PUSHJ P,PUPOFL		;Flush output list
+	LDB TAC,PUP1DA		;Pickup error code again
+	MOVEI TAC1,1
+	LSH TAC1,(TAC)
+;;;	TRNE TAC1,1⊗EFRBSY!1⊗EFNOSP	;Is it an interesting error?
+  printx Ignore EFTP abort code 4 for now.  This really should get fixed.
+	TRNE TAC1,1⊗4!1⊗EFRBSY!1⊗EFNOSP	;Is it an interesting error?
+	  JRST PUPEB4		;  No, skip message
+;printx Print text of EFTPAbort someday
+	PUPMSG(NEA,EB3,<EFTP Abort>,<<Code,TAC>>)
+;	\ /	  ( ↑ gets us to PUPEB3)
+PUPEB3:	SKIPA
+PUPEB4:	AOS PUPNEA
+	TROE IOS,IODMRK		;Has one of these been queued already?
+	  JRST PUPDSC		;  Yes, just flush it
+	SETZ TAC1,		;Does not occupy space on input like data does
+	PUSHJ P,PUPIQ2		;Queue packet freely
+	POPJ P,
+;	---
+
+;Make a specific connection when Data or Ack is received
+EFTSET:	TRNE TAC1,177777	;Low order bits had better be zero!
+	  JRST PUPDSC		;  Lose!  Assume it's stale
+	MOVEM AC2,PUPHST(LNK)	;Complete the link
+	MOVEM AC3,PUPFSK(LNK)
+	MOVEM TAC,PUPLSK(LNK)
+	MOVSI TAC,RFCS!RFCR
+	IORM TAC,PUPSTB(LNK)
+	LDB TAC,PUPTYP		;Get type of PUP
+	CAIE TAC,BS%EDA		;Data packet received?
+	  POPJ P,		;  No
+	MOVEM TAC1,PUPRID(DDB)	;Establish PUP ID
+	POPJ P,
+
+;Queue packet on input list		;⊗ PUPIQ PUPIQ1 PUPIQ2 PUPIQ3 PUPIQ4 PUPIQ5 PUPLGR
+
+;Put packet in PKT on the input list for a DDB.  Skip if successful
+
+PUPIQ:	LDB TAC1,PUPLEN		; Get size of Pup
+	SUBI TAC1,$PUPMN	; Minus overhead bytes
+	JUMPG TAC1,PUPIQ2	; Accept packet with non-zero packet size
+	POPJ P,
+;	---
+;Entry point for queueing any kind of packet
+PUPIQ1:	LDB TAC1,PUPLEN		; Get size of Pup
+	SUBI TAC1,$PUPMN	; Minus overhead bytes
+PUPIQ2:	SKIPG DDB		; is there a DDB there?
+	  PUSHJ P,PUPBUG	; oops, somebody blew it!
+	AOSG TAC,PUPICN(DDB)	; bump message counter
+	  PUSHJ P,PUPBUG	; counter was negative?
+	CAMLE TAC,PUPNMA(DDB)	; more packets on list than we will allow?
+	  JRST PUPIQ5		;   yes, backup and try again later
+	LSH TAC1,3		; Convert byte to bit count
+	ADD TAC1,PUPIBC(DDB)	; Update number of bytes in input list
+	CAMLE TAC1,PUPNBA(DDB)	; Will it fit?
+	  JRST PUPIQ5		;   No, flush it for now
+	MOVEM TAC1,PUPIBC(DDB)	; Update number of bytes in input list
+	SETZM DTQ%LK(PKT)	; break any old KLSER links
+	SKIPN PUPILS(DDB)	; any input list already?
+	 JRST [	CAIE TAC,1	; no - check count
+		  PUSHJ P,CNTBUG	; packet count disagrees with list?
+		HRRM PKT,PUPILS(DDB)	; start a list with this packet
+		JRST PUPIQ3]		; continue with waking up user
+	CAIG TAC,1		; check count
+	  PUSHJ P,CNTBUG	; packet count disagrees with list?
+	HLRZ TAC,PUPILS(DDB)	; get list tail pointer
+	SKIPE DTQ%LK(TAC)	; verify this is the list tail
+	  PUSHJ P,PUPBUG	; tail points to a packet with a next?
+	HRRZM PKT,DTQ%LK(TAC)	; link new packet to tail
+PUPIQ3:	HRLM PKT,PUPILS(DDB)	; and make this message the tail
+	LDB J,PJOBN		; get job # of DDB's owner
+	JUMPE J,PUPIQ4		; can't happen it says here
+	MOVSI TAC1,INTINP	; feed it INP interrupt
+	TDNN TAC1,JBTIEN(J)	; enabled for this job?
+	 JRST PUPIQ4		; no, still wake up user
+	IORM TAC1,JBTIRQ(J)	; cause job to get interrupt
+	TDNE TAC1,JBTMSK(J)	; any bit masked on?
+	 SETOM INTREQ		; yes, run interrupts
+PUPIQ4:	TLNE IOS,INPW		; Waiting for input?
+	PUSHJ P,PUPWAK		;   Yes, wake up user
+	AOS (P)			; Success!
+	POPJ P,			; process next packet
+
+;Received packet with input queue full.  Perhaps we should log these someday
+;for BSP connections, and perhaps ask for pause from EFTP connections.
+PUPIQ5:	SOS PUPICN(DDB)		; yes - set count back
+	AOS PUPILF		; Count number of times this happens
+	POPJ P,			; and take failure return
+
+;  Pup logger.  Tries to fire up server, if fireup queue is full it retries
+; every tick until a slot opens up.
+
+PUPLGR:	HGMAC(43)
+	HRRM DAT,PUPSVR		; select Pup server desired
+	MOVSI TAC,REAPRV!WRTPRV	; FTP server gets extra privs
+	ANDCAM TAC,PUPPRV
+	CAME DAT,[PUPLGR,,'007']; MAIL server? (Temporary - TVR/May81)
+	CAMN DAT,[PUPLGR,,'003']; FTP server?
+	 IORM TAC,PUPPRV
+	CAMN DAT,[PUPLGR,,'131']; Telnet gateway?
+	 IORM TAC,PUPPRV
+	MOVEI TAC,PUPSVR	; pointer to Pup server fireup block
+	PUSHJ P,FIREUP		; fire up server, skip if successful
+	 JFCL			; don't fill up clock queue -- flush request
+repeat 0,<	;;don't fill up the clk queue over silly servers. -- ME
+	PUSHJ P,FIREUP		; fire up server
+	 JRST [	SYSPIFF		; failed, try again next tick
+		IDPB DAT,CLKQ
+		SYSPIN
+		POPJ P,]
+>;repeat 0
+	POPJ P,
+;Queue packet on output list		;⊗ PUPOQ PUPOQ1 PUPOQ2 PUPOQ3 PUPOQ4 PUPOFL PUPOF2 PUPOF3
+
+;Attempt to queue the PUP on the output list for a DDB.
+;TAC1 contains instruction for DTQ%XC if this packet is queued.
+;Skips if allocations permit, and returns next to last packet in TAC
+
+PUPOQ:	LDB TAC,PUPLEN		;Calculate byte count
+	SUBI TAC,$PUPMN
+	ASH TAC,3		;IMPSER compatability
+	OFFPUP			;Put into output queue
+	CAMG TAC,PUPBAL(DDB)	;Will it fit?
+	SKIPG PUPMAL(DDB)	;Is there enough space?
+	  JRST PUPONJ		;  No, forget it
+	MOVN TAC,TAC		;We want to subtract this from PUPBAL
+	ADDM TAC,PUPBAL(DDB)	;Update allocation.
+	SOSA PUPMAL(DDB)	;Decrement packet (msg) allocation
+;	\ / (skips)
+;Entry point for queueing without checking allocations
+PUPOQ1:	  OFFPUP
+	AOSG PUPOCN(DDB)	;Bump message counter
+	  PUSHJ P,PUPBUG	;  Counter was negative?
+	HRLZM DDB,DTQ%OL(PKT)	;Point packet back at DDB
+	HLRZ TAC,PUPOLS(DDB)	;Get list tail pointer
+	JUMPE TAC,PUPOQ3	;Jump if empty
+	HRRM PKT,DTQ%OL(TAC)	;Link new packet to tail
+	HRLM PKT,PUPOLS(DDB)	;and make this message the tail
+	ONPUP
+PUPOQ2:	JRST CPOPJ1		;Successful return.
+;	---
+PUPOQ3:	MOVEM PKT,PUPOLS(DDB)	;New list header
+	HRLM PKT,PUPOLS(DDB)
+	MOVEM TAC1,DTQ%XC(PKT)	;Assume we'll succeed in queueing it
+	CAME TAC1,[PUSHJ P,PUPBQN]	;Are we doing multiple packet output?
+	  JRST PUPOQ4		;  No
+	MOVSI IOS,IODTQD	;Mark as in DTEQ
+	IORB IOS,DEVIOS(DDB)
+;	\ /
+PUPOQ4:	ONPUP
+	PUSHJ P,ENOUTQ		;Enqueue new packet for transmission
+	  SKIPA			;  Failed
+	  JRST CPOPJ1		;  Succeeded.  We're done.
+	MOVSI IOS,IODTQD	;We were wrong about packets in DTEQ
+	ANDCAB IOS,DEVIOS(DDB)
+	SETZM DTQ%XC(PKT)
+	JRST CPOPJ1 		;Let retry code worry about it
+
+;
+;Flush output queue
+;
+PUPOFL:	PUSH P,PKT		;Save current packet while flushing output queue
+	OFFPUP			;Lock out interrupts while getting list
+	HRRZ PKT,PUPOLS(DDB)	;Get first packet in list
+	SETZM PKT,PUPOLS(DDB)	;Don't give anyone else access to list
+	ONPUP			;Let any interrupts happen that might
+	JUMPE PKT,PUPOF3	;None
+PUPOF2:	OFFPUP			;Disable interrupts while checking DTE queue
+	SKIPN DTQ%XC(PKT)	;Is packet in DTE output queue?
+	  JRST[	ONPUP
+		HRRZ TAC,DTQ%OL(PKT)	;No, save pointer to next packet
+		PUSHJ P,PUPGIV		;Now just release it
+		SKIPE PKT,TAC		;Is there another packet?
+		   JRST PUPOF2		;  Yes, process it as well
+		JRST PUPOF3 ]
+	MOVE TAC,[PUSHJ P,PUPGIV]	;Packet to be flushed after transmission
+	MOVEM TAC,DTQ%XC(PKT)
+	HRRZ PKT,DTQ%OL(PKT)	;Make sure we get the next packet before let
+				;interrutps happen which might free packet
+	ONPUP			;Allow interrupts again
+	JUMPN PKT,PUPOF2	;Repeat until end of list
+PUPOF3:	POP P,PKT
+	POPJ P,
+
+;Dump a losing Pup on the CTY		;⊗ PUPDMP Data PUPDM1
+
+PUPDMP:
+IFE FTCCRMA,<	;for now...
+	SKIPE PUPTEL		;skip if suppressing this stuff
+>;IFE FTCCRMA
+	AOSLE PPERCN		;reduce max msg count again, since long msg
+	 JRST PUPDSC
+	PUSHACS
+	PUSHJ P,DISMES
+	 ASCIZ/Losing 11 msg: LK: /
+	MOVE PKT,-17+PKT(P)
+	MOVE TAC,DTQ%LK(PKT)
+	PUSHJ P,DISOCH
+	PUSHJ P,DISMES
+	 ASCIZ/  WC: /
+	MOVE PKT,-17+PKT(P)
+	MOVE TAC,DTQ%WC(PKT)
+	PUSHJ P,DISOCH
+	PUSHJ P,DISMES
+	 ASCIZ/  MS: /
+	MOVE PKT,-17+PKT(P)
+	MOVE TAC,DTQ%MS(PKT)
+	PUSHJ P,DISOCH
+	PUSHJ P,DISMES
+	 ASCIZ/
+Data: /
+	MOVE PKT,-17+PKT(P)
+	LDB AC2,QMPWDC		; get msg from -11
+	CAILE AC2,=20		; dump up to 20 words
+	 MOVEI AC2,=20
+	PUSH P,QMPWDC
+PUPDM1:	ILDB TAC,(P)
+	PUSHJ P,DISLOC
+	MOVEI TEM," "
+	PUSHJ P,DISTYO
+	MOVE PKT,-20+PKT(P)
+	SOJG AC2,PUPDM1
+	ADJSP P,-1
+	PUSHJ P,DISCRLF
+	POPACS
+	JRST PUPDSC
+;⊗ PUPDSP
+
+;------------------------------------------------------------------------------
+;
+;	UUO level routines
+;
+;------------------------------------------------------------------------------
+
+; UUO dispatch table
+
+	JRST PUPIOS		; Set IOS
+	JRST PUPCLR		; DDB flush
+	JRST PUPSET		; DDB create
+	JRST PUPINI		; initialize
+	JRST PUPHNG		; hung timeout
+↑PUPDSP:JRST PUPRLS		; RELEASE
+	JRST PUPCLS		; CLOSE output
+	JRST BUFO		; buffered OUTPUT
+	JRST BUFI		; buffered INPUT
+	JRST UUOERR		; ENTER
+	JRST UUOERR		; LOOKUP
+	JRST DMPO		; dump mode OUTPUT
+	JRST DMPI		; dump mode INPUT
+	JRST UUOERR		; USETO
+	JRST UUOERR		; USETI
+	JRST UUOERR		; UGETF
+	JRST UUOERR		; RENAME
+	POPJ P,			; CLOSE input
+	JRST UUOERR		; UTPCLR
+	JRST PUPMTP		; MTAPE
+;Initialization, create/destroy DDB	;⊗ PUPINI PUPSET PUPCLR PUPCR1
+
+; System initialization
+
+↑PUPINI:SETZM PUPCBG		; clear Puppy core
+	MOVE TAC,[PUPCBG,,PUPCBG+1]
+	BLT TAC,PUPCEN
+	MOVNI TAC,NPPMSS	; set number of Pup messages allowed per minute
+	MOVEM TAC,PPERCN
+	MOVEI AC3,3		; Make dummy routing table
+	MOVEM AC3,ROUSIZ
+	PUSHJ P,FSGET
+	  PUSHJ P,PUPBUG	;   No way to recover here!
+	SETZM (AC1)		; Empty routing table.  PUPs for local net get
+	SETZM 1(AC1)
+	SETZM 2(AC1)
+	PUSHJ P,SETRO2		; sent for free
+IFN FTF2,<
+;;	SETZM .PUPON		; Start with things turned off.  Microcode may
+;;				; not be loaded yet.
+	SKIPE .PUPON		; Did ONCE succeed in loading microcode?
+	  PUSHJ P,FNTINI	;   Yes, initialize the rest of the device
+>;IFN FTF2
+	POPJ P,
+
+; Create a PUP: DDB
+
+↑PUPSET:MOVEI AC3,PUPDLN	; make a block
+	PUSHJ P,FSGET		; get FS block
+	  JRST[	ADJSP P,-3
+		JRST DLYCM1]
+	HRRI DDB,DDBSKW(AC1)	; point DDB at device name
+	HRLI AC1,PUPDDB-DDBSKW	; copy DDB from prototype
+	BLT AC1,PUPDLS(DDB)
+	MOVEI AC1,DEVIOS(DDB)	; set up SPT
+	MOVEM AC1,DEVSPT(DDB)
+	HRLM DDB,PUPDDB+DEVSER	; link in DDB chain
+	POPJ P,
+
+; Flush a PUP: DDB
+
+↑PUPCLR:SETZB IOS,DEVIOS(DDB)	; flush IOS
+	PUSHJ P,PUPCR0
+	JUMPE AC1,CPOPJ		; DDB not found? (shouldn't happen)
+	SUBI AC1,DDBSKW		; return to FS
+	PUSH P,TAC1		; save previous DDB on stack in case debugging
+	PUSHJ P,FSGIVE
+	POP P,TAC1
+	POPJ P,
+
+;Delete DDB from DDB chain (but don't release it yet)
+PUPCR0:	MOVEI AC1,PUPDDB	; find DDB
+PUPCR1:	MOVE TAC1,AC1
+	HLRZ AC1,DEVSER(TAC1)
+	JUMPE AC1,CPOPJ
+	CAIE AC1,(DDB)
+	 JRST PUPCR1
+	MOVE DDB,DEVSER(AC1)	; delete DDB from chain
+	HLLM DDB,DEVSER(TAC1)
+	POPJ P,
+;Set IOS, check connection type		;⊗ PUPIOS STSTYP STSTY2 ADRRT %ADRRT
+
+↑PUPIOS:PUSHJ P,STSTYP		;Get mode of operation
+	SKIPE PUPMOD(DDB)	;Is there a current mode?
+	CAMN AC1,PUPMOD(DDB)	;Same?
+	  POPJ P,		;  Yes, we're OK
+	JSP TAC,UUOMES
+	  ASCIZ\Can't change I/O modes for PUP.  UUO\
+
+; Convert I/O status to mode bit
+STSTYP:
+IFE FTF2,< SKIPE ENHADR >	;Do we know our address yet?
+IFN FTF2,< SKIPE .PUPON >	;Are we up yet?
+	  JRST STSTY2		;  Yes
+	PUSHJ P,SRETRY		;Set output retry routine
+	  %ADRRT
+	  RFCTP
+	MOVSI IOS,DEVSBB	;Set wait state
+	IORB IOS,DEVIOS(DDB)
+	PUSHJ P,PUPWT1		;Wait for Ethernet to be ready
+	TRNN IOS,TMO		;Timed out?
+	  JRST STSTYP		;  No, see if we're ready now.
+	JSP TAC,UUOMES
+IFE FTF2,<  ASCIZ\Device PUP: Console-11 not responding.  UUO\  >;IFE FTF2
+IFN FTF2,<  ASCIZ\Device PUP not initialized.  UUO\		>;IFN FTF2
+;	---
+STSTY2:	LDB AC1,PIOMOD		;Get mode bits
+	CAIE AC1,IB-1		;(No name for this mode)
+	CAIN AC1,SD		;How about packet mode?
+	  MOVSI AC1,PKTMOD
+	CAIE AC1,DR		;Dump record
+	CAIN AC1,IB		;or image binary?
+	  MOVSI AC1,EFTMOD	;  Yes, EFTP mode
+	TLNN AC1,-1		;None of the above?
+	  MOVSI AC1,BSPMOD	;  Yes, use BSP connection
+	POPJ P,			;Return what ever type they want
+
+;Wait for Ethernet to be initialized
+ADRRT:
+IFE FTF2,< SKIPE ENHADR >	;Do we know our address yet?
+IFN FTF2,< SKIPE .PUPON >	;Are we up yet?
+	  JRST PUPWK1		;  Yes, wake up waiting user.
+	TRNE IOS,TMO		;Timed out?
+	  POPJ P,		;  Yes, just go away
+	JRST EFTOR2		;Reset retry count
+
+%ADRRT:	XWD PUPSEC/4,ADRRT	;Retry every 1/4 second.
+;INPUT UUO				;⊗ BUFI BUFI1 DMPI TMOCHK
+
+; BUFFERED MODE INPUT
+
+BUFI:	HRRZ TAC1,DEVIAD(DDB)	; ADDRESS OF USER'S BUFFER
+	XCTR XR,[HLRZ TAC,(TAC1)]; TAC←BUFFER SIZE
+	ANDCMI TAC,400000	; IGNORE BUFFER USE BIT
+	MOVEI AC1,(TAC1)
+	ADDI AC1,(TAC)		; ADDRESS OF LAST DATA WORD IN BUFFER
+	XCTR XRW,[MOVES (AC1)]	; ADDRESS CHECK
+	SUBI TAC,1		; REDUCE BUFFER WC TO SKIP 1 OVERHEAD WORD
+	ADDI TAC1,2		; ADVANCE TO POINT TO FIRST DATA WORD.
+	PUSHJ P,BUFI1		; DO THE INPUT.
+	  JRST TMOCHK		; ERROR OR EOF
+	HRRZ AC2,DEVIAD(DDB)	; PICK UP BUFFER ADDRESS
+	XCTR XW,[MOVEM TAC,1(AC2)] ; SET WORD COUNT IN BUFFER
+	PUSHJ P,ADVBFF		; ADVANCE THE BUFFER
+	  cai			;;; (sigh)
+;;;    Only attempts to transfer one buffer per call on BUFI.  If you try
+;;;    to change this, then you'll have to deal with marks somehow.
+;;;	  POPJ P,		;   Next buffer is full.
+;;;	SKIPE PUPICN(DDB)	; Any packets on the input list?
+;;;	  JRST BUFI		;   Yes, go process it.
+	POPJ P,			; No, return to user.
+
+BUFI1:	LDB AC2,PUPCDS		; Get mode
+	JRST .+1(AC2)		; And dispatch
+	  JRST PKTIN		;   PKTMOD
+	  JRST EFTPIN		;   EFTMOD
+	  JRST BSPIN		;   BSPMOD
+	  JRST PUPBUG		;   Illegal (EFTMOD∨BSPMOD)
+IFN FTETHX,<  JRST XPKTIN >	;   XPKMOD
+IFE FTETHX,<  JRST PUPBUG >	;   Illegal
+
+; DUMP MODE INPUT
+
+DMPI:	PUSHJ P,DMPCMD		; FETCH AND CHECK NEXT IOWD FROM COMMAND LIST
+	 POPJ P,		; END OF COMMAND LIST
+	MOVN TAC,TAC		; TAC←POSITIVE WC.
+	TLZE TAC1,-1		; MAKE SURE THIS ISN'T WRITE PROTECTED
+	 JRST UADRER		; ADDRESS ERROR - CAN'T INPUT TO WRITE PROT AREA
+	PUSHJ P,BUFI1		; DO AN INPUT
+	  SKIPA
+	  AOJA UUO,DMPI		; CHECK FOR MORE COMMANDS
+;	\ /
+;*** This is probably should be in PKTIWT
+TMOCHK:	TRNN IOS,TMO		; TIMED OUT?
+	  POPJ P,		;   NO, IT'S FINE
+	MOVEI IOS,IODERR	; NEED TO SET ERROR BIT FOR UUOCON.
+	IORB IOS,DEVIOS(DDB)
+	POPJ P,
+
+;OUTPUT UUO				;⊗ BUFO BUFO2 BUFO1 BUFO3 OUTDSP DMPO
+
+; BUFFERED MODE OUTPUT
+
+BUFO:	HRRZ TAC1,DEVOAD(DDB)	; PICK UP OUT BUFFER ADDRESS
+	XCTR XR,[SKIPL (TAC1)]	; IS THIS BUFFER IN USE?
+	  JRST BUFO2		;   NO, TRY ANOTHER
+	XCTR XR,[MOVE J,1(TAC1)] ;PICK UP WORD COUNT and byte position
+	HLRZ AC2,DEVBUF(DDB)	;GET ADDRESS OF BUFFER HEADER
+	XCTR XLB,[LDB AC2,[POINT 6,1(AC2),11]] ;USER'S BYTE SIZE.
+	JUMPE AC2,ADRERR	;Address check if zero byte size
+	PUSHJ P,ITMCNT		;Count number of bytes in buffer
+	MOVEI TAC,(J)		;Get result where we need it
+	HRRZ TAC1,DEVOAD(DDB)	;Get buffer address
+	ADDI TAC1,2		; MOVE POINTER TO DATA AREA
+	JUMPE TAC,BUFO2		; MAKE SURE THERE IS DATA TO SEND.
+	PUSHJ P,BUFO1		; DO TRANSFER USING USER ADDR IN TAC1 AND WD CT IN TAC
+	  JRST TMOCHK		;   SOME KIND OF ERROR
+BUFO2:	PUSHJ P,ADVBFE		; ADVANCE BUFFER
+	  POPJ P,
+	JRST BUFO		; TRY FOR ANOTHER ONE
+
+;Dispatch on I/O mode.  Note here we break up buffers which are too big to fit
+;in one packet.  While $PUPMD is fine for 3Mb and 10Mb ethernet, if a host talking
+;PUP encapsulated over Chaosnet can't have full sized packets.   TVR/Apr86
+BUFO1:	LDB AC2,PUPCDS		;Get mode
+	JUMPE AC2,OUTDSP(AC2)	;If packet mode, don't split packets
+	CAMLE TAC,PUPPMX(DDB)	;Is there too much for one packet?
+	CAILE AC2,2		;And is it either BSP or EFTP?
+	  JRST OUTDSP(AC2)	;  No, just send it
+	PUSH P,TAC		;Save count and address
+	PUSH P,TAC1
+	MOVE TAC,PUPPMX(DDB)	;Byte count for this transfer
+	TRZ TAC,3
+	PUSH P,TAC
+	PUSHJ P,OUTDSP(AC2)	;Do this transfer
+	  JRST BUFO3		;  Some sort of error
+	POP P,AC2
+	POP P,TAC1
+	MOVE TAC,AC2		;Update address
+	LSH TAC,-2
+	ADD TAC1,TAC
+	POP P,TAC
+	SUB TAC,AC2		;And count
+	JRST BUFO1		;OK, now do next transfer
+
+BUFO3:	POP P,AC2
+	POP P,TAC1		;Flush stack (indicating how much was transferred)
+	JRST TPOPJ
+
+OUTDSP:	  JRST PKTOUT		;   PKTMOD
+	  JRST EFTPOUT		;   EFTMOD
+	  JRST BSPOUT		;   BSPMOD
+	  JRST PUPBUG		;   Illegal (EFTMOD∨BSPMOD)
+IFN FTETHX,<  JRST XPKOUT >	;   XPKMOD
+IFE FTETHX,<  JRST PUPBUG >	;   Illegal
+
+; DUMP MODE OUTPUT
+
+DMPO:	PUSHJ P,DMPCMD		;FETCH NEXT IOWD.
+	 POPJ P,		;END OF COMMAND LIST
+	MOVN TAC,TAC		;TAC←POSITIVE WC
+	LSH TAC,2		;Make into byte count
+	HRRZ TAC1,TAC1		;TAC1←USER-RELATIVE STARTING ADDRESS
+	PUSHJ P,BUFO1		;DO SOME KIND OF TRANSFER
+	  JRST TMOCHK		;   SOME KIND OF ERROR
+	AOJA UUO,DMPO		;DO NEXT COMMAND
+
+;BSP and EFTP mode input			;⊗ BSPIN EFTPI2 BSPIN1 EFTPIN BSPIN2 BSPIN3 BSPIN4
+;
+;TAC1:	User address of data
+;TAC:	Word count
+;
+;All the special stuff is handled at interrupt level.  All we have to do is to
+;bless the packet for length and being data, then pass it to the user.
+BSPIN:	PUSHJ P,PKTIWT		;Wait for a packet to arrive.
+	  POPJ P,		;  Failed for some reason
+	CAIE AC2,BS%DAT		;Data or AData?
+	CAIN AC2,BS%ADA
+	  JRST BSPIN2		;  Yes, use it
+	CAIE AC2,BS%MRK		;Mark or AMark?
+	CAIN AC2,BS%AMA
+	  JRST BSPIN1
+;	\ /
+;Bad packet type found on input list.
+EFTPI2:	PUSHJ P,PUPCHK		;Anything else shouldn't be in this queue!
+	PUSHJ P,PUPREL		;Flush packet
+	JRST BSPIN		;And try again, perhaps in futility.
+;	---
+;Mark seen
+BSPIN1:	MOVEI IOS,IODMRK	;Set mark status
+	IORB IOS,DEVIOS(DDB)
+	POPJ P,			;Failure return.  Don't flush packet
+;	---
+
+;EFTP input entry point
+;
+;Same as BSP mode except packet type is different.
+EFTPIN:	PUSHJ P,PKTIWT		;Wait for packet to arrive.
+	  POPJ P,		;  Some kind of error
+	CAIE AC2,BS%EDA		;Only one type is permissible here.
+	  JRST EFTPI2		;  Wrong!
+;	\ /
+;We have a packet of the proper type for BSP or EFTP.  Check its length for
+;reasonableness
+BSPIN2:	SUBI AC3,$PUPMN		;Subtract out size of header
+	MOVEI TEM,PUP1DW(PKT)	;Point at data
+	JUMPG AC3,BSPIN3	;Watch for empties and other bad things
+	PUSHJ P,PUPCHK		;How did a null length packet get queued???
+	JRST BSPIN		;Oh, well...
+;	---
+;Check packet's length against user's buffer size
+BSPIN3:	MOVEI AC2,(AC3)		;Save low order bits of byte count
+	ANDI AC3,3
+	ADDI AC2,3		;Compute word count
+	LSH AC2,-2
+	CAMG AC2,TAC		;Is it reasonable?
+	  JRST BSPIN4		;  Yes
+;; Alas, that bit has been recycled...
+;;	MOVEI IOS,IOBKTL	;Set length error
+;;	IORB IOS,DEVIOS(DDB)
+	MOVEI AC2,(TAC)		;Set to user buffer size and forget the rest!
+	SETZ AC3,		;Forget the fragment
+;	\ /
+;Now length is reasonable, copy it to user's buffer and return.
+BSPIN4:	MOVEI TAC,(AC2)		;Save updated word count
+	HLL TAC,CBCTAB(AC3)	;Set LH of byte ptr to indicate last byte
+				;(table in LOWCOR)
+	MOVEI AC2,(TAC)		;Point to end of user's buffer
+	ADDI AC2,-1(TAC1)
+	HRLI TAC1,(TEM)		;Copy data into user memory
+	XCTR XBLTW,[BLT TAC1,(AC2)]
+	PUSHJ P,PUPREL		;Now, flush packet.
+	JRST CPOPJ1		;Skip return means success
+;	---
+
+IFN FTCCRMA,<	;Where in LOWCOR should this go?
+;Table containing the left half of byte pointers to indicate byte position
+CBCTAB:	POINT 8,0,31
+	POINT 8,0,7
+	POINT 8,0,15
+	POINT 8,0,23
+>;IFN FTCCRMA
+;  Packet and experimental mode input	;⊗ PKTIN XPKTIN XPKin1
+;
+; Packet mode input
+;
+;We take a raw packet, bless it for length and being data, then pass it
+;to the user.  Much code is shared with BSP and EFTP input
+PKTIN:	PUSHJ P,PKTIWT		;Wait for a packet to arrive.
+	  POPJ P,		;  Failed for some reason
+	MOVEI TEM,PUP1HW(PKT)	;Point to beginning of header
+	SUBI AC3,2		;Exclude checksum
+	JUMPG AC3,BSPIN3	;Use the PUP size just as we get it!
+	PUSHJ P,PUPBUG		;Impossible packet length
+	POPJ P,
+;	---
+IFN FTETHX,<
+;
+; Experimental mode input
+;
+;We take a raw packet, which may or may not be a PUP packet, and pass it
+;to the user.
+XPKTIN:	PUSHJ P,PKTIW1		;Wait for a packet to arrive.
+	  POPJ P,		;  Failed for some reason
+IFE FTETH2,<	;This code might be flushed.  See long comment above EXPQ
+	push p,tac
+	hrrz tac,pupexd		;Do bugtrap for serial line stuff only
+	caie tac,(ddb)
+	  jrst xpkin1
+	push p,tac1
+	pushj p,pupcxm
+	ildb tac,tac1
+	came tac,tem
+	  pushj p,cxsbug
+	pop p,tac1
+xpkin1:	pop p,tac
+>;IFE FTETH2
+ifn ftsuai,<
+  printx  I think this is right for 3 Mb, but please check it.
+>;ifn ftsuai
+	MOVEI TEM,PUP1PW(PKT)	;Point to first word beyond overhead.
+	LDB AC3,QMPWDC		;Get size from -11
+	LSH AC3,1		;Convert -11 word count to byte count
+	JRST BSPIN3
+>;IFN FTETHX
+;  Wait for input			;⊗ PKTIWT PKTIW1 PKTIW2 PKTIW3 %LSNRT %INPRT %BS2RT %NOPRT
+
+;Bless connection and wait for a packet.  Skips if successful.
+;Packet should be returned by calling PUPREL. 
+;
+;Returns packet in PKT, type in AC2, and length in AC3.
+;Must not clobber TAC or TAC1.
+PKTIWT:	HRRZS DDB		;Don't get confused by a left half
+	SKIPGE LNK,PUPLNK(DDB)	;Get link index
+	  JRST NOELNK		;  No link exists
+	CAME DDB,PUPLDB(LNK)	; bug trap
+	  PUSHJ P,PUPBUG		; link table disagrees with DDB?
+PKTIW1:	TRNE IOS,IODERR!IODTER!IODEND!HDEAD!RSET!TMO
+				;Is connection closing or otherwise losing?
+	  POPJ P,		;  Let caller worry about it.
+	OFFPUP			;Watch race conditions
+	SKIPN PKT,PUPILS(DDB)	;Get first packet from input list
+	  JRST PKTIW2		;  None, wait for one
+	HRRZ PKT,PKT		;Flush left half
+	ONPUP			;Turn scanner back on
+	LDB AC2,PUPTYP		;Return type of packet in AC2
+	LDB AC3,PUPLEN		;and length in AC3
+	JRST CPOPJ1		;Skip return for success
+;	---
+PKTIW2:	MOVSI IOS,INPW!DEVSBB	;Indicate we're waiting
+	IORB IOS,DEVIOS(DDB)
+	ONPUP			;Turn scanner back on
+	LDB AC2,INPTP		;Get input timeout
+	JUMPE AC2,[PUSHJ P,SRETRY	;None, just make sure connection is alive
+		     %NULRT
+		     IDLETP
+		   JRST PKTIW3]
+	PUSHJ P,SRETRY		;Setup to timeout
+	  %INPRT
+	  INPTP
+PKTIW3:	PUSHJ P,PUPWT1		;Now, wait for something to happen
+IFN FTCCRMA,<
+..pwt2::	;See PUPWT1
+>;IFN FTCCRMA
+	JRST PKTIW1		;Back to try again
+;	---
+
+;No retry is really used for input and listen.  We just timeout
+%LSNRT::
+%INPRT::
+%BS2RT::
+%NOPRT:	0
+
+;  Remove packet from input list		;⊗ PUPREL PUPRE2 PUPRE3 XCTCHK XCTCH2
+
+; Return a packet on a DDB's input list to free storage
+;	MOVEI PKT,<address of top packet in list>
+;	PUSHJ P,PUPREL
+;	<return>
+; Calls PUPBUG if PUPICN disagrees with the length of PUPILS.
+
+PUPREL:	PUSH P,PKT		;Save packet to be flushed
+	PUSH P,TAC		;and an AC to use
+	move tac,pupils(ddb)	;Bugtrap
+	caie pkt,(tac)
+	  pushj p,pupchk
+	LDB TAC,PUPLEN		;Get length of packet
+	SUBI TAC,$PUPMN
+	LSH TAC,3		;Convert to bits
+	ADDM TAC,PUPHBA(DDB)	;Update for allocations for users
+	AOS PUPHMA(DDB)
+	MOVN TAC,TAC		;Now, update the one that counts
+	OFFPUP			;Don't allow DDB to be disturbed during delinking
+	ADDM TAC,PUPIBC(DDB)	;Update bit count with interrupts on
+	HRRZ PKT,DTQ%LK(PKT)	;Get next packet, if any
+	HRRM PKT,PUPILS(DDB)
+	JUMPN PKT,[ONPUP		;Jump if at least one left
+		   SOSG PUPICN(DDB)	;OK if this got increments at int. level
+		     PUSHJ P,CNTBUG	;  List count screwed up
+		   JRST PUPRE2]
+	SETZM PUPILS(DDB)	;No input left
+	SOSE PUPICN(DDB)	;Decrement and check count
+	  PUSHJ P,CNTBUG
+	ONPUP
+PUPRE2:	EXCH PKT,-1(P)		;Save new packet, if any.  Get back one to flush
+	SKIPN DTQ%XC(PKT)
+	  JRST[	PUSHJ P,PUPCHK
+		JRST PUPRE3]
+IFN FTETH2,<	;More of a dubious idea.
+	CONSO PI,77400		;UUO level?
+	  PUSHJ P,XCTCHK	;  Yes, check for bad things
+	  XCT DTQ%XC(PKT)	;Normally, flush old packet.  But, if from serial
+				;line, could be some kind of output completion
+				;action.
+>;IFN FTETH2
+IFE FTETH2,<
+	XCT DTQ%XC(PKT)
+>;IFE FTETH2
+PUPRE3:	POP P,TAC
+	POP P,PKT		;Return new one, if any
+	POPJ P,
+
+IFN FTETH2,<	;More of a dubious idea.
+;Check to see if it is safe to do DTQ%XC from UUO level.
+;Clobbers TAC, and possibly queues packet for interrupt level processing.
+XCTCHK:	HLRZ TAC,DTQ%XC(PKT)	;Get special instruction
+	CAIE TAC,(<PUSHJ P,>)	;Can it do anything bad?
+	  POPJ P,		;  No, don't worry about it
+	HRRZ TAC,DTQ%XC(PKT)	;Is it the usual call to PUPGIV
+	CAIN TAC,PUPGIV
+	  POPJ P,		;  Yes, that doesn't assume PUPOFF
+	AOS (P)			;Don't do XCT now
+	OFFPUP
+	AOSE PUPEXC
+	SETZM DTQ%LK(PKT)	;We're already removed this from old list (we hope)
+	MOVS TAC,PUPEXQ		;Get current tail, if any
+	JUMPN TAC,[HRRM PKT,DTQ%LK(TAC)	;Add to end of list
+		   HRLM PKT,PUPEXQ
+		   JRST XCTCH2]
+	MOVEM PKT,PUPEXQ	;Make new list
+	HRLM PKT,PUPEXQ
+	SKIPE PUPEXF		;Cause interrupt if none pending already
+	  JRST EXPOQ2
+	SETOM PUPEXF		;Set flag for interrupt level
+	CONO PI,2000+PUPON	;Cause interrupt in PUPCHN.
+XCTCH2:	ONPUP
+	POPJ P,
+
+>;IFN FTETH2
+;BSP mode output				;⊗ BSPOUT BSPOU2 BSPOU4 BSPORS
+;
+;TAC1:	User address of data
+;TAC:	Byte count
+;
+;Compute size of packet (in bytes, and bits).  Decide if packet can be
+;sent at this point, and if so, enqueue in the output queue in this DDB and
+;also the DTE queue if DDB's queue is empty.  If not, wait for allocation
+;to be received.
+BSPOUT:	HRRZS DDB		;Don't get confused by a left half
+	SKIPL LNK,PUPLNK(DDB)	;Get link index
+	  SKIPGE PUPHST(LNK)	;  Is this a listening link?
+	  JRST NOELNK		;  No link exists
+	CAME DDB,PUPLDB(LNK)	; bug trap
+	  PUSHJ P,PUPBUG	; link table disagrees with DDB?
+	TRNE IOS,IODERR!IODTER!IODEND!HDEAD!RSET!TMO
+				;Is connection closing or otherwise losing?
+	  POPJ P,		;  Let caller worry about it.
+	TLNE IOS,RFCW		;Are we waiting for connection?
+	  JRST NOELNK		;  Yes, error.
+	MOVE AC2,PUPSTB(LNK)	;Is connection half-closed?
+	TLNE AC2,CLSR
+	  JRST BSPOER		;  Yes, don't queue anything more
+	MOVEI AC2,(TAC1)	;Put address in safer place
+	SKIPN AC3,TAC		;Save byte count for PUP
+	  JRST BSPOWT		;  If no count, we don't have allocation. Just
+				;  wait and return
+	MOVEI TEM,BS%ADA	;Our new packet will be an AData packet. Next
+				;  to last will become a Data packet.
+;	\ /
+;We come here to try again after getting more allocation
+BSPOU2:	LSH TAC,3		;Convert to bit allocation
+	CAMG TAC,PUPBAL(DDB)	;Are there enough bits left?
+	SKIPG PUPMAL(DDB)	;and is there a message to send them in?
+	  JRST BSPOWT		;  No, wait for allocation
+	MOVE TAC,TEM		;Get type
+	MOVE TAC1,PUPSID(DDB)	;Send this packet, maybe
+	PUSHJ P,PUPMAK		;Make a PUP out of this data
+	  PUSHJ P,PUPBUG	;  FSGET should not fail at UUO level
+	PUSHJ P,PUPROU		;Route PUP to appropriate network
+	  JRST ROUFAI		;  Host inaccessable
+	MOVE TAC1,[PUSHJ P,PUPBQN]	;Code to advance to next buffer (see PUPBQN)
+	PUSHJ P,PUPOQ		;Check and update allocate, queue packet
+				;    if successful
+	  JRST BSPOWF		;  Lost. We have to flush the packet!!
+	ADD AC3,PUPSID(DDB)	;Update send ID
+	DPB AC3,[POINT 32,PUPSID(DDB),35]	;MOD 2↑32
+	AOS (P)			;Packet queued successfully (as far as we know)
+	JUMPE TAC,BSPORS	;Jump if our packet is the only thing in the queue.
+;	\ /
+;Here we change AData packets into Data packets!  We must do this very carefully
+;as the packet might be in the process of being transmitted by DTE!  It might be
+;possible to do this at interrupt level, but it seems easier to tie up scanner
+;channel during checksum.
+BSPOU4:		;This label is used for debugging only
+	MOVE PKT,TAC		;Make this the current packet
+	LDB TAC,PUPTYP		;Get type of packet
+	CAIE TAC,BS%ADA		;An AData packet?
+	  JRST BSPORS		;  No, don't mess with it.
+	PUSHJ P,PUPSXP		;Get byte pointer to checksum
+	LDB TEM,TAC1		;Save current checksum
+	MOVEI TAC,177777	;Invalidate checksum
+	DPB TAC,TAC1
+	MOVEI TAC,BS%DAT	;Now, we can change the type with impunity
+	DPB TAC,PUPTYP
+IFDEF TO11MA,<
+	CAMN AC1,TO11MA		;If this packet is in progress, wait before
+	  JRST[	PUSHJ P,WSCHED	;  giving it a good checksum.
+		JRST .-1 ]
+>;IFDEF TO11MA
+IFNDEF TO11MA,<
+;;; Need interlock on transmission when changing PUP type.
+;;;
+;;; Otherwise, a race would allow packets with bad checksums.  However,
+;;; the cross-section of this is very small, and probably acceptable.
+>;IFNDEF TO11MA
+;;Xerox's algorthm loses somehow???  [No, i just misunderstood it.    TVR/May86]
+;;	SUBI TEM,2*(BS%ADA-BS%DAT)	;Update checksum
+;;	SKIPGE TEM
+;;	  ADDI TEM,177777
+;;	DPB TEM,TAC1			;Now, set valid one
+	pushj p,pupcxm			;compute new checksum
+	idpb tem,tac1			;slightly different (sigh)
+;	\ /
+;Do retry in case packet doesn't make it or they're not ready.
+BSPORS:	PUSHJ P,SRETRY		;Setup retry routine
+	  %BSPORT
+	  RFNMTP
+	POPJ P,			;We won!
+;	---
+
+;  Wait and retry routines for BSP output;⊗ BSPOWF BSPOWT BSPOW2 BSPOW3 BSPOER PUPBQN BSPBQE BSPORT BSPOR2 PUPRTF PUPRT0 PUPRT1 %BSPORT BSPSRT BSPART %BSPART NULADA
+
+;We don't have enough allocation to send his packet, try again later
+;If we have nothing pending, then just send null AData packets until we get
+;a response or time out.  Otherwise, keep resending pending data/mark
+;packets (unless we get IQFULL errors, in which case we switch to null
+;AData packets until the next ACK comes).
+BSPOWF:	PUSHJ P,PUPGIV		;Flush the packet we uselessly created
+BSPOWT:	SKIPN PUPPMX(DDB)	;Any allocation yet?
+	  JRST[	MOVE IOS,[XWD DEVSBB!BLOKW,0*BLOK]	;Waiting for more allocation
+		JRST .+2]		;SKIPA 0, doesn't load an AC
+	  MOVSI IOS,DEVSBB!ALLW	;Waiting for initial allocation
+	SKIPE PUPOLS(DDB)	;Anything already pending?
+	  JRST BSPOW2		;  Yes, wait for it.
+	PUSH P,IOS		;Save reason for waiting.
+	PUSHJ P,SRETRY
+	  %BSPART		;Allocation retry routine
+	  ALLTP
+	POP P,IOS
+	PUSHJ P,PUPRT1		;Retry in next tic.
+	OFFPUP
+	JRST BSPOW3		;We definitely need to set new IO status 
+;	---
+BSPOW2:	OFFPUP
+	SKIPE PUPOLS(DDB)	;Anything already pending?
+BSPOW3:	  IORB IOS,DEVIOS(DDB)	;  Yes, it should make us wait.
+	ONPUP
+	PUSHJ P,PUPWT1		;Wait for allocation
+	MOVE TAC,PUPSTB(LNK)	;Is connection closing?
+	TLNN TAC,CLSR
+	TRNE IOS,IODERR!IODEND!HDEAD!RSET!TMO
+				;Or timed out?
+	  JRST BSPOER		;  Yes, return error status
+	TLNE IOS,ALLW!BLOKW	;Still waiting?
+	  JRST BSPOWT		;  Yes, wait some more
+	SKIPE TAC,AC3		;Setup byte count again
+	  JRST BSPOU2		;Now, try again
+	JRST CPOPJ1		;Nothing to output
+;	---
+BSPOER:	MOVEI IOS,IODERR	;We can't send this packet
+	IORB IOS,DEVIOS(DDB)
+	POPJ P,
+
+;Advance to next packet in list.  Called when packet has been sent to the
+;network. 
+;
+;CAUTION: DDB is NOT setup here.
+;
+;BSP output packets are queued onto PUPOLS(DDB) by PUPOQ, but PUPOQ only starts
+;output of the first packet when the queue begins as empty.  The subsequent
+;packets are transmitted by this code, which is normally called when transmission
+;of a Data/Mark packet is completed by the hardware.  Here we advance to the next
+;packet in the output list and transmit it until the end of the list is reached.
+;IODTQD indicates that this kind of transmission is in progress.  This process
+;is then restarted from the beginning of the output queue periodically by the
+;retry code until all of the queued packets are acknowledge or the connection
+;times out.  Note that other parts of PUPSER may modify this strategy, notably
+;PUPIQF.  This is an whole area is one where improvement may be necessary.
+PUPBQN:	MOVE TAC,DTQ%XC(PKT)	;Get instruction that called us.
+	SETZM DTQ%XC(PKT)	;This packet is no long in DTE queue
+	HLRZ DDB,DTQ%OL(PKT)	;Get DDB pointer to change IOS at BSPBQE
+	HRRZ PKT,DTQ%OL(PKT)	;Get next packet in list
+	JUMPE PKT,BSPBQE	;We're done if this is the last packet in
+				;the list.  Signal this to UUO, clock level
+	MOVEM TAC,DTQ%XC(PKT)	;Set instruction to get us back here, and
+				;also to indicate we're in DTE queue
+	PUSHJ P,ENOUTQ		;Queue this packet for output
+	  SKIPA			;  Lost.  Try again later
+	POPJ P,			;Done with setting up this packet.
+;	\ /
+;We should never get here as we are called from code which removes one packet
+;from the DTE output queue, and thus should have room for one more packet.
+	PUSHJ P,PUPCHK		;We're probably in trouble if we get here.
+				;as we'll never transmit an AData
+	SETZM DTQ%XC(PKT)	;Ooops, we didn't succeed in queueing this one
+;	\ /
+BSPBQE:	MOVSI IOS,IODTQD	;No longer have a packet in the queue?!
+	ANDCAB IOS,DEVIOS(DDB)
+	POPJ P,
+;	---
+
+;Clock interrupt for BSP transmission.  Check to see if DTE output queue still
+;contains our packet(s), and enqueue one if it doesn't.
+BSPORT:	TLNE IOS,IODTQD		;In DTE queue still?
+	  JRST BSPOR2		;  Yes, set to retry later
+	HRRZ PKT,PUPOLS(DDB)	;Get first packet in queue
+	JUMPE PKT,CPOPJ		;  Nothing left to do.
+	MOVE TAC,[PUSHJ P,PUPBQN]	;  Execute code for packet
+	MOVEM TAC,DTQ%XC(PKT)
+	MOVSI IOS,IODTQD	;Assume we're going to queue this packet
+	IORB IOS,DEVIOS(DDB)	;(And avoid a timing race.  TVR/Aug85)
+	PUSHJ P,ENOUTQ		;Queue an Ethernet packet
+	  JRST PUPRTF		;  Setup to try again next tic
+BSPOR2:	MOVE TAC,%BSPORT	;Reset retry delay
+	HLLM TAC,PUPCSB(DDB)
+	POPJ P,
+;	---
+PUPRTF:	MOVSI IOS,IODTQD	;Failed to put packet in DTE queue
+	ANDCAB IOS,DEVIOS(DDB)
+PUPRT0:	SETZM DTQ%XC(PKT)	;Packet not in DTE queue
+PUPRT1:	MOVEI TAC,1		;Retry same thing next tic
+	HRLM TAC,PUPCSB(DDB)
+	POPJ P,
+;	---
+%BSPORT: XWD PUPSEC/2,BSPORT	;Retry every 1/2 second.
+
+;If we've gotten an IQFUL, then change our strategy and just send AData packets
+BSPSRT:	TLNE IOS,IODTQD		;In DTE queue still???
+	  JRST BSPOR2		;  Hmmm, set to retry later
+;	\ /
+
+;Clock interrupt routine for waiting for allocation
+BSPART:	TLNN IOS,ALLW!BLOKW	;Still waiting?
+	  POPJ P,		;  No, forget it
+	PUSHJ P,NULADA		;Send a null AData to get allocation back
+	MOVE TAC,%BSPART	;Reset retry delay
+	HLLM TAC,PUPCSB(DDB)
+	POPJ P,			;Come back, soon y'all
+
+%BSPART: XWD PUPSEC/2,BSPART	;Retry every half second.  First should have won
+
+;Send null AData to get back allocation
+NULADA:	MOVEI TAC,BS%ADA	;Type: AData packet
+	SETZB AC2,AC3		;No bytes in this packet
+	MOVE TAC1,PUPSID(DDB)	;
+	PUSHJ P,PUPMAK		;Make a PUP out of this data
+	  POPJ P,		;  Ignore, anyone calling this should retry
+	PUSHJ P,PUPROU		;Route PUP to appropriate network
+	  JRST ROUFAI		;  Host inaccessable!
+	MOVE TAC,[PUSHJ P,PUPGIV]
+	MOVEM TAC,DTQ%XC(PKT)	;Discard upon transmission
+	PUSHJ P,ENOUTQ		;Queue it for transmission
+	  PUSHJ P,PUPGIV	;  Flush it if it fails
+	POPJ P,
+
+;  EFTP mode output			;⊗ EFTPOU EFTPO2 EFTCO2 EFTPWF EFTPOW RFCRT BS1CRT EFTORT EFTOR1 EFTOR2 %RFCRT %BS1CR %EFTOR
+;
+;TAC1:	User address of data
+;TAC:	Byte count
+;
+;Compute size of packet (in bytes, -11 words, and bits).  Decide if
+;there are too many packets already queued, and if not, enqueue in the
+;output queue in this DDB and also the DTE queue if DDB's queue is empty.
+;If not, output queue to empty.
+EFTPOU:	HRRZS DDB		;Don't get confused by a left half
+	SKIPL LNK,PUPLNK(DDB)	;Get link index
+	  SKIPGE PUPHST(LNK)	;  Is this a listening link?
+	  JRST NOELNK		;  No link exists
+	CAME DDB,PUPLDB(LNK)	; bug trap
+	  PUSHJ P,PUPBUG	; link table disagrees with DDB?
+	TRNE IOS,IODERR!IODTER!IODEND!HDEAD!RSET!TMO
+				;Is connection closing or otherwise losing?
+	  POPJ P,		;  Let caller worry about it.
+	MOVEI AC2,(TAC1)	;Put address in safer place
+	MOVEI AC3,(TAC)		;Save byte count for PUP
+	MOVSI TAC,EFTPO		;Flag that EFTP output is active
+	IORM TAC,PUPSTB(LNK)
+;	\ /
+;We come here to try again after waiting for queue to empty
+EFTPO2:	MOVE TAC1,PUPOCN(DDB)	;Are there too many packets queued already?
+	CAML TAC1,PUPNMA(DDB)	;(We set our own limit!!! PUPNMA is normally
+				;   allocation for foreign host to use).
+	  JRST EFTPOW		;  Yes, wait for them to be sent
+	MOVEI TAC,BS%EDA	;Code for EFTPData
+	PUSHJ P,EFTCO2		;Output an EFTP packet
+	AOS (P)			;Packet queued successfully (as far as we know)
+	POPJ P,
+;	\ /
+;Common for EFTPData and EFTPEnd
+EFTCO2:	PUSHJ P,WRETRY		;Wait for retry code to complete and avoid
+	  %EFTORT		;  FS loser.
+	MOVE TAC1,PUPSID(DDB)	;Send this packet, maybe
+	PUSHJ P,PUPMAK		;Make a PUP out of this data
+	  PUSHJ P,PUPBUG	;  FSGET should not fail at UUO level
+	LDB TAC1,PUPTYP		;Get type of packet
+	CAIE TAC1,BS%EEN	;EFTPEnd?
+	  SKIPA TAC1,RFNMTP	;  No, normal timeout
+	MOVE TAC1,CLSTP		;Yes, different timeout for close
+	PUSHJ P,SRETRY		;Setup retry routine.  (See note in BSPCL5)
+	  %EFTORT
+	  TAC1
+	PUSHJ P,PUPROU		;Route PUP to appropriate network
+	  JRST ROUFAI		;  Host inaccessable
+	MOVE TAC1,[SETZM DTQ%XC(PKT)]	;Leave these packets alone!
+	PUSHJ P,PUPOQ1		;Just queue packet for transmission
+	  PUSHJ P,PUPBUG	;  Currently no way to lose and no way to
+				;    recover gracefully either.
+	MOVE TAC1,PUPSID(DDB)	;Increment low order 16 bits
+	ADDI TAC1,1
+	DPB TAC1,[POINT 16,PUPSID(DDB),35]
+	POPJ P,			;We won!
+;	---
+
+;We already have enough packets queued, wait for some to be sent.
+EFTPWF:	PUSHJ P,PUPGIV		;Flush the packet we uselessly created
+EFTPOW:	MOVE IOS,[XWD DEVSBB!BLOKW,0*BLOK]
+				;Pretend we're waiting for allocation
+	OFFPUP
+	SKIPE PUPOCN(DDB)	;Has the list been freed up while we weren't looking
+	  IORB IOS,DEVIOS(DDB)	;  No, really wait
+	ONPUP
+	PUSHJ P,PUPWT1		;Wait for allocation
+	MOVE IOS,DEVIOS(DDB)	;Get status
+	TRNN IOS,IODERR!TMO	;Error?
+	  JRST EFTPO2		;  No, try again
+	POPJ P,			;Yes, pass error uplevel
+;	---
+
+;Clock interrupt for EFTP transmission.  Check to see if DTE output queue still
+;contains our packet(s), and enqueue one if it doesn't.
+;
+;Also used for transmission of single packets
+RFCRT:
+BS1CRT:
+EFTORT:	HRRZ PKT,PUPOLS(DDB)	;Get first packet in queue
+	JUMPE PKT,CPOPJ		;  Nothing left to do.
+	SKIPE DTQ%XC(PKT)	;Is first packet still in the queue?
+	  JRST EFTOR2		;  Curious... Oh well, try later.
+	AOS PUPEFR		;Count retransmissions
+;	\ /
+;Called from PUPEA3 after EFTPAck is received to reset retry delay and
+;queueing new packet
+EFTOR1:	MOVE TAC,[SETZM DTQ%XC(PKT)]	;Set to clear done flag when sent
+	MOVEM TAC,DTQ%XC(PKT)
+	PUSHJ P,ENOUTQ		;Queue an Ethernet packet
+	  JRST PUPRT0		;  Setup to try again next tic
+;	\ /
+EFTOR2:	MOVE TAC,%EFTOR		;Setup to come back again
+;;; If PUPCSB is zero, then we've already timed out and this shouldn't be here.
+;;; Note, we go to PUPRT0 above without checking PUPCSB.  This will only happen
+;;; if we're out of FS or the DTEQ output queue is full (e.g. '11 is losing).
+;;; The timeout stuff for EFTP needs some cleanup.   TVR/May82
+	SKIPE PUPCSB(DDB)	;Make sure we still have retry code active
+	  HLLM TAC,PUPCSB(DDB)
+	POPJ P,			;Setup output retry again
+;	---
+
+;Note:  In retrospect, it think this is an over simplification, at least for EFTP.
+;I believe this was changed from 1/4 second to 1 second because SAIL was pestering
+;the Dover too much.  Probably the right thing would be to use one second for the
+;first packet of an EFTP transfer, and 1/4 second for subsequent packets.  Meanwhile
+;let's leave it alone for now.  (It may be such that BS1CRT and RFCRT might want
+;different timeouts)
+%RFCRT:
+%BS1CR:
+%EFTOR:	XWD PUPSEC/1,EFTORT	;Retry every second (for now)
+;  Datagram mode output			;⊗ PKTOUT PKTOU2 PKTOU3 PKTOU4 PKTOU5 PKTOU6 ROUFAI NOELNK
+;
+;TAC1:	User address of data
+;TAC:	Byte count
+;
+;Compute size of packet (in bytes).  Extract portions of PUP header that
+;user is allowed to change.  Make packet and send it, discarding on
+;completion of first transmission.  It is the user's responsibility to
+;do acknowledgement and retransmission.
+PKTOUT:	HRRZS DDB		;Don't get confused by a left half
+	SKIPGE LNK,PUPLNK(DDB)	;Get link index
+	  JRST NOELNK		;  No link exists
+	CAME DDB,PUPLDB(LNK)	; bug trap
+	  PUSHJ P,PUPBUG	; link table disagrees with DDB?
+	MOVEI AC2,(TAC1)	;Put address in safer place
+	MOVEI AC3,(TAC)		;Save byte count for PUP
+	XCTR XR,[MOVE TEM,(AC2)]	;Fetch first word from packet
+	LDB TAC1,[POINT 16,TEM,15]	;Extract byte count from user's word
+	JUMPE TAC1,PKTOU2	;Don't check if zero
+	CAIL TAC1,$PUPMN	;Check for reasonableness
+	CAILE TAC1,2(AC3)	;Should not be larger than user's buffer
+	  PUSHJ P,ADRERR	;  Terrible error message, got a better one?
+	MOVEI AC3,-2(TAC1)	;Accept user's value (which includes checksum)
+;	\ /
+PKTOU2:	LDB TAC,[POINT 8,TEM,31]	;Get packet type
+	XCTR XR,[MOVE TAC1,1(AC2)]	;and ID from user
+	LSH TAC1,-4		;Right justify for PUPMAK
+	ADDI AC2,($PUPMN-2)/4	;Now, point at actual data
+	SUBI AC3,$PUPMN-2
+	PUSHJ P,PUPMAK		;Make a PUP out of this data
+	  PUSHJ P,PUPBUG	;  FSGET should not fail at UUO level
+	SKIPL PUPHST(LNK)	;Listening?
+	  JRST PKTOU3		;  No
+	XCTR XR,[MOVE TAC,2-($PUPMN-2)/4(AC2)]	;Fetch host number from user's PUP
+	ROT TAC,=16
+	DPB TAC,PUPDHN
+	SKIPGE PUPFSK(LNK)	;Socket wild as well?
+	  JRST PKTOU4		;  Yes
+	JRST PKTOU5		;No, just update checksum
+;	---
+PKTOU3:	SKIPL PUPFSK(LNK)	;Wild socket number?
+	  JRST PKTOU6		;  No
+;	\ /
+PKTOU4:	XCTR XR,[MOVE TAC,2-($PUPMN-2)/4(AC2)]
+	ROT TAC,-4
+	DPB TAC,PUPDS1
+	XCTR XR,[MOVE TAC,3-($PUPMN-2)/4(AC2)]	;Fetch host number from user's PUP
+	ROT TAC,=16
+	DPB TAC,PUPDS2
+;	\ /
+PKTOU5:	PUSHJ P,PUPSXM		;Recompute checksum
+;	\ /
+PKTOU6:	PUSHJ P,PUPROU		;Route PUP to appropriate network
+	  JRST ROUFAI		;  Host inaccessable
+	MOVE TAC,[PUSHJ P,PUPGIV]	;Discard packet upon transmission
+	MOVEM TAC,DTQ%XC(PKT)
+	PUSHJ P,ENOUTQ		;Queue the packet
+	  PUSHJ P,PUPGIV	;  Failed.  Oh, well.  We can flush it now.
+				;  (They don't guarantee deliver, so why 
+				;   should we!)
+	JRST CPOPJ1
+;	---
+
+;Routing failed.  Set errors and flush packet.
+ROUFAI:	PUSHJ P,PUPGIV		;  Host inaccessable
+	MOVEI IOS,IODERR!IODTER!HDEAD
+	IORB IOS,DEVIOS(DDB)
+	POPJ P,
+;	---
+
+;User tried to do something with non-ex connection
+NOELNK:	JSP TAC,UUOMES
+	ASCIZ\PUP I/O without connection, UUO\
+
+;  Experimental packet output		;⊗ XPKOUT XPKOQ1 XPKOQ2 XPKOQ3 xpkcbd YODOQ1
+;
+;TAC1:	User address of data
+;TAC:	Byte count
+;
+;Take raw packet from user and place it in PUPOLS.  Someone else is
+;is responsible for removing it.
+
+IFN FTETHX,<	;Whole page
+
+XPKOUT:	HRRZS DDB		;Don't get confused by a left half
+	MOVEI AC2,(TAC1)	;Put address in safer place
+	MOVEI AC3,(TAC)		;Setup byte count for PUP
+	PUSHJ P,XPKMAK		;Make a packet out of this data
+	  PUSHJ P,PUPBUG	;  FSGET should not fail at UUO level
+IFE FTETH2,<	;This code might be flushed.  See long comment above EXPQ
+	HRRZ TAC,DDB
+	CAME TAC,PUPEXD		;Serial line stuff?
+	  JRST YODOQ1		;  No, get ready for direct ether drive.
+	push p,tac1
+	pushj p,pupcxm
+	ildb tac,tac1
+	came tac,tem
+	  jrst xpkcbd
+	pop p,tac1
+	MOVE TAC,[PUSHJ P,PUPGIV]	;Discard packet upon transmission
+	MOVEM TAC,DTQ%XC(PKT)
+	HRLZM DDB,DTQ%OL(PKT)	;Point packet back at DDB
+	OFFPUP
+	SKIPG PUPOCN(DDB)	;*** Bulletproofing
+	SKIPN PUPOLS(DDB)
+	  SKIPA
+	  PUSHJ P,CNTBUG
+	AOSG PUPOCN(DDB)	;Bump message counter
+	  PUSHJ P,PUPBUG	;  Counter was negative?
+	HLRZ TAC,PUPOLS(DDB)	;Get list tail pointer
+	JUMPE TAC,XPKOQ3	;Jump if empty
+	HRRM PKT,DTQ%OL(TAC)	;Link new packet to tail
+XPKOQ1:	HRLM PKT,PUPOLS(DDB)	;and make this message the tail
+;;;Test for other experimental modes here...
+	SKIPE PUPEXF
+	  JRST XPKOQ2
+	SETOM PUPEXF		;Set flag for interrupt level
+	CONO PI,2000+PUPON	;Cause interrupt in PUPCHN.
+XPKOQ2:	ONPUP
+	JRST CPOPJ1		;Successful return.
+;	---
+XPKOQ3:	MOVEM PKT,PUPOLS(DDB)	;New list header
+	JRST XPKOQ1
+
+xpkcbd:	PUSHJ P,PUPGIV
+	JSP TAC,UUOMES
+	  ASCIZ\Device PUP: Bad checksum.  UUO\
+>;IFE FTETH2
+
+;Yodanet (or other foreign protocol)
+YODOQ1:
+IFN FTETH2,<
+	MOVEI TAC,0		;Send to normal Ether
+	DPB TAC,QMPNET
+>;IFN FTETH2
+	MOVE TAC,PUPCID(DDB)	;Get packet type
+IFN FTF2,<
+	DPB TAC,E10TYPE		;And make sure they're honest...
+>;IFN FTF2
+IFE FTF2,<
+	DPB TAC,ENTYPE		;And make sure they're honest...
+>;IFE FTF2
+	MOVE TAC,[PUSHJ P,PUPGIV]
+	MOVEM TAC,DTQ%XC(PKT)	;Make sure it disappears after sending
+	MOVEI TAC,(AC3)		;Get length of packet in bytes
+	ADDI TAC,$QMPHD		;Include -11 and Ethernet overhead
+	LSH TAC,-1		;Convert to PDP-11 wods
+	MOVEM TAC,DTQ%WC(PKT)	;This is DTE word count
+	SUBI TAC,2
+	DPB TAC,QMPWDC		;This is -11 word count for Ethernet packet
+	PUSHJ P,ENOUTQ		;Try to queue packet
+	  JRST PUPGIV		;  Lost, flush it
+	POPJ P,
+
+>;IFN FTETHX	;Whole page
+;CLOSE UUO				;⊗ PUPCLS PUPCL1 PUPCLW PKTCLS XPKCLS XPKCL2 XPKCL3
+
+;CLOSE - Figure out what kind of connection and flush it.
+
+;Enter here from CLOSE UUO
+PUPCLS:	PUSHJ P,PUPCL1		;Close appropriate kind of connection
+	PUSHJ P,PUPCLW		;Wait for close to finish.
+	POPJ P,
+
+PUPCL1:	LDB TAC,PUPCDS		;Get connection type dispatch code
+	JRST .+1(TAC)		;And decide what kind of CLOSE to do
+	  JRST PKTCLS		;  Closing datagram connection just breaks the link
+	  JRST EFTPCL		;  Close an EFTP connection
+	  JRST BSPCLS		;  Normal (BSP) close
+	  JRST PUPBUG
+IFN FTETHX,<  JRST XPKCLS >	;  Close an experimental connection
+IFE FTETHX,<  JRST PUPBUG >	;  Illegal
+;	---
+
+PUPCLW:	SKIPGE LNK,PUPLNK(DDB)	;Is there a connection?
+	  POPJ P,		;  No, forget it
+	LDB TAC,PUPCDS		;Get connection type dispatch code
+	JRST .+1(TAC)		;And decide what kind of CLOSE to do
+	  POPJ P,		;  Datagram closure requires nothing special
+	  JRST EFTCLW		;  Close an EFTP connection
+	  JRST BSPCLW		;  Wait for BSP close
+	  JRST PUPBUG
+	  POPJ P,
+;	---
+
+;For packet mode, just flush link.
+PKTCLS:	SKIPGE LNK,PUPLNK(DDB)	;Is there a connection?
+	  POPJ P,
+	JRST RLLINK		;No, flush link
+;	---
+
+IFN FTETHX,<	;Rest of page
+
+;Watch out for serial line DDB.
+XPKCLS:	HRRZ TAC,DDB		;Flush junk in left half, if any
+	CAMN TAC,EFSDDB		;Is this the special DDB?
+	  JRST XPKCL3		;  Yes, we'll need to use a different one
+IFE FTETH2,<	;This code might be flushed.  See long comment above EXPQ
+	CAME TAC,PUPEXD	
+IFE FTYODA,<
+	  PUSHJ P,PUPBUG	;  No, there's only supposed to be one of these!
+>;IFE FTYODA
+IFN FTYODA,<
+	  JRST XPKCL2		;  Nothing special, just clear it the bit
+>;IFN FTYODA
+	SETZM PUPEXD		;Forget we have one of these going
+>;IFN FTETH2
+;	\ /
+XPKCL2:	MOVSI TAC,XPKMOD
+	ANDCAB TAC,PUPMOD(DDB)
+	SETOM PUPCID(DDB)	;Make sure we won't match a packet type before we
+	POPJ P,			;get to PUPCLR
+;	---
+XPKCL3:	HLRZ TAC,DEVSER(DDB)	;Get link to next
+	MOVE TAC1,(DDB)		;Check name
+	CAME TAC1,(TAC)		;Another one of ours?
+	  SETZ TAC,		;  No, last of the experimental users for now
+	MOVEM TAC,EFSDDB
+	JRST XPKCL2
+
+>;IFN FTETHX
+;  Close an BSP connection		;⊗ BSPCLS BSPCL1 BSPCL2 BSPCL3 BSPCL4 BSPCL5 BSPCL6
+;
+;Procedure to close a connection is to send an End packet, wait for an
+;EndReply, and then send our own EndReply.  If an End packet is received,
+;it can effectively treat it as an EndReply, and then send our EndReply.
+;We must wait for a while in the second case, in case they don't get our
+;EndReply and retransmit the End.  Almost all of this is handled at
+;interrupt level.
+;
+;N.B.  If PUPTMO is negative when we get here, then we may get wedged.
+;      haven't studied this enough to offer a fix yet.    TVR/May86
+BSPCLS:	SKIPL LNK,PUPLNK(DDB)	;Is there no connection?
+	TRNE IOS,IODEND		;Is the connection closed already?
+	  POPJ P,		;  Yes, we're done now.
+	TRNN IOS,TMO		;Timed out?
+	TLNE IOS,RFCW		;Waiting for connection?
+	  JRST BSPCL6		;  Yes, just flush output queue
+	SKIPN PUPOLS(DDB)	;Are there packets pending?
+	  JRST BSPCL3
+;;;	SKIPN TAC,PUPTMO(DDB)	;Is there a timeout already going?
+;;; This should hopefully fix it (ME&JJW/Aug86)
+	SKIPG TAC,PUPTMO(DDB)	;Is there a timeout already going?
+	  LDB TAC,RFNMTP	;  No, set one
+	MOVEM TAC,PUPTMO(DDB)
+;	\ /
+BSPCL1:	MOVE IOS,[XWD DEVSBB!BLOKW,0*BLOK]	;Wait for output to finish
+	OFFPUP
+	SKIPE PUPOLS(DDB)	;Is there still something on the list?
+	  IORB IOS,DEVIOS(DDB)	;  Yes, really wait
+	ONPUP
+	PUSHJ P,PUPWT1
+	JRST BSPCLS		;Now, try again
+;	\ /
+BSPCL2:	PUSHJ P,PUPOFL		;Yes, flush output buffer
+;	\ /
+BSPCL3:	MOVE TAC,PUPSTB(LNK)	;Are we already closing?
+	TLCN TAC,CLSR!CLSS
+	  JRST BSPCL5		;  No, do it
+	TLCE TAC,CLSR!CLSS	;Partially closed?
+	  JRST BSPCL4		;  Yes, wait for it to finish
+	MOVEI IOS,IODEND	;Set EOF again (sign...)  CLOSE clears it, but
+	IORB IOS,DEVIOS(DDB)	;  RELEAS calls CLOSE.
+	POPJ P,
+;	---
+BSPCL4:	PUSHJ P,SRETRY		;Setup retry routine so we wait until they've
+	  %BS2RT		;  given up trying to send ENDs
+	  CLSTP
+	JRST BSPCLW		;Now, wait, probably for timeout
+;	---
+BSPCL5:	PUSHJ P,WRETRY		;Wait for retry code to complete and avoid
+	  %BS1CR		;  FS loser.  See comment after SRETRY below.
+	MOVEI TAC,BS%END	;Send an End packet
+	SETZB AC2,AC3		;No bytes in End packet
+	MOVE TAC1,PUPCID(DDB)	;Close uses connection ID, not byte ID
+	PUSHJ P,PUPMAK		;Make a PUP out of this data
+	  PUSHJ P,PUPBUG	;  FSGET should not fail at UUO level
+	PUSHJ P,SRETRY		;Setup retry routine.  Note:  This needs to be
+	  %BS1CR		;  done after PUPMAK, as PUPMAK could wait for
+	  CLSTP			;  for FS, and retry code would think it was
+				;  done since there was no packet and terminate.
+				;  WRETRY must be done before PUPMAK to avoid
+				;  possibly losing FS if user calls out of retry
+				;  wait.  But it must be done before PUPOQ1 in
+				;  case something at interrupt level setup
+				;  some retry code for some strange reason. Blah!
+	PUSHJ P,PUPROU		;Route PUP to appropriate network
+	  JRST ROUFAI		;  Host inaccessable
+	MOVE TAC1,[SETZM DTQ%XC(PKT)]	;Don't mess with packet
+	PUSHJ P,PUPOQ1		;Queue packet for transmission
+	  PUSHJ P,PUPBUG	;  Currently no way to lose and no way to
+				;    recover gracefully either.
+	MOVSI TAC,CLSS		;Indicate partial closure
+	IORB TAC,PUPSTB(LNK)
+	POPJ P,			;And we're done for now
+;	---
+;Timeout an RFC (or already timed out)
+BSPCL6:	MOVEI IOS,TMO		;Set timeout (in case it's not set already)
+	IORB IOS,DEVIOS(DDB)
+	PUSHJ P,PUPOFL		;Flush anything queued
+	POPJ P,			;and we're done.
+;  Close an EFTP connection		;⊗ EFTPCL BSPCLW EFTCLW
+;
+;The EFTPEnd packets work in very much the same way as regular data packets
+;except that the EFTPAck is itself acknowledged with another EFTPEnd packet.
+;None of this is not visible at UUO level.
+;
+EFTPCL:	SKIPGE LNK,PUPLNK(DDB)	;Is there no connection?
+	  POPJ P,		;  Forget it.
+	MOVE TAC,PUPSTB(LNK)
+	TLNN TAC,CLSR!CLSS	;Already closing?
+	TLNN TAC,EFTPO		;or output not done.
+	  POPJ P,		;  Yes, give up
+	MOVEI TAC,BS%EEN	;Code for EFTPEnd
+	SETZB AC2,AC3		;No data to move
+	PUSHJ P,EFTCO2		;Send this packet
+	MOVSI TAC,CLSS		;Indicate partial closure
+	IORB TAC,PUPSTB(LNK)
+	POPJ P,
+;	---
+
+;Wait for BSP or EFTP connection to close
+BSPCLW:
+EFTCLW:	OFFPUP			;Get consistent IOS
+	MOVE IOS,DEVIOS(DDB)
+	TRNE IOS,IODEND!TMO	;Has close completed?
+	  JRST PUPONJ		;  Yes, we're done
+	TLO IOS,DEVSBB!CLSW	;Wait for output queue to empty
+	MOVEM IOS,DEVIOS(DDB)
+	ONPUP
+	PUSHJ P,PUPWT1
+	JRST EFTCLW		;I think it's OK to not check TMO here.
+;	---
+
+;RELEASE UUO				;⊗ PUPRLS PUPRL2 PUPRL3 PUPRL4 RLLINK RLLNK2 PUPONJ
+
+; RELEASE UUO.  Flush input list if one still exists
+;	RELEASE chn,
+PUPRLS:	MOVE TAC,PUPMOD(DDB)	; EFTP connection?
+	TLNE TAC,EFTMOD
+	TRNE IOS,IODEND		; and not closed yet?
+	  JRST PUPRL2		;   no, do normal release
+	EFTERR EFXSAB,<Abnormal EOF>	;Indicate send went away.
+	JRST PUPRL3		; don't try close
+;	---
+;;;Perhaps we want to blast BSP connections as well?
+PUPRL2:	TLNE TAC,BSPMOD!XPKMOD	; BSP connection
+	  PUSHJ P,PUPCLS	;   Make damn sure we run through the close code
+;	\ /
+PUPRL3:	PUSHJ P,RLLINK		; flush the connection
+	SKIPN PKT,PUPILS(DDB)	; any input list?
+	  JRST PUPRL4	
+	HRRZ PKT,PKT		; flush crud
+	PUSHJ P,PUPREL		; return the packet to free storage
+	JUMPN PKT,.-1		; continue until list is gone
+;	\ /
+PUPRL4:	HRRZS DDB		; don't get confused by a left half
+	PUSHJ P,PUPOFL		; Flush output side
+	POPJ P,
+;	---
+
+;Flush a link table entry by replacing this link with the last one.  We can do
+;this because interrupt level finds the link from the table, clock level always
+;fetches it whenever it runs (and won't be run while we're at UUO level), and
+;UUO level reloads LNK whenever it returns from a wait state.
+RLLINK:	SKIPGE LNK,PUPLNK(DDB)	;Get link index user wants to flush
+	  POPJ P,		;  No link index - no-op then
+	MOVE TAC,PUPLDB(LNK)	;Bug trap
+	CAIE TAC,(DDB)
+	  PUSHJ P,PUPBUG	;  link table disagrees with DDB?
+	OFFPUP			; don't let interrupt level see inconsistency
+	SETOM PUPLNK(DDB)	;Break the DDB's link
+	SOS AC2,PUPLKS		;One less active link
+	CAIN AC2,(LNK)		;Did we delete the last link?
+	  JRST RLLNK2		;  Yes, no need to update
+FOR %I IN (PUPHST,PUPFSK,PUPLSK,PUPSTB,PUPLDB)	;Note, PUPLDB must be last thing in list
+<	MOVE TAC,%I(AC2)
+	MOVEM TAC,%I(LNK)
+>;FOR %I
+	MOVEM LNK,PUPLNK(TAC)	;New link
+RLLNK2:
+;;The next instruction could go away, but it's cheap enough.
+	SETZM PUPLDB(AC2)	;For IMPSTA for now.
+IFN PUPCHN-SCNCHN,<
+PUPONJ:
+>;IFN PUPCHN-SCNCHN
+	ONPUP			;Link table now consistent again.
+	POPJ P,
+
+;MTAPE Dispatch				;⊗ PUPMTP ILGMTP UUODSP PUPMMT
+
+PUPMTP:	XCTR XR,[HRRZ TAC,(UUO)]	; GET FUNCTION CODE
+	CAIL TAC,PUPMMT			; FUNCTION IN BOUNDS?
+	 JRST UUOERR			; ILLEGAL FUNCTION
+	SKIPL TAC1,UUODSP(TAC)		; GET DISPATCH ADDRESS
+	TDNE TAC1,PUPMOD(DDB)		; FUNCTION APPROPRIATE?
+	  JRST (TAC1)			;   YES, DISPATCH
+ILGMTP:	JSP TAC,UUOMES			; NOPE, BLAST USER'S JOB
+	 ASCIZ/Improper MTAPE for PUP/
+
+
+; PUP MTAPE UUO DISPATCH TABLE.  THIS SHOULD MATCH THE IMP MTAPE DISPATCH EXCEPT
+; THE LH BITS ARE DIFFERENT.
+;	400000 means always dispatch
+;	100000 means dispatch if BSP connection (BSPMOD)
+;	040000 means dispatch if EFTP connection (EFTMOD)
+
+UUODSP:	400000,,PUPCON			; 0 ESTABLISH CONNECTION
+	400000,,PUPLSN			; 1 LISTEN ON A SOCKET
+	400000,,MTSTAT			; 2 GET STATUS BITS
+	400000,,MTTERM			; 3 TERMINATE CONNECTION (LIKE CLOSE UUO)
+	BSPMOD,,PUPCWT			; 4 WAIT FOR CONNECTION
+	400000,,PUPMTB			; 5 GET POINTERS TO SYSTEM SYMBOLS
+	400000,,WAKEMT			; 6 WAKE UP USER PROCESS FROM I-LEVEL
+	400000,,MTGADR			; 7 GET STATUS BLOCK (USED AFTER LISTEN)
+	400000,,PUPSIP			; 10 SKIP IF IMP INPUT
+	BSPMOD,,PUPSIN			; 11 SEND INR/INS
+	400000,,PUPENB			; 12 TURN ON NCP
+	0				; 13 TURN OFF NCP
+	BSPMOD,,PUPRIN			; 14 TEST AND CLEAR INTERRUPT STATUS
+	400000,,USETAL			; 15 SET ALLOCATION
+	400000,,UGETAL			; 16 GET ALLOCATION
+	400000,,USETTM			; 17 SET TIMEOUTS
+	400000,,UGETTM			; 20 GET TIMEOUTS
+	400000,,UGNSYM			; 21 GENSYM A SOCKET FOR ICP
+	0				; 22 SEND A RESET
+	0				; 23 SEND HOST DOWN STATUS MESSAGE
+	0				; 24 ATTEMPT TO UNWEDGE AN IMP CONNECTION
+	BSPMOD,,PUPSMK			; 25 SEND A MARK
+	BSPMOD!EFTMOD,,PUPRMK		; 26 RECEIVE A MARK (OR EFTP ABORT CODE)
+	400000,,GETROU			; 27 GET ROUTING TABLE
+	PKTMOD,,SETROU			; 30 SET ROUTING TABLE
+	400000,,SETEXP			; 31 SET EXPERIMENTAL MODE
+PUPMMT←←.-UUODSP
+;  Connect/Listen			;⊗ PUPCON PUPCN1 PUPCN2 PUPCN3 PUPCN4 CONSYF PUPCN5 PUPCN6 EFTCN2 RFCWT1 PUPLSN CONHDD CONXST CONFAI CONTMO BADHSN
+
+; Function 0 - Connect to host on a specified socket
+
+PUPCON:	HRRZS DDB		; don't get confused by a left half
+	SKIPL PUPLNK(DDB)	; better not be a link here...
+	  JRST CONXST
+	SKIPN AC1,PUPMOD(DDB)	; do we know what mode we're in yet?
+	  PUSHJ P,STSTYP
+	MOVEM AC1,PUPMOD(DDB)
+	XCTR XR,[SKIPLE AC3,FSLOC(UUO)]; get socket user wants to connect on
+	  TLNE AC3,740000	; reasonable socket to connect to?
+	  JRST BADHSN		; not a server socket
+	XCTR XR,[SKIPLE AC2,HLOC(UUO)]; set host
+	  TDNE AC2,[777777,,600000]; host must be an 16-bit host number
+	  JRST BADHSN
+;	\ /
+PUPCN1:	TRNN AC2,<377>⊗8	; network number specified?
+	 IORI AC2,SUENNM⊗8	; no, add network number in
+	XCTR XR,[MOVE TAC,LSLOC(UUO)]
+	TLNE TAC,740000		;Reasonable socket to connect to?
+IFE FTYODA,<
+	  AOJN TAC,BADHSN	;  Not unless it's -1
+>;IFE FTYODA
+IFN FTYODA,<
+	  AOJN TAC,[
+		TLC TAC,200000		;Yoda mode?
+		TLNN TAC,740000
+		TLCE TAC,200000
+		  JRST BADHSN		;  No, forget it
+		MOVEI TEM,ETHIPT	;Set packet type
+		MOVEM TEM,PUPCID(DDB)
+		MOVSI TEM,XPKMOD
+		IORM TEM,PUPMOD(DDB)
+		JUMPE TAC,[
+			PUSHJ P,GENSYM	;  Note:  This isn't guaranteed to win, but
+					;	  it's too much work to do it right.
+			TLO TAC,200000	;Mark socket special, as well.
+			JRST PUPCN2]
+		SOJA TAC,PUPCN2 ]	;Yes
+>;IFN FTYODA
+	JUMPG TAC,PUPCN2	;Jump if explicit local socket
+	PUSHJ P,GENSYM		;Construct a local socket number
+;	\ /
+;Make a link.  See MKLINK for AC usage
+PUPCN2:	PUSHJ P,MKLINK		;Make a link if succeeded.
+	JUMPGE LNK,PUPCN3	;Now, make the connection
+	CAIN TEM,SIU		;Socket number in use?
+	XCTR XR,[SKIPE LSLOC(UUO)]	;And did we come up with the socket number?
+	  JRST CONFAI		;  No, failure return
+	ADDI TAC,10		;Try another socket
+	TLZ AC2,740000
+	JRST PUPCN2
+;	---
+;Check bytesize to make sure user understands extent of compatability with IMP
+PUPCN3:	XCTR XR,[SKIPE TAC1,BSLOC(UUO)]	;Get byte size, if given
+	CAIN TAC1,8		;None, supply the right one
+	  JRST PUPCN4
+	CAIE TAC1,=16		;We'll let these go by
+	CAIN TAC1,=32
+	  JRST PUPCN4
+	JSP TAC,UUOMES
+	  ASCIZ/Byte size for PUP must be 8. /
+;	---
+;Decide what kind of connection this is.  Then, if BSP construct an RFC.
+PUPCN4:	MOVE TAC1,PUPMOD(DDB)	;Get type of connection
+	TLNE TAC1,EFTMOD	;EFTP?
+	  JRST EFTCN2		;  Yes, finish setting up connection
+	TLNN TAC1,BSPMOD	;Is this a BSP connection?
+	  POPJ P,		;  No, we're done!
+	SKIPL PUPHST(LNK)	;Is this link wild?
+	SKIPGE PUPFSK(LNK)
+	  JRST[	MOVSI TAC1,RFCL		;Yes, we can't send to a specific place
+		IORB TAC1,PUPSTB(LNK)	;Flag as listening for RFC
+		PUSHJ P,SRETRY		;Set output retry routine
+		  %LSNRT
+		  RFCTP
+		JRST PUPCN6 ]
+	MOVE TAC1,ENNADR	;Our address
+	ROT TAC1,-=16
+	ROT TAC,-=16		;Break into two 16 bits pieces
+	DPB TAC,[POINT 16,TAC1,31]	;High order into first word
+	PUSH P,TAC1		;BYTE (16) host address, high order socket
+	PUSH P,TAC		;BYTE (16) low order socket number
+	PUSHJ P,GENSYM		;Construct a connection ID
+	MOVEM TAC,PUPSID(DDB)
+	MOVEI TAC,BS%RFC	;Packet type = RFC
+	MOVE TAC1,PUPSID(DDB)
+	HRROI AC2,-1(P)		;Point to data in EXEC space
+	MOVEI AC3,6		;Size of RFC in bytes
+	PUSHJ P,PUPMAK
+	  SETZ PKT,		;  Failure case shouldn't happen at UUO level
+	SUB P,[XWD 2,2]		;Flush packet from stack
+	JUMPN PKT,PUPCN5	;Jump if successful
+	SKIPN INTACT		;At real UUO level?
+	SKIPE SPWUUF
+	  SKIPA			;  No, FS couldn't wait.
+	PUSHJ P,PUPCHK
+CONSYF:	MOVEI TEM,SYS		;We blew it.
+	JRST CONFAI
+;	---
+;Send RFC if possible.  Wait if necessary
+PUPCN5:	PUSHJ P,PUPROU		;Route PUP to appropriate network
+	  JRST CONHDD		;  Host inaccessable
+	MOVE TAC1,[SETZM DTQ%XC(PKT)]	;Don't mess with packet
+	MOVSI IOS,RFCW!DEVSBB	;Set RFC wait
+	IORB IOS,DEVIOS(DDB)
+	PUSHJ P,PUPOQ1		;Queue this packet for transmission
+	  PUSHJ P,PUPBUG
+	MOVSI TAC,RFCS		;Set status bits
+	IORB TAC,PUPSTB(LNK)
+	PUSHJ P,SRETRY		;Set output retry routine
+	  %RFCRT
+	  RFCTP
+;	\ /
+PUPCN6:	XCTR XR,[SKIPE WFLOC(UUO)]	;Wait for completion?
+	  PUSHJ P,RFCWT1	;  Yes, wait now.
+	MOVE IOS,DEVIOS(DDB)	;Get recent enough IOS
+	TRNE IOS,HDEAD!RSET	;Connect lost?
+	  JRST CONTMO		;  Yes
+	TLNE IOS,RFCW		;Still waiting?
+	  POPJ P,		;  Yes, return without updating status
+	MOVE AC3,PUPFSK(LNK)	;Set socket and host numbers
+	MOVE AC2,PUPHST(LNK)	;This can possibly change with PUP!
+	MOVE TAC,PUPLSK(LNK)	;And this, too!
+	MOVEI TAC1,8
+	XCTR XR,[SKIPN BSLOC(UUO)]	;Set byte size?
+	  XCTR XW,[MOVEM TAC1,BSLOC(UUO)]	;Yes
+	XCTR XW,[MOVEM AC3,FSLOC(UUO)]
+	XCTR XW,[MOVEM AC2,HLOC(UUO)]
+	XCTR XW,[MOVEM TAC,LSLOC(UUO)]
+	JRST MTRETS		;And also return status
+;	---
+
+;Finish setting up EFTP connection
+EFTCN2:	SETZM PUPSID(DDB)	;Dover requires this to be zero.
+	SETOM PUPRID(DDB)	;Nothing received yet
+	MOVEI TAC,$PUPMD	;Assume a default packet size, since can't
+	MOVEM TAC,PUPPMX(DDB)	;negotiate one
+	POPJ P,			;Nothing to wait for in EFTP mode
+	
+;Wait for RFC to complete.
+RFCWT1:	MOVSI TAC,RFCR		;To check RFC received
+	OFFPUP
+	MOVE IOS,DEVIOS(DDB)	;Get up-to-date status
+	TDNN TAC,PUPSTB(LNK)	;RFC received?
+	TRNE IOS,IODERR!IODEND!HDEAD!RSET!TMO
+				;Or we've lost for some other reason?
+	  JRST PUPONJ		;  Yes, we're done
+	TLO IOS,RFCW!DEVSBB	;Set RFC wait
+	MOVEM IOS,DEVIOS(DDB)
+	ONPUP
+repeat 1,<
+	MOVSI TAC,RFCS		;Bugtrap: Make sure we'll be retried
+	TRNE TAC,PUPSTB(LNK)
+	SKIPN PUPCSB(DDB)
+	  SKIPA
+	  PUSHJ P,PUPBUG
+>;repeat 1 (bugtrap)
+	PUSHJ P,PUPWT1		;Now wait for RFC if not here already.
+IFN FTCCRMA,<
+..pwt1::	;See bugtrap at PUPWT1
+>;IFN FTCCRMA
+	JRST RFCWT1
+
+; Function 1 - Wait for connection from any host or socket
+
+PUPLSN:	HRRZS DDB		; don't get confused by a left half
+	SKIPL PUPLNK(DDB)	; better not be a link here...
+	  JRST CONXST
+	SKIPN AC1,PUPMOD(DDB)	; do we know what mode we're in yet?
+	  PUSHJ P,STSTYP
+	MOVEM AC1,PUPMOD(DDB)
+	XCTR XR,[SKIPN AC3,FSLOC(UUO)]; get socket user wants to connect on
+	  SETO AC3,		; wild socket number
+	TLNE AC3,740000		; reasonable socket to connect to?
+	CAMN AC3,[-1]
+	  SKIPA
+	  JRST BADHSN		; not a reasonable socket number
+	XCTR XR,[SKIPN AC2,HLOC(UUO)]; set host
+	  SETO AC2,		; wild host number
+	TDNE AC2,[777777,,600000]; host must be an 16-bit host number
+	CAMN AC2,[-1]
+	  SKIPA
+	  JRST BADHSN		; not a reasonable socket number
+	JRST PUPCN1		;This connection may be wild
+;	---
+	
+;Various flavors of connection failed.
+CONHDD:	MOVEI IOS,HDEAD		;Set losing status
+	IORB IOS,DEVIOS(DDB)
+IFN FTCCRMA,<	;... until CCRMA is up-to-date
+	SKIPA TEM,[GATDWN]	;We can't reach this network
+>;IFN FTCCRMA
+IFE FTCCRMA,<
+	SKIPA TEM,[CGT]		;We can't reach this network
+>;IFE FTCCRMA
+;	\ /
+CONXST:	MOVEI TEM,CCS		;Can't change sockets
+;	\ /
+CONFAI:	XCTR XW,[MOVEM TEM,STLOC(UUO)]	;Set status bits
+;	\ /
+CONTMO:	SKIPGE LNK		;Did we setup a link table entry.
+	  POPJ P,		;  No, we're done
+	PUSHJ P,RLLINK		;Flush the link table entry
+	POPJ P,
+
+BADHSN:	JSP TAC,UUOMES
+	  ASCIZ/Illegal host or socket number. UUO/
+
+;  Get status, Terminate, Wait, Tables	;⊗ MTSTAT MTTERM MTRETS PUPCWT PUPMTB PUPTBS NPUPTB WAKEMT
+
+;Function 2 - Get status
+MTSTAT:	SKIPL LNK,PUPLNK(DDB)	;Is there a link assigned?
+	  SKIPA TAC,PUPSTB(LNK)	;  Yes, get corresponding bits
+	SETZ TAC,		;No, return zero for status
+	XCTR XR,[MOVEM TAC,1(UUO)]	;Return same status into both places
+	XCTR XR,[MOVEM TAC,2(UUO)]	;(At least for now)
+	POPJ P,
+
+;Function 3 - Terminate
+MTTERM:	SKIPGE LNK,PUPLNK(DDB)	;Better be a link assigned
+	  JRST NOELNK		;  Nope, blow user out of water
+	PUSHJ P,PUPCL1		;Close connection, probably without waiting.
+	XCTR XR,[SKIPN WFLOC(UUO)]
+				;Wait for completion?
+	  POPJ P,		;  No, we're done
+	PUSHJ P,PUPCLW		;Wait for close to complete
+;	\ /
+;Return status of connection
+MTRETS:	MOVE TAC,PUPSTB(LNK)	;Return status
+	XCTR XW,[MOVEM TAC,STLOC(UUO)]
+	POPJ P,
+
+;Function 4 - Wait for connection
+PUPCWT:	SKIPGE LNK,PUPLNK(DDB)	;Is there a connection to wait for?
+	  JRST NOELNK		;  No, blow user out of water
+	PUSHJ P,RFCWT1		;Wait for connection, if necessary
+	JRST MTRETS		;Return status of connection
+
+
+;Function 5 - Give user some cell addresses.
+
+PUPMTB:	AOS UUO				; DON'T STEP ON FUNCTION WORD
+	HRLI UUO,PUPTBS			; FORM BLT POINTER
+	MOVEI TEM,NPUPTB(UUO)		; COMPUTE ENDING ADDRESS
+	XCTR XBLTW,[BLT UUO,(TEM)]	; BLT FROM PUPTBS TO USER CORE
+	POPJ P,
+
+;PUP table pointer.  Should correspond to IMP tables as much as possible
+
+PUPTBS:	0	;IMPDIE,,IMPDEA		; NCP UP STATUS
+	0	;NMESIN,,NMESOU		; NCP I/O STATISTICS
+	0	;IMPTDN,,IMPTUP		; IMP DOWN/UP TIME
+	PUPLKS	;IMPDWY,,FFLNK		; IMP WHY DOWN/# ACTIVE LINKS
+	PUPHST,,PUPLDB			; H-L NUMBER/DDB
+	PUPLSK,,PUPFSK			; SOCKETS
+	PUPSTB	;IMPBS,,IMPSTB		; BYTE SIZE/STATUS
+NPUPTB←←.-PUPTBS
+
+;Function 6 - Wake up user level if waiting.  Called from user interrupt level.
+;Used to share this code with IMPSER, now separate.  (JJW 4/86)
+
+WAKEMT:	SKIPN INTACT		;Running user interrupt?
+	POPJ P,			;No
+	MOVEI IOS,TMO		;Set timeout bit to exit UUO
+	OFFPUP
+	IORB IOS,DEVIOS(DDB)
+	PUSHJ P,PUPWK1		;Wake up job if waiting
+	JRST PUPONJ
+;  Functions 7,10,12			;⊗ MTGADR MTGAD2 MTGAD3 MTGAD4 PUPSIP PUPENB
+
+;Function 7 - Get socket numbers and host numbers
+
+MTGADR:	SKIPL LNK,PUPLNK(DDB)	;Make sure there is a connection
+	  JRST MTGAD2
+	SETZB TAC,AC3
+	SETZ AC2,
+	JRST MTGAD3
+;	---
+MTGAD2:	MOVE TAC,PUPLSK(LNK)	;Load up std. ACs with sockets, etc.
+	MOVE AC3,PUPFSK(LNK)
+	MOVE AC2,PUPHST(LNK)
+;	\ /
+MTGAD3:	LSH AC2,8		;@#%$#@& IMPSER
+	PUSHJ P,MTGAD4		;"Send" connection
+	ADDI UUO,3
+;	\ /			;"Receive" connection is the same for PUP
+MTGAD4:	XCTR XW,[MOVEM AC2,1(UUO)]	;Host-"Link"
+	XCTR XW,[MOVEM TAC,2(UUO)]	;Local socket
+	XCTR XW,[MOVEM AC3,3(UUO)]	;Foreign socket
+	POPJ P,
+
+;Function 10 - Skip if input present
+
+PUPSIP:	SKIPL LNK,PUPLNK(DDB)	; get link index
+	TLNE IOS,RFCW		; make sure connection is complete
+	  JRST[	MOVE TAC,PUPMOD(DDB)	;One last chance...
+		TLNN TAC,XPKMOD
+		  JRST NOELNK		;   oops
+		JRST .+1]		;Aha, it's special
+	TRNE IOS,IODEND		; is connection closing?
+	  JRST CPOPJ1		; yes, make user do input
+	SKIPE PUPICN(DDB)	; any packets on the input list?
+	  AOS (P)		; yes - skip return
+	POPJ P,
+
+;Function 12 - Turn on NCP
+
+;*** Transition: accept both.  Someday remove ACWPRV
+PUPENB:	MOVSI AC1,ACWPRV!DEVPRV	;One last detail...
+	TDNN AC1,JBTPRV(J)
+	  JRST CPOPJ		;  Sorry about.
+IFN FTF2,<
+	SETOM .PUPON		;Turn it on
+	PUSHJ P,FNTINI		;Initialize FOONET interface
+	SKIPN XPUPIB		;Is there an packet buffer?
+	  PUSHJ P,PUPIGB	;   Get one ready
+>;IFN FTF2
+	POPJ P,
+;  Function 11 - Send interrupt		;⊗ PUPSIN PUPSI2 PUPSI3
+
+;Note:  Socket number is ignored.  Only Send side exists.
+PUPSIN:	SKIPL LNK,PUPLNK(DDB)	;Get and check link index
+	TLNE IOS,RFCW		;Make sure connection is complete
+	  JRST NOELNK		;  No connection
+	TRNE IOS,IODEND		;Is the connection closed already?
+	  JRST BSPOER		;  Yes, forget it!
+	OFFPUP			;Watch the race
+	TLNN IOS,INTSW		;Do we already have a pending interrupt?
+	  JRST PUPSI2		;  No
+	MOVSI IOS,DEVSBB
+	IORB IOS,DEVIOS(DDB)
+	ONPUP
+	PUSHJ P,PUPWT1		;Wait for interrupt to be acknowledged
+	JRST PUPSIN		;Try again
+;	---
+;Construct and send an interrupt packet.
+PUPSI2:	ONPUP
+	MOVSI IOS,INTSW		;Mark interrupt sent
+	IORB IOS,DEVIOS(DDB)
+	MOVEI TAC,BS%INT	;Send an Interrrupt packet
+	SETZB AC2,AC3		;No bytes in this type of packet
+	MOVE TAC1,PUPSII(DDB)	;Interrupts have their own IDs
+	PUSHJ P,PUPMAK		;Make a PUP out of this data
+	  PUSHJ P,PUPBUG	;  Shouldn't fail here!
+	PUSHJ P,PUPROU		;Route PUP to appropriate network
+	  JRST ROUFAI		;  Host inaccessable
+;	\ /
+;Insert packet in front of output queue
+	HLRZM DDB,DTQ%OL(PKT)	;Point packet at 
+	OFFPUP			;Make sure things stay consistent
+	MOVE AC2,PUPOLS(DDB)	;Get head of list
+	HRRM AC2,DTQ%OL(PKT)	;Point new packet at old packet(s) if any
+	AOSG PUPOCN(DDB)	;Update count
+	  PUSHJ P,CNTBUG	;  Ooops!
+	JUMPN AC2,[		;Jump if there are already packets queued
+		MOVSI TAC,(<JFCL>)	;Don't queue next packet, wait for retry
+		JRST PUPSI3 ]
+	HRLM PKT,PUPOLS(DDB)	;List empty.  Set end pointer
+	MOVE TAC,[PUSHJ P,PUPBQN]
+				;Standard output retry in case more packets get
+;	\ /			;queued for output
+PUPSI3:	MOVEM TAC,DTQ%XC(PKT)
+	ONPUP
+	PUSHJ P,ENOUTQ		;Send it directly
+	  SETZM DTQ%XC(PKT)	;  It didn't make it into the queue.  We'll retry
+	POPJ P,			;And we're done for now
+;	---
+
+;  Test interrupts, Get/Set allocations	;⊗ PUPRIN UGETAL USETAL USETTB USETSP USETTM UGETTM
+
+;Function 14 - Test and clear interrupts
+
+;Note:  Only SEND side interrupt exist for PUP
+PUPRIN:	SKIPL LNK,PUPLNK(DDB)	;Get and check link index
+	TLNE IOS,RFCW		;Make sure connection is complete
+	  JRST NOELNK		;  No connection
+	XCTR XW,[SETZM 1(UUO)]	;Assume no interrupts.  Also, make sure we can
+	XCTR XW,[SETZM 2(UUO)]	;write in this place before messing with PUPSTB.
+	MOVSI TAC,INTINS	;Interrupt bit set?
+	TDNN TAC,PUPSTB(LNK)
+	  POPJ P,		;  No, forget it
+	ANDCAM TAC,PUPSTB(LNK)	;Yes, clear it
+	XCTR XW,[SETOM 1(UUO)]	;And set the flag
+	POPJ P,
+
+
+;Function 15 - Give user the current allocations
+
+UGETAL:	MOVE TAC,PUPNBA(DDB)
+	XCTR XW,[MOVEM TAC,1(UUO)]
+	MOVE TAC,PUPNMA(DDB)
+	XCTR XW,[MOVEM TAC,2(UUO)]
+	MOVE TAC,PUPHBA(DDB)
+	XCTR XW,[MOVEM TAC,3(UUO)]
+	MOVE TAC,PUPHMA(DDB)
+	XCTR XW,[MOVEM TAC,4(UUO)]
+	MOVE TAC,PUPIBC(DDB)
+	XCTR XW,[MOVEM TAC,5(UUO)]
+	MOVE TAC,PUPICN(DDB)
+	XCTR XW,[MOVEM TAC,6(UUO)]
+	MOVE TAC,PUPBAL(DDB)
+	XCTR XW,[MOVEM TAC,7(UUO)]
+	MOVE TAC,PUPMAL(DDB)
+	XCTR XW,[MOVEM TAC,10(UUO)]
+	POPJ P,
+
+;Function 16 - Set allocations
+;
+; LOCATION 1 OF THE USER TABLE IS A CODE
+;	0 MEANS TAKE LOC 2 AS BIT ALLOCATION AND LOC 3 AS MESSAGE ALLOCATION
+;	1 MEANS SET ALLOCATION TO SYSTEM MAXIMUM
+;	2 MEANS SET ALLOCATION TO SYSTEM MINIMUM
+;	3 MEANS SET ALLOCATION TO SYSTEM DEFAULT
+; LOCATION 2 IS THE BIT ALLOCATION
+; LOCATION 3 IS THE MESSAGE ALLOCATION
+
+USETAL:	XCTR XR,[SKIPL TAC,1(UUO)]
+	 CAILE TAC,3		; CHECK CODE FOR LEGAL RANGE
+	  JRST UUOERR
+	XCT USETTB(TAC)		; CALL RELEVANT ROUTINE
+	MOVEM AC2,PUPNBA(DDB)
+	MOVEM AC3,PUPNMA(DDB)
+	POPJ P,			; END OF UUO
+
+USETTB:	PUSHJ P,USETSP		; USER OPTION
+	DMOVE AC2,[MAXBAL ↔ MAXMAL] ; MAXIMUM ALLOCATION
+	DMOVE AC2,[MINBAL ↔ MINMAL] ; MINIMUM ALLOCATION
+	DMOVE AC2,[DEFBAL ↔ DEFMAL] ; DEFAULT ALLOCATION
+
+USETSP:	XCTR XR,[MOVE AC2,2(UUO)]
+	XCTR XR,[MOVE AC3,3(UUO)]
+	CAIGE AC2,MINBAL	; IS IT ABOVE MINIMUM ALLOCATION?
+	 MOVEI AC2,MINBAL	; NO, GIVE HIM AT LEAST THIS MUCH
+	CAILE AC2,MAXBAL	; IS IT OVER MAXIMUM?
+	 MOVEI AC2,MAXBAL	; NO, PUT A LID ON AT AT THE MAXIMUM
+	CAIGE AC3,MINMAL	; SAME FOR MESSAGE ALLOCATION
+	 MOVEI AC3,MINMAL
+	CAILE AC3,MAXMAL
+	 MOVEI AC3,MAXMAL
+	POPJ P,
+
+; SET SYSTEM DEFAULT TIMEOUTS. PUT WORD OF 6-BIT FIELDS IN 1(UUO).
+; THE FIELDS ARE IN UNITS OF 2-SECONDS. I.E., THE MAXIMUM WAIT IS 126 SECONDS
+; AND THE MINIMUM WAIT IS 2 SECONDS.
+
+USETTM:	XCTR XR,[MOVE AC1,1(UUO)]
+	MOVEM AC1,PTIMES(DDB)
+	POPJ P,
+
+; ROUTINE TO GET CURRENT TIMEOUTS
+
+UGETTM:	MOVE AC1,PTIMES(DDB)
+	XCTR XW,[MOVEM AC1,1(UUO)]
+	POPJ P,
+;  Function 21 - Generate unique socket #;⊗ UGNSYM GENSYM GENSY2 GENSY3
+
+UGNSYM:	PUSHJ P,GENSYM		;Invent a socket number
+	XCTR XW,[MOVEM TAC,1(UUO)]	;Give it to the user
+	POPJ P,
+
+;Generate a unique socket number in TAC.  Clobbers TAC1
+
+GENSYM:	MOVE TAC,TIME		;Get time of day in tics
+	ADD TAC,THSDAT		;Make sure two programs started at the exact same
+				;time get different sockets on different days
+	ROT TAC,=16		;Mangle it so important high order 16 bits change
+	XOR TAC,TIME		;quickly.  Don't leave hole, either.  This scheme
+				;goes against Knuth's adage that random numbers
+				;should not be generated by "random" means, but we
+;	\ /			;simply want a unique number.
+GENSY2:	DPB J,[POINT 12,TAC,11]	;Clear high order four bits, set job number in
+				;remainder
+	HRLOI TAC1,-PUPMLK-1	;Setup to search link tables for local socket, plus
+;	\ /			;most recent unrecognized packet
+GENSY3:	CAME TAC,PUPLSK(TAC1)
+	  AOBJN TAC1,GENSY3
+	JUMPGE TAC1,CPOPJ	;If we don't find anything, we're done.
+	ADD TAC,THSDAT		;Fudge the socket number
+	JRST GENSY2		;and try again, retaining job number in high byte
+;	---
+
+;  Send/Read Mark			;⊗ PUPSMK PUPRMK PUPRM2
+
+;Function 25 - Send Mark
+
+  printx Shouldn't this code be doing something to flush the user's output buffer?
+
+PUPSMK:	SKIPL LNK,PUPLNK(DDB)	;Get and check link index
+	TLNE IOS,RFCW		;Make sure connection is complete
+	  JRST NOELNK		;  No connection
+	TRNE IOS,IODEND		;Closing?
+	  POPJ P,		;  Forget it
+	XCTR XR,[MOVE TAC,2(UUO)]	;Get mark code
+	LSH TAC,=36-=8
+	PUSH P,TAC		;Save properly justified in stack
+	HRROI AC2,(P)		;Setup to send
+	MOVEI AC3,1		;One byte to send
+	MOVEI TEM,BS%AMA	;Type = AMark
+	MOVEI TAC,1		;1 byte to send
+	PUSHJ P,BSPOU2		;Send the mark
+	MOVE TAC,PUPSTB(LNK)	;Return status of connection
+	XCTR XW,[MOVEM TAC,1(UUO)]
+	SUB P,[XWD 1,1]		;Flush value from stack
+	JRST CPOPJ1		;Skip return
+
+;Function 26 - read last Mark type received
+
+PUPRMK:	SKIPL LNK,PUPLNK(DDB)	;Get and check link index
+	TLNE IOS,RFCW		;Make sure connection is complete
+	  JRST NOELNK		;  No connection
+	SKIPN PKT,PUPILS(DDB)	;Get input list header
+	  POPJ P,		;  Failure return
+	HRRZ PKT,PKT		;Flush left half
+	MOVE TAC,PUPSTB(LNK)	;Return status of connection
+	XCTR XW,[MOVEM TAC,1(UUO)]
+	LDB TAC,PUPTYP		;Get type of first packet
+	CAIE TAC,BS%AMA		;Mark or AMark
+	CAIN TAC,BS%MRK
+	  JRST PUPRM2
+	CAIE TAC,BS%EAB		;EFTPAbort?
+	  POPJ P,		;  No, failure return
+	LDB TAC,PUP1DA		;16 bit quantity for abort code
+	SKIPA
+PUPRM2:	  LDB TAC,PUP1DB	;Get mark code
+	XCTR XW,[MOVEM TAC,2(UUO)]	;Return code to user
+	PUSHJ P,PUPREL		;Now, flush this packet
+	MOVEI IOS,IODMRK	;Clear bit in IOS
+	ANDCAB IOS,DEVIOS(DDB)
+	JRST CPOPJ1		;Skip return means success
+
+;  Function 27 - Get routing table	;⊗ GETROU
+;	27
+;	IOWD count,buffer
+;	size returned here
+GETROU:	XCTR XR,[MOVE AC1,1(UUO)]	;Fetch IOWD
+	HLRE AC2,AC1		;Get count
+	MOVN AC2,AC2
+	CAMG AC2,ROUSIZ		;Compare against actual size of table
+	  MOVE AC2,ROUSIZ	;  Don't move too much
+	JUMPL AC2,ADRERR	;Watch for stupidty
+	ADDI AC2,(AC1)
+	MOVEI AC1,1(AC1)	;It's off by one being an IOWD
+	HRL AC1,ROUNET		;Get address of routing table
+	XCTR XW,[BLT AC1,(AC2)]
+	MOVE AC1,ROUSIZ		;Get user the actual size
+	XCTR XW,[MOVEM AC1,2(UUO)]
+	POPJ P,
+
+;  Function 30 - Set routing table	;⊗ SETROU SETRO2
+;	30
+;	IOWD count,buffer
+;
+;Skips if successful. Must have ACW privledge to do this UUO
+SETROU:	XCTR XR,[MOVE TAC,1(UUO)]	;Get IOWD from user
+	HLRE AC3,TAC		;Get size
+	MOVN AC3,AC3		;Make it positive
+	CAIL AC3,5		;Check its size for reasonableness
+	CAIL AC3,200		;Arbitrary upper limit
+	  JRST ADRERR		;  BAD error message
+	XCTR XR,[SKIP 1(TAC)]	;Check first word of table
+	MOVEI TAC1,(TAC)	;Check last word of table
+	ADDI TAC1,(AC3)
+	XCTR XR,[SKIP (TAC1)]
+	MOVSI AC1,ACWPRV	;One last detail...
+	TDNN AC1,JBTPRV(J)
+	  JRST CPOPJ		;  Sorry about.
+	PUSHJ P,FSGET		;Now we can get FS for table
+	  JRST CPOPJ		;  Called from interrupt level or spacewar
+	HRLI TAC,1(TAC)		;Make BLT pointer from IOWD
+	HRR TAC,AC1
+	MOVEI AC2,-1(AC1)	;Point to end of buffer
+	ADDI AC2,(AC3)
+	XCTR XBLTR,[BLT TAC,(AC2)]	;Copy from user to FS
+	PUSH P,ROUNET		;Save pointer to old routing table
+	PUSHJ P,SETRO2		;Set new routing table
+	POP P,AC1		;Recover old one
+	HRRZS AC1		;FSGIVE doesn't like this.
+	PUSHJ P,FSGIVE
+	JRST CPOPJ1		;Skip return for success
+
+;Set routing table address.  Called from PUPINI to setup dummy routing table.
+;Normally just falls thru.
+SETRO2:	OFFPUP
+	HRRM AC1,ROUNET
+	HRRM AC1,ROUGTW
+	HRRM AC1,ROUINT
+	MOVEM AC3,ROUSIZ
+	ONPUP
+	POPJ P,
+
+;  Function 31 - Set experimental mode	;⊗ SETEXP SETEX2 SETEX3 SETEX4 SETEX5
+;	31
+;	packet type or -1 if serial line driver
+;
+;  [Document how this works!!!]
+;
+SETEXP:
+	XCTR XR,[SKIPL TAC,1(UUO)]	;Take all packets of given type?
+	  JRST SETEX2
+IFN FTETH2,<	;This code might be flushed.  See long comment above EXPQ
+	SKIPE PUPEXD		;Is there a DDB there already?
+	  POPJ P,		;  Yes, lose
+	MOVSI TAC,XPKMOD	;Set funny mode
+	IORM TAC,PUPMOD(DDB)
+	HRRZM DDB,PUPEXD	;We're going to take all of these.
+	MOVE AC1,ENNAD2		;Get our serial address
+	LSH AC1,-8
+	MOVE TAC,AC1
+	PUSHJ P,GROUTE		;Find its routing.
+	  SKIPE @ROUNET		;  Skip if no entry
+	  JRST CPOPJ1		;Already in table.  Skip return for success
+	DPB AC1,ROUGTW
+	MOVEI AC1,EXPNNM	;Internal network number for this hackery
+	DPB AC1,ROUINT
+	DPB TAC,ROUNET		;Set network number, LAST.
+	JRST CPOPJ1
+>;IFN FTETH2
+IFE FTETH2,<
+	JRST UUOERR
+>;IFE FTETH2
+
+;Receive packets of specific type.  Originally just for Yodanet but now generalized
+SETEX2:
+IFN FTETHX,<
+	PUSH P,DDB
+	PUSHJ P,XPKSRC		;Already in use?
+	  JRST TPOPJ		;  Yes
+	MOVE DDB,(P)
+	MOVEM TAC,PUPCID(DDB)	;Set packet type to use
+	MOVSI TAC,XPKMOD	;Set funny mode
+	TDNE TAC,PUPMOD(DDB)	;Already set?
+	  JRST TPOPJ		;  Yes, no more to do
+	IORM TAC,PUPMOD(DDB)
+	PUSHJ P,PUPCR0		;Remove from DDB chain
+	POP P,DDB
+	SKIPE AC1,EFSDDB	;Are there any here already?
+	  JRST SETEX5		;  Yes, we know where we can insert
+	MOVEI TAC,PUPDDB	;No, find last of PUP DDB's and insert there
+				;  so we can search these quickly
+	MOVE TAC1,(DDB)		;And our name
+;	\ /
+SETEX3:	MOVE AC1,TAC		;Save pointer to last PUP DDB seen
+	HLRZ TAC,DEVSER(AC1)	;Get pointer to next DDB
+	JUMPE TAC,SETEX4	;Boiler plate.
+	CAMN TAC1,(TAC)		;Is there one of ours?
+	  JRST SETEX3		;  Yes, try next one
+;	\ /
+SETEX4:	HRRZM DDB,EFSDDB	;Now the first place to look for experimental pkts
+;	\ /
+SETEX5:	HLRZ TAC,DEVSER(AC1)	;Now, insert this DDB here
+	HRLM TAC,DEVSER(DDB)
+	HRLM DDB,DEVSER(AC1)
+	JRST CPOPJ1		;Success
+;	---
+>;IFN FTETHX
+IFE FTETHX,<
+	POPJ P,			;Not implemented
+>;IFE FTETHX
+;MKLINK - Make a link.			;⊗ MKLINK MKLNK1 MKLNKF MKLNK3
+;
+;Note:  It is permissible to have one local socket for several connection
+;provided the foreign socket and host are unique.
+;
+;N.B.  This does not work entirely right, at least for an EFTP server.
+;
+; Setup:
+;	TAC	Local socket number
+;	AC2	Foreign host number
+;	AC3	Foreign socket number
+;	DDB	DDB address (if any, else -1).
+; Returns:
+;	LNK	Link index (if any, else -1)
+;	TEM	Error code
+;
+MKLINK:	MOVE LNK,PUPLKS		;Start at the end and work back
+	SOJL LNK,MKLNK3		;Convert to max. link and check for empty table
+MKLNK1:	CAMN AC2,PUPHST(LNK)	;Does this connection already exist?  Host?
+	CAME AC3,PUPFSK(LNK)	;    Foreign socket
+	  SOJGE LNK,MKLNK1	;  No, repeat until end of table (i.e. full)
+				;    (Note, it is OK to address link -1)
+	CAME TAC,PUPLSK(LNK)	;    Local socket
+	  SOJGE LNK,MKLNK1
+;	SKIPN PUPLDB(LNK)	;Is this a pending RFC?
+;	  JRST MKLNK2		;  Yes, complete connection
+	JUMPL LNK,MKLNK3	;Not in table
+	MOVEI TEM,SIU		;Decide what kind of error this is.
+MKLNKF:	SETO LNK,
+	POPJ P,			;Failure return
+;	---
+;Complete connection for which we have received an RFC
+;MKLNK2:
+;	CONO PI,PIOFF
+;	SKIPE PUPLDB(LNK)
+;	  JRST[	CONO PI,PION
+;					;Gee, they stole it out from under us!
+;		JRST MKLINK ]		;Now, let's try this again.
+;	---
+MKLNK3:	SYSPIFF
+				;Now, check again with interrupt off
+	MOVE LNK,PUPLKS		;Get new link number
+	CAIL LNK,PUPMLK
+	  JRST[	SYSPIN
+		MOVEI TEM,NLA
+		JRST MKLNKF ]
+	HRRZM DDB,PUPLDB(LNK)	;Claim this link
+	AOS PUPLKS		;Increment number of active connections
+	SYSPIN
+	MOVEM LNK,PUPLNK(DDB)
+	MOVEM AC3,PUPFSK(LNK)	;Set socket and host numbers
+	MOVEM AC2,PUPHST(LNK)
+	MOVEM TAC,PUPLSK(LNK)
+	SETZM PUPSTB(LNK)	;No status yet.
+	POPJ P,
+
+;Make a PUP packet			;⊗ PUPMAK PUPMK2 PUPMKF PUPMKB PUPMKS PUPRCY PUPCY1 XPKMAK
+;... including copying data
+;
+;Assumes LNK,PKT are setup.  Obtains source/destination from system
+;tables.
+;	AC2:	Address of data, from EXEC space if B0 is set.
+;	AC3:	Count in 8 bit bytes
+;	TAC:	PUP type
+;	TAC1:	PUP ID
+;	LNK:	Link number (CAUTION: -1 for non-ex connection at interrupt level)
+;Returns:
+;	PKT:	New packet [AC1]
+;Clobbers TAC,TAC1 (but these can be found in the packet)
+;
+;CAUTION: We may not have a DDB here!
+PUPMAK:	PUSH P,AC2		;Save address and count
+	PUSH P,AC3
+	PUSH P,TEM		;Save another AC which PUPCXM clobbers
+	MOVEI AC3,4*DTQ%XX+$ENHDS+$PUPMN+3(AC3)
+				;Include overhead, in bytes
+	LSH AC3,-2		;Convert to '10 word count
+	PUSHJ P,EFSGET		;Get FS (with special stuff for bug trap)
+	  JRST PUPMKF		;  Failed!
+	CONSO PI,77400
+				;UUO level?
+	  MOVE LNK,PUPLNK(DDB)	;  Yes, we might have changed link numbers while
+				;    waiting for FS.
+PUPMK2:	DPB TAC,PUPTYL		;First, set type of PUP and zero
+				;  transport field
+	DPB TAC1,PUPID		;Set ID field
+	MOVE TAC,-1(P)		;Get count in bytes again
+	MOVEI TAC,$PUPMN(TAC)	;Set total length of PUP from data length
+	DPB TAC,PUPLEN		;  PUPLEN = [POINT 16,ε(PKT),15]
+	SKIPGE TAC,PUPHST(LNK)	;Set destination host
+	  SETZ TAC,		;  Broadcast from listening sockets.
+	DPB TAC,PUPDHN
+	LDB TAC,PUPFS1		;Set destination socket 1st half
+	DPB TAC,PUPDS1
+	LDB TAC,PUPFS2		;Set destination socket 2nd half
+	DPB TAC,PUPDS2
+	MOVE TAC,PUPLSK(LNK)	;Set local socket
+	DPB TAC,PUPSSK
+	MOVE TAC,ENNADR		;Set local host
+	DPB TAC,PUPSHN
+	MOVEI AC2,PUP1DW(PKT)
+	SKIPE AC3,-1(P)		;Is there any data to send?
+	  PUSHJ P,PUPMKB	;  Yes, BLT data into packet, etc.
+	AOS -3(P)		;Successful return
+	PUSHJ P,PUPSXM		;Compute checksum
+PUPMKF:	POP P,TEM		;Restore ACs
+	POP P,AC3		;Restore count and address
+	POP P,AC2
+	POPJ P,
+
+;BLT data into packet, for PUPMAK or XPKMAK
+PUPMKB:	HRL AC2,-3(P)		;Setup to BLT data into packet
+	MOVEI AC3,3(AC3)	;Convert bytes to words again
+	LSH AC3,-2
+	ADDI AC3,-1(AC2)	;Point to last word in packet
+	SKIPG -3(P)		;Data from EXEC?
+	  JRST[	SKIPE -3(P)	;and not already there?
+		BLT AC2,(AC3)	;  Yes, just copy it
+		POPJ P, ]
+ifn ftpupd,<
+	push p,tac
+	hrrz tac,-1(pkt)
+	cail ac3,(tac)
+	  pushj p,pupbug
+	pop p,tac
+>;ifn ftpupd
+	XCTR XBLTR,[BLT AC2,(AC3)]	;Copy data from user
+PUPMKS:	POPJ P,			;Successful return
+
+;Recycle a PUP.
+PUPRCY:	PUSHJ P,PUPCY1		;Avoid hassles with skip return
+	  PUSHJ P,PUPBUG
+	POPJ P,
+;	---
+PUPCY1:	PUSH P,AC2		;Save address and count
+	PUSH P,AC3
+	PUSH P,TEM		;Save another AC which PUPCXM clobbers
+	LDB AC2,PUPLEN		;Check to make sure they're the same size
+	CAIE AC2,$PUPMN(AC3)	;Total length of new PUP from data length
+	  PUSHJ P,PUPBUG	;  Ooops!
+	JRST PUPMK2		;OK to reuse it.
+
+IFN FTETHX,<
+;Similar to PUPMAK, but don't fill in anything.
+;AC3 contains raw packet size
+XPKMAK:	PUSH P,AC2		;Save address and count
+	PUSH P,AC3
+	PUSH P,TEM		;Save another AC which PUPCXM clobbers
+	MOVEI AC3,4*DTQ%XX+3(AC3)
+				;Include overhead, in bytes
+	LSH AC3,-2		;Convert to '10 word count
+	PUSHJ P,EFSGET		;Get FS (with special stuff for bug trap)
+	  JRST PUPMKF		;  Failed!
+	MOVEI AC2,PUP1PW(PKT)	;Transfer entire packet, include header
+	MOVE AC3,-1(P)		;Get count again
+	PUSHJ P,PUPMKB		;BLT data into packet
+	AOS -3(P)		;Successful return
+	JRST PUPMKF		;Return
+>;IFN FTETHX
+;Route a PUP packet			;⊗ PUPROU PUPRO3 PUPRO4 EXPNNM NPUPNT PUPRO5 PUPETH NT1108 ISLM2 PUPSLA PUPSL2 GROUTE GROUT2
+;
+;	PUSHJ P,PUPROU
+;	  <failure>
+;	<success - send to normal Ethernet>
+;
+;Decide what network to use to send a packet, and skip an appropriate
+;number of times for that net.  Since there is only one network handling
+;PUP packets on SAIL, there will only be one successful return for now.
+;Also, constructs network dependent part of header.
+PUPROU:	LDB TAC,PUPDNT		;Get destination network from PKT
+	CAIE TAC,SUENNM		;Default network?
+	SKIPN TAC
+	  JRST PUPRO5		;  Yes, don't worry about routing
+	PUSHJ P,GROUTE		;Get routing table entry.
+	  POPJ P,
+;	\ /
+PUPRO3:	AOS (P)			;Assume success
+	LDB TAC,ROUGTW		;Success, get gateway host
+	JUMPE TAC,[LDB TAC,PUPDHS	;None, on one of our nets
+		   JRST .+1]
+IFE FTETH2,<
+	JRST PUPETH
+>;IFE FTETH2
+IFN FTETH2,<
+	LDB TAC1,ROUINT		;And internal network number
+	CAIG TAC1,NPUPNT	;Limit check
+	  JRST PUPRO4(TAC1)
+	PUSHJ P,PUPBUG		;Illegal internal network number
+;	\ /
+PUPRO4:	JRST PUPETH		;Setup PUP for Ethernet (must be 0 for YODOQ1)
+	JRST PUPSLA		;Setup PUP for Serial Line
+  EXPNNM←←.-PUPRO4-1
+NPUPNT←←.-PUPRO4-1	;Number of networks we are connected to which handle
+			;PUPs
+>;IFN FTETH2
+
+;Direct route
+PUPRO5:	AOS (P)			;Default network always succeeds
+	LDB TAC,PUPDHS		;We send directly to host
+IFN FTETH2,<
+	SETZ TAC1,		;Default internal net number
+>;IFN FTETH2
+;	\ /
+;Setup packet for Ethernet transmission.  TAC is destination Ethernet host
+PUPETH:
+IFN FTETH2,<
+	skipl tac1
+	cail tac1,enodsz
+	  pushj p,pupchk
+	DPB TAC1,QMPNET		;Set internal network number
+>;IFN FTETH2
+IFE FTF2,<
+	MOVE TAC1,PUPHDW	;Setup a PUP header word
+	MOVEM TAC1,PUP1PW(PKT)
+	DPB TAC,ENDEST		;Send this packet to host or gateway
+>;IFE FTF2
+IFN FTF2,<
+;We really should implement at least Xerox ARP.  Meanwhere, there is this kludge....
+	DPB TAC,PDSTHS		;Set destination for 10Mb
+IFN FTCCRMA,<
+	CAIL TAC,MN1108		;Funny host?
+	CAILE TAC,MX1108
+	  JRST[	CAIN TAC,202		;How about LM-2 acting as a gateway
+		  JRST[	MOVEI TAC,20536
+			DPB TAC,PDSTHS
+			MOVE TAC,[201600400]
+			JRST ISLM2 ]
+		CAIN TAC,3		;#@&#?!@ ACIS gatway
+		  JRST[	MOVEI TAC,34165
+			DPB TAC,PDSTHS
+			MOVE TAC,[230106006]
+			JRST ISLM2 ]
+		JUMPN TAC,NT1108
+		SETO TAC,
+		DPB TAC,PDSTHS
+		JRST ISLM2 ]		;  No
+	SKIPN TAC,DMUMBL-MN1108(TAC)	;Does this one exist?
+	  JRST[	SOS (P)			;  No, forget it.
+		POPJ P,]
+	DPB TAC,PDSTHS
+	SKIPA TAC,[125000]	;All of the 1108's have the same network number
+NT1108:
+>;IFN FTCCRMA
+	LDB TAC,PUPDNT
+ISLM2:	DPB TAC,PDSTNT
+	LDB TAC,PUPSHS		;Setup source for 10Mb
+	DPB TAC,PSRCHS
+	LDB TAC,PUPSNT
+	DPB TAC,PSRCN2
+	SETZ TAC,
+	DPB TAC,PSRCN1
+	MOVEI TAC,$PUP
+	DPB TAC,E10TYP
+>;IFN FTF2
+	LDB TAC,PUPLEN		;Get length of packet in bytes
+	ADDI TAC,$QMPHD+$ENHDS+1	;Include -11 and Ethernet overhead
+	LSH TAC,-1		;Convert to PDP-11 words
+	MOVEM TAC,DTQ%WC(PKT)	;This is DTE word count
+	SUBI TAC,2
+	DPB TAC,QMPWDC		;This is word count for Ethernet packet
+IFE FTF2,<
+	MOVEI TAC,%%ENMG	;Set type of -11 message
+	DPB TAC,QMPTYP
+>;IFE FTF2
+	SETZM DTQ%XC(PKT)	;Packet has not yet been queued
+	POPJ P,
+
+IFN FTETH2,<	;This code might be flushed.  See long comment above EXPQ
+
+;Setup packet for serial transmission.  TAC is destination Ethernet host
+PUPSLA:	PUSH P,TAC1		;Save internal routing code while we adjust host
+	LDB TAC1,PUPSHN		;Get source of packet
+	CAME TAC1,ENNADR	;Is that ours?
+	  JRST PUPSL2		;  No, forget it.
+	MOVE TAC1,ENNAD2
+	DPB TAC1,PUPSHN		;Yes, change the host address so gateway works
+	PUSH P,TEM		;Now, we have to recompute the stupid checksum
+	PUSHJ P,PUPSXM
+	POP P,TEM
+;	\ /
+PUPSL2:	POP P,TAC1
+	JRST PUPETH		;Otherwise, treat as normal Ethernet route
+;	---
+>;IFN FTETH2
+
+;Do hash table lookup on routing table.
+;Takes network number in TAC, returns table index in TAC1
+;Skips on success if network is in the table.
+;(Called from UUOCON.)
+↑GROUTE:PUSH P,TAC		;Save on stack
+	IDIV TAC,ROUSIZ		;Hash the network number
+GROUT2:	LDB TAC,ROUNET		;Is this the network number we want?
+	CAMN TAC,(P)
+	  JRST TPOPJ1		;  Yes, use it
+	JUMPE TAC,TPOPJ		;Not accessible if slot is empty
+	SOJGE TAC1,GROUT2	;Try next slot, but watch for wraparound
+	MOVE TAC1,ROUSIZ	;Start again from other end of table
+	SOJA TAC1,GROUT2
+;Wait, Wake and check connection		;⊗ PUPWAI PUPWT1 PUPWAK PUPWK1 NULRT %NULRT
+
+; Conditionally go into IOWQ
+;
+;	JSP TEM,PUPWAI
+;	  <instruction which skips if entering IOWQ>
+;	  <instruction to set IOS for IOWQ>
+;
+PUPWAI:	ADDI TEM,2		;Skip over arguments
+	PUSH P,TEM		;So POPJ works
+	OFFPUP			;Avoid timing races and saving stale IOS
+	MOVE IOS,DEVIOS(DDB)	;Get most recent IOS
+	XCT -2(TEM)		;Test for entering IOWQ
+	  JRST PUPONJ		;  No, just return
+	XCT -1(TEM)		;Update IOS
+	MOVEM IOS,DEVIOS(DDB)	;Save new version
+	ONPUP			;Allow interrupts again
+;	\ /
+;
+; Put job into IOWQ
+;
+PUPWT1:	PUSH P,AC1		;Save ACs which WSYNC clobbers
+	PUSH P,AC2
+	PUSH P,AC3
+IFN FTCCRMA,<
+	hrrz ac1,pupcsb(ddb)	;Retry active?
+	jumpn ac1,pupwt2	;  Yes
+	tlnn ios,devsbb		;Will we wait?
+	  jrst pupwt2		;  No, just the expected timing race.
+	hrrz ac1,-3(p)
+	caie ac1,..pwt1		;These are OK
+	cain ac1,..pwt2		;(If you flush these instructions, flush the labels)
+	  jrst pupwt2
+	aosle ppercn		;too many errors lately?
+	 jrst pupwt2		;  yes, forget it
+	PUSHACS
+	PUSHJ P,DISUSR
+	 SIXBIT/PUP/
+	PUSHJ P,DISERR
+	 [ASCIZ"At PUPWT1 w/o retry, called from "]
+	 DISARG LOC,<-23(P)>
+	 [ASCIZ/, DDB=/]
+	 DISARG LOC,DDB
+	 -1
+	PUSHJ P,DISCRLF
+	POPACS
+>;IFN FTCCRMA
+PUPWT2:	PUSHJ P,WSYNC		;Wait for DEVSBB to be cleared
+	MOVE LNK,PUPLNK(DDB)	;Make sure we have the updated link field
+	POP P,AC3
+	POP P,AC2
+	POP P,AC1
+	POPJ P,
+
+; Wake up user in PUPW state.  Must be at interrupt level or with OFFPUP
+; (=OFFSCN on KL system) in effect.
+; Must not clobber TAC or PUPRFC will have to change.
+
+PUPWAK:	MOVE IOS,DEVIOS(DDB)	; wake up job in case it was blocked
+PUPWK1:	TLZ IOS,DEVSBB		; clear DEVSBB so job won't re-block
+	TLZE IOS,IOW		; job in I/O wait?
+	  PUSHJ P,STTIOD	; yes - put job in TQ
+	MOVEM IOS,DEVIOS(DDB)	; update DEVIOS
+	POPJ P,
+
+;Check health of connection
+
+NULRT:	MOVE TAC,PUPMOD(DDB)	;Get type of connection
+	TLNN TAC,BSPMOD		;BSP?
+	  POPJ P,		;  No, forget it
+	PUSHJ P,NULADA		;Send a null AData packet to make sure the
+				;connection is still live
+	MOVE TAC,%NULRT		;Try again later
+	HLLM TAC,PUPCSB(DDB)
+	POPJ P,
+
+%NULRT:	XWD =30*PUPSEC,NULRT	;Do this every half minute
+;Set/Check PUP checksums			;⊗ PUPSXP PUPSXM PUPCXM PUPCX1
+
+;------------------------------------------------------------------------------
+;
+;	Pup checksum routines
+;
+;------------------------------------------------------------------------------
+
+;  Set byte pointer for Pup checksum in TAC1.  Examines PUPLEN to compute
+; where the checksum byte for this Pup is.
+
+PUPSXP:	LDB TAC1,PUPLEN		; get Pup length
+	ADDI TAC1,1		; round up for possible garbage byte
+	LSH TAC1,-1		; convert to 16-bit bytes
+	ADDI TAC1,1		; if odd checksum is first byte of next word
+	ROT TAC1,-1		; convert to 32-bit bytes
+	ADDI TAC1,PUP1HW-1	; advance to location within block
+	SKIPL TAC1		; odd or even?
+	 TLOA TAC1,(<POINT 16,(PKT),15>); left byte
+	  HRLI TAC1,(<POINT 16,(PKT),31>); right byte
+	POPJ P,
+
+; Set Pup checksum in a Pup, should be called before PUPROU or ENOUTQ unless the Pup
+; is being retransmitted
+
+PUPSXM:	PUSHJ P,PUPCXM		; compute checksum in TEM
+	IDPB TEM,TAC1		; set computed checksum
+	POPJ P,
+
+; Compute Pup checksum, with computed checksum in TEM and ILDB pointer
+; in TAC1
+
+PUPCXM:	PUSH P,TAC		; get some scratch ACs
+	PUSH P,J
+	LDB TAC,PUPLEN		; get Pup length
+	ADDI TAC,1		; round up for possible garbage byte
+	LSH TAC,-1		; convert to 16 bit words
+	SUBI TAC,1		; don't look at checksum word
+	MOVE TAC1,[POINT 16,PUP1HW(PKT)]
+	SETZ TEM,		; initialize checksum
+PUPCX1:	ILDB J,TAC1		; add next byte to checksum
+	ADDI TEM,(J)
+	TRZE TEM,200000		; zero overflow bit, skip if it wasn't set
+	 ADDI TEM,1		; add in overflow bit to simulate 1's-complement
+	LSH TEM,1		; shift bits left
+	TRZE TEM,200000		; do overflow computation again
+	 ADDI TEM,1
+	SOJG TAC,PUPCX1		; loop until done
+	CAIN TEM,177777		; if compute to null checksum
+	 SETZ TEM,		; make checksum be zero
+	POP P,J			; restore ACs
+	POP P,TAC
+	POPJ P,
+;Trace packets			;⊗ PKTTRC PKTTR1 PKTTRE PKTTR2 PKTTR3 PKTTR4 PKTTR5
+
+IFN FTPKTL,<
+
+;------------------------------------------------------------------------------
+;
+;	Packet tracing for PUP
+;
+;------------------------------------------------------------------------------
+;
+; Provide mechanism for studying ether traffic, as perceived by WAITS.  Packets
+; header (+ some data) are copied into F.S. and these are read periodically by
+; a user program which maps in that part of F.S. into its upper segment.  This
+; feature defaults to being disabled.  Since it is not expected to be used by
+; ordinary users, no UUO support has been provided at present.  It is turned on
+; by using UEDDT to deposit the desired buffer size into PKLOGP, and turned off
+; by zeroing PKLOGL.  Not very mnemonic, but it minimizes the amount of time it
+; expends at interrupt level.  Similarly, no end checking is done on (PKT), so
+; your value of PKLOGI had better be reasonable.
+;
+; The current format saved in F.S. consists of simply the time (in ticks since
+; the system was loaded), followed by as much of the PUP part of the packet as
+; will fit.  No attempt is made to deal with other packet types, but it ought
+; to be easy enough to change that.
+;
+; CAUTION: PKTTRC must be called from interrupt level or with PUPOFF!
+;
+PKTTRC:	SKIPN TAC,PKLOGP	; Anything to do?
+	  POPJ P,		;   No, forget it.
+	PUSH P,AC3
+;	\ /
+PKTTR1:	MOVE AC3,PKLOGI
+	ADDB AC3,PKLOGP		; Amount of packet to save
+	CAMLE AC3,PKLOGL	; Beyond end?
+	  JRST PKTTR2		;   Yes, this gets complicated
+	PUSH P,UPTIME		; This one is monotonic
+	POP P,(TAC)
+	ADDI TAC,1
+	HRLI TAC,PUP1HW(PKT)	; Now, copy as much of packet as is requested
+	BLT TAC,-1(AC3)
+;	\ /
+PKTTRE:	POP P,AC3
+	POPJ P,
+;	---
+PKTTR2:	SKIPN PKLOGL		; Are we getting/flushing buffer?
+	  JRST PKTTR3		;   Yes
+	MOVE TAC,PKLOGB
+	MOVEM TAC,PKLOGP
+	JRST PKTTR1
+;	---
+PKTTR3:	PUSH P,PKT		; Save packet (PKT=AC1)
+	SKIPN AC1,PKLOGB	; Have buffer already?
+	  JRST PKTTR5		;   No, must need one
+	PUSHJ P,FSGIVE
+	POP P,PKT
+;	\ /
+PKTTR4:	SETZM PKLOGP		; Forget we had a packet logging buffer
+	SETZM PKLOGB
+	SETZM PKLOGL
+	JRST PKTTRE		; We're done
+;	---
+; We are given a size for a buffer in PKLOGP
+PKTTR5:	MOVN AC3,PKLOGI		; Backup "pointer" so we don't make increasingly
+	ADDB AC3,PKLOGP		; larger requests when FSGET fails...
+	CAIL AC3,0
+	CAILE AC3,=4096
+	  JRST PKTTR4		; Out of range, forget it!
+	PUSHJ P,FSGET
+	  JRST PKTTR6		;   No space, try again laster
+	MOVE TAC,AC1
+	POP P,PKT
+	MOVEM TAC,PKLOGB	; Setup pointers
+	EXCH TAC,PKLOGP
+	ADD TAC,PKLOGB
+	MOVEM TAC,PKLOGL
+	JRST PKTTR1
+;	---
+PKTTR6:	POP P,PKT
+	JRST PKTTRE
+
+>;IFN FTPKTL
+;Bugtraps 				;⊗ PUPBUG PUPCHK CNTBUG CXSBUG PUPGIV GIVBUG
+
+;------------------------------------------------------------------------------
+;
+;	Bug trap for impossible errors
+;
+;------------------------------------------------------------------------------
+
+; Here to report a Ethernet bug
+;	<bug trap instruction, skip if no bug>
+;	  PUSHJ P,PUPBUG
+; Re-executes the losing instruction
+
+↑PUPBUG: SOS (P)		; make it come back to the instruction
+	SOS (P)			; which screwed us, so $P will retry
+	PUSHACS
+	PUSHJ P,DISUSR
+	 SIXBIT/PUP/
+	PUSHJ P,DISERR
+	 [ASCIZ/Impossible Pup error at /]
+	 DISARG LOC,<-21(P)>
+	 [ASCIZ/.  P points at the losing instruction.
+Find TVR or reload.  /]
+	 -1
+	PUSHJ P,DISFLUSH
+	POPACS
+	JRST DDTCALL		; make the stack point to losing instruction
+
+; Here to report a minor problem
+PUPCHK:	PUSHACS
+	PUSHJ P,DISUSR
+	 SIXBIT/PUP/
+	PUSHJ P,DISERR
+	 [ASCIZ/PUPSER problem at /]
+	 DISARG LOC,<-21(P)>
+	 [ASCIZ/.  Find TVR or type "$P".  $ means ESC.  /]
+	 -1
+	PUSHJ P,DISFLUSH
+	POPACS
+	JRST DDTCALL		; make the stack point to losing instruction
+
+; A count got messed up in PUPICN or PUPOCN
+↑CNTBUG: PUSHACS
+	PUSHJ P,DISUSR
+	 SIXBIT/PUP/
+	PUSHJ P,DISERR
+	 [ASCIZ/PUPSER list count bad at /]
+	 DISARG LOC,<-21(P)>
+	 [ASCIZ/.  Find TVR or type "$P".  $ means ESC.  /]
+	 -1
+	PUSHJ P,DISFLUSH
+	POPACS
+	JRST DDTCALL		; make the stack point to losing instruction
+
+IFE FTETH2,<	;This code might be flushed.  See long comment above EXPQ
+
+↑CXSBUG: PUSHACS
+	PUSHJ P,DISUSR
+	 SIXBIT/PUP/
+	PUSHJ P,DISERR
+	 [ASCIZ/Bad PUP checksum at /]
+	 DISARG LOC,<-21(P)>
+	 [ASCIZ/.  Find TVR or type "$P".  $ means ESC.  /]
+	 -1
+	PUSHJ P,DISFLUSH
+	POPACS
+	JRST DDTCALL		; make the stack point to losing instruction
+
+>;IFE FTETH2
+
+; Bugtrap for releasing packets twice from DTEQ
+PUPGIV:	PUSH P,[PUSHJ P,GIVBUG]
+	POP P,DTQ%XC(AC1)
+	PUSHJ P,FSGIVE
+	MOVSI AC1,777000	;Make sure packet doesn't get used.
+	POPJ P,
+
+; Here to report a minor problem
+GIVBUG:	PUSHACS
+	PUSHJ P,DISUSR
+	 SIXBIT/PUP/
+	PUSHJ P,DISERR
+	 [ASCIZ/Attempt to release PUP packet twice /]
+	 [ASCIZ/.  Find TVR or type "$P".  $ means ESC.  /]
+	 -1
+	PUSHJ P,DISFLUSH
+	POPACS
+	JRST DDTCALL
+
+
+BEND PUPSER
+>;IFN PUPNUM

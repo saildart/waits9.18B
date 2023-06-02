@@ -1,0 +1,123 @@
+COMMENT ⊗   VALID 00004 PAGES
+C REC  PAGE   DESCRIPTION
+C00001 00001
+C00002 00002	ADDRCK NULDSP
+C00004 00003	NULSET NULCLR NULCL1
+C00005 00004	NULOOK NULINP NULDMI NULOUT NULBFE NULGTW NULDMO
+C00007 ENDMK
+C⊗;
+;ADDRCK NULDSP
+
+BEGIN NULSER ↔ SUBTTL NULSER NUL Device Service Routine
+
+; MRC 4/24/78
+
+;  Device NUL: is a shared device like DSK:.  It has the same buffer
+; size as DSK:.  On input, it returns EOF and no data, and on output
+; slurps up and discards whatever the user sends to it.
+;
+;  All other UUO's are no-ops; the UUO's that have success skip returns
+; will skip.
+
+HISYS
+
+ADDRCK←←0			; ≠ 0 → output UUO's should address check
+				; It doesn't really help to address check
+				; output since it won't be done on input
+				; anyway, so why slow the user down?
+
+; UUO dispatch table:
+
+	JRST NULCLR		; release a DDB
+	JRST NULSET		; make a DDB
+	POPJ P,			; initialize
+	POPJ P,			; hung timeout(?)
+↑NULDSP:POPJ P,			; RELEASE
+	POPJ P,			; CLOSE output
+	JRST NULOUT		; OUTPUT
+	JRST NULINP		; INPUT
+	JRST CPOPJ1		; ENTER
+	JRST NULOOK		; LOOKUP
+	JRST NULDMI		; dump mode INPUT
+IFN ADDRCK,<JRST NULDMO>	; dump mode OUTPUT
+IFE ADDRCK,<POPJ P,>		; dump mode OUTPUT
+	POPJ P,			; USETO
+	POPJ P,			; USETI
+	POPJ P,			; UGETF
+	JRST CPOPJ1		; RENAME
+	POPJ P,			; CLOSE input
+	POPJ P,			; UTPCLR
+	POPJ P,			; MTAPE
+;NULSET NULCLR NULCL1
+
+; Make a NUL: DDB
+
+NULSET:	MOVEI AC3,NULDLN
+	PUSHJ P,FSGET
+	 JRST [	ADJSP P,-3 ↔ JRST DLYCM1]
+	HRRI DDB,DDBSKW(AC1)
+	HRLI AC1,NULDDB-DDBSKW
+	BLT AC1,NULDLN-DDBSKW-1(DDB)	;Copy prototype DDB
+	MOVEI AC1,DEVIOS(DDB)		;Set up pointer to IOS word
+	MOVEM AC1,DEVSPT(DDB)
+	HRLM DDB,NULDDB+DEVSER
+	POPJ P,
+
+; Flush a NUL: DDB
+
+NULCLR:	SETZB IOS,DEVIOS(DDB)
+	MOVEI AC1,NULDDB
+NULCL1:	MOVE TAC1,AC1
+	HLRZ AC1,DEVSER(TAC1)
+	JUMPE AC1,BUGTRP
+	CAIE AC1,(DDB)
+	 JRST NULCL1
+	MOVE DDB,DEVSER(AC1)
+	HLLM DDB,DEVSER(TAC1)
+	SUBI AC1,DDBSKW
+	JRST FSGIVE
+;NULOOK NULINP NULDMI NULOUT NULBFE NULGTW NULDMO
+
+; LOOKUP UUO.  Does nothing but zero 4th word of block pointed to by UUO
+
+NULOOK:	XCTR XW,[SETZM 3(UUO)]	; pretend successful lookup of empty disk file
+	JRST CPOPJ1
+
+; INPUT UUO
+
+NULINP:
+NULDMI:	IORI IOS,IODEND		; input returns immediate EOF
+	MOVEM IOS,DEVIOS(DDB)	; set error for UUOCON
+	POPJ P,
+
+; OUTPUT UUO
+
+NULOUT:
+IFN ADDRCK,<
+	HRRZ TAC1,DEVOAD(DDB)	; OUT buffer address
+	XCTR XR,[HRRZ TAC,1(TAC1)] ; word count
+	JUMPE TAC,NULBFE	; buffer empty
+	HRLOI TAC,-1(TAC)	; form AOBJN pointer to buffer
+	EQVI TAC,2(TAC1)
+	XCTR XR,[SKIP (TAC)]	; ensure all of buffer is readable
+	AOBJN TAC,.-1
+NULBFE:
+>;IFN ADDRCK
+	PUSHJ P,ADVBFE		; advance buffer
+	 POPJ P,		; no more buffers, return to user
+	JRST NULOUT
+
+; Dump mode OUTPUT UUO
+
+IFN ADDRCK,<
+NULGTW:	HRR UUO,TAC		; use goto word
+NULDMO:	XCTR XR,[SKIPN TAC,(UUO)]; get dump IOWD
+	 POPJ P,		; end of list
+	TLNN TAC,-1
+	 JRST NULGTW		; goto word
+	XCTR XR,[SKIP 1(TAC)]	; ensure all of buffer is readable
+	AOBJN TAC,.-1
+	AOJA UUO,NULDMO		; do next command
+>;IFN ADDRCK
+
+BEND NULSER

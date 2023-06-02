@@ -1,0 +1,40 @@
+COMMENT ⊗   VALID 00002 PAGES
+C REC  PAGE   DESCRIPTION
+C00001 00001
+C00002 00002	 HIEND ..LIT FFF CHKEND ..VAR
+C00005 ENDMK
+C⊗;
+;⊗ HIEND ..LIT FFF CHKEND ..VAR
+
+;THIS PROGRAM SHOULD BE LOADED AFTER LAST NEEDED PROGRAM
+;BUT BEFORE EXEC DDT AND ONCE
+
+HIEND←<.+777>&777000			;NEXT PAGE BOUNDARY - END OF HI REGION
+IFE FTHSYS,<HIEND←←0>			;ZERO IF NOT FTHSYS
+
+LOSYS	;LITERALS ARE NEEDED BY P2
+
+..LIT:	XLIST	;FOR CRISSAKE SAVE 100 PAGES OF PAPER (LIT IS XLISTED)
+	LIT
+	LIST
+
+IFN FTMACP,<
+;FFF and CHKEND are defined in the file CHKEND
+>;IFN FTMACP
+IFE FTMACP,<	;nonzero means protected part of system includes MACRO code
+FFF:					;FREE WORDS IN CHECKSUMMED MONITOR
+	LOC <FFF+777>&777000		;skip to beginning of next page
+CHKEND←.-1				;END OF CHECKSUMMED REGION.
+>;IFE FTMACP
+
+..VAR::	VAR	;see if there are any variables declared (with "#")
+IFN .-..VAR,<
+  IFE FTMACP,<
+    PRINTX This system has variables in it!
+  >;IFE FTMACP
+  IFN FTMACP,<
+    .FATAL This system has variables in it, and they're in the write-protected area!
+  >;IFN FTMACP
+>;IFN .-..VAR
+
+;*** The PATCH area, formerly here, now appears at the end of UNCDAT! ***

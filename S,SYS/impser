@@ -1,0 +1,2592 @@
+COMMENT ⊗   VALID 00035 PAGES
+C REC  PAGE   DESCRIPTION
+C00001 00001
+C00007 00002	IMP Service Routines
+C00013 00003	BEGIN IMPSER  TYHB RFNHB TEST IMPERR IDONE IEND ODONE NREADY IEPIA IDPIA ODPIA TEST STRIN I32 O32 CLRST CLRWT STROUT FINO IEPIEN IDPIEN ODPIEN PIA ISTART IFLUSH CLRERR MAK10D STPOUT FINO GOTEND IEPIEN ODPIEN IDPIEN PWRUP DOWN10 IMPERR IMPDWN IEND ODONE IDONE STROUT O32 I32 ISTART IFLUSH
+C00019 00004	Use of interrupt levels
+C00026 00005	Interrupt macros  SONPPJ SONPJ1 IMPFFJ IMPNJ1 IMPONJ IMPONJ IMPNJ1
+C00031 00006	AC save and restore SETAC SETT10 SAVAC TCPCAL  SAVALL SAVOK IF.NWT IF.PRV IF.ALS SUP1P2
+C00037 00007	Storage management  GETFMB GETFM2 GIVBIB RELFMB
+C00040 00008	UUO dispatch table  IMPDSP
+C00041 00009	Make and release IMP device data blocks  DDBGET IMPSET IMPSE1 IMPSE2 DDBLNK DDBREL DDBRE0 DDBRE1 IMPRET IMPRE1
+C00051 00010	Initialization and clock level  IMPINI INI0 INI1 INI2 ZERTAB ZERTBN IMPCLK
+C00055 00011	MTAPE dispatch  IMTIGD IMTSTB IMTNID IMTCLD IMTTCP IMTUDP UUODSP MXUUO IMTAPE IMTAP1 IMPLUZ UILLBS IDERR CGTERR STTERR BADPRO
+C00061 00012	Open a TCP connection  CONECT CONNEW IPADR CONEC1
+C00062 00013	Listen for a TCP connection  LISTEN LISTN1 SETST LISTN2 PUTSTB STBTAB STATUS
+C00066 00014	 TERMIN TERMI1 TERMI2 SWAIT SWAIT1 SWAIT2
+C00069 00015	 WAKEMT INPSKP SNDINT REINIT
+C00072 00016	 TSINT TSETAL TSETTB TSETSP TGETAL TGETFS TGETF1 USETTM UGETTM
+C00077 00017	 GENSYM ABORT ABORT1 SNDWDN SNDWDN UNWEDG
+C00080 00018	 SETPSH XSTATS XSTAT1 XSTSTB XSTBLN
+C00083 00019	Set UDP parameters  SETUDP SETUD0 SETUD1 UDPFLS SETUD2 CGTERR STTERR UDPPRT UDPPR1 UDPPR2
+C00087 00020	Buffered and dump mode output UUOs  BUFO DMPO
+C00090 00021	Common output code  OUTPT OUTBAD TCPOUT OUT01 OUT02 OUT025 OUT05 OUT050 OUT051 OUT07 OUT06 OUT10 OUT102 UDPOUT UDPOU1 UDPOU2 OUTFLS ETHREL
+C00099 00022	Buffered and dump mode input UUOs  BUFI UUXIT ENDCHK DMPI DMPIT
+C00103 00023	Common input code  INPT INPT01 INPBAD TCPINP INPT11 INPT02 INPT17 INPT18 INPT19 INPT21 INPT09 INP09A INPT13 INPT14 UDPINP UDPIN1 UDPIN2 UDPIN3 UDPIN4 UDPIN5
+C00113 00024	Close and release UUOs  UDPCLS CLSI CLSO CLSO1 IMPRLS
+C00116 00025	I/O wait and wake routines  IMPW60 IMPWAT IMPWA1 IMPWA2 IMPWAK IMPWK1 IMPHNG IMPIOD
+C00121 00026	Bugtraps  IMPBUG DIE CONTAB
+C00124 00027	IMPSER/TTYSER interface.  ITYGET ITYGE1 ITYREL ITYRL1 RECIMP ILGOUT ILGOU2 QTCLOS ITYCLS FIXITY ITYECH
+C00134 00028	Subroutines for TOPS-10 code  IMSINT INTCOM CTLJBD CTLJB1 TSETBI TSETBO TTFORC IACIP IACIP1 IACAYT IACEL IACEL1 IACEL2
+C00138 00029	Telnet binary mode  BINWIL BINWNT BINDO BINDNT BINIAC RCBON RCBOFF TRBON TRBOFF WANTRB WANTTB TPTIMP TPTIM1 TTICMP TTICM1
+C00143 00030	Telnet server output  IMPTYW IMPTW1
+C00146 00031	Server job startup  GOSERV EXCLGR EXCLG2 EXCLG3
+C00149 00032	Internet routing  ISUP HASROU SAMNET SAMSBN SETW SETW1 SETW2 SETW3 SETW4 SETW5 SETW8 SETW9 SETW TARGET TARGE2 TARGE3 TARGE4 TARGE5 IPEROU IPERO2 IPERO3 IPERO4
+C00157 00033	Clock-level input handling  IMPENQ IMPENX IMPINQ
+C00161 00034	Output preparation  OUTPRE OUTPR1 IMPPRE ETHPRE OUTBYT
+C00164 00035	Typeout routines for debugging  .FIRST .LAST .FIRQ .LASQ .FIRR .LASR XGOTMS XRFNM XGOTM1 XOUTMS XNOP XOUTM1 XPRMSG XICMP XTCP XTCP1 XTCP2 XTCP3 XTCPTB XPRHDR XDIS32 XOUTST XOUT1 XOUT2 XOUT3 XOUT4 XOUT5
+C00172 ENDMK
+C⊗;
+SUBTTL IMP Service Routines
+
+IFE FTIP,<.FATAL Why are you compiling IMPSER?>
+
+IFN FTIP,<			;Whole file
+
+;JAM	September '71	NCP
+;MRC	May '78		extended leaders
+;JJW,ME	April '83 	IP/TCP (with TOPS-10 code by Don Provan)
+;JJW	March '84	IP/UDP
+;JJW	February '86	32-bit I/O and clock-level input processing
+
+;Prior to April 1983, this file contained all of the code to handle the
+;Arpanet NCP protocol for device IMP.  Beginning in January 1983, the
+;Internet protocols (IP, ICMP, TCP, UDP, etc.) became mandatory on the
+;Arpanet, and also supported on the Stanford Ethernet.  Much of our
+;Internet code is borrowed from TOPS-10; this file contains only the
+;top-level UUO code and various interfaces between the TOPS-10 code and
+;the rest of WAITS.  The TOPS-10 code, modified for WAITS, may be found
+;in the following MACRO files:
+;
+;	F.MAC		Feature switches
+;	S.MAC		System definitions for TOPS-10
+;	IMPINT.MAC	IMP interrupt handlers and AC save code
+;	NETMAC.MAC	Network definitions (used to be NETDEF.MAC)
+;	NETSUB.MAC	Network subroutines
+;	IPSER.MAC	IP and ICMP protocols
+;	UDPSER.MAC	UDP protocol
+;	TCPSER.MAC	TCP protocol and IMPUUO handlers (our MTAPEs)
+;	IMPMAC.MAC	I/O and Telnet service (used to be IMPSER.MAC)
+;----------------------------------------------------------------------
+
+;Global declarations for all WAITS symbols used in TOPS-10 code.  Note that
+;they must be available in the outer block (i.e., preceded with ↑) for these
+;declarations to refer to them.
+
+;From CACDAT:
+	INTERN	PUSHIT,POPIT,DDTCALL,MAINTM,IMPETS,IMPOTS,IMPCTS,CLKQ
+	INTERN	IMLHAC,LINTAB,PTYIMP,PSTDAT,TTYTAB
+	INTERN	UPTIME,PSTIME,CTYMAR,IMPDDB,CLSTP,ALLTP,RFCTP,SERVOK
+	INTERN	IMPBFT,IMPBUF,IMPBFE,PIOFFS
+IFN FTAIP,<
+	INTERN	IMPETS,IMPOTS,IMPCTS,IMPCHN,MPIPI,MPICHL,MPISAV,MPEPI,MPECHL
+	INTERN	MPESAV,MPPPI,MPPCHL,MPPSAV,IMPBTS,IMPOUM,RFNMCT,BADNOP
+	INTERN	IMPOFF,IMPON	;Defined by CHNDEF macro in OUTER
+>;IFN FTAIP
+IFN FTEIP,<
+	INTERN	IMPBFX,ETHINM,ETHOUM
+	INTERN	%%ENMG,DTQ%WC,DTQ%XC,DTQ%OL,DTQ%MS,DTQ%XX,ENHADR
+>;IFN FTEIP
+
+;From CLKSER
+	INTERN	F.HELL,DAYCNT
+
+;From CORE
+	INTERN	FSGET,FSGIVE
+
+;From COMCSS
+	INTERN	DISFLU,DISUSR,DISMES,DISCRL,DISERR,DISLOC,DISOHS,DISDEC,DISIPA
+	INTERN	STOIOS,STTIOD,BUGTRP
+
+IFN FTEIP,<
+;From KLSER
+	INTERN	EFSGET,DTEQ
+>;IFN FTEIP
+
+;From LOWCOR
+	INTERN	CPOPJ2,CPOPJ1,PJOBN,PDVTIM,BITTAB
+
+;From NETDEF
+	INTERN	STLOC,LSLOC,WFLOC,BSLOC,FSLOC,HLOC
+
+;From OUTER
+	INTERN	PUNITS,PTYL0,JIFSEC,INTINP
+
+IFN FTEIP,<
+;From PUPSER
+	INTERN	$QMPHD,$ENHDS,ETHIPT,QMPTYP,QMPWDC,ENDEST,ENSRC,ENTYPE
+>;IFN FTEIP
+
+;From TTYSER
+	INTERN	TLKRNG,DMLIN,FULTWX,DELHBT,PUTCRS
+
+;From UNCDAT
+	INTERN	IMP.NX
+
+;From IMPSER
+	INTERN	SONPPJ,SONPJ1
+	INTERN	GETFMB,RELFMB,GIVBIB,IMSINT,INTCOM,DDBGET,DDBREL,OUTFLS
+	INTERN	IMPWAT,IMPBUG,DIE,ITYGET,ITYREL,ITYCLS,CTLJBD,RECIMP
+	INTERN	ILGOUT,IMPTYW,TSETBI,TSETBO,TTFORC,WANTRB,WANTTB,IACIP,IACAYT
+	INTERN	IACEL,GOSERV,IMPTW1,IMPWAK,IMPWK1,TARGET
+	INTERN	IMPENQ,OUTPRE,OUTBYT
+
+;Temporary for debugging
+repeat 0,<
+	INTERN	XGOTMS,XOUTMS,XOUTST
+>;repeat 0
+BEGIN IMPSER ;⊗ TYHB RFNHB TEST IMPERR IDONE IEND ODONE NREADY IEPIA IDPIA ODPIA TEST STRIN I32 O32 CLRST CLRWT STROUT FINO IEPIEN IDPIEN ODPIEN PIA ISTART IFLUSH CLRERR MAK10D STPOUT FINO GOTEND IEPIEN ODPIEN IDPIEN PWRUP DOWN10 IMPERR IMPDWN IEND ODONE IDONE STROUT O32 I32 ISTART IFLUSH
+
+HISYS
+
+;TOPS-10 uses different names for ACs, and in most cases we try not to
+;depend on particular assignments of AC names, but the following are
+;used often enough that it is more convenient to require their identity:
+
+GLOBAL S,W,F	;Can't downarrow these in OUTER since DDT has different defs.
+
+IFN IOS-S,<.FATAL IOS must be the same as S>
+IFN TAC-W,<IFN TAC-T1,<.FATAL TAC must be either W or T1>>
+IFN DDB-F,<.FATAL DDB must be the same as F>
+IFN LINE-U,<.FATAL LINE must be the same as U>
+
+IFN FTAIP,<
+repeat 0,<
+;CONI and CONO bits for the IMP, kept here for posterity though with the
+;TOPS-10 code they are only used in IMPINT.MAC, where they are redefined.
+
+IFE FTF2,<
+; CONI bits
+
+TYHB←←	400000	; There's Your Host Bit
+RFNHB←←	200000	; Ready For Next Host Bit
+TEST←←	100000	; Interface is in test mode
+↑↑IMPERR←←040000 ; IMP error (the READY line has gone down)
+↑↑IDONE←←020000	; Input done
+↑↑IEND←←010000	; Input end (end of message)
+↑↑ODONE←←004000	; Output done
+NREADY←←002000	; IMP not ready if ¬TEST (actually ¬TEST∧¬READY)
+IEPIA←←	000700	; input end PI channel
+IDPIA←←	000070	; input done PI channel
+ODPIA←←	000007	; output done PI channel
+
+; CONO bits
+
+TEST←←	100000	; Enter test mode.  In test mode the output side is
+		; tied to the input side of the interface, and READY
+		; is brought down
+STRIN←←	040000	; Start input, sets stop, clears IEND.
+		; Stop means enable wait.  Wait happens after the
+		; last bit has come in (if enabled by "stop") to
+		; allow the programmer to change data modes before
+		; the first bit of the next word comes in
+I32←←	020000	; Set 32. bit input mode if IDPIEN set
+O32←←	010000	; Set 32. bit output mode if ODPIEN set
+CLRST←←	004000	; Clear stop
+CLRWT←←	002000	; Clear wait
+STROUT←←000200	; Start output
+FINO←←	000100	; Finish output (last bit has been sent)
+IEPIEN←←000040	; Enable change of IEPIA
+IDPIEN←←000020	; Enable change of input byte size and IDPIA, clear
+		; IMPERR
+ODPIEN←←000010	; Enable change of output byte size and ODPIA
+PIA←←	000007	; PI channel (see IEPIEN, IDPIEN, ODPIEN)
+
+ISTART←←STRIN!CLRWT!IEPIEN!IDPIEN!IMPCHN
+IFLUSH←←TEST!IEPIEN!IDPIEN!ODPIEN	;stop the IMP, turn off PIAs
+>;IFE FTF2
+
+IFN FTF2,<
+;CONO BITS
+	CLRERR←←200000	;clear "IMP has been down"
+	MAK10D←←100000	;host down
+	STPOUT←←40000	;stop output
+	FINO←←20000	;end of output
+	GOTEND←←10000	;clear input (clear EIB)
+	IEPIEN←←4000	;enable PI (bits 25:27) for end of input
+	ODPIEN←←200	;enable PI (bits 29:31) for ready for output
+	IDPIEN←←10	;enable PI (bits 33:35) for input ready
+;CONI BITS
+	PWRUP←←200000	;interface powered
+	DOWN10←←100000	;IMP is down
+	↑↑IMPERR←←40000	;IMP has been down
+	IMPDWN←←20000	;??
+	↑↑IEND←←14000	;end of input (two bits??)
+	↑↑ODONE←←200	;ready for output
+	↑↑IDONE←←10	;input ready
+
+	STROUT←←0	;These non-ex bits are set to zero for F2 version
+	O32←←0		; to avoid extra conditionals in the code.
+	I32←←0		;The F2 IMP interface has only a 36-bit mode.
+
+ISTART←←IEPIEN!IDPIEN!IMPCHN!<IMPCHN⊗8> ;set input PIAs
+IFLUSH←←MAK10D!STPOUT!GOTEND!IEPIEN!ODPIEN!IDPIEN ;stop the IMP, turn off PIAs
+
+>;IFN FTF2
+
+>;repeat 0
+>;IFN FTAIP
+;Use of interrupt levels
+
+COMMENT ⊗ (entire page)
+
+First let's explain how the TOPS-10 code was designed.  They run the IMP
+in a lower-priority channel than terminal lines.  (Channel 4 for TTYs and
+5 for the IMP, for instance, although the channel assignments are done by
+macros instead of being fixed as in WAITS.)  Therefore, TTY interrupts can
+interrupt packet processing unless the scanner channel is masked off.
+
+Rather than masking off TTY and IMP interrupts separately, TOPS-10 has
+macros SCNOFF and SCNON that turn both channels off and on.  It may be
+necessary to turn off the TTY channel during IMP interrupts, because TTY
+lines can cause changes in IMP DDBs.  (Mainly, perhaps only, through the
+"crosspatch" feature, which allows local TTY lines to be tied directly to
+IMP DDBs for user Telnet output.  We don't have crosspatching, but we do
+allow mapping of TTY lines to Telnet SERVER connections (IMP PTYs), which
+has the same potential problems.)  For the same reasons, it is necessary
+to turn off both TTY and IMP interrupts during parts of clock-level and
+UUO processing for IMP DDBs.  TOPS-10's SCNOFF/SCNON can't be nested like
+our OFFSCN/ONSCN, but this doesn't bother us; it just means TOPS-10 code
+has to be more careful.
+
+The main thing wrong with the above scheme is that TTY interrupts can be
+lost when a long time elapses between SCNOFF and SCNON.  The worst culprit
+in this regard is output packet processing, which keeps interrupts off
+during the whole time it is constructing packet headers, copying bytes
+from 32 bits per word to 36 bits per word, and putting the packet on the
+output queue.  This can take several milliseconds, long enough to be
+noticeable.
+
+Another misfeature that affects us worse than TOPS-10 is that the TOPS-10
+code does all the processing of an input packet as soon as it receives the
+completion interrupt for that packet.  The old (NCP) IMPSER for WAITS was
+much better in this regard.  It took IMP interrupts in channel 4 for each
+word of a packet, but deferred all processing of the packet to channel 7
+or UUO level, and did all output at UUO level.
+
+In the initial implementation of the IP/TCP code for WAITS, we were forced
+to put all IMP interrupts in channel 5, the same as TTY interrupts.  This
+was both because of the interlock needed between IMP and TTY input
+processing, and because Ethernet input comes in on channel 5, and it would
+be hard to process IMP and Ethernet packets on different channels without
+adding lots of extra interlocking.  By using channel 5, however, input
+packets could cause loss of TTY interrupts when they took a long time
+before dismissing the channel.
+
+The new scheme, begun in February 1986, is an attempt to improve this
+situation.  Essentially it is a return to the NCP IMPSER method of taking
+IMP interrupts for each word in channel 4, but doing the processing of
+complete packets at clock level.  Ethernet packets arrive with a channel
+5 interrupt, but they too are deferred to channel 7 for processing.
+
+Here is an overview of what is done at each interrupt level.
+
+Channel 4: IMP input interrupts for each word of data
+	IMP buffer allocation (needed to hold input data)
+	IMP end-of-packet interrupts
+	Handle simple messages from the IMP and send replies
+	Queue host-to-host messages for channel 7
+	IMP output interrupts
+	IMP output queue operations
+
+Channel 5: Queue Ethernet input packets for channel 7
+	Queue TTY operations requiring IMP service for channel 7
+
+Channel 7: Process queued IMP and Ethernet input packets
+	Process queued TTYSER operations
+	IMP buffer allocation
+	Clock-level operations as defined in TOPS-10 code
+
+UUO level: Handle UUOs, may cause output
+
+Almost all of the places that turn off interrupts in the TOPS-10 code no
+longer need to do so, because so little is done at interrupt level, and
+there is an implicit interlock between channel 7 and UUO level (i.e.,
+channel 7 interrupts dismiss immediately if a UUO is in progress).  The
+only things that still need care are IMP buffer allocation and IMP output
+queue operations, and they are concentrated in a small set of subroutines.
+So the SCNOFF and SCNON macros of TOPS-10 are turned into no-ops, and
+separate code has been added for the interlocking necessary with our use
+of interrupt levels.
+
+end of comment ⊗
+;Interrupt macros ;⊗ SONPPJ SONPJ1 IMPFFJ IMPNJ1 IMPONJ IMPONJ IMPNJ1
+
+;IMPSER and the TOPS-10 code no longer has code for protection against
+;interrupt-level input packet processing, because packet processing is now
+;always done at clock level.  TOPS-10 code still uses macros SCNOFF and
+;SCNON, but these have been made into no-ops.
+
+;Definitions for TOPS-10 code.
+GLOBAL CPOPJ,CPOPJ1		;Stupid FAIL
+↑SONPPJ←←CPOPJ
+↑SONPJ1←←CPOPJ1
+
+;Macros OFFIMP and ONIMP protect code against channel 4 IMP interrupts,
+;for the few times this is needed.  (Mainly to manipulate the IMP output
+;queues.)  They allow nested calls within the same interrupt level, as
+;well as calls from multiple levels (including channel 4), though currently
+;they are only called from channels 4, 7 and UUO level.  IMPCNT is -1 when
+;IMP interrupts are not masked off.
+
+IFN FTAIP,<
+DEFINE OFFIMP<PUSHJ P,IMPFFJ>	;Also defined in S.MAC
+DEFINE ONIMP<PUSHJ P,IMPONJ>
+
+IMPFFJ↑:AOS IMPCNT
+	CONO PI,IMPOFF
+	POPJ P,
+
+IMPNJ1↑:AOS (P)
+IMPONJ↑:SOSGE IMPCNT		;Skip if not outermost caller
+	CONO PI,IMPON
+	POPJ P,
+>;IFN FTAIP
+
+IFE FTAIP,<
+;Make these noops if we don't have an Arpanet IMP.
+DEFINE OFFIMP<>
+DEFINE ONIMP<>
+IMPONJ←←CPOPJ
+IMPNJ1←←CPOPJ1
+>;IFE FTAIP
+;AC save and restore ;SETAC SETT10 SAVAC TCPCAL ;⊗ SAVALL SAVOK IF.NWT IF.PRV IF.ALS SUP1P2
+
+;SAVALL similar to PUSHACS except that caller doesn't do a POPACS, just
+;a normal or skip return, whereupon all the ACs get restored.
+
+SAVALL:	PUSH P,0	;SAVE 0
+	HLRE 0,P	;PICK UP COUNT
+	ADDI 0,20	;ADD IN DISPLACEMENT
+	XOR 0,P		;IF SIGNS ARE DIFFERENT, NOT ENOUGH STACK
+	JUMPGE 0,SAVOK
+	POP P,0		;CAN'T DO IT, LOSE BIG
+	PUSH P,TAC
+	MOVE TAC,[POINT 7,[ASCIZ⊗NOT ENOUGH ROOM TO PUSH ACS AT SAVALL - FATAL.
+FIND A WIZARD OR RELOAD.  ⊗]]
+	JSR DDTTYPE
+	POP P,TAC
+	JRST DDTCALL
+
+SAVOK:	POP P,0		;GET BACK 0
+	EXCH 0,(P)	;SAVE 0 AND GET caller's PC
+	MOVEM 0,20(P)	;Store caller's PC
+	MOVEI 0,1(P)
+	HRLI 0,1
+	BLT 0,17(P)
+	MOVE 0,(P)	;Restore 0
+	ADD P,[17,,17]
+	PUSHJ P,@1(P)	;Go back to caller, overwrite caller PC with .+1
+	 CAIA		;Here on non-skip return
+	AOS -20(P)	;Skip return.  AOS the return address
+	MOVSI 0,-16(P)
+	HRRI 0,1
+	BLT 0,17	;Restore 1 thru 17
+	POP P,0		;Restore 0
+	POPJ P,		;and return
+
+;Routines to change AC conventions back and forth from WAITS to TOPS10.  We
+;assume that P and J will be defined the same in both systems (because they have
+;the same name).  The TOPS10 code at IMPUUO (in TCPSER) sets the right half of M
+;to the address of the argument block.  For functions that we do by MTAPE, that
+;information, if needed, is in UUO.
+
+;At UUO level, ACs normally start out in WAITS mode.  We call SAVALL to save
+;them.  Usually only IOS and DDB contain values of interest, and these are
+;guaranteed to be S and F in the TOPS-10 code.  If other ACs (such as M) have to
+;be set up, SETAC may be used.
+
+DEFINE SETAC(AC,SVAC)<
+IFN AC-SVAC,<
+	MOVE AC,SVAC-20(P)
+>>
+
+;ACs are automatically restored when returning from code that called SAVALL.
+;SAVAC is used to store values into the saved AC block before this happens.
+
+DEFINE SAVAC(SVAC,AC)<
+	MOVEM AC,SVAC-20(P)
+>
+
+;Macro to call an IMPUUO handler in TCPSER.  Assume TOPS-10 ACs have been
+;set up.  Sets up left half of P4; also used to turn interrupts off and on
+;if needed, but no longer does so in the new interrupt scheme.  Skip
+;returns are ignored - error code in status bits will have been set.
+
+DEFINE TCPCAL ' (DD)<
+	MOVE P4,[.W'DD↑]
+	PUSHJ P,(P4)
+	 JFCL
+>;TCPCAL
+
+;Flags for P1 in calling IMPUUOs (from TCPSER.MAC)
+
+	IF.NWT==1B0	;IF SET, DON'T GO INTO IO WAIT FOR NCP ACTIVITY
+	IF.PRV==1B1	;IF SET, ALLOW THE OPERATION EVEN IF THE USER
+			;  DOESN'T OWN THE DEVICE (PRIVILEGED)
+	IF.ALS==1B2	;IF SET, LOCAL SOCKET IS ABSOLUTE RATHER THAN
+			;  JOB- OR USER-RELATIVE (PRIVILEGED)
+
+;Here to set up P1 and P2 for TOPS10 code, after setting M to address of UUO
+;parameter block.  P1 gets flags in left half; P2 gets TOPS10 version of local
+;port number in MTAPE block, to allow generation of new port numbers.
+
+SUP1P2:	SETZ P1,			;All flags off initially
+	XCTR XR,[SKIPN WFLOC(M)]	;See if we should wait
+	 TLO P1,(IF.NWT)		;No wait.
+;Following code to allow listen on an absolute port only if UPG priv enabled.
+IFN 0,<
+	MOVSI T1,UPGPRV
+	TDNE T1,JBTPRV(J)		;Is UPG enabled?
+>;IFN 0
+	TLO P1,(IF.PRV)			;Yes, allow absolute port
+	XCTR XR,[MOVE P2,LSLOC(M)]	;Get local port supplied by user
+	CAME P2,[-1]			;Is he asking for a gensymmed port?
+	 TLOA P1,(IF.ALS)		;No, absolute
+	  SETZ P2,			;Yes.  Ask for 0 in lower 3 bits
+	POPJ P,
+
+;Storage management ;⊗ GETFMB GETFM2 GIVBIB RELFMB
+
+;Here to allocate a Future Message Block for a TCP input packet.
+;Returns FMB address in T1 and skips on success.
+
+↑GETFMB:PUSH P,AC3
+	MOVEI AC3,FMBFS		;Type of spare FS to get
+	PUSH P,AC1		;Preserve TOPS-10 AC1
+	PUSHJ P,SFSGET		;Get FS from spares list
+	 JRST GETFM2		;Lost
+	AOS -2(P)		;Indicate success
+	AOS TCPFMB↑		;Count one more in use
+	MOVE T1,AC1		;Return block address in T1
+GETFM2:	POP P,AC1		;Restore TOPS-10 ACs
+	POP P,AC3
+	POPJ P,
+
+;Here to return a BIB.  Call with BIB address in T2.  (BIBs allocated by OUTPRE.)
+
+↑GIVBIB:PUSH P,AC1		;Preserve AC1
+	MOVE AC1,T2		;Address of block
+	PUSHJ P,SFSGIV
+	 BIBFS			;Which type of spares to return FS to
+	POP P,AC1
+	SOS BIBCNT		;One less BIB in use
+	POPJ P,
+
+;Here to return a FMB.  Call with FMB address in T2.
+
+↑RELFMB:SOS TCPFMB↑		;One less FMB
+	PUSH P,AC1
+	MOVE AC1,T2		;Address of block
+	PUSHJ P,SFSGIV
+	 FMBFS			;Which type of spares to return FS to
+	POP P,AC1
+	POPJ P,
+;UUO dispatch table ;⊗ IMPDSP
+
+	JRST IMPRET	; DDB FLUSH
+	JRST IMPSET	; DDB MAKE
+	JRST IMPINI	; SYSTEM INITIALIZATION
+	JRST IMPHNG	; HUNG TIMEOUT
+↑IMPDSP:JRST IMPRLS	; RELEASE
+	JRST CLSO	; CLOSE OUTPUT
+	JRST BUFO	; BUFFERED OUTPUT
+	JRST BUFI	; BUFFERED INPUT
+	JRST CPOPJ1	; ENTER
+	JRST CPOPJ1	; LOOKUP
+	JRST DMPO	; DUMP MODE OUTPUT
+	JRST DMPI	; DUMP MODE INPUT
+	POPJ P,		; USETO
+	POPJ P,		; USETI
+	POPJ P,		; UGETF
+	JRST CPOPJ1	; RENAME
+	JRST CLSI	; CLOSE INPUT
+	POPJ P,		; UTPCLR
+	JRST IMTAPE	; MTAPE
+;Make and release IMP device data blocks ;⊗ DDBGET IMPSET IMPSE1 IMPSE2 DDBLNK DDBREL DDBRE0 DDBRE1 IMPRET IMPRE1
+
+;The ASSCON bit in DEVMOD(DDB) is set for all DDBs created for incoming
+;connections when there is no existing DDB.  Then either TTYLIN(DDB) is given
+;the number of an ITY, for incoming Telnet, or IMPSRV in TTYLIN(DDB) is set and
+;a phantom server job is started.  When this job INITs the IMP, it will get this
+;DDB, ASSCON will be turned off, and ASSPRG on (in UUOCON).  Then when it does
+;an MTAPE to listen for a connection, IMPSRV will be turned off.
+
+;Here from TCPSER.MAC to allocate an IMP DDB at packet input level.  Never
+;waits.  Skip returns if successful.
+
+↑DDBGET:PUSHJ P,SAVALL		;Don't damage ACs TOPS-10 may use
+	MOVEI AC3,IMPFS		;Type of spare FS to use
+	MOVEI TAC,ASSCON
+	TDNN TAC,IMPDDB+DEVMOD	;Skip if IMP detached from system
+	PUSHJ P,SFSGET		;Get FS from spares list
+	 POPJ P,		;IMP detached or no FS, fail
+	PUSHJ P,DDBLNK		;Set up DDB and link into DDB chain
+	MOVEI TAC,ASSCON	;Assign the DDB
+	IORM TAC,DEVMOD(DDB)
+	SAVAC(F,DDB)		;Make AC restore pop DDB into F
+	JRST CPOPJ1		;Skip return for success
+
+;Here to allocate an IMP DDB at clock or UUO level.  If at UUO level, check
+;for a DDB already created for an incoming server and assign it.
+
+IMPSET:	CONSZ PI,77400		;Skip if at UUO level
+	JRST IMPSE2		;No special DDB to look for if at clock level
+	MOVEI DDB,IMPDDB	;Look thru IMP DDBs for special one for this job
+IMPSE1:	HLRZ DDB,DEVSER(DDB)	;Next DDB (ignore prototype)
+	CAIN DDB,IMP.NX		;End of IMP DDBs?
+	JRST IMPSE2		;Yes, no special DDB found
+	LDB AC3,PJOBN		;Get job number for this IMP DDB
+	CAIE AC3,(J)		;Is this DDB for us?
+	JRST IMPSE1		;No, keep looking
+	MOVE AC1,DEVMOD(DDB)	;Yes, see if we already have INITed this DDB
+	MOVSI AC3,IMPSRV	;and see if this is a special DDB awaiting server
+	TRNN AC1,ASSPRG		;Skip if DDB already INITed by us
+	TDNN AC3,TTYLIN(DDB)	;Skip if this DDB is special
+	JRST IMPSE1		;Not special, keep looking for special DDB
+	MOVEI AC3,ASSCON	;Clear this bit that was set temporarily
+	ANDCAM AC3,DEVMOD(DDB)	;  at DDBGET (below) -- our caller sets ASSPRG
+	POPJ P,			;Give this DDB back to user as if we just made it
+
+IMPSE2:	MOVEI AC3,IMPDLN	;Make a block
+	PUSHJ P,FSGET
+	 JRST [	ADJSP P,-3	;We must be at clock level (in command decoder)
+		JRST DLYCM1]
+;Set up DDB and link into DDB chain.  Called from DDBGET (above) as a subroutine.
+DDBLNK:	HRRI DDB,DDBSKW(AC1)	;Point DDB at device name
+	HRLI AC1,IMPDDB-DDBSKW	;Copy DDB from prototype
+	;DDBs are only created at UUO and clock level, so no need to
+	;protect against interrupts.  Some IMP-to-host messages change
+	;status words in DDBs at interrupt level, but they will work
+	;because this code never leaves the DDB chain unlinked.
+	BLT AC1,IMPDLS(DDB)	;Copy prototype including ptr to next in chain
+	MOVEI AC1,DEVIOS(DDB)
+	MOVEM AC1,DEVSPT(DDB)
+	HRLM DDB,IMPDDB+DEVSER	;Link in DDB chain
+	POPJ P,
+
+;We want IMP DDBs to stay around until the IP/TCP protocols are completely
+;done, i.e., the connection has completely closed.  So they may remain for a
+;while after the job owning them releases the IMP.  DDBREL is called from
+;TOPS-10 code when a DDB may really be released.
+
+↑DDBREL:
+repeat 1,<			;See if this is how we're losing BIBs
+	SKIPN RETRNQ(F)		;Retransmission queue empty?
+	JRST DDBRE0		;Yes, it should be
+	PUSHACS
+	PUSHJ P,DISGST		;Print time on CTY
+	PUSHJ P,DISMES
+	 ASCIZ/Releasing IMP DDB with non-empty retransmission queue.
+Will continue by flushing DDB.
+/
+	PUSHJ P,DISFLU
+	POPACS
+	PUSHJ P,WDDTCALL	;Find a wizard
+	PUSHJ P,DDBFLS		;Flush IMP DDB
+DDBRE0:
+>;repeat 1
+	SETZM STATE(F)		;To make IMPRET return this DDB
+	PUSHJ P,IMSINT		;Prevent hanging jobs
+	MOVEI T1,ASSPRG
+	TDNE T1,DEVMOD(F)	;Is it still INITed by the user?
+	POPJ P,			;Yes, then don't return it
+	CONSZ PI,77000		;Skip unless in PI channel above clock
+	PUSHJ P,BUGTRP		;This shouldn't happen!
+	PUSHJ P,SAVALL		;Get into WAITS mode
+DDBRE1:	LDB J,PJOBN		;RELEA6 needs J set up
+	MOVEI TAC1,ASSCON	;Bit to clear
+	JRST RELEA6		;Call UUOCON (eventually gets to IMPRET)
+
+;Here when UUOCON wants to return this DDB to free storage.
+
+IMPRET:	SKIPLE STATE(DDB)	;Test the state of the connection
+	POPJ P,			;We only return DDBs for closed connections
+	SETZB IOS,DEVIOS(DDB)	;Flush IOS
+	MOVEI AC1,IMPDDB	;Find DDB
+IMPRE1:	MOVE TAC1,AC1
+	HLRZ AC1,DEVSER(TAC1)
+	JUMPE AC1,CPOPJ		;DDB not found? (shouldn't happen)
+	CAIE AC1,(DDB)
+	JRST IMPRE1
+	MOVE DDB,DEVSER(AC1)	;Delete DDB from chain
+	HLLM DDB,DEVSER(TAC1)
+	SUBI AC1,DDBSKW
+	PUSHJ P,SFSGIV		;Return to spares list
+	 IMPFS
+	POPJ P,
+;Initialization and clock level ;⊗ IMPINI INI0 INI1 INI2 ZERTAB ZERTBN IMPCLK
+
+;Here on system initialization or reinitialization for device IMP.
+;(Adapted from INI in IMPMAC.MAC.)
+
+IMPINI:	PUSHJ P,SAVALL		;Get into TOPS-10 mode
+IFN FTAIP,<
+	PUSHJ P,IMPDWN↑		;Turn off IMP interface
+	SETOM IMPCNT		;Initialize OFFIMP counter
+>;IFN FTAIP
+	MOVEI F,IMPDDB		;Start by clearing DDBs
+INI0:	HLRZ F,DEVSER(F)	;Next IMP DDB (skip over prototype DDB)
+	CAIN F,IMP.NX
+	JRST INI2		;No more IMP DDBs
+INI1:	PUSHJ P,IMPWAK		;Wake job in case waiting for anything
+	PUSHJ P,DDBFLS↑		;Clear out DDB
+	PUSHJ P,DDBREL		;Release DDB
+	JRST INI0		;Go do next IMP DDB
+
+INI2:	SETO T1,		;Tell IP once a second code to
+				;  flush all FDBs.  Show no mercy.
+	PUSHJ P,IPSEC↑		;Flush FDBs in IPSER.MAC
+
+	MOVSI T1,-ZERTBN	;Get wipe table
+	MOVE T2,ZERTAB(T1)	;Get one wiper
+	SETZM (T2)		;Clear a location
+	AOBJN T2,.-1		;Loop
+	AOBJN T1,.-3		;Get next table entry
+
+	MOVEI T1,IMPBFN		;Initialize buffer counters
+	MOVEM T1,BUFNUM
+	MOVEM T1,BUFAVG
+
+	MOVEI TAC,UDRPRT	;Initialize UDP free port number
+	MOVEM TAC,UDFPRT
+
+IFN FTAIP,<
+	PUSHJ P,HSTINI↑		;Initialize host tables
+>;IFN FTAIP
+	POPJ P,
+
+;Table of tables to clear.  (All data in CACDAT.)
+ZERTAB:	-IMPSTN,,IMPST		;Non-TOPS-10 data
+	-IMPB36,,IMPBFT		;Buffer allocation table
+	-ZERON,,ZERO		;IMPMAC.MAC data
+	-IMPDCN,,IMPDAT		;NETSUB.MAC data
+	-TCPDCN,,TCPDAT		;TCPSER.MAC data
+ZERTBN←←.-ZERTAB
+
+;Here every clock tick from CLKSER.  Process input packets, then look for
+;clock service requests.  This way Telnet echoes and ACKs should happen at
+;the end of the same clock tick as their input packets were processed.
+
+↑IMPCLK:PUSHJ P,IMPINQ		;Process input packet queue
+	SKIPE IMPRQF↑		;Any IMP DDB requests pending?
+	PUSHJ P,IMPTIK↑		;Yes, service them
+	POPJ P,
+;MTAPE dispatch ;⊗ IMTIGD IMTSTB IMTNID IMTCLD IMTTCP IMTUDP UUODSP MXUUO IMTAPE IMTAP1 IMPLUZ UILLBS IDERR CGTERR STTERR BADPRO
+
+;IMP MTAPE UUO dispatch table.  LH bits are:
+IMTIGD←←400000	;This MTAPE always wins whether or not IMP is dead
+IMTSTB←←200000	;This MTAPE returns status bits in arg block, so set IDD if IMP dead
+IMTNID←←100000	;This MTAPE is a no-op if the IMP is dead
+;If none of the above bits are set user gets an "IMP dead" message if IMP dead.
+;NOTE:  As of the February '86 changes we no longer check network status
+;for MTAPE calls, so the above bits are no longer used.
+IMTCLD←← 40000	;Clear closed DDB before doing this MTAPE
+IMTTCP←← 20000	;This MTAPE requires DDB closed or TCP protocol
+IMTUDP←← 10000	;This MTAPE requires DDB closed or UDP protocol
+
+UUODSP:	IMTSTB!IMTCLD!IMTTCP,,CONECT	;0 ESTABLISH CONNECTION
+	IMTSTB!IMTCLD!IMTTCP,,LISTEN	;1 LISTEN ON A port
+	IMTSTB,,STATUS		;2 GET STATUS BITS
+	IMTSTB!IMTTCP,,TERMIN	;3 TERMINATE CONNECTION (LIKE CLOSE UUO)
+	IMTSTB!IMTTCP,,SWAIT	;4 WAIT FOR CONNECTION
+	XSTATS			;5 Extended status information
+	WAKEMT			;6 WAKE UP USER PROCESS FROM I-LEVEL
+	IMTSTB,,SETST		;7 GET STATUS BLOCK (USED AFTER LISTEN)
+	INPSKP			;10 SKIP IF IMP INPUT
+	IMTSTB!IMTTCP,,SNDINT	;11 SEND INR/INS
+	REINIT			;12 Reinitialize NCP
+	UUOERR			;13 Illegal (formerly "turn off IMP")
+	IMTTCP,,TSINT		;14 TEST AND CLEAR INTERRUPT STATUS
+	IMTNID!IMTTCP,,TSETAL	;15 SET ALLOCATION
+	IMTNID!IMTTCP,,TGETAL	;16 GET ALLOCATION
+	IMTNID,,USETTM		;17 SET TIMEOUTS
+	IMTNID,,UGETTM		;20 GET TIMEOUTS
+	IMTNID,,GENSYM		;21 GENSYM A port
+	IMTSTB!IMTTCP,,ABORT	;22 Abort connection
+	IMTNID,,SNDWDN		;23 SEND HOST DOWN STATUS MESSAGE
+	UNWEDG			;24 ATTEMPT TO UNWEDGE AN IMP CONNECTION
+	;New MTAPEs added with Internet protocols
+	IMTTCP,,SETPSH		;25 Select push handling of output
+	IMTSTB!IMTCLD!IMTUDP,,SETUDP	;26 Set UDP parameters
+MXUUO←←.-UUODSP
+
+IMTAPE:	XCTR XR,[HRRZ TAC,(UUO)] ;GET FUNCTION CODE
+	CAIL TAC,MXUUO		;FUNCTION IN BOUNDS?
+	JRST UUOERR		;ILLEGAL FUNCTION
+	MOVE TAC1,UUODSP(TAC)	;Get dispatch word
+	SKIPG STATE(DDB)	;Is DDB closed?
+	JRST [	PUSH P,TAC1	  ;Save around TOPS-10 call
+		TLNE TAC1,IMTCLD  ;Yes, should we clear it?
+		PUSHJ P,CLRIMP↑   ;(in NETSUB.MAC)
+		POP P,TAC1
+		JRST IMTAP1]	  ;Skip protocol checks
+	MOVE TAC,PROTCL(DDB)	;Get protocol
+	TLNE TAC1,IMTTCP	;Supposed to be TCP?
+	CAIN TAC,.IPTCP		;Yes, is it?
+	CAIA
+	JRST BADPRO		;Protocol is bad
+	TLNE TAC1,IMTUDP	;Supposed to be UDP?
+	CAIN TAC,.IPUDP		;Yes, is it?
+	CAIA
+	JRST BADPRO		;Protocol is bad
+IMTAP1:	JRST (TAC1)		;Dispatch to MTAPE handler
+
+;Here to return error codes to user.  Some may be remnants of NCP and
+;unlikely or impossible to happen with IP/TCP.
+
+UILLBS:	SKIPA TAC,[ILB]		;Illegal byte size
+IDERR:	MOVEI TAC,IDD		;IMP dead
+	XCTR XW,[MOVEM TAC,STLOC(UUO)]
+	POPJ P,
+
+CGTERR:	SKIPA TAC,[CGT]		;Can't get there error
+STTERR:	MOVEI TAC,STT		;State error
+	XCTR XW,[MOVEM TAC,STLOC(UUO)]
+	POPJ P,
+
+BADPRO:	TLNE TAC1,IMTSTB	;Does this MTAPE return status?
+	JRST STTERR		;Yes, do it
+	JSP TAC,UUOMES		;No, then type message
+	 ASCIZ/Incorrect protocol, UUO/
+;Open a TCP connection ;⊗ CONECT CONNEW IPADR CONEC1
+
+CONECT:	XCTR XR,[SKIPN DAT,BSLOC(UUO)] ;Check byte size
+	MOVEI DAT,=8		;Default 0 to =8
+	CAIE DAT,=8
+	JRST UILLBS		;Bad byte size
+	XCTR XW,[MOVEM DAT,BSLOC(UUO)]
+	PUSHJ P,CONEC1		;Call TCPSER code to make the connection.
+	MOVE AC2,LCLPRT(DDB)	;Store local port if we got one
+	XCTR XW,[MOVEM AC2,LSLOC(UUO)]
+	JRST PUTSTB		;Give user status bits and return
+
+CONEC1:	PUSHJ P,SAVALL		;Get into TOPS-10 mode
+	SETAC(M,UUO)		;Address of parameter block
+	PUSHJ P,SUP1P2		;Set flags and local port
+	TCPCAL(CONN)
+	POPJ P,			;Restore ACs and return
+;Listen for a TCP connection ;⊗ LISTEN LISTN1 SETST LISTN2 PUTSTB STBTAB STATUS
+
+LISTEN:	XCTR XRW,[MOVES HLOC(UUO)]	;Address check
+	;See if there is already a connection on our DDB which was initiated if
+	;we were started up as a server.
+	MOVSI AC3,IMPSRV		;See if this DDB is waiting for us
+	TDNN AC3,TTYLIN(DDB)		;Skip if DDB is waiting for us
+	JRST LISTN1			;Not special DDB
+	ANDCAM AC3,TTYLIN(DDB)		;Is special, clear special bit now
+	SKIPG STATE(DDB)		;Closed?
+	JRST LISTN1			;Yes, try for new connection
+	;Connection not closed, but maybe not established.  Wait for
+	;established if user requests.
+	XCTR XR,[SKIPE WFLOC(UUO)]
+	 PUSHJ P,SWAIT2			;Wait for established state
+	JRST SETST			;Return status block
+
+LISTN1:	PUSHJ P,LISTN2			;Listen for a connection
+SETST:	MOVE AC2,LCLPRT(DDB)		;Store local port if we got one
+	XCTR XW,[MOVEM AC2,LSLOC(UUO)]
+	MOVEI AC2,=8			;Return fixed byte size
+	XCTR XW,[MOVEM AC2,BSLOC(UUO)]
+	MOVE AC2,RMTPRT(DDB)		;Remote port will be -1 if none yet
+	XCTR XW,[MOVEM AC2,FSLOC(UUO)]
+	MOVE AC2,RMTADR(DDB)		;Store remote host
+	XCTR XW,[MOVEM AC2,HLOC(UUO)]
+	MOVE AC2,LCLADR(DDB)		;Store local IP address
+	XCTR XW,[MOVEM AC2,WFLOC(UUO)]
+	JRST PUTSTB			;Give him status bits and return
+
+LISTN2:	PUSHJ P,SAVALL			;Get into TOPS-10 mode
+	SETAC(M,UUO)			;Address of parameter block
+	PUSHJ P,SUP1P2			;Set flags and local port
+	TCPCAL(REQU)			;This stores info in the DDB
+	POPJ P,				;Restore ACs and return
+
+;Here to store status in usual return location.
+
+PUTSTB:	MOVE AC2,STB(DDB)		;Current status
+	TLZ AC2,RFCS!RFCR!CLSS!CLSR	;Clear out these bits
+	SKIPGE AC3,STATE(DDB)		;Get TCP state
+	 SETZ AC3,			;Negative states are closed
+	IOR AC2,STBTAB(AC3)		;Add appropriate old-style status bits
+	XCTR XW,[MOVEM AC2,STLOC(UUO)]	;Give it to user
+	POPJ P,
+
+;Table of bits corresponding to each of the TCP states defined in TCPSER.MAC.
+
+STBTAB:	0				;Closed
+	0				;Listen
+	RFCS,,0				;SYN sent
+	RFCR,,0				;SYN received, passive
+	RFCR,,0				;SYN received, active
+	RFCS!RFCR,,0			;Established
+	CLSS,,0				;FIN wait 1
+	CLSS,,0				;FIN wait 2
+	CLSS!CLSR,,0			;Closing
+	CLSS!CLSR,,0			;Time wait
+	CLSR,,0				;Close wait
+	CLSS!CLSR,,0			;Last ACK
+
+;STATUS call returns same values in both words.
+
+STATUS:	PUSHJ P,PUTSTB
+	XCTR XW,[MOVEM AC2,STLOC+1(UUO)]
+	POPJ P,
+;⊗ TERMIN TERMI1 TERMI2 SWAIT SWAIT1 SWAIT2
+
+;Terminate TCP connection.  This differs from the CLOSE UUO in that
+;it allows the user to wait for the FIN from the other side to be
+;received.  It does not try to force out the last buffer, however.
+
+TERMIN:	XCTR XR,[SKIPE AC2,LSLOC(UUO)]	;Get desired port, zero OK
+	CAMN AC2,LCLPRT(DDB)		;Is it ours?
+	JRST TERMI1			;This port's OK
+	JSP TAC,UUOMES			;Wrong port number
+	 ASCIZ/Illegal port in terminate, UUO/
+
+TERMI1:	PUSHJ P,TERMI2
+	JRST PUTSTB		;Give him status bits and return
+
+TERMI2:	PUSHJ P,SAVALL		;Get into TOPS-10 mode
+	SETAC(M,UUO)		;Address of parameter block
+	PUSHJ P,SUP1P2		;Set wait flag
+	TCPCAL(CLOS)		;Close connection, maybe wait
+	JRST IMPWK1		;Clear flags, restore ACs on return
+
+
+;Wait for TCP connection to become established.
+
+SWAIT:	XCTR XR,[SKIPE AC2,LSLOC(UUO)]	;Get desired port, zero OK
+	CAMN AC2,LCLPRT(DDB)		;Is it ours?
+	JRST SWAIT1			;This port's OK
+	JSP TAC,UUOMES
+	 ASCIZ/Illegal port in wait, UUO/
+
+SWAIT1:	PUSHJ P,SWAIT2
+	JRST PUTSTB
+
+SWAIT2:	PUSHJ P,SAVALL		;Get into TOPS-10 mode
+	MOVE T1,STATE(F)	;Get current state
+	CAIGE T1,S%ESTB↑	;Already established?
+	PUSHJ P,ESTBWT↑		;Wait to get into established or better.
+	 JFCL			;Error return nothing special
+	POPJ P,			;Restore ACs and return
+;⊗ WAKEMT INPSKP SNDINT REINIT
+
+;Wake up user level if waiting.  Called from user interrupt level.
+;Used to share this code with PUPSER, now separate.  (JJW 4/86)
+
+WAKEMT:	SKIPN INTACT		;Running user interrupt?
+	POPJ P,			;No
+	MOVEI IOS,TMO		;Set timeout bit to exit UUO
+	IORB IOS,DEVIOS(DDB)
+	JRST IMPWAK		;Wake up job if waiting
+
+;Skip if there is any input present.
+
+INPSKP:	SKIPE IBFTHS(DDB)	;Any input?
+	AOS (P)			;Yes.
+	POPJ P,
+
+;SNDINT not implemented for IP/TCP.  No interrupt is sent, but status bits are
+;returned.
+
+SNDINT←←PUTSTB
+
+;Reinitialize Internet.  Used by wizards when out of IMP buffers or
+;network otherwise wedged.
+
+REINIT:	MOVE TAC,JB2PRV(J)	;Check passive privs
+	TLNN TAC,DEVPRV		;Does he have DEV?
+	JRST UUOERR		;No
+	PUSHACS
+	PUSHJ P,DISUSR
+	 SIXBIT/IP/
+	PUSHJ P,DISMES
+	 ASCIZ/Internet reinitialized by /
+	MOVE TAC1,PRJPRG(J)
+	PUSHJ P,DISSIX		;Type user name
+	PUSHJ P,DISMES
+	 ASCIZ/, job = /
+	PUSHJ P,DISJOB
+	PUSHJ P,DISCRLF
+	POPACS
+	JRST IMPINI		;Go do it
+;⊗ TSINT TSETAL TSETTB TSETSP TGETAL TGETFS TGETF1 USETTM UGETTM
+
+; TEST AND CLEAR INTERRUPT BITS - SET SYSTEM DEFAULT TIMEOUTS
+; RETURNS FLAG FOR SEND SIDE IN 1(UUO), RECEIVE SIDE IN 2(UUO)
+
+;Always returns 0 for IP/TCP.
+
+TSINT:	XCTR XW,[SETZM 1(UUO)]
+	XCTR XW,[SETZM 2(UUO)]
+	POPJ P,
+
+; MTAPE 15 - SET ALLOCATION
+; LOCATION 1 OF THE USER TABLE IS A CODE
+;	0 MEANS TAKE LOC 2 AS BIT ALLOCATION AND LOC 3 AS MESSAGE ALLOCATION
+;	1 MEANS SET ALLOCATION TO SYSTEM MAXIMUM
+;	2 MEANS SET ALLOCATION TO SYSTEM MINIMUM
+;	3 MEANS SET ALLOCATION TO SYSTEM DEFAULT
+; LOCATION 2 IS THE BIT ALLOCATION (truncated to nearest byte in TCP)
+; LOCATION 3 IS THE MESSAGE ALLOCATION (ignored in TCP)
+
+TSETAL:
+repeat 0,<			;JJW - still working on this code
+	XCTR XR,[SKIPL TAC,1(UUO)]
+	 CAILE TAC,3		;Check code for legal range
+	  JRST UUOERR
+	XCT TSETTB(TAC)		;Call relevant routine
+	;Update RCVWND(DDB) and RCVTHR(DDB).
+	;Call SNDMSG in IMPMAC.MAC to send up-to-date ACK if necessary.
+>;repeat 0
+	POPJ P,
+
+repeat 0,<
+TSETTB:	PUSHJ P,TSETSP		;User option
+	MOVEI AC2,WNDMAX	;Maximum allocation
+	MOVEI AC2,WNDMIN	;Minimum allocation
+	MOVEI AC2,WNDSIZ	;Default allocation
+
+TSETSP:	XCTR XR,[MOVE AC2,2(UUO)]
+	ASH AC2,-BYT2BT		;Convert bits to bytes
+	CAIGE AC2,WNDMIN	;Is it above minimum allocation?
+	 MOVEI AC2,WNDMIN	;No, give him at least this much
+	CAILE AC2,WNDMAX	;Is it over maximum?
+	 MOVEI AC2,WNDMAX	;No, put a lid on at at the maximum
+	POPJ P,
+>;repeat 0
+
+;GET ALLOCATIONS - This code only sets the bit allocation fields, and
+;always to a multiple of 8 bits.  The message allocation fields are zeroed.
+
+TGETAL:	MOVE TAC,RCVWND(DDB)
+	ADD TAC,RCVHLD(DDB)
+	LSH TAC,BYT2BT		;Convert bytes to bits
+	XCTR XW,[MOVEM TAC,1(UUO)]
+	XCTR XW,[SETZM 2(UUO)]
+	MOVE TAC,RCVWND(DDB)
+	LSH TAC,BYT2BT
+	XCTR XW,[MOVEM TAC,3(UUO)]
+	XCTR XW,[SETZM 4(UUO)]
+	PUSHJ P,TGETFS
+	LSH TAC,BYT2BT
+	XCTR XW,[MOVEM TAC,5(UUO)]
+	XCTR XW,[SETZM 6(UUO)]
+	MOVE TAC,SNDWND(DDB)
+	LSH TAC,BYT2BT
+	XCTR XW,[MOVEM TAC,7(UUO)]
+	XCTR XW,[SETZM 10(UUO)]
+	POPJ P,
+
+;Here to add up number of bytes in free storage (i.e., on input list) and
+;return in TAC.  Byte count in all but first buffer is taken from left
+;half of the header word.  Byte count in first buffer is in IBFBC(DDB).
+
+TGETFS:	MOVE TAC,IBFBC(DDB)	;Bytes in first buffer
+	HRRZ AC1,IBFTHS(DDB)	;Addr of first buffer
+	JUMPE AC1,CPOPJ		;Return if no first buffer
+TGETF1:	HRRZ AC1,(AC1)		;Advance to next buffer
+	JUMPE AC1,CPOPJ		;Return if all done
+	HLRZ TAC1,(AC1)		;Get byte count
+	ADDI TAC,(TAC1)		;Add it in
+	JRST TGETF1
+
+; SET SYSTEM DEFAULT TIMEOUTS. PUT WORD OF 6-BIT FIELDS IN 1(UUO).
+; THE FIELDS ARE IN UNITS OF 2-SECONDS. I.E., THE MAXIMUM WAIT IS 126 SECONDS
+; AND THE MINIMUM WAIT IS 2 SECONDS.
+
+USETTM:	XCTR XR,[MOVE AC1,1(UUO)]
+	MOVEM AC1,TIMES(DDB)
+	POPJ P,
+
+; ROUTINE TO GET CURRENT TIMEOUTS
+
+UGETTM:	MOVE AC1,TIMES(DDB)
+	XCTR XW,[MOVEM AC1,1(UUO)]
+	POPJ P,
+;⊗ GENSYM ABORT ABORT1 SNDWDN SNDWDN UNWEDG
+
+;Generate a local port number.  Calls appropriate routine in TCPSER.MAC.
+
+GENSYM:	PUSHJ P,SAVALL		;Get into TOPS-10 mode
+	SETAC(M,UUO)		;Address of parameter block
+	PUSHJ P,FRESKT↑		;Get a free port in T1
+	XCTR XW,[MOVEM T1,1(M)]	;Store result in argument block
+	POPJ P,			;Restore ACs and return
+
+;Abort current connection (send TCP reset).
+
+ABORT:	PUSHJ P,ABORT1
+	JRST PUTSTB		;Store status bits and return
+
+ABORT1:	PUSHJ P,SAVALL		;Get into TOPS-10 mode
+	TCPCAL(ABOR)		;Abort the connection
+	POPJ P,			;Restore ACs and return
+
+IFN FTAIP,<
+;Set fields in HOST GOING DOWN message, and send it right away.
+
+SNDWDN:	MOVSI AC1,UPGPRV
+	TDNN AC1,JBTPRV(J)	;Enabled UPG?
+	 JRST UUOERR
+	XCTR XR,[MOVE AC2,1(UUO)]	;User argument
+	DPB AC2,[POINT 12,MS.HGD+2,11]	;Store expected uptime
+	LDB DAT,[POINT 4,AC2,17]	;Get reason why down
+	DPB DAT,[POINT 4,MS.HGD+2,15]	;Store it
+	PUSHJ P,SAVALL		;Get into TOPS-10 mode
+	MOVE T1,HGDIOW↑		;Pointer (in IMPMAC.MAC) to HGD msg
+	OFFIMP			;IMP interrupts off to call IMPMES
+	PUSHJ P,IMPMES↑		;Send message
+	 JFCL			;Ignore failure
+	ONIMP
+	POPJ P,
+>;IFN FTAIP
+
+IFE FTAIP,<
+SNDWDN:	JRST UUOERR		;Illegal if no IMP
+>;IFE FTAIP
+
+;Unwedge a connection - not used in TCP.
+
+UNWEDG:	JRST UUOERR
+;⊗ SETPSH XSTATS XSTAT1 XSTSTB XSTBLN
+
+;Select push handling of output.
+
+SETPSH:	XCTR XR,[MOVE TAC,1(UUO)]
+	CAIL TAC,PSHALL		;Check if legal option
+	CAILE TAC,PSHNOT
+	JRST UUOERR		;Illegal!
+	MOVEM TAC,PSHOPT(DDB)
+	POPJ P,
+
+;Extended status: return information up to size of user MTAPE block.
+
+XSTATS:	XCTR XR,[SKIPG TAC1,1(UUO)] ;Number of words to store
+	JRST UUOERR		;Better be positive
+	MOVSI TAC,-XSTBLN	;Set up for AOBJN
+XSTAT1:	XCT XSTSTB(TAC)		;DAT ← next word to store
+	ADDI UUO,1
+	XCTR XW,[MOVEM DAT,1(UUO)] ;first word → 2(UUO), etc.
+	SOJLE TAC1,CPOPJ	;Return if user satisfied
+	AOBJN TAC,XSTAT1	;Continue unless done whole table
+	POPJ P,
+
+XSTSTB:	MOVE DAT,DEVIOS(DDB)	;I/O status word
+	MOVE DAT,STB(DDB)	;Status bits
+	MOVE DAT,STATE(DDB)	;Connection state
+	MOVE DAT,LCLADR(DDB)	;Local host
+	MOVE DAT,LCLPRT(DDB)	;Local port
+	MOVE DAT,RMTADR(DDB)	;Foreign host
+	MOVE DAT,RMTPRT(DDB)	;Foreign port
+	MOVE DAT,NETADR(DDB)	;Network host
+	MOVE DAT,PROTCL(DDB)	;IP Protocol
+	MOVE DAT,RCVWND(DDB)	;Receive window size
+	MOVE DAT,SNDWND(DDB)	;Send window size
+	MOVE DAT,RTTIME(DDB)	;Retransmission time
+	MOVE DAT,RCVNXT(DDB)	;Next number to be received
+	MOVE DAT,SNDNXT(DDB)	;Next number to be sent
+	MOVE DAT,SNDUNA(DDB)	;Sent but unacknowledged
+XSTBLN←←.-XSTSTB
+;Set UDP parameters ;⊗ SETUDP SETUD0 SETUD1 UDPFLS SETUD2 CGTERR STTERR UDPPRT UDPPR1 UDPPR2
+
+;	MTAPE <chan>,ADR
+;ADR:	26
+;	<status bits returned>
+;	<local port>
+;	<unused>
+;	<unused>
+;	<foreign port>
+;	<foreign host>
+
+SETUDP:	SETZM PROTCL(DDB)	;Now no input packets can reach us
+	SKIPE IBFTHS(DDB)	;Skip if no existing packet
+	PUSHJ P,SETUD1		;Flush the packet
+	XCTR XR,[SKIPGE TAC,LSLOC(UUO)]
+	PUSHJ P,UDPPRT		;Get a new port if he wants
+	XCTR XW,[MOVEM TAC,LSLOC(UUO)]
+	MOVEM TAC,LCLPRT(DDB)	;Save local port
+	XCTR XR,[MOVE TAC,FSLOC(UUO)]
+	MOVEM TAC,RMTPRT(DDB)	;Save remote port
+	XCTR XR,[MOVE TAC,HLOC(UUO)]
+	MOVEM TAC,RMTADR(DDB)	;Save remote host
+	JUMPE TAC,SETUD0	;Jump if host unspecified
+	PUSHJ P,SETUD2		;Else get target address for output
+	 JRST CGTERR		;Error if we can't get there
+SETUD0:	MOVEI TAC,S%LIST↑	;Set some non-zero state
+	MOVEM TAC,STATE(DDB)	;To prevent other protocols
+	MOVEI TAC,.IPUDP	;Set protocol
+	MOVEM TAC,PROTCL(DDB)	;Input may happen as soon as we do this
+	JRST PUTSTB		;Give status bits and return
+
+SETUD1:	PUSHJ P,SAVT↑		;Get needed TOPS-10 ACs
+;Here to flush UDP packet in DDB awaiting input.
+UDPFLS:	HRRZ T1,IBFTHS(F)	;Point to first buffer of packet
+	SETZM IBFTHS(F)
+	JRST RELBUF↑		;Return all the buffers
+
+SETUD2:	PUSHJ P,SAVT↑		;Get some ACs
+	MOVE T1,RMTADR(F)
+	PUSHJ P,TARGET↑		;Get a net address
+	 POPJ P,		;Can't get there
+	MOVEM T1,NETADR(F)
+	MOVEM W,NETWRK(F)
+	MOVE T1,NI.IPA(W)	;Set our IP address
+	MOVEM T1,LCLADR(F)
+	JRST CPOPJ1
+
+UDPPRT:	AOS TAC,UDFPRT		;Get next port number
+	TRNN TAC,200000		;Skip if more than 16 bits
+	JRST UDPPR1
+	MOVEI TAC,UDRPRT	;Reserve well-known ports
+	MOVEM TAC,UDFPRT
+UDPPR1:	MOVEI TAC1,IMPDDB	;Start search through DDBs
+UDPPR2:	HLRZ TAC1,DEVSER(TAC1)	;Get next DDB
+	CAIN TAC1,IMP.NX	;End of IMP DDBs?
+	POPJ P,			;Yes, done
+	CAMN TAC,LCLPRT(TAC1)	;Is port the same?  (We may match TCP DDBs, but so what?)
+	JRST UDPPRT		;Yes, try a different port number
+	JRST UDPPR2		;Keep checking
+;Buffered and dump mode output UUOs ;⊗ BUFO DMPO
+
+;Because the TOPS-10 IMPMAC.MAC implements only buffered mode (and even that in
+;a slightly different way from WAITS), the code here is a hybrid of that and the
+;old NCP code in WAITS. The same holds for input UUO code.
+
+BUFO:	HRRZ TAC1,DEVOAD(DDB)		;PICK UP OUT BUFFER ADDRESS
+	XCTR XR,[MOVE J,1(TAC1)] 	;PICK UP WORD COUNT and byte position
+	HLRZ AC2,DEVBUF(DDB)		;GET ADDRESS OF BUFFER HEADER
+	XCTR XLB,[LDB AC2,[POINT 6,1(AC2),11]] ;USER'S BYTE SIZE.
+	JUMPE AC2,ADRERR		;Address check if zero byte size
+	PUSHJ P,ITMCNT			;Count number of bytes in buffer
+	HRRZ TAC1,DEVOAD(DDB)		;Buffer address
+	ADDI TAC1,2			;MOVE POINTER TO DATA AREA
+	PUSHJ P,OUTPT			;Do transfer with user addr in TAC1 and
+					; byte count in J
+	PUSHJ P,ADVBFE			;ADVANCE BUFFER
+	 JRST UUXIT
+	JRST BUFO			;TRY FOR ANOTHER ONE
+
+;DUMP MODE OUTPUT
+
+DMPO:	PUSHJ P,DMPCMD			;FETCH NEXT IOWD.
+	 POPJ P,			;END OF COMMAND LIST
+	MOVN J,TAC			;POSITIVE WC
+	LSH J,WD2BYT			;Byte count
+	HRRZ TAC1,TAC1			;TAC1←USER-RELATIVE STARTING ADDRESS
+	MOVEI AC2,=8			;Dump mode implies 8-bit bytes
+	PUSH P,UUO			;SAVE POINTER TO COMMAND LIST
+	PUSHJ P,OUTPT			;DO TRANSFER
+	POP P,UUO
+	MOVE IOS,DEVIOS(DDB)		;Ensure correct IOS
+	AOJA UUO,DMPO			;DO NEXT COMMAND
+
+;JJW - Perhaps check for error on return from OUTPT and if so go to UUXIT.
+;Common output code ;⊗ OUTPT OUTBAD TCPOUT OUT01 OUT02 OUT025 OUT05 OUT050 OUT051 OUT07 OUT06 OUT10 OUT102 UDPOUT UDPOU1 UDPOU2 OUTFLS ETHREL
+
+;Enter with byte count in J, user byte size in AC2, and user address in TAC1.
+
+;Be sure to change DEVIOS(DDB) whenever updating IOS.  AC restore upon leaving
+;TOPS-10 mode will clobber IOS, but caller of OUTPT restores it from DEVIOS.
+
+OUTPT:	HRLI TAC1,440000	;MAKE INPUT POINTER INTO BYTE POINTER
+	DPB AC2,[POINT 6,TAC1,11] ;Use user byte size to read from core
+	MOVE TAC,PROTCL(DDB)	;See what kind of output
+	CAIN TAC,.IPTCP
+	JRST TCPOUT
+	CAIN TAC,.IPUDP
+	JRST UDPOUT
+OUTBAD:	MOVEI IOS,IOIMPM	;Set IOIMPM if bad protocol
+	IORB IOS,DEVIOS(DDB)
+	POPJ P,
+
+TCPOUT:	JUMPE J,CPOPJ		;LEAVE IF USER byte COUNT=0
+
+;All output is done byte-by-byte.  This doesn't add too much in the way of
+;inefficiency, because checksumming has to get done sometime, and OUBYTE handles
+;this.  (We could possibly use the code that checksums words, but for now that
+;looks too hairy.)  Code here is derived from OUTPT in IMPMAC.MAC.
+
+OUT01:	PUSHJ P,SAVALL		;Get into TOPS-10 mode
+	SETAC(P1,TAC1)		;User address of data
+	SETAC(P2,J)		;Desired byte count
+	;P3 is used to keep the running checksum.  P4 is the coroutine pointer.
+OUT02:	PUSHJ P,TCPOCK↑		;OPEN FOR OUTPUT?
+	 JRST OUT102		;NO
+	MOVEI P4,OUBYTE↑	;ASSUME BYTE MODE
+	MOVSI S,IO
+	IORB S,DEVIOS(F)
+	JUMPLE P2,OUT051	;Jump if no data
+;TEST FOR ALLOCATION
+	MOVSI S,ALLCWT		;SET WAIT FLAG
+	IORB S,DEVIOS(F)
+	PUSHJ P,TCPTCK↑		; is there enough window available?
+	 JRST OUT07		; no window or not enough.  wait.
+;OUTPUT LOOP
+OUT025:	XCTR XLB,[ILDB T1,P1]	;Get a character
+	PUSHJ P,OTBYTE↑		;BUFFER AND COUNT IT
+	 JRST OUT06		;LOSE!!!
+	SOJG P2,OUT025		;Loop for more
+	SKIPG OBFBYT(F)		;DID WE BUFFER ANYTHING?
+	JRST OUT051		;NO, SO DON'T SEND ANYTHING
+;HERE WHEN TRANSFER TO MONITOR BUFFER STOPPED.
+OUT05:
+;;	JUMPG P2,OUT050		;Jump if not end of user buffer
+	MOVE T1,PSHOPT(F)	;Get push option
+	CAIGE T1,PSHNOT		;Should we push this buffer?
+	SETOM SNDPSH(F)		;Yes
+	CAIN T1,PSHNXT		;Was it for only this buffer?
+	AOS PSHOPT(F)		;Yes, set to not push next time
+	PUSHJ P,TCPPSH↑		;Let TCP do push handling.
+OUT050:	PUSHJ P,TCPOCK↑		;Still open for output?
+	 JRST OUT102		;NO.  must have crapped out while we
+				;weren't watching.
+				;indicate error and release space
+	PUSHJ P,OUTPRE		;Pre-allocate resources for this message
+	 JRST OUT10		;Unable to do so, indicate error
+	PUSHJ P,OUTBYT↑		;Send it out
+	JUMPG P2,OUT02		;Jump if any bytes left
+;Here when done a transfer.
+OUT051:	MOVSI S,IOBEG
+	SKIPE IBFTHS(F)		;ANY INPUT DATA?
+	TDNN S,DEVIOS(F)	;AND STILL VIRGIN INPUT SIDE?
+	JRST IMPWK1		;NO
+	MOVEI S,IODATA		;YES
+	IORB S,DEVIOS(F)	;SET DATA BIT
+	JRST IMPWK1
+
+;HERE TO WAIT
+OUT07:	LDB T1,ALLTP		;Get allocation wait time
+	PUSHJ P,IMPWAT		;WAIT
+	TRNN S,TMO		;See if we timed out
+	JRST OUT02		;No, try again
+	MOVEI S,IODERR		;SET ERROR BIT SO GET OUT OF UUOCON
+	IORB S,DEVIOS(DDB)
+	POPJ P,
+
+;HERE IF FAILED TO PACK BYTE INTO BUFFER.  T2 CONTAINS CERROR FLAG
+OUT06:	LDB T1,[POINT 6,P1,11]	;GET BYTE SIZE
+	ROT T1,-6
+	ADD P1,T1		;BACK UP BYTE POINTER
+	JUMPN T2,OUT05		;IF NON-ZERO, MESSAGE SIZE OR ALLOCATION
+;HERE IF NO BUFFERS LEFT
+OUT10:	MOVEI S,IODERR		;DEVICE ERROR
+	CAIA			;Don't optimize to SKIPA S,[IODERR] (duhh)
+OUT102:	MOVEI S,IOIMPM		;IMPROPER MODE
+	IORB S,DEVIOS(F)
+	PUSHJ P,OUTFLS		;Flush output stream
+	JRST OUT051
+
+
+;UDP packet output.
+
+UDPOUT:	SKIPLE STATE(DDB)	;Have we set UDP parameters?
+	SKIPN NETADR(DDB)	;Is there a destination?
+	JRST OUTBAD		;Closed, or haven't gotten output address
+	PUSHJ P,SAVALL		;Enter TOPS-10 mode
+	;Copy the data into IMP buffers (byte-by-byte, as we checksum)
+	;and send it out.
+	SETAC(P1,TAC1)		;Starting address
+	SETAC(P2,J)		;Length in bytes
+	SETZB P3,OBFBYT(F)	;Zero checksum so far and byte count
+	MOVEI P4,OUBYTE↑	;Coroutine linkage
+	JUMPE P2,UDPOU2		;Nothing to copy if null packet
+	SKIPN W,NETWRK(F)
+	PUSHJ P,IMPBUG
+	CAMG P2,NI.TMX(W)	;TCP maximum, close enough
+	JRST UDPOU1
+	MOVEI S,IOBKTL		;This packet is too large
+	IORB S,DEVIOS(F)
+	POPJ P,
+
+UDPOU1:	XCTR XLB,[ILDB T1,P1]	;Get a byte
+	JSP P4,(P4)		;Store it
+	 JRST OUTFLS		;No more buffers.  Drop packet (we can do this!)
+	AOS OBFBYT(F)
+	SOJG P2,UDPOU1		;Loop for more
+UDPOU2:	PUSHJ P,OUTPRE↑		;Pre-allocate (UDP takes less than TCP,
+				;so OUTPRE is usable).
+	 JRST OUTFLS		;Not enough, lose
+	PUSHJ P,OUTBFX↑		;Link last buffer to stream
+	JRST UDPMAK↑		;Send it away!
+
+;Subroutine to flush all output data from a DDB (TCP or UDP).
+↑OUTFLS:PUSHJ P,OUTBFX↑		;Link buffer we're currently filling to stream
+	SKIPE T2,OUTBIB(F)	;Check for a pre-allocated BIB
+	PUSHJ P,GIVBIB		;Return it
+	SETZM OUTBIB(F)
+	SKIPE T1,OUTBFS(F)	;Check for a buffer or Ethernet packet
+	JRST [	SKIPN W,NETWRK(F)	;Get network interface
+		PUSHJ P,IMPBUG
+		PUSHJ P,@NI.REL(W)	;Return it
+		SETZM OUTBFS(F)
+		JRST .+1]
+	HRRZ T1,OBFFST(F)	;Get list of buffers to release
+	SETZM OBFFST(F)		;Clear all traces of the stream
+	SETZM OBFLST(F)
+	SETZM OBFBC(F)
+	SETZM OBFBYT(F)
+	JRST RELBUF↑		;Release buffers and return
+
+IFN FTEIP,<
+;Release a pre-allocated Ethernet packet from a DDB.
+↑ETHREL:EXCH AC1,T1
+	PUSHJ P,FSGIVE		;Return Ethernet packet
+	EXCH AC1,T1
+	POPJ P,
+>;IFN FTEIP
+;Buffered and dump mode input UUOs ;⊗ BUFI UUXIT ENDCHK DMPI DMPIT
+
+BUFI:	HRRZ TAC1,DEVIAD(DDB)		;ADDRESS OF USER'S BUFFER
+	XCTR XR,[HLRZ TAC,(TAC1)]	;TAC←BUFFER SIZE
+	ANDCMI TAC,400000		;IGNORE BUFFER USE BIT
+	MOVEI DSER,(TAC1)
+	ADDI DSER,(TAC)			;ADDRESS OF LAST DATA WORD IN BUFFER
+	XCTR XRW,[MOVES (DSER)]		;ADDRESS CHECK
+	SUBI TAC,1			;REDUCE BUFFER WC TO SKIP 1 OVERHEAD WORD
+	ADDI TAC1,2			;ADVANCE TO POINT TO FIRST DATA WORD.
+	;Clear the buffer.  In particular, we want the low-order 4 bits of words
+	;read in 8-bit mode to be 0; to maintain compatibility with old IMPSER.
+	XCTR XW,[SETZM (TAC1)]
+	HRLI AC1,(TAC1)			;First source word
+	HRRI AC1,1(TAC1)		;First dest word
+	XCTR XBLTRW,[BLT AC1,(DSER)]	;Clear to end of buffer
+	HRRZ AC2,DEVBUF(DDB)		;GET ADDRESS OF BUFFER HEADER
+	XCTR XLB,[LDB AC2,[POINT 6,1(AC2),11]] ;USER'S BYTE SIZE.
+	JUMPE AC2,ADRERR		;Address check if zero byte size
+	PUSHJ P,INPT			;DO THE INPUT.
+	 JRST ENDCHK			;ERROR OR EOF
+	HRRZ AC2,DEVIAD(DDB)		;PICK UP BUFFER ADDRESS
+	XCTR XW,[MOVEM DAT,1(AC2)] 	;SET WORD COUNT IN BUFFER
+	PUSHJ P,ADVBFF			;ADVANCE THE BUFFER
+	 CAI
+UUXIT:	MOVE IOS,DEVIOS(DDB)		;UUOCON EXPECTS THIS
+	POPJ P,
+
+ENDCHK:	MOVE IOS,DEVIOS(DDB)		;Make sure IOS up-to-date
+	TLZE IOS,IOEND			;DID WE HIT EOF?
+	 IORI IOS,IODEND		;YES, SET EOF BIT
+	TRNE IOS,TMO			;TIMED OUT?
+	 IORI IOS,IODERR		;NEED TO SET ERROR BIT FOR UUOCON.
+	MOVEM IOS,DEVIOS(DDB)
+	POPJ P,
+
+;DUMP MODE INPUT
+
+DMPI:	PUSHJ P,DMPCMD			;FETCH AND CHECK NEXT IOWD FROM COMMAND LIST
+	 POPJ P,			;END OF COMMAND LIST
+	MOVN TAC,TAC			;TAC←POSITIVE WC.
+	TLZE TAC1,-1			;MAKE SURE THIS ISN'T WRITE PROTECTED
+	 JRST UADRER			;ADDRESS ERROR - CAN'T INPUT TO WRITE PROT AREA
+	MOVEI AC2,=8			;Dump mode implies 8-bit bytes
+DMPIT:	PUSHJ P,INPT			;DO AN INPUT
+	 JRST ENDCHK
+	MOVE IOS,DEVIOS(DDB)		;Get correct IOS
+	ADDI TAC1,(DAT)			;Address to store next data
+	SUBI TAC,(DAT)			;See if we got all we wanted
+	JUMPG TAC,DMPIT			;IF WE HAVEN'T GOTTEN IT, GO BACK FOR MORE
+	AOJA UUO,DMPI			;CHECK FOR MORE COMMANDS
+;Common input code ;⊗ INPT INPT01 INPBAD TCPINP INPT11 INPT02 INPT17 INPT18 INPT19 INPT21 INPT09 INP09A INPT13 INPT14 UDPINP UDPIN1 UDPIN2 UDPIN3 UDPIN4 UDPIN5
+
+;Common input routine to read data out of input list and into user core.
+;Call:	MOVE TAC1,[user address]
+;	MOVE TAC,[# of words desired]
+;	MOVE AC2,[byte size]
+;	PUSHJ P,INPT
+;	  <error or no data available>
+;	<some data transferred, with word count in RH(DAT) and
+;	 LH of byte ptr to last byte transferred in LH(DAT)>
+;Some of this code similar to INPT in IMPMAC.MAC, though cleaned up a bit.
+;Labels have been kept the same when possible, for easy reference.
+
+;Be sure to change DEVIOS(DDB) whenever updating IOS.  AC restore upon leaving
+;TOPS-10 mode will clobber IOS, but caller of INPT restores it from DEVIOS.
+
+INPT:	HRLI TAC1,440000		;Make input pointer into byte pointer
+	DPB AC2,[POINT 6,TAC1,11]	;Use user byte size
+	PUSHJ P,SAVALL			;Get into TOPS-10 mode
+	SETAC(P1,TAC1)			;User address to store data
+	SETAC(P2,TAC)			;Desired word count
+	LSH P2,WD2BYT			;Make it a byte count
+	SETZ P3,			;Words transferred
+	MOVE S,[ALLWAT!IO!IOFST,,IODATA]
+	ANDCAB S,DEVIOS(F)		;Clear flags
+	TLNN S,IOBEG			;FIRST TIME AROUND?
+	JRST INPT01			;NO
+	MOVSI S,IOFST!IOBEG		;FIRST IO FLAG
+	XORB S,DEVIOS(F)
+INPT01:	MOVSI S,IDATWT
+	IORB S,DEVIOS(F)		;SET IO WAIT FLAG
+	MOVE T1,PROTCL(F)	;See what kind of input
+	CAIN T1,.IPTCP
+	JRST TCPINP
+	CAIN T1,.IPUDP
+	JRST UDPINP
+INPBAD:	MOVEI S,IOIMPM		;Set IOIMPM if bad protocol
+	IORB S,DEVIOS(DDB)
+	POPJ P,
+
+TCPINP:	PUSHJ P,INBYTC↑			;CALL CHECK ROUTINE
+	 JRST INPT02			;DATA!
+;Fall into INPT11 (IMPMAC.MAC puts it later in the code).
+INPT11:	PUSHJ P,TCPICK↑			;OPEN?
+	 JRST INPT13			;No.  Return to caller.
+	LDB T1,INPTP			;Get input wait time
+	PUSHJ P,IMPWAT			;Wait
+	TRNN S,TMO			;See if we timed out
+	 JRST INPT01			;No, try from top
+	MOVEI S,IODERR			;SET ERROR BIT SO GET OUT OF UUOCON
+	IORB S,DEVIOS(DDB)
+	POPJ P,
+
+;Here we move data from the input stream into user core.
+INPT02:	MOVEI P4,0
+	EXCH P4,IBFPC(F)		;Get coroutine link, if any.
+	JUMPN P4,INPT17			;Proceed if already set
+	MOVEI P4,INBYTE↑		;Assume text
+;Here to get an input byte
+INPT17:	MOVSI S,IDATWT			;Set wait flag
+	IORB S,DEVIOS(F)
+	JSP P4,(P4)			;Get a byte
+	 JRST INPT19			;No more
+	AOS IBFBYT(F)			;Count bytes read
+	MOVSI S,IOFST			;Clear first data flg
+	ANDCAB S,DEVIOS(F)
+	XCTR XDB,[IDPB T1,P1]		;Store it
+	SOJG P2,INPT17			;Count and loop
+;Here when user data area exhausted
+INPT18:	SKIPLE IBFBC(F)			;Any input left?
+	 HRRZM P4,IBFPC(F)		;Yes, save linkage
+	PUSHJ P,INBYTC↑			;Make sure no more
+	 CAIA
+	JRST INPT21			;Empty
+	MOVEI S,IODATA			;Set data flag
+	IORB S,DEVIOS(F)
+	JRST INPT09			;DONE: tell NCP and free interrupts
+
+;Here when stream exhausted before user data area
+INPT19:	MOVEI S,IODATA			;Clear input data flag
+	ANDCAB S,DEVIOS(F)
+;Here when input exhausted
+INPT21:	PUSHJ P,TCPIFN↑			;Test for closed
+	 JRST [				;Closed. Interrupts are on.
+		PUSHJ P,INPT14		;  Tell user about EOF.
+		JRST INP09A]
+;Here when done.
+INPT09:	PUSHJ P,TCPWUP↑			;Update window information
+	PUSHJ P,IMPWK1			;Clear flags and such
+INP09A:	SETAC(T1,TAC)			;Number of words user wanted
+	LSH P2,BYT2WD			;Number of full words not transferred
+	SUB T1,P2			;Number of words transferred
+	HLL T1,P1			;Left half of byte ptr
+	SAVAC(DAT,T1)			;Return to caller here
+	JRST CPOPJ1			;Indicate success
+
+;Here if port not open.
+
+INPT13:
+INPT14:	MOVSI S,IOEND			;End of file
+	IORB S,DEVIOS(F)
+repeat 0,<			;Taken out by Provan: see IMPMAC.MAC
+	SKIPN IBFTHS(F)			;Any data in buffers?
+	TLNN S,IOFST			;No. Was any input?
+	 JRST IMPWK1
+	MOVEI S,IOIMPM			;No. Error
+	IORB S,DEVIOS(F)
+>;repeat 0
+	JRST IMPWK1
+
+
+UDPINP:	SKIPG STATE(F)		;Legal state for input?
+	JRST INPBAD		;no
+	SKIPE P4,IBFTHS(F)	;See if there's a packet
+	JRST UDPIN1		;Yes, there is
+	LDB T1,INPTP		;Get input wait time
+	PUSHJ P,IMPWAT		;Wait for data
+	TRNN S,TMO		;Check for timeout
+	JRST UDPINP		;No, try again from the top
+	MOVEI S,IODERR		;Set error bit with timeout
+	IORB S,DEVIOS(F)
+	POPJ P,
+
+UDPIN1:	MOVE T1,MSGLEN(F)	;Get packet length in bytes
+	ANDI T1,3		;Length mod 4
+	HLL T1,CBCTAB(T1)	;LH of byte ptr (table in LOWCOR)
+	MOVE P3,MSGLEN(F)	;Get packet length again
+	ADDI P3,3		;Round up to multiple of 4
+	LSH P3,BYT2WD		;Convert bytes to words
+	HRRI T1,(P3)
+	SAVAC(DAT,T1)		;Return in DAT
+	JUMPE P3,UDPIN3		;Check for null message
+	CAILE P3,(P2)		;Will it fit in user buffer?
+	 JRST UDPIN4		;No
+;Taking advantage of the fact that data must be packed 4 bytes per word in
+;the input buffer stream, we BLT from IMP buffers into the user buffer.
+UDPIN2:	MOVSI T1,NBHLEN(P4)	;Source for BLT
+	HRRI T1,(P1)		;Destination
+	MOVEI T2,IMPBFS-NBHLEN	;Number of data words in an IMP buffer
+	CAILE T2,(P3)		;Number of words to BLT
+	MOVEI T2,(P3)
+	SUBI P3,(T2)		;Decrement count
+	ADDI P1,(T2)		;First word after BLT
+	XCTR XBLTW,[BLT T1,(P1)] ;Transfer one IMP buffer
+	HRRZ P4,(P4)		;Advance to next buffer
+	JUMPE P3,UDPIN3		;Unless done
+	JUMPN P4,UDPIN2		;Read next buffer if there is one
+	PUSHJ P,BUGTRP		;There should be!
+	JRST UDPIN4		;Exit with an error if continued
+
+UDPIN3:	JUMPE P4,UDPIN5		;If done, message should be exhausted
+	PUSHJ P,BUGTRP		;Wrong again
+	;If continued, return with an error flag for the user job.
+UDPIN4:	MOVEI S,IOBKTL		;Block too long
+	IORB S,DEVIOS(F)
+	JRST UDPFLS		;Flush the losing packet
+
+UDPIN5:	AOS (P)			;Indicate success
+	JRST UDPFLS
+;Close and release UUOs ;⊗ UDPCLS CLSI CLSO CLSO1 IMPRLS
+
+;Here to close UDP "connection".
+UDPCLS:	PUSHJ P,SAVALL		;Get into TOPS-10 mode
+	PUSHJ P,UDPFLS		;Flush any waiting packet
+	SETZM STATE(F)		;Close the DDB
+	JRST IMPWK1
+
+;Close input side.  Does nothing for TCP, for UDP discards waiting input.
+CLSI:	MOVE TAC,PROTCL(DDB)
+	CAIN TAC,.IPUDP
+	JRST UDPCLS
+	JRST IMPWK1
+
+;Close output side.  Does nothing for UDP, sends FIN on TCP connection,
+;without waiting.  (Use MTAPE 3 to wait.)
+CLSO:	MOVE TAC,PROTCL(DDB)
+	CAIN TAC,.IPUDP
+	JRST IMPWK1
+	;Assume protocol is TCP if not UDP.
+;ACs still in WAITS mode.  Here we make use of the fact that TCPCLS only
+;needs F (DDB) set up and clobbers no ACs.  If this changes, more ACs will
+;have to be saved.
+	PUSHJ P,TCPCLS↑		;Ensure a TCP Push on last output
+	TLNN DDB,OUTBFB!OUTPB	;Output buffer set up?
+	JRST CLSO1		;No, forget about flushing last buffer
+	LDB AC1,PIOMOD		;What mode are we in?
+	CAIGE AC1,DR		;Dump maybe?
+	PUSHJ P,OUT		;No, do last output for buffered mode
+;Here from IMPRLS and from code above.
+CLSO1:	PUSHJ P,SAVALL		;Get into TOPS-10 mode
+	MOVSI P1,(IF.NWT)	;Don't wait to close
+	TCPCAL(CLOS)		;Close the connection
+	JRST IMPWK1		;Clear flags and return
+
+;Here on a release UUO.  Close input and output has already been done,
+;unless inhibited.  Send a reset on a TCP connection in that case.
+IMPRLS:	MOVE TAC,PROTCL(DDB)
+	CAIN TAC,.IPUDP
+	JRST UDPCLS
+	;Assume protocol is TCP if not UDP.
+	PUSHJ P,TCPOCK↑		;Still open for output?
+	 JRST CLSO1		;No, make sure DDB is closed and return
+	PUSHJ P,SAVALL		;Yes, get into TOPS-10 mode
+	TCPCAL(ABOR)		;Send a reset
+	JRST IMPWK1		;Clear flags and return
+;I/O wait and wake routines ;⊗ IMPW60 IMPWAT IMPWA1 IMPWA2 IMPWAK IMPWK1 IMPHNG IMPIOD
+
+;ROUTINE TO WAIT FOR INTERRUPT ACTIVITY.  RETURNS WHEN WOKEN AT
+;   INTERRUPT LEVEL OR WHEN WAIT TIMES OUT.
+;	(SET SOME WAIT FLAG IN DEVIOS)
+;	MOVE	T1,[timeout interval]
+;	PUSHJ	P,IMPWAT
+;	RETURN WHEN I/O DONE OR TIMER TIMES OUT (TMO SET)
+
+;This is an adapted version of the code in IMPMAC.MAC.  It takes in T1 the
+;amount of time to wait (0 means wait forever until woken), in 2-second units
+;rather than the weird 4*2↑N code used in TOPS-10.  Also, DEVSBB is used
+;in the DEVIOS word instead of IOACT so that the job gets put in IOWQ, and
+;all wait flags are in DEVIOS rather than IMPIOS.  Call with TOPS-10 ACs.
+
+↑IMPWAT:ERRSPW				;Jump to SPWERR if spacewar level
+	MOVEI T3,TMO			;CLEAR TIMEOUT FLAG
+	ANDCAM T3,DEVIOS(F)
+	MOVSI T4,ALLWAT			;TEST ALL WAIT FLAGS
+	LSH T1,1			;Convert to seconds
+	IDIVI T1,77			;Divide into =63 second segments
+	JUMPN T2,IMPWA2			;Non-zero remainder is fine
+	SOJL T1,IMPWA2			;If 0 quotient no timeout else reduce T1 and
+IMPWA1:	MOVEI T2,77			; set timeout to =63 seconds
+IMPWA2:	DPB T2,PDVTIM			;Deposit timeout in DDB
+	DPB T2,PDVCNT			;And start the countdown
+	;Next two lines from old IMPSER (at TIMAGN).
+	LDB J,PJOBN		;I DON'T KNOW HOW, BUT THIS IS OFTEN CLOBBERED.
+	HRRZM DDB,JBTIOW(J)	;TELL WHOLINE WHICH DDB WE'RE WAITING FOR
+	MOVSI S,DEVSBB			;Set bit to indicate I/O active
+	IORM S,DEVIOS(F)
+	TDNE T4,DEVIOS(F)		;WAIT FLAG(S) STILL SET?
+	PUSHJ P,[PUSHJ P,SAVALL		;YES, WAIT (NO AC'S CLOBBERED)
+		 JRST WSYNC]
+	SOJGE T1,IMPWA1			;BACK IF TIMEOUT AND LARGE time GIVEN
+	TDNE T4,DEVIOS(F)		;WAIT FLAG STILL SET?
+	IORM T3,DEVIOS(F)		;YES, SET TIMEOUT FLAG
+	JRST IMPWK1			;ENSURE FLAGS ARE CLEAR AND RETURN
+
+
+;ROUTINE TO WAKE THE JOB AT INTERRUPT (actually clock) LEVEL
+↑IMPWAK:PUSHJ P,IMPIOD			;SET I/O DONE FOR JOB
+
+;ROUTINE TO CLEAR ALL WAIT FLAGS AND RESET THE TIMEOUT COUNTER TO INFINITY
+↑IMPWK1:MOVSI S,ALLWAT!IOFST!IOW!DEVSBB	;Clear these flags
+	DPB S,PDVCNT			;Turn off hung timer
+	ANDCAB S,DEVIOS(F)
+	POPJ P,
+
+;HERE AT CLOCK LEVEL TO HANDLE HUNG DEVICE TIMEOUT
+IMPHNG:	AOS (P)				;PRESET SKIP RETURN TO BYPASS
+					;HUNG DEVICE MSG
+	AOS IMPHDC↑			;count a hung device seen
+	LDB T1,PJOBN			;get the job number
+	JUMPN T1,IMPIOD			;ok if not job zero
+	PUSHJ P,DDBFLS↑			;i don't know how you got here, but
+	JRST DDBREL			;don't do it again.
+
+;ROUTINE TO SET I/O DONE FOR A JOB WAITING FOR AN IMP
+IMPIOD:	MOVSI S,IOW
+	TDNE S,DEVIOS(F)		;Is the job waiting for this IMP?
+	 PUSHJ P,STTIOD			;Yes, requeue job to TQ state
+	MOVSI S,DEVSBB!IOW		;Turn off these flags in DEVIOS
+	DPB S,PDVCNT			;Turn off hung timer
+	ANDCAB S,DEVIOS(F)
+	POPJ P,
+;Bugtraps ;⊗ IMPBUG DIE CONTAB
+
+;Here for random errors.  Call from anywhere with PUSHJ P,IMPBUG
+
+↑IMPBUG:PUSHACS
+	PUSHJ P,DISUSR		;Print time of new message on CTY
+	 SIXBIT/IMPBUG/
+	PUSHJ P,DISMES
+	 ASCIZ/IMP bugtrap, called from /
+	MOVE TAC,-20(P)		;PC saved on PUSHJ P,IMPBUG
+	MOVEI TAC,-1(TAC)	;Address of caller
+	PUSHJ P,DISLOC
+	PUSHJ P,DISMES
+	 ASCIZ/, PI CONI = /
+	CONI PI,TAC
+	PUSHJ P,DISOHS
+	PUSHJ P,DISCRLF
+	PUSHJ P,DISFLUSH
+	POPACS
+	PUSHJ P,WDDTCALL
+	POPJ P,
+
+;Here from TOPS-10 errors that want the system to stop.
+
+↑DIE:	PUSHACS
+	PUSHJ P,DISUSR		;Print time of new message on CTY
+	 SIXBIT/IMPBUG/
+	PUSHJ P,DISMES
+	 ASCIZ/IMP bug (/
+	HRLZ TAC1,@-20(P)	;Get error mnemonic stored in code
+	PUSHJ P,DISSIX
+	PUSHJ P,DISMES
+	 ASCIZ/) called from /
+	MOVE TAC,-20(P)		;PC saved on PUSHJ P,DIE
+	MOVEI TAC,-1(TAC)	;Address of caller
+	PUSHJ P,DISLOC
+	PUSHJ P,DISMES
+	 ASCIZ/, PI CONI = /
+	CONI PI,TAC
+	PUSHJ P,DISOHS
+	PUSHJ P,DISCRLF
+	PUSHJ P,DISFLUSH
+	POPACS
+	PUSHJ P,WDDTCALL
+;Decipher continuation code in index field of code word.
+	PUSH P,TAC		;Get an AC to work with
+	LDB TAC,[POINT 4,@-1(P),17]
+	JRST @CONTAB(TAC)	;Try to continue
+
+CONTAB:	TPOPJ			;(0) .
+	TPOPJ			;(1) .+1
+	[POP P,-1(P) ↔ JRST TPOPJ]	;(2) CPOPJ
+	[POP P,-1(P) ↔ JRST TPOPJ1]	;(3) CPOPJ1
+	TPOPJ			;(4)
+	TPOPJ			;(5)
+	TPOPJ			;(6)
+	TPOPJ			;(7)
+	TPOPJ			;(10)
+	TPOPJ			;(11)
+	TPOPJ			;(12)
+	TPOPJ			;(13)
+	TPOPJ			;(14)
+	TPOPJ			;(15)
+	TPOPJ			;(16)
+	TPOPJ1			;(17) Special return
+;IMPSER/TTYSER interface. ;⊗ ITYGET ITYGE1 ITYREL ITYRL1 RECIMP ILGOUT ILGOU2 QTCLOS ITYCLS FIXITY ITYECH
+
+;Here to get a free PTY (which we call an ITY, though it isn't the same as an
+;ITY in TOPS-10).  Call:
+;	MOVE F,[address of IMP DDB]
+;	PUSHJ P,ITYGET
+;	  error return	... none left
+;	OK return  ...	line number has been stored in the DDB
+;This code is a combination of parts of PTYGET in TTYSER and ITYGET in IMPMAC.MAC.
+
+↑ITYGET:PUSHJ P,SAVALL		;Get into WAITS mode
+	MOVSI LINE,-PTYNUM	;Look for an available PTY
+	MOVSI TAC,PTYLIN
+	TDNE TAC,LINTAB+PTYL0(LINE)
+ITYGE1:	AOBJN LINE,.-1
+	JUMPG LINE,CPOPJ	;Error return if none available
+	PUSH P,LINE		;Save aobjn cnt in case of retry
+	ADDI LINE,PTYL0		;Get number of a possibly available PTY
+repeat 1,<		;Take this out for automatic enable of PTYs
+	SKIPE TTYLOK		;Need to check for enabled PTYs?
+	PUSHJ P,PTYTST		;Yes, skip if this PTY not enabled
+>;repeat 1
+	PUSHJ P,DDBSRC			;Get a DDB
+	 JRST [	POP P,LINE		;No DDB or PTY not enabled, try another
+		MOVSI TAC,PTYLIN	;TAC has been clobbered by now
+		JRST ITYGE1]		;Next PTY please
+	ADJSP P,-1			;Flush aobjn count
+repeat 0,<		;This used while debugging Telnet server code
+PRINTX Automatic enable of IMP PTYs
+	PUSH P,AC1
+	PUSH P,AC2
+	PUSH P,AC3
+	MOVEI AC2,(LINE)	;Convert line number to bit index
+	IDIVI AC2,=36
+	MOVN AC3,AC3		;Negate for use in shifting
+	MOVSI AC1,400000
+	LSH AC1,(AC3)
+	IORM AC1,TTYENB(AC2)	;Enable this TTY
+	POP P,AC3
+	POP P,AC2
+	POP P,AC1
+>;repeat 0
+	HRLI LINE,PTYLIN!PTYUSE!IMPBIT!ECHARR!FCS!TBXPND!FULTWX ;Set characteristics word
+	MOVEM LINE,LINTAB(LINE)
+	SETAC(TAC,F)		;Get the IMP DDB address
+	MOVEM TAC,PTYIMP-PTYL0(LINE) ;Store it in the table
+	SETZM PTYJOB-PTYL0(LINE)     ;No job owns this PTY in the usual sense
+	HRLI LINE,TTYJB		;Store this bit along with line number
+	MOVEM LINE,TTYLIN(TAC)	; in the IMP DDB
+	JRST CPOPJ1
+
+;Here to release the PTY connected to an IMP.  Call (with TOPS-10 ACs):
+;	MOVE F,[address of IMP DDB]
+;	PUSHJ P,ITYREL
+;	always return here
+;This code is taken from ITYREL in IMPMAC.MAC and PTYREL in TTYSER.
+
+↑ITYREL:PUSHJ P,SAVALL		;Get WAITS ACs
+	SKIPL LINE,TTYLIN(DDB)	;Is there a connection?
+	POPJ P,			;Nothing there
+	SETZM TTYLIN(DDB)
+	HLL LINE,LINTAB(LINE)	;Get line characteristics
+	TLNE LINE,PTYLIN	;Make sure it's a PTY
+	JRST ITYRL1		;Good, it is
+	PUSHACS			;Not a PTY, this is a bug
+	HRRZ LINE,LINE
+	PUSH P,LINE
+	PUSHJ P,DISUSR		;Print time of new message on CTY
+	 SIXBIT/TCP/
+	PUSHJ P,DISERR
+	 [ASCIZ/Trying to release a non-PTY line at ITYREL.  Line = /]
+	 DISARG LOC,<-1(P)>
+	 [ASCIZ/
+/]
+	 -1
+	PUSHJ P,DISFLUSH
+	POPACS
+	PUSHJ P,WDDTCALL
+	POPJ P,			;Don't try to go any further into this code
+
+ITYRL1:	SETZM PTYIMP-PTYL0(LINE) ;Clear IMP table entry for this line
+	PUSHJ P,PTYRL0		;Free up this PTY (clears PTYUSE)
+	JUMPE DDB,CPOPJ		;Shouldn't happen, but just in case...
+	LDB J,PJOBN		;Get job on this PTY
+	JUMPE J,TTYKIL		;If none, no job to kill, just kill TTY
+	MOVEI TAC,F.DET		;Plant forced DETACH cmd on PTY
+	MOVE AC1,JBTSTS(J)	;Get job status word
+	TLNN AC1,JLOG		;Skip if job logged in
+	MOVEI TAC,F.KILL	;Not logged in, kill it instead
+	JRST FORCER		;Replace any already planted forced cmd!
+
+;Here to feed an input character to an ITY.  Called from TTYIN6 in IMPMAC.MAC.
+;Most ACs don't need to be saved because TOPS-10 code assumes they're clobbered.
+
+↑RECIMP:PUSH P,U		;Save line number
+IFN TEM-T3,<MOVE TEM,T3>	;Get character into TEM (same as CHR)
+	OFFSCN			;Turn off TTY interrupts
+	SETZM PHYLIN		;Must do this before calling RECITY
+	PUSHJ P,RECITY		;Call TTYSER to deliver an input character
+	ONSCN
+	POP P,U
+	POPJ P,
+
+;Here to print "Autologout" message on an idle ITY.  DDB has TTY DDB.
+↑ILGOUT:PUSHJ P,SAVALL		;Get in WAITS mode
+	MOVE DAT,[POINT 7,[ASCIZ/Autologout
+/]]
+ILGOU2:	ILDB TEM,DAT		;Get char from msg
+	JUMPE TEM,TYPGO		;Jump if end of msg -- start output
+	PUSHJ P,OUTCHR		;Stuff char in TTY output buffer
+	JRST ILGOU2
+
+;Here to close a connection from QUIT command (or TTYSET UUO).
+;Call:	MOVE LINE,[line #]
+;	PUSHJ P,QTCLOS
+;	<always returns here>
+↑QTCLOS:PUSHJ P,SAVALL		;Get into TOPS-10 mode
+	SKIPN F,PTYIMP-PTYL0(U)	;Get the IMP DDB
+	POPJ P,			;Not an IMP line
+;	JRST ITYCLS		;fall into ITYCLS
+
+;Here to close a connection on an ITY.  Gets out of Telnet binary mode
+;and turn on scroll mode etc. on Datamedias.  Call (with TOPS-10 ACs):
+;	MOVE U,[line #]
+;	MOVE F,[IMP DDB]
+;	PUSHJ P,ITYCLS
+;	<always returns here>
+;This probably loses if BINDNT has to queue an IAC, or if the TTY output
+;buffer fills up, but we don't expect that to happen too often.
+↑ITYCLS:PUSHJ P,TCPOCK↑		;Open for output?
+	 JRST ITYREL↑		;No, release ITY (used to be done in TCPIFN)
+	MOVSI T1,TTYFIN
+	TDNE T1,TTYLIN(F)	;Have we already been here?
+	POPJ P,			;Yes
+	IORM T1,TTYLIN(F)	;Make connection close after output done
+	PUSHJ P,RCBOFF		;Get out of receive-binary mode
+	PUSHJ P,FIXITY		;Get out of display mode
+	JRST RQTOIO↑		;Make sure it gets noticed
+
+;Subroutine to get out of display mode.  F has IMP DDB on entry, is changed
+;to TTY DDB by DPKSTR, but restored upon return.
+FIXITY:	PUSHJ P,SAVALL		;Get into WAITS mode
+	SETAC(TAC,U)		;Line number in TAC for DPKSTR
+	PUSHJ P,DPKSTR		;Output tty-no-dm string for this display type
+	 POPJ P,		;No TTY DDB or not a display
+	JRST TYPGO		;Start output
+
+;Here on TTY ECHO or TTY NO ECHO command from TTYSER.
+;Call:	MOVE TAC,[IMP DDB]
+;	MOVE LINE,[LH(lintab word),,line #]
+;	PUSHJ P,ITYECH
+;	<always returns here>
+↑ITYECH:PUSHJ P,SAVALL		;Get into TOPS-10 mode
+	SETAC(F,TAC)		;Get IMP DDB
+	MOVEI T1,.TNWIL		;Assume it's a WILL ECHO
+	TLNE U,FULTWX		;Test echo state just changed
+	MOVEI T1,.TNWNT		;If FULTWX, then we won't echo
+	MOVEI T2,.TOECH		;Echo option code
+	AOS ECPEND(F)		;So we won't reply to his reply
+	JRST IACSND↑		;Send the IAC
+;Subroutines for TOPS-10 code ;⊗ IMSINT INTCOM CTLJBD CTLJB1 TSETBI TSETBO TTFORC IACIP IACIP1 IACAYT IACEL IACEL1 IACEL2
+
+;Routine to plant an interrupt request.  Called with TOPS-10 ACs with F
+;set up and interrupt bits in T1.
+
+↑IMSINT:MOVSI T1,INTIMS		;Here for IMS interrupt
+↑INTCOM:LDB J,PJOBN
+	JUMPE J,CPOPJ		;Make sure it's a real job
+	TDNN T1,JBTIEN(J)
+	POPJ P,
+	IORM T1,JBTIRQ(J)
+	TDNE T1,JBTMSK(J)	;Any bit masked on?
+	SETOM INTREQ		;Yes, run interrupts
+	POPJ P,
+
+;Here to get job number of controlling job.  (Called from MAKMYS in TCPSER.MAC.)
+;Call:	MOVE J,[job number]
+;	PUSHJ P,CTLJBD
+;	return with T1 = job # or -1 if not a subjob
+
+↑CTLJBD:MOVE T1,JBTLIN(J)
+	CAMN T1,[-1]		;Detached?
+	POPJ P,			;Then T1 says what we want
+	HRRZ T1,T1		;Get just the line number
+	CAIGE T1,PTYL0		;Is it a PTY?
+	JRST CTLJB1		;No.
+	SKIPN T1,PTYJOB-PTYL0(T1) ;Get controlling job number
+CTLJB1:	MOVNI T1,1		;Not PTY or no controlling job
+	POPJ P,
+
+;Here to flush a TTY's input buffer.  Line number is in U.
+
+↑TSETBI:PUSHJ P,SAVALL		;Save TOPS-10's ACs
+	SKIPN DDB,TTYTAB(U)	;Get TTY DDB
+	PUSHJ P,BUGTRP		;None!
+	JRST SETBFI		;Flush it
+
+;Here to flush a TTY's output buffer.
+
+↑TSETBO:PUSHJ P,SAVALL
+	SKIPN DDB,TTYTAB(U)
+	PUSHJ P,BUGTRP
+	JRST SETBF2
+
+;Here to force a command on a TTY.  T1 contains the index in the forced command
+;table, and U contains the line number.
+
+↑TTFORC:PUSHJ P,SAVALL
+	SETAC(TAC,T1)		;Get the command index
+	SKIPN DDB,TTYTAB(U)	;Get the TTY's DDB
+	PUSHJ P,BUGTRP
+	JRST FORCEC		;Force the command
+
+;Code for various Telnet functions.  Called from IMPMAC.MAC.
+
+;Interrupt Process
+↑IACIP:	PUSHJ P,IACIP1		;Call and return with TOPS-10 ACs
+	JRST IACNOP↑		;Back to IMPMAC.MAC
+
+IACIP1:	PUSHJ P,SAVALL		;Save ACs
+	PUSHJ P,PTCALL		;Send a CALL to TTY input buffer
+	JRST PTCALL		;Two of them will really stop the job
+
+;Are You There
+↑IACAYT:PUSHJ P,SAVALL
+	JRST WHOITY		;Force some sort of wholine
+
+;Erase Line
+↑IACEL:	HLL U,LINTAB(U)		;Get characteristics bits
+	TLNE U,DDDLIN!DISLIN!DMLIN
+	JRST IACEL1		;If a DPY, send a CLEAR
+	MOVEI T1,"U"-100	;Not a DPY.  Send ↑U
+	JRST IACAOS↑
+
+IACEL1:	PUSHJ P,IACEL2
+	JRST IACNOP↑		;Return where expected
+
+IACEL2:	PUSHJ P,SAVALL		;Get WAITS ACs
+	MOVEI TEM,10044		;Set up CLEAR for KBDED
+	MOVEI UCHN,0		;KBDED wants all these other ACs
+	MOVEI DSER,44
+	MOVE DDB,TTYTAB(LINE)
+	OFFSCN			;Turn off TTY interrupts
+	MOVE IOS,DEVIOS(DDB)
+	PUSHJ P,KBDEDP		;Send the CLEAR
+	JRST SCNONJ		;Restore ACs and return
+;Telnet binary mode ;⊗ BINWIL BINWNT BINDO BINDNT BINIAC RCBON RCBOFF TRBON TRBOFF WANTRB WANTTB TPTIMP TPTIM1 TTICMP TTICM1
+
+;Routines to send WILL, WONT, DO, DONT to enter or leave Telnet binary mode.
+;Call with TOPS-10 ACs.
+
+BINWIL:	JSP T1,BINIAC
+BINWNT:	JSP T1,BINIAC
+BINDO:	JSP T1,BINIAC
+BINDNT:	JSP T1,BINIAC
+BINIAC:	SUBI T1,BINWIL+1-.TNWIL	;Build proper IAC function code
+	MOVEI T2,.TOBIN		;Binary option code
+	JRST IACSND↑		;Send the IAC (in IMPMAC.MAC)
+
+;Routines to set or clear binary mode flags in IMP DDB and send out IAC
+;if necessary.
+
+RCBON:	PUSHJ P,SETRCB↑		;Set flag, skip if already set
+	 JRST BINDO		;Tell him to transmit binary
+	POPJ P,
+
+RCBOFF:	PUSHJ P,CLRRCB↑		;Clear flag, skip if already clear
+	 JRST BINDNT		;Tell him not to transmit binary
+	POPJ P,
+
+TRBON:	PUSHJ P,SETTRB↑		;Set flag, skip if already set
+	 JRST BINWIL		;Tell him we will transmit binary
+	POPJ P,
+
+TRBOFF:	PUSHJ P,CLRTRB↑		;Clear flag, skip if already clear
+	 JRST BINWNT		;Tell him we won't transmit binary
+	POPJ P,
+
+;Check whether Telnet binary mode is desired.  WANTRB skips if terminal
+;wants to receive in binary mode.  WANTTB skips if terminal wants to
+;transmit in binary mode.  Call with line number in U.  Clobbers T3.
+;Called from TOPS-10 code in IMPMAC.MAC, and from TPTIMP below.
+;(Because of problems with Arpanet TACs, we never call WANTTB.)
+
+↑WANTRB:MOVSI T3,DMLIN
+	TDNE T3,LINTAB(U)	;Are we a display?
+	JRST CPOPJ1		;Yes, we want to receive binary
+↑WANTTB:MOVE T3,TTYTAB(U)	;Get TTY DDB
+	MOVE T3,DEVIOS(T3)
+	TRNE T3,10		;TTY in image mode?
+	TRNE T3,6
+	POPJ P,			;No
+	JRST CPOPJ1		;Yes, we want to send and receive binary
+
+;Here from TPTINT in DPYSER when a terminal type change occurs on an IMP PTY.
+;Call:	MOVE TAC,[line #]
+;	PUSHJ P,TPTIMP
+;	<always returns here>
+;Checks the receive-binary bit and sends an IAC if we need to change it.
+;Doesn't check the transmit-binary bit, since it should only be affected
+;by TTY IOS changes (see below).
+↑TPTIMP:PUSHJ P,SAVALL		;Get into TOPS-10 mode
+	SETAC(U,TAC)		;Line number
+	MOVE F,PTYIMP-PTYL0(U)	;IMP DDB
+TPTIM1:	PUSHJ P,WANTRB		;Skip if we want to receive binary
+	 JRST RCBOFF		;No, turn it off
+	JRST RCBON		;Yes, turn it on
+
+;Here from TTYIC5 in TTYSER when a terminal enters or leaves image mode.
+;Call:	MOVE UUO,[new I/O mode]
+;	MOVE LINE,[line #]
+;	PUSHJ P,TTICMP
+;	<always returns here>
+;Because new IOS bits are not yet in DEVIOS(TTY DDB), we can't use the
+;subroutines WANTRB and WANTTB.
+↑TTICMP:PUSHJ P,SAVALL		;Get into TOPS-10 mode
+	MOVE F,PTYIMP-PTYL0(U)	;IMP DDB
+	TRNE UUO,10		;Image mode?
+	TRNE UUO,6
+	JRST TTICM1		;No
+	PUSHJ P,TRBON		;Yes, we want to transmit binary
+	JRST RCBON		;And also receive binary
+
+	;Not in image mode.  We don't want to transmit binary, but don't
+	;clear the flag because an Arpanet TAC forces the user to set it
+	;manually.  We want to receive binary if a display.
+TTICM1:	MOVSI T3,DMLIN
+	TDNN T3,LINTAB(U)	;Are we a display?
+	JRST RCBOFF		;No
+	JRST RCBON		;Yes
+;Telnet server output ;⊗ IMPTYW IMPTW1
+
+;Here when an ITY does output, to start sending characters to the IMP.
+;Called from PTOCK1 in TTYSER.
+;
+;Call:	MOVE TAC,[IMP DDB]
+;	PUSHJ P,IMPTYW
+;	<always returns here>
+;
+;IMPTYW sets the request bit to transfer output data to the IMP DDB at
+;clock level.  Even if we are already at clock or UUO level, the scanner
+;may be off in IMPTYW and we don't want to keep it off very long.  If we
+;are retransmitting for this IMP DDB, we hold off for reasons discussed
+;at TTYRN1 in IMPMAC.MAC.  (Doing so here as well as there allows better
+;management of characters in DM queues.)
+;
+;At clock level, IMPTYC jumps to IMPTW1 with LINE (a.k.a. U) set up, we
+;get the next character, and go to IMPTYP to output it.  IMPTYP will loop
+;back to IMPTW1 if it was able to handle the character; otherwise it will
+;save it in OTTYC(DDB) and return.  When more allocation is available,
+;ALCNEW (in IMPMAC.MAC) will cause the next clock tick to call IMPTYC,
+;which continues the transfer.
+
+↑IMPTYW:EXCH DDB,TAC		;Set up IMP DDB for RQTOIO
+	SETZM IDLTMR(DDB)	;Reset idle time counter
+	SKIPN OTTYC(DDB)	;Is there a char backlogged?
+	SKIPE RETRNQ(DDB)	;Or are we retransmitting?
+	CAIA			;Yes to either, hold off for now
+	PUSHJ P,RQTOIO↑		;No, set request bit for output
+	EXCH DDB,TAC		;Restore TTY DDB
+	POPJ P,
+
+;Here from IMPTYC with TOPS-10 ACs.  The only important AC is LINE (U).
+↑IMPTW1:PUSHJ P,XMTINT		;Get char from TTY output buffer
+IFN TEM-T3,<MOVE T3,TEM>	;Put character where IMPTYP wants
+	JUMPN T3,IMPTYP↑	;Process IMP output character
+	JRST XMTQIT↑		;TTY buffer empty, start IMP output
+;Server job startup ;⊗ GOSERV EXCLGR EXCLG2 EXCLG3
+
+;Here from TCPSER to start up a job TCPnnn that is the server for a new
+;connection being attempted on port nnn; port number is in LCLPRT(DDB).
+
+↑GOSERV:PUSHJ P,SAVALL		;Get into WAITS mode
+	SETAC(DAT,F)		;IMP DDB
+	JRST EXCLG3		;Here from TCPSER w/valid DDB, skip validation
+
+;Return here from clock request -- must validate DDB lest it have been freed up.
+EXCLGR:	MOVEI AC3,IMPDDB	;Search DDB chain for IMP DDB pointed to by DAT
+EXCLG2:	HLRZ AC3,DEVSER(AC3)	;Next DDB (ignore prototype)
+	CAIN AC3,IMP.NX		;End of IMP DDBs?
+	POPJ P,			;Yup, DDB of interest must have gone away
+	CAIE AC3,(DAT)		;Is this our DDB?
+	JRST EXCLG2		;No, keep looking
+EXCLG3:	MOVE AC1,LCLPRT(DAT)	;Get local port of server
+	IDIVI AC1,=10		;Convert to decimal for server name
+	LSHC AC2,-6		;AC3 ← ones digit
+	IDIVI AC1,=10		;AC1 ← hundreds, AC2 ← tens
+	LSHC AC2,=30		;Shift tens and ones
+	LSHC AC1,=12		;Now all 3 digits in place
+	MOVEI AC1,'000'(AC1)	;Form sixbit
+	HRRM AC1,SVRNAM		;Store into server name
+	MOVSI TAC,PROPRV!REAPRV!WRTPRV	;Privs FTP server gets
+	ANDCAM TAC,SVRPRV
+	CAIN AC1,'021'		;FTP server?
+	 IORM TAC,SVRPRV	;Yes.  Grant it needed privs
+	HRRZM DAT,SVRDDB	;Store special DDB to be given to job
+	MOVEI TAC,SVRNAM
+	PUSHJ P,FIRSER		;Start server (similar to FIREUP)
+	 CAIA
+	  POPJ P,
+	HRLI DAT,EXCLGR
+	SYSPIF			;Server can't be fired now, plant a clock
+	IDPB DAT,CLKQ		; request to try later (datum is DDB addr)
+	SYSPIN
+	POPJ P,
+;Internet routing ;⊗ ISUP HASROU SAMNET SAMSBN SETW SETW1 SETW2 SETW3 SETW4 SETW5 SETW8 SETW9 SETW TARGET TARGE2 TARGE3 TARGE4 TARGE5 IPEROU IPERO2 IPERO3 IPERO4
+
+;(This code is fairly primitive and could use some improvement.)
+
+;SETW chooses which network interface to use, based on target IP address and
+;current interface status.  Call:
+;	MOVE T1,<IP network address>
+;	PUSHJ P,SETW
+;	<return here with network interface in W>
+;Preserves all ACs (except W).
+
+;We go through the list of interfaces, keeping the best so far on top
+;of the stack, and keeping one of the following codes in P4 to indicate
+;how good it is (higher numbers are better):
+ISUP←←1			;Is up
+HASROU←←2		;Has routing entry
+SAMNET←←3		;Same network
+SAMSBN←←4		;Same subnet
+
+IFG NINUM-1,<			;If we have multiple interfaces
+SETW:	PUSHJ P,SAVE4↑		;Get P1-P4
+	PUSH P,NILIST		;Use default if we find none better
+	MOVEI P4,0		;Anything we find will be better
+	MOVSI P1,-NINUM		;Start loop through all interfaces
+	;First look for one that gives us a direct connection.
+SETW1:	MOVE W,NILIST(P1)	;Get a network interface
+	SKIPL NI.UP(W)		;Is interface up?
+	JRST SETW9		;No, forget it
+	CAIL P4,ISUP
+	JRST SETW2
+	MOVEI P4,ISUP
+	MOVEM W,(P)
+SETW2:	MOVE P2,T1		;Copy address
+	XOR P2,NI.IPA(W)	;Compare with our address on this interface
+	TDNN P2,NI.NTM(W)	;Same network?
+	CAIL P4,SAMNET
+	JRST SETW3
+	MOVEI P4,SAMNET
+	MOVEM W,(P)
+SETW3:	TDNN P2,NI.NSM(W)	;Same net and subnet?
+	CAIL P4,SAMSBN
+	JRST SETW4
+	MOVEI P4,SAMSBN
+	MOVEM W,(P)
+SETW4:	SKIPGE P3,NI.RTS(W)	;Have any static routing entries?
+SETW5:	SKIPN P2,(P3)		;Get a network number
+	JRST SETW9		;No more routing entries
+	XOR P2,T1		;Compare
+	ADJSP P3,1		;Point to mask in routing table
+	TDNN P2,(P3)		;Does it match?
+	CAIL P4,HASROU
+	JRST SETW8
+	MOVEI P4,HASROU
+	MOVEM W,(P)
+SETW8:	AOBJN P3,SETW5		;Loop through routing entries
+SETW9:	AOBJN P1,SETW1		;Loop through all interfaces
+	POP P,W			;Get best interface
+	POPJ P,
+>;IFG NINUM-1
+
+IFLE NINUM-1,<			;If only one interface
+SETW:	MOVE W,NILIST		;Use it!
+	POPJ P,
+>;IFLE NINUM-1
+
+;TARGET chooses both the network interface and destination address that we
+;should use to send to a given network address.
+;	MOVE T1,<IP network address>
+;	PUSHJ P,TARGET
+;	  <return here if we couldn't figure out a way>
+;	<return here with T1 = target IP address and W = network interface>
+
+	;First look for an existing open connection to this host.
+↑TARGET:MOVEI T3,IMPDDB		;Start loop through DDBs
+TARGE2:	HLRZ T3,DEVSER(T3)	;Next DDB
+	CAIN T3,IMP.NX		;End of list?
+	JRST TARGE3		;Yes
+	MOVE T2,STATE(T3)	;Get state
+	CAMN T1,RMTADR(T3)	;Same host?
+	CAIE T2,S%ESTB↑		;Established?
+	JRST TARGE2		;No, keep looking
+	MOVE T1,NETADR(T3)	;Found one.  Get target address
+	SKIPN W,NETWRK(T3)	;And network interface
+	PUSHJ P,IMPBUG
+	JRST CPOPJ1		;Success
+
+	;No existing connections match.  Figure out how to get there if we can.
+TARGE3:	PUSHJ P,SETW		;Get network interface
+	MOVE T3,T1		;Copy target address
+	XOR T3,NI.IPA(W)	;Compare with our address
+	TDNN T3,NI.NSM(W)	;Same net and subnet?
+	JRST TARGE5		;Yes, send directly
+	TDNE T3,NI.NTM(W)	;Same net?
+	JRST TARGE4		;Different net, use a default gateway
+	;Here when different subnet but same net.  Route if we can.
+IFN FTEIP&PUPNUM,<
+	CAIN W,NETETH		;Ethernet?
+	JRST IPEROU		;Yes, do Ethernet routing, return from there
+>;IFN FTEIP&PUPNUM
+TARGE4:	MOVE T1,@NI.PGW(W)	;Use current primary gateway for interface
+TARGE5:
+IFN FTAIP,<
+	CAIN W,NETARP		;Arpanet?
+	TRZ T1,177400		;Yes, clear "logical host" byte
+>;IFN FTAIP
+	JUMPN T1,CPOPJ1		;Return unless 0 address
+	POPJ P,			;Fail if no address
+
+IFN FTEIP&PUPNUM,<
+;Determine target address for an IP address on our Ethernet.  This uses the
+;PUP routing tables.  Call:
+;	MOVE T1,<IP address on our Ethernet>
+;	PUSHJ P,IPEROU
+;	 <failure - can't find a route>
+;	<return with target IP address in T1>
+;Preserves all ACs except T1.  This code similar to PUPROU in PUPSER.
+;Note: TAC1 must be used because of the indexed byte pointers ROUNET and ROUGTW.
+
+IFE TAC-T1,<.FATAL IPEROU doesn't work if TAC=T1>
+IFE TAC1-T1,<.FATAL IPEROU doesn't work if TAC1=T1>
+IPEROU:	PUSH P,TAC		;Preserve TAC
+	PUSH P,TAC1		;Preserve TAC1
+	LDB TAC,[IPESBX!T1]	;Get subnet number
+	PUSH P,TAC		;Save subnet on stack
+	IDIV TAC,ROUSIZ		;Hash the subnet number
+IPERO2:	LDB TAC,ROUNET		;Is this the subnet number we want?
+	CAMN TAC,(P)
+	JRST IPERO3		;Yes, use it
+	JUMPE TAC,IPERO4	;Not accessible if slot is empty
+	SOJGE TAC1,IPERO2	;Try next slot, but watch for wraparound
+	MOVE TAC1,ROUSIZ	;Start again from other end of table
+	SOJA TAC1,IPERO2
+
+IPERO3:	LDB TAC,ROUGTW		;Get gateway host
+	AOS -3(P)		;Set skip return
+	JUMPE TAC,IPERO4	;Send directly if zero
+	IOR TAC,[SUHOST(SUENNM,0)]	;Construct IP address
+	MOVE T1,TAC		;Return it in T1
+IPERO4:	POP P,TAC		;Flush subnet number
+	POP P,TAC1		;Restore saved ACs
+	POP P,TAC
+	POPJ P,
+>;IFN FTEIP&PUPNUM
+;Clock-level input handling ;⊗ IMPENQ IMPENX IMPINQ
+
+;The input queue holds two words of information for each packet: the code
+;to call at clock level, and a pointer to the packet.  We might want to
+;store this information in IMP buffers, but it would be difficult to
+;allocate IMP buffers in channel 5 (for Ethernet) since none of the other
+;buffer-allocation code protects against channel 5.
+
+;Packets will be processed in the order they arrive.  IMPQCT contains the
+;number of full slots in the tables, and IMPQST contains the index of the
+;first slot not yet read at clock level.  Entries wrap around from the
+;end to the beginning.
+
+;Here at (any) interrupt level to enqueue an input packet for clock-level
+;processing.  Call:
+;	MOVEI P1,<code to run at clock level>
+;	MOVE P2,<pointer to packet>
+;	PUSHJ P,IMPENQ
+;	 <failed, unable to queue>
+;	<success>
+;Occasionally P2 may contain something other than a packet pointer, such
+;as the address of a host when an IMP "host down" packet is received.
+
+↑IMPENQ:AOS T1,IMPQCT		;Try to grab a slot
+	SUBI T1,1		;Slot index, relative to current starting pos
+	CAIL T1,IMPQLN		;Was there room?
+	JRST IMPENX		;No
+	ADD T1,IMPQST		;Add current starting position
+	CAIL T1,IMPQLN		;Skip if in range
+	SUBI T1,IMPQLN		;Else wrap around
+	MOVEM P1,IMPADR(T1)	;Store address
+	MOVEM P2,IMPPTR(T1)	;Store pointer
+	JRST CPOPJ1
+
+IMPENX:	SOS IMPQCT		;Compensate for AOS
+	SKIPE IMPQFL		;Have we typed a message recently?
+	POPJ P,			;Yes, return quietly
+	SETOM IMPQFL		;Prevent too many messages
+	PUSHACS
+	PUSHJ P,DISUSR
+	 SIXBIT/IP/
+	PUSHJ P,DISMES
+	 ASCIZ/Input queue overflow, discarding packet.
+/
+	POPACS
+	POPJ P,
+
+;Here at every clock tick to process queued input packets in the order
+;they came in.
+
+IMPINQ:	SKIPG IMPQCT		;Any there?
+	JRST [	SETZM IMPQFL	;Queue empty, reenable overflow messages
+		POPJ P,]
+	MOVE T1,IMPQST		;Point to the oldest one
+	MOVE P1,IMPADR(T1)
+	MOVE P2,IMPPTR(T1)
+	SYSPIF			;Hold everything
+	SOS IMPQCT		;One less in use
+	AOS T1,IMPQST		;New starting position
+	SYSPIN
+	CAIL T1,IMPQLN		;Wrap around?
+	SETZM IMPQST		;Yes, back to beginning
+	PUSHJ P,(P1)		;Call the requested subroutine
+	JRST IMPINQ		;Go back for more
+;Output preparation ;⊗ OUTPRE OUTPR1 IMPPRE ETHPRE OUTBYT
+
+;Subroutine to preallocate resources needed for output of a packet.
+;Called with TOPS-10 ACs at UUO or clock level.  Preserves all ACs.
+
+OUTPRE:	PUSH P,AC1		;Save ACs used by FSGET
+	PUSH P,AC3
+	MOVEI AC3,BIBFS		;Type of spare FS to get
+	PUSHJ P,SFSGET		;Get FS from spares list
+	 JRST OUTPR1		;Lost, return without skip
+	MOVEM AC1,OUTBIB(F)	;Save BIB address
+	SKIPN W,NETWRK(F)	;Get network interface
+	PUSHJ P,IMPBUG
+	PUSHJ P,@NI.PRE(W)	;Allocate buffer or packet
+	 JRST [	MOVE AC1,OUTBIB(F) ;Failed.  Get back BIB address
+		SETZM OUTBIB(F)
+		PUSHJ P,SFSGIV	;Return it
+		 BIBFS
+		JRST OUTPR1]	;Give non-skip return
+	AOS BIBCNT		;One more BIB in use
+	AOS -2(P)		;Set skip return
+OUTPR1:	POP P,AC3
+	POP P,AC1
+	POPJ P,
+
+IFN FTAIP,<			;Arpanet
+↑IMPPRE:PUSHJ P,SAVT↑		;BUFGET clobbers T1,T2,T3
+	PUSHJ P,BUFGET↑		;Get buffer for packet headers
+	 POPJ P,		;Can't get one, fail
+	MOVEM T1,OUTBFS(F)	;Save buffer pointer in DDB
+	JRST CPOPJ1↑		;Skip for success
+>;IFN FTAIP
+
+IFN FTEIP,<			;3MB Ethernet
+↑ETHPRE:SKIPG AC3,OBFBYT(F)	;Data size in bytes
+	MOVEI AC3,4		;Allow for TCP options (never sent with data)
+	ADDI AC3,4*DTQ%XX+$ENHDS+4*IPLEN+4*TCPLEN+3	;Add headers, round up
+	LSH AC3,BYT2WD		;Convert to words
+	PUSHJ P,EFSGET		;Get Ethernet packet
+	 POPJ P,		;Can't get one, fail
+	MOVEM AC1,OUTBFS(F)	;Save packet pointer in DDB
+	JRST CPOPJ1↑		;Skip for success
+>;IFN FTEIP
+
+;Subroutine to transmit the output stream through TCP.  Call OUTPRE to
+;allocate needed resources before calling this routine.
+OUTBYT:	PUSHJ P,OUTBFX		;Link last buffer
+	MOVSI T1,CLKACK		;Turn off this flag
+	ANDCAM T1,TTYLIN(F)	;  since we're about to send an ACK
+	JRST TCPMAK↑		;Send this to TCP for processing
+;Typeout routines for debugging ;⊗ .FIRST .LAST .FIRQ .LASQ .FIRR .LASR XGOTMS XRFNM XGOTM1 XOUTMS XNOP XOUTM1 XPRMSG XICMP XTCP XTCP1 XTCP2 XTCP3 XTCPTB XPRHDR XDIS32 XOUTST XOUT1 XOUT2 XOUT3 XOUT4 XOUT5
+
+repeat 0,<			;Not in use anymore
+IFN FTAIP,<
+;Macro to get part of a header word into AC1.  Parameters are word number in
+;header (starting at 0), leftmost bit in word (starting 0), and # of bits
+DEFINE GETFLD(WORD,START,NUM)<
+	RADIX =10
+.FIRST←←WORD⊗5+START
+.LAST←←.FIRST+NUM-1
+.FIRQ←←.FIRST/32
+.LASQ←←.LAST/32
+.FIRR←←.FIRST∂32
+.LASR←←.LAST∂32
+IFE .FIRQ-.LASQ,<
+	LDB AC1,[POINT NUM,.FIRQ(J),.LASR]
+>
+IFN .FIRQ-.LASQ,<
+.FATAL This shouldn't happen
+	LDB AC1,[POINT 36-.FIRR,.FIRQ(J),35]
+	LSH AC2,.FIRR-4
+	LDB AC2,[POINT .FIRR-4,.LASQ(J),.FIRR-5]
+	IORI AC1,AC2
+>
+	PURGE .FIRST,.LAST,.FIRQ,.LASQ,.FIRR,.LASR
+	RADIX =8
+>
+	
+
+;Here when we've got a message from the IMP.  J points to first message word.
+↑XGOTMS:SKIPN XDEBUG			;Are we printing messages?
+	 POPJ P,			;No
+	PUSHJ P,SAVALL
+	SETZM CTYMAR			;Print in column 0
+	MOVE TAC,(J)
+	CAME TAC,[BYTE (8)17,0,0,5]	;Is it a RFNM?
+	 JRST XGOTM1			;No
+XRFNM:	JFCL				;POPJ P, here to ignore RFNMs
+	PUSHJ P,DISMES
+	 ASCIZ/RFNM for /
+	GETFLD(1,8,24)
+	PUSHJ P,XDIS32
+	JRST DISCRLF
+XGOTM1:	PUSHJ P,DISMES
+	 ASCIZ/Input  /
+	JRST XPRMSG
+
+;Here when we've started to output a message.  J points to first message word.
+↑XOUTMS:SKIPN XDEBUG
+	 POPJ P,
+	PUSHJ P,SAVALL
+	SETZM CTYMAR			;Print in column 0
+	MOVE TAC,(J)
+	CAME TAC,[BYTE (8)17,0,0,4]	;Is it a no-op?
+	 JRST XOUTM1			;No
+XNOP:	POPJ P,				;JFCL here to print no-ops
+	PUSHJ P,DISMES
+	 ASCIZ/N /			;Quick simple message
+	POPJ P,
+XOUTM1:	PUSHJ P,DISMES
+	 ASCIZ/Output /
+	JRST XPRMSG
+
+XPRMSG:	GETFLD(0,4,4)			;Look at beginning of message
+	CAIE AC1,17			;New format?
+	 PUSHJ P,XPRHDR			;No, show header
+	GETFLD(0,24,8)			;Message type
+	JUMPN AC1,XPRHDR		;Not a data message
+	GETFLD(2,0,8)			;Link
+	CAIE AC1,233			;IP?
+	 JRST XPRHDR			;No
+	PUSHJ P,DISMES
+	 ASCIZ/IP from /
+	GETFLD(6,0,32)			;Source address
+	PUSHJ P,XDIS32
+	PUSHJ P,DISMES
+	 ASCIZ /to /
+	GETFLD(7,0,32)			;Dest address
+	PUSHJ P,XDIS32
+	GETFLD(5,8,8)			;Protocol
+	CAIN AC1,1
+	 JRST XICMP
+	CAIN AC1,6
+	 JRST XTCP
+	PUSHJ P,DISMES
+	 ASCIZ/Unknown protocol: /
+	MOVE TAC,AC1
+	JRST DISLOC
+
+XICMP:	PUSHJ P,DISMES
+	 ASCIZ/ICMP/
+	JRST DISCRLF
+
+XTCP:	GETFLD(3,4,4)			;IP header length
+	CAIN AC1,5
+	 JRST XTCP1
+	PUSHJ P,DISMES
+	 ASCIZ/Hdr len /
+	MOVE TAC,AC1
+	PUSHJ P,DISDCP
+	JRST DISCRLF
+
+XTCP1:	PUSHJ P,DISMES
+	 ASCIZ/port /
+	GETFLD(8,0,16)
+	MOVE TAC,AC1
+	PUSHJ P,DISLOC
+	PUSHJ P,DISMES
+	 ASCIZ/ to /
+	GETFLD(8,16,16)
+	MOVE TAC,AC1
+	PUSHJ P,DISLOC
+	GETFLD(11,10,6)
+	MOVE AC2,AC1
+	MOVE AC3,[-6,,XTCPTB]
+XTCP2:	TRNN AC2,1
+	 JRST XTCP3
+	MOVEI AC1,(AC3)			;Addr of message
+	PUSHJ P,DISSTR
+XTCP3:	LSH AC2,-1
+	AOBJN AC3,XTCP2
+	JRST DISCRLF
+
+XTCPTB:	ASCIZ/ FIN/
+	ASCIZ/ SYN/
+	ASCIZ/ RST/
+	ASCIZ/ PSH/
+	ASCIZ/ ACK/
+	ASCIZ/ URG/
+
+XPRHDR:	PUSHJ P,DISMES
+	 ASCIZ/header /
+	LDB AC1,[POINT 32,0(J),31]	;Get 1st header word
+	PUSHJ P,XDIS32
+	LDB AC1,[POINT 32,1(J),31]	;Get 2nd header word
+	PUSHJ P,XDIS32
+	LDB AC1,[POINT 32,2(J),31]	;Get 3rd header word
+	PUSHJ P,XDIS32
+	LDB AC1,[POINT 32,3(J),31]	;Get 4th header word
+	PUSHJ P,XDIS32
+	JRST DISCRLF
+
+;Subroutine to print a 32-bit word in AC1 in 4-byte format, each byte in octal.
+XDIS32:	LDB TAC,[POINT 8,AC1,11]
+	PUSHJ P,DISLOC
+	MOVEI TEM,"."
+	PUSHJ P,DISTYO
+	LDB TAC,[POINT 8,AC1,19]
+	PUSHJ P,DISLOC
+	MOVEI TEM,"."
+	PUSHJ P,DISTYO
+	LDB TAC,[POINT 8,AC1,27]
+	PUSHJ P,DISLOC
+	MOVEI TEM,"."
+	PUSHJ P,DISTYO
+	LDB TAC,[POINT 8,AC1,35]
+	PUSHJ P,DISLOC
+	MOVEI TEM," "
+	JRST DISTYO
+
+;Here to print contents of an output stream (8-bit bytes) in Ascii.  Non-printing
+;characters are typed as 'nnn (octal).  Enter with F containing the DDB.  At the
+;point this is called (OUTBY0 in IMPMAC), the message is 4 bytes per word.
+↑XOUTST:SKIPN XDEBUG
+	 POPJ P,
+	PUSHJ P,SAVALL
+	SETZM CTYMAR			;Print in column 0
+	PUSHJ P,DISMES
+	 ASCIZ/Output /
+	;First add bytes in all the buffers
+	MOVE J,OBFFST(F)		;First buffer
+	SETZ TAC,			;Accumulated byte count
+XOUT1:	JUMPE J,XOUT2
+	HLRZ UCHN,(J)			;Get byte count
+	ADDI TAC,(UCHN)
+	HRRZ J,(J)			;Get next buffer
+	JRST XOUT1
+XOUT2:	PUSHJ P,DISDCP			;Print count in TAC
+	PUSHJ P,DISMES
+	 ASCIZ/ bytes: /
+	MOVE J,OBFFST(F)		;First buffer again
+XOUT3:	JUMPE J,DISCRLF			;No more
+	HLRZ UCHN,(J)			;Get byte count
+	MOVE AC1,[POINT 8,1(J)]		;Point to first byte
+XOUT4:	SOSGE UCHN
+	 JRST [ HRRZ J,(J)		;Next buffer
+		JRST XOUT3]
+	ILDB TEM,AC1			;Get a byte
+	CAIL TEM,40
+	 CAILE TEM,176
+	  JRST XOUT5
+	PUSHJ P,DISTYO			;Print a printing character
+	JRST XOUT4
+XOUT5:	MOVEI TAC,(TEM)
+	MOVEI TEM,"'"
+	PUSHJ P,DISTYO
+	PUSHJ P,DISLOC
+	JRST XOUT4
+>;IFN FTAIP
+>;repeat 0
+
+BEND IMPSER
+
+>;IFN FTIP

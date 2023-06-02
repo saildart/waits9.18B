@@ -1,0 +1,1725 @@
+COMMENT ⊗   VALID 00034 PAGES
+C REC  PAGE   DESCRIPTION
+C00001 00001
+C00004 00002	DLNSER Dialnet device service routines
+C00008 00003	PDB PDBLNK PDBCNT PDBPNT PDBCHK PDBHDR PDBDAT PDBSIZ PKTCOP PKTCHN PKTOPC PKTMSQ PKTMPX PKTSEQ PKTRAK PKTREV PKTACK PKTSIZ PKTDAT PKTFDA PKTSDA PKTWNS
+C00013 00004	MAKPDB DLNQRP REPFPC REPFPL REPFP1 REPFP2
+C00016 00005	CLRPDB FLSPDB
+C00018 00006	DLNDSP DLNINI DLNIN1
+C00020 00007	DLNRLS DLNRLA DLNLC
+C00023 00008	DLNINP DLILUP DLIDSC UUOTAB OPMAX
+C00026 00009	DLIMSG SETEOF DLMLUP DLICLS DLIEOF
+C00029 00010	DLNOUT DLONEW DLOOLD DLOLUP DLNDUN DLNDN1
+C00032 00011	DLNMTP DLNMDS DLNMMX
+C00033 00012	DLNRPC
+C00035 00013	DLNRPD
+C00038 00014	DLNRPA DLNRWN BADRPC
+C00040 00015	DLNCLS DLCLS1
+C00042 00016	DLNWIN DLNEOF
+C00044 00017	DLNINT DLNFRC DLNFR1
+C00046 00018	DLNSTA DLNCWA DLNPRF
+C00049 00019	DLHANG DLWAIT DCWAKE DLWAKE GETARG SETARG DLOUTQ DLOUQ1
+C00053 00020	DLNCLK DLNCL1 DLNCL2
+C00056 00021	RDPCKT RDPCKX RDPDAT RDPLUZ
+C00060 00022	RDPDUN RDPSIW RDPFAK RDPCKN RDPNRT
+C00064 00023	RDPPAK RDPNPK RDPPK0 RDPNOP INTTAB
+C00066 00024	RDPMSG RDPMS1 RDPWIN RDPWN1 RDPINT
+C00069 00025	RDPNAK REVPDB RDPERR
+C00072 00026	RDPRPC RDPRP1 RDPCLS RDPCL1
+C00075 00027	WRLIST WRPSOP
+C00078 00028	WRPDAT WRPMOR WRPBKU
+C00081 00029	DLNICH DLNOCH DLNOC1 DLNDIL DLNLGR CHKBYT
+C00084 00030	SNDERR SNDERL SERRET
+C00086 00031	DLIINT DLOINT
+C00089 00032	DLPINT DLPCLK DLPIN1 DLPTST
+C00092 00033	DLHINT DLHIN1
+C00095 00034	DLNBUG BADDLU
+C00097 ENDMK
+C⊗;
+SUBTTL DLNSER Dialnet device service routines
+
+; Mark Crispin, September '80
+
+; Aren't you glad you use Dialnet?  Don't you wish everybody did?
+
+IFN DLNNUM,<
+
+BEGIN DLNSER
+
+HISYS
+
+;  Timing definitions.  Most of these are things to prevent sending protocol
+; on a modem which is in a transitory state between dialer and modem mode.
+
+DILWAT←←5			; # of seconds between dial complete and RPC
+HNGWAT←←5			; # of seconds to hold DTR down in hanging up
+CLKWAT←←5			; # of seconds between DLNCLK runs
+COKWAT←←2			; # of seconds to ignore pickup after hangup
+CCRWAT←←4			; # of seconds between pickup and CCR light
+RDYWAT←←=15			; # of seconds before hangup if no RDY
+
+; Site-dependent definitions
+
+LCLARC←←<ASCII/415/>		; local area code
+
+; Window size definitions, used for # of PDB's to allocate
+
+WINMIN←←=2			; at least 2 packets (can't change!)
+WINDEF←←=3			; default to 3 packets
+WINMAX←←=5			; limit of 5 packets (absolute maximum is 15.)
+
+; ASCII definitions
+
+%DLE←←220			; Data Link Escape
+%STX←←202			; Start of TeXt
+%ETX←←203			; End of TeXt (must = %STX+1)
+
+; Op code definitions
+
+%NOP←←00			; No-OPeration (must be zero)
+%RPC←←01			; Request Process Connection
+%CLS←←02			; CLoSe process connection
+%WIN←←03			; WINdow size
+%MSG←←04			; MeSsaGe
+%NAK←←05			; Negative AcKnowledge
+%EOF←←06			; End Of File
+%INT←←07			; INTerrupt
+%ERR←←10			; ERRor
+
+; Packet definitions
+
+NPKBYT←←=256			; number of bytes in a packet
+NRPBYT←←=10			; number of bytes in an RPC
+
+; Bits in DEVIOS
+; RH - user bits
+
+IO%INT←←100			; 1.7 → interrupt in input stream
+IO%CLS←←200			; 1.8 → connection closing
+IO%EOF←←400			; 1.9 → end of file in input stream
+IO%DTM←←1000			; 2.1 → data missed due to user being too slow
+
+; LH - system bits
+
+IO%COK←←100			; 3.7 → okay to light CCR (only for VADIC)
+IO%CON←←200			; 3.8 → connection open
+IO%CCR←←400			; 3.9 → carrier detect on this line
+IO%RDY←←2000			; 4.2 → have received a good packet from other side
+IO%IDL←←4000			; 4.3 → output idle
+IO%DLE←←10000			; 4.4 → DLE seen at DLIINT
+IO%EOP←←20000			; 4.5 → RDPDUN to be run at EOP
+IO%R1B←←40000			; 4.6 → read one byte into DDB's DREP
+IO%ACN←←100000			; 4.7 → need to send acknowledgement
+IO%ODE←←200000			; 4.8 → need to output an additional DLE
+IO%LIC←←400000			; 4.9 → locally initiated connect, set at DLNRPC
+;PDB PDBLNK PDBCNT PDBPNT PDBCHK PDBHDR PDBDAT PDBSIZ PKTCOP PKTCHN PKTOPC PKTMSQ PKTMPX PKTSEQ PKTRAK PKTREV PKTACK PKTSIZ PKTDAT PKTFDA PKTSDA PKTWNS
+
+; PDB definitions
+
+PDB←←AC1			; AC to use as PDB pointer (must be AC1)
+
+; Format of a PDB (Packet Data Block) in memory:
+;
+;	  __________________________________________________
+; PDBLNK  |  previous PDB in list |    next PDB in list	   | 1 word
+;	  |------------------------------------------------|
+; PDBCNT  |   Count of bytes to be processed in this PDB   | 1 word
+;	  |------------------------------------------------|
+; PDBPNT  | Pointer to current byte being processed in PDB | 1 word
+;	  |------------------------------------------------|
+; PDBCHK  | 		Current packet checksum		   | 1 word
+;	  |------------------------------------------------|
+; PDBHDR  | Packet header (see header definitions for fmt) | 1 word
+;	  |------------------------------------------------|
+;	  |						   |
+; PDBDAT  |		   Packet data			   | 100 words
+;	  |						   |
+;	  |________________________________________________|
+;
+;  PDBs are assigned out of free storage.  The previous PDB is used by the
+; code only for reversing the retransmission list (although it is also useful
+; for debugging!).
+
+PDBLNK←←0			; previous PDB,,next PDB (must be first in the PDB)
+PDBCNT←←PDBLNK+1		; PDB I/O counter
+PDBPNT←←PDBCNT+1		; PDB I/O pointer
+PDBCHK←←PDBPNT+1		; packet checksum
+PDBHDR←←PDBCHK+1		; packet header,,start of real packet
+PDBDAT←←PDBHDR+1		; first word of data
+PDBSIZ←←PDBDAT+100		; size of PDB
+
+; Pointers for snarfing things in the packet
+
+; Format of the packet header:
+;
+;   byte 1     byte 2	  byte 3     byte 4   padding
+; _________________________________________________
+; |chn |opcd||mch| seq ||rsv| ack ||data cnt||xxxx|
+; |____|____||___|_____||___|_____||________||____|
+;  0	4     7   10	 15  18     23	      32
+
+PKTCOP:	331100,,PDBHDR(PDB)	; channel/op code
+ PKTCHN:370400,,PDBHDR(PDB)	; channel
+ PKTOPC:330400,,PDBHDR(PDB)	; op code
+
+PKTMSQ:	221100,,PDBHDR(PDB)	; mpx channel/sequence
+ PKTMPX:270300,,PDBHDR(PDB)	; multiplex channel
+ PKTSEQ:220500,,PDBHDR(PDB)	; sequence number
+
+PKTRAK:	111100,,PDBHDR(PDB)	; reserved byte/acknowledgement
+ PKTREV:160300,,PDBHDR(PDB)	; reserved byte
+ PKTACK:110500,,PDBHDR(PDB)	; acknowledgement
+
+PKTSIZ:	001100,,PDBHDR(PDB)	; packet data size -1
+
+PKTDAT:	441100,,PDBDAT(PDB)	; ILDB/IDPB pointer to data area
+PKTFDA:	331100,,PDBDAT(PDB)	; first word in data area
+PKTSDA:	221100,,PDBDAT(PDB)	; second word in data area
+
+PKTWNS:	331100,,PDBDAT+2(PDB)	; pointer to window size in RPC
+;MAKPDB DLNQRP REPFPC REPFPL REPFP1 REPFP2
+
+SUBTTL Memory manglers
+
+;  MAKPDB gets a PDB from free list or free storage.  Note that the free
+; list is only lunk one-way.
+;	PUSHJ P,MAKPDB
+;	 <no core>
+;	<return, PDB pointer in PDB>
+
+MAKPDB:	OFFSCN
+	SKIPN PDB,PDBFL		; get a PDB off the free list
+	 JRST [	ONSCN
+		PUSHJ P,REPFPL	; no free list, run the replenisher
+		SKIPE PDBFL	; did the replenisher take?
+		 JRST MAKPDB
+		AOS NNSERR(DDB)	; oh damn, count a loser
+		POPJ P,]
+	MOVE TAC,(PDB)		; make the next the first
+	MOVEM TAC,PDBFL
+	SETZM (PDB)		; unbind the block we got from the list
+	SOS TAC,PDBFLN
+	ONSCN
+	AOS (P)			; set skip return
+	AOSE PDBRPN		; only request if one not in already
+	 POPJ P,
+
+;; NOTE!!  Only REPFP1 has the right to jump to DLNQRP.  Anybody else better
+;; use the AOSE.
+
+DLNQRP:	MOVSI TAC,REPFPC	; request clock level to run the replenisher
+	HRRI TAC,(DDB)
+	SYSPIFF
+	IDPB TAC,CLKQ
+	SYSPIN
+	POPJ P,
+
+; Replenish the free PDB list
+
+REPFPC:	MOVEI DDB,(DAT)		; here from clock level
+REPFPL:	SKIPL PDBFLN		; need to replenish?
+	 POPJ P,		; gee, that was fast!
+REPFP1:	MOVEI AC3,PDBSIZ
+	PUSHJ P,FSGET		; ask FS mangler for core
+	 JRST [	AOS NRSERR(DDB)
+		CONSZ PI,400	; can't get any, at clock level?
+		 JRST DLNQRP	; yes, try again next tick
+		POPJ P,]	; else punt
+REPFP2:	SETZM (PDB)		; entry from CLRPDB
+	HRLI TAC,(PDB)		; zero the PDB and put on free list
+	HRRI TAC,1(PDB)
+	BLT TAC,PDBSIZ-1(PDB)
+	OFFSCN
+	EXCH PDB,PDBFL		; PDBFL ← new, PDB ← old
+	MOVEM PDB,@PDBFL	; tack on rest of the list
+	ONSCN
+	AOSGE PDBFLN		; note one less block needed
+	 JRST REPFP1		; still more to do
+	CONSZ PI,400		; are we at clock level?
+	 SETOM PDBRPN		; yes, let people run DLNQRP again
+	POPJ P,
+;CLRPDB FLSPDB
+
+;  CLRPDB returns a PDB to free storage, points PDB at the next.  Barfs if
+; there was a previous to this PDB.
+;	MOVEI PDB,<addr of PDB to release>
+;	PUSHJ P,CLRPDB
+;	<return, new PDB addr in PDB>
+
+CLRPDB:	TLNE PDB,-1
+	 PUSHJ P,DLNBUG		; PDB should be remotely reasonable
+	SKIPN PDB
+	 PUSHJ P,DLNBUG
+	OFFSCN
+	MOVE TAC,(PDB)
+	TLNE TAC,-1		; barf if there was a previous
+	 PUSHJ P,DLNBUG
+	SKIPE TAC		; if it was in a list
+	 HRRZS (TAC)		; unlink it from the list
+	ONSCN
+	PUSH P,TAC		; put new one on stack
+	SKIPL PDBFLN		; does the free list want any?
+	 JRST [	PUSHJ P,FSGIVE	; no, give it back
+		POP P,PDB
+		POPJ P,]
+	PUSHJ P,REPFP2		; call the replenisher at special entry point
+	POP P,PDB
+	POPJ P,
+
+; Here to release a PDB list.  I-level must be disabled.
+
+FLSPDB:	HLRZ TAC,(PDB)		; run down list until find the first
+	JUMPN TAC,[MOVEI PDB,(TAC) ↔ JRST FLSPDB] ; buzz
+	PUSHJ P,CLRPDB		; and flush the entire list
+	JUMPN PDB,.-1
+	POPJ P,
+;DLNDSP DLNINI DLNIN1
+
+SUBTTL UUO routines
+
+; UUO dispatch table.  I said it wasn't a standard device!
+
+	JRST DLNINI		; initialize
+	POPJ P,			; hung timeout
+↑DLNDSP:JRST DLNRLS		; RELEASE
+	JRST DLNCLS		; CLOSE output
+	JRST UUOERR		; buffered OUTPUT (it can't happen it says here)
+	JRST UUOERR		; buffered INPUT (can't happen)
+	JRST UUOERR		; ENTER
+	JRST UUOERR		; LOOKUP
+	JRST DLNOUT		; dump mode OUTPUT
+	JRST DLNINP		; dump mode INPUT
+	JRST UUOERR		; USETO
+	JRST UUOERR		; USETI
+	JRST UUOERR		; UGETF
+	JRST UUOERR		; RENAME
+	POPJ P,			; CLOSE input
+	JRST UUOERR		; UTPCLR
+	JRST DLNMTP		; MTAPE
+
+; System initialization
+
+DLNINI:	MOVNI TAC,DLNNUM	; one spare for each port
+	MOVEM TAC,PDBFLN
+	PUSHJ P,REPFPL		; make the spares list
+	MOVSI TAC,-DLNNUM
+DLNIN1:	MOVE DDB,DLNUTB(TAC)	; get DDB for this unit
+	PUSH P,TAC
+	SETZM DFSWC(DDB)	; clear statistics
+	HRLI TAC,DFSWC(DDB)
+	HRRI TAC,DFSWC+1(DDB)
+	BLT TAC,DLWC(DDB)
+	PUSHJ P,DLNRLS		; initialize the DDB
+	POP P,TAC
+	AOBJN TAC,DLNIN1	; loop through for each DDB
+	MOVE TAC,[$DLNCLK,,CLKWAT*JIFSEC] ; set up DLNCLK run request
+	CLKENQ(TAC)		;Plant clk req
+	POPJ P,
+;DLNRLS DLNRLA DLNLC
+
+; RELEASE UUO.  Also called at system initialization time to init the DDB.
+
+DLNRLS:	OFFSCN
+	SETZM DEVIOS(DDB)	; clear IOS
+	SKIPE PDB,DILIST(DDB)	; flush input list
+	 PUSHJ P,FLSPDB
+	SKIPE PDB,DOLIST(DDB)	; and output list
+	 PUSHJ P,FLSPDB
+	SKIPE PDB,DXLIST(DDB)	; and pending acknowledgement list
+	 PUSHJ P,FLSPDB
+	SKIPE PDB,UUOPDB(DDB)	; flush UUO PDB if any
+	 PUSHJ P,CLRPDB
+	SKIPE PDB,INTPDB(DDB)	; ditto for interrupt PDB's
+	 PUSHJ P,CLRPDB
+	LDB TAC,PUNIT
+	PUSHJ P,DLNHNG		; hang up the modem
+	LDB TAC,PUNIT
+	LSH TAC,=12
+	IOR TAC,[$DLNRLA,,HNGWAT*JIFSEC] ; enable DTR later
+	CLKENQ (TAC)		; plant clk req
+	SETZM DFWC(DDB)		; clear DDB
+	HRLI TAC,DFWC(DDB)
+	HRRI TAC,DFWC+1(DDB)
+	BLT TAC,DLWC(DDB)
+	MOVEI TAC,WINMIN	; set up minimum window size
+	MOVEI TAC1,WINMIN
+	DMOVEM TAC,DIWS(DDB)
+	DMOVEM TAC,DIWIN(DDB)
+	MOVEI TAC,RDPLUZ	; initial input interrupt dispatch
+	MOVEM TAC,DIDS(DDB)
+	MOVEI TAC,CPOPJ		; output interrupt dispatch
+	MOVEM TAC,DODS(DDB)
+	MOVSI IOS,IO%IDL	; flag output I-level as idle
+	MOVEM IOS,DEVIOS(DDB)
+	ONSCN
+	POPJ P,
+
+; Here at clock level to pick up the modem and send an abort
+
+↑DLNRLA:PUSH P,TAC
+	PUSHJ P,DLNPKU		; enable DTR
+	MOVE TAC,(P)
+	MOVE DDB,DLNUTB(TAC)
+	SETOM DREP(DDB)
+	MOVSI IOS,IO%R1B	; read a character at I-level
+	IORB IOS,DEVIOS(DDB)
+	MOVEI CHR,"↓"
+	PUSHJ P,DLNTYP		; send an abort
+	POP P,TAC
+	LSH TAC,=12
+	IOR TAC,[$DLNLC,,COKWAT*JIFSEC]
+	CLKENQ (TAC)		; plant clk req
+	POPJ P,
+
+; Here to light COK (meaning okay for DLPINT to light CCR)
+
+↑DLNLC:	MOVE DDB,DLNUTB(TAC)
+	SKIPL CHR,DREP(DDB)	; get reply
+	 CAIE CHR,"B"		; is dialer winning?
+	  JRST [AOS NDLERR(DDB)	; no, count the lossages up
+		POPJ P,]	; this is normal for non-VADICs
+	MOVSI IOS,IO%COK
+	IORB IOS,DEVIOS(DDB)
+	POPJ P,
+;DLNINP DLILUP DLIDSC UUOTAB OPMAX
+
+; INPUT UUO and UUO-level opcode processing
+;
+; Receive data
+;	INPUT chn,block
+;	...
+; block:byte pointer to data buffer
+;	number of data bytes
+;	data channel
+;
+;  Also handle command packets which should be processed in the data stream.
+; This includes things like EOF, or CLS, which are conditions which want to
+; be raised only after previous packets have been processed.
+
+DLNINP:	MOVSI TAC,IO%CON
+	TDNN TAC,DEVIOS(DDB)	; insist on open connection
+	 JRST [	MOVEI IOS,IOIMPM
+		IORB IOS,DEVIOS(DDB)
+		POPJ P,]
+	PUSHJ P,GETARG		; snarf user args
+	JUMPLE AC2,CPOPJ
+	XCTR XRW,[MOVES TAC,2(UUO)] ; check channel writeability
+	TDNE TAC,[-1,,777760]	; illegal channel?
+	 XCTR XRW,[SETZB TAC,2(UUO)]
+DLILUP:	SKIPN PDB,DILIST(DDB)	; get PDB from the list
+	 JRST [	PUSHJ P,SETARG	; return updated args to user
+		MOVSI TAC,IO%CON
+		TDNE TAC,DEVIOS(DDB)
+		 TLNE AC3,40
+		  JRST SETEOF
+		PUSHJ P,DLWAIT
+		JRST DLILUP]
+	LDB TAC,PKTOPC
+	CAIGE TAC,OPMAX		; legal opcode?
+	 XCT UUOTAB(TAC)	; yes, dispatch to appropriate server
+	PUSHJ P,DLNBUG		; undef opcode?
+
+; Remove PDB from input list and discard it.
+
+DLIDSC:	AOS DIWIN(DDB)		; open up that space in the window
+	OFFSCN
+	SKIPE TAC,PDBLNK(PDB)	; get the next
+	 HRRZS PDBLNK(TAC)	; unbind old PDB from list
+	MOVEM TAC,DILIST(DDB)	; make it the current now
+	PUSHJ P,CLRPDB
+	ONSCN
+	POPJ P,
+
+; UUO-level packet type dispatch table
+
+UUOTAB:	CAI			; %NOP
+	CAI			; %RPC
+	JRST DLICLS		; %CLS
+	CAI			; %WIN
+	JRST DLIMSG		; %MSG
+	CAI			; %NAK
+	JRST DLIEOF		; %EOF
+	CAI			; %INT
+	CAI			; %ERR
+OPMAX←←.-UUOTAB
+;DLIMSG SETEOF DLMLUP DLICLS DLIEOF
+
+; Individual opcode handlers
+
+; MSG -- stuff user buffer
+
+DLIMSG:	LDB TAC,PKTCHN		; get its channel
+	XCTR XR,[CAMN TAC,2(UUO)] ; same as channel user wanted?
+	 JRST DLMLUP
+	XCTR XW,[MOVEM TAC,2(UUO)] ; tell user the channel changed
+SETEOF:	MOVEI IOS,IODEND	; make sure we get out of UUOCON
+	IORB IOS,DEVIOS(DDB)
+	POPJ P,
+
+DLMLUP:	SOSGE PDBCNT(PDB)	; anything in this PDB?
+	 JRST [	PUSHJ P,SETARG
+		PUSHJ P,DLIDSC	; discard this PDB
+		PUSHJ P,GETARG	; retrieve pointer AC's
+		JRST DLILUP]
+	ILDB TAC,PDBPNT(PDB)	; get buffer byte
+	XCTR XDB,[IDPB TAC,AC3]	; give user data byte
+	SOJG AC2,DLMLUP
+	PUSHJ P,SETARG
+	SKIPG PDBCNT(PDB)	; if this PDB is spent
+	 JRST DLIDSC		; discard it first
+	POPJ P,			; all done
+
+; CLS -- set IO%CLS, IO%EOF, clear IO%CON and return to user
+
+DLICLS:	PUSH P,PDB
+	PUSHJ P,DLNCLS		; send return CLS
+	POP P,PDB
+	SETZM DPID(DDB)		; clear PID
+	SETZM DPID+1(DDB)
+	MOVEI IOS,IO%CLS!IO%EOF!IODEND ; and wake user up to the bad news
+	IORB IOS,DEVIOS(DDB)
+	JRST DLIDSC		; discard PDB and return
+
+; EOF -- set IO%EOF and return to user
+
+DLIEOF:	MOVEI IOS,IO%EOF!IODEND	; tell user EOF happened
+	IORB IOS,DEVIOS(DDB)	; happy UUOCON
+	LDB TAC,PKTCHN		; gobble down channel number
+	XCTR XW,[MOVEM TAC,2(UUO)] ; pass it to user
+	JRST DLIDSC
+;DLNOUT DLONEW DLOOLD DLOLUP DLNDUN DLNDN1
+
+; OUTPUT UUO
+;
+; Send data
+;	OUTPUT chn,block
+;	...
+; block:byte pointer to data buffer
+;	number of data bytes
+;	data channel
+
+DLNOUT:	MOVSI TAC,IO%CON
+	TDNN TAC,DEVIOS(DDB)	; insist it be connected
+	 JRST [	MOVEI IOS,IOIMPM
+		IORB IOS,DEVIOS(DDB)
+		POPJ P,]
+	SKIPE PDB,UUOPDB(DDB)	; get last output PDB
+	 JRST DLOOLD
+DLONEW:	PUSHJ P,MAKPDB		; none, make one
+	 PUSHJ P,DLNBUG		; no core at UUO level?
+	MOVEM PDB,UUOPDB(DDB)
+	XCTR XRW,[MOVES TAC,2(UUO)] ; data channel
+	TDNE TAC,[-1,,777760]	; illegal channel?
+	 XCTR XRW,[SETZB TAC,2(UUO)]
+	DPB TAC,PKTCHN
+	MOVEI TAC,NPKBYT	; empty packet
+	MOVEM TAC,PDBCNT(PDB)
+	MOVE TAC,PKTDAT		; data pointer
+	MOVEM TAC,PDBPNT(PDB)
+	MOVEI TAC,%MSG		; MSG type packet
+	DPB TAC,PKTOPC
+DLOOLD:	PUSHJ P,GETARG
+	JUMPLE AC2,CPOPJ
+	LDB TAC,PKTCHN		; get packet's channel
+	XCTR XR,[CAMN TAC,2(UUO)]
+DLOLUP:	 SOSGE PDBCNT(PDB)	; any space in this PDB?
+	  JRST DLNDUN
+	XCTR XLB,[ILDB TAC,AC3]	; get user data byte
+	IDPB TAC,PDBPNT(PDB)	; store in our buffer
+	SOJG AC2,DLOLUP
+	SKIPE PDBCNT(PDB)	; is PDB full?
+	 JRST SETARG		; no, return to user--we're done
+DLNDUN:	PUSHJ P,SETARG
+DLNDN1:	SKIPN DPID(DDB)
+	 SKIPE DPID+1(DDB)
+	  CAIA
+	   JRST SETEOF
+	SKIPG DOWIN(DDB)
+	 JRST [	MOVSI TAC,IO%CON
+		TDNE TAC,DEVIOS(DDB)
+		 TLNE AC3,40
+		  JRST SETEOF
+		PUSHJ P,DLWAIT
+		JRST DLNDN1]
+	PUSHJ P,DLNFR1		; wrong channel or full, output it
+	PUSHJ P,GETARG
+	JUMPG AC2,DLONEW	; loop back if more
+	POPJ P,
+;DLNMTP DLNMDS DLNMMX
+
+; MTAPE UUO dispatch
+
+DLNMTP:	XCTR XR,[SKIPL TAC,(UUO)] ; get function code
+	 CAIL TAC,DLNMMX
+	  JRST UUOERR		; illegal function
+	JRST @DLNMDS(TAC)	; else dispatch to server
+
+DLNMDS:	DLNRPC			; 0 request connection
+	DLNCLS			; 1 close connection
+	DLNWIN			; 2 set window size
+	DLNEOF			; 3 end of file
+	DLNINT			; 4 interrupt
+	DLNFRC			; 5 force out buffer
+	DLNSTA			; 6 return status bits
+	DLNCWA			; 7 wait for connection to complete
+	DLNPRF			; 10 get performance information
+
+DLNMMX←←.-DLNMDS
+;DLNRPC
+
+; Send RPC (request process connection)
+;	MTAPE chn,block
+;	 <error--dialing failed, error code in block>
+;	<won>
+;	...
+; block:0
+;	first 4 9-bit bytes of process ID
+;	last 4 9-bit bytes of process ID
+;	window wize
+;	phone number in ASCIZ (up to 4 words)
+
+DLNRPC:	MOVSI TAC,IO%CON
+	TDNE TAC,DEVIOS(DDB)
+	 JRST BADRPC		; RPC with connection open
+	XCTR XR,[DMOVE AC2,1(UUO)] ; get PID
+	SKIPN DPID(DDB)
+	 SKIPE DPID+1(DDB)
+	  JRST [JUMPN AC2,BADRPC; connect RPC with connect pending
+		JUMPN AC3,BADRPC
+		MOVSI TAC,IO%LIC
+		XCTR XR,[SKIPN 4(UUO)] ; illegal to dial when accepting
+		 TDNE TAC,DEVIOS(DDB) ; or to accept when we connected
+		  JRST BADRPC
+		JRST DLNRPA]	; winning accept RPC, do it
+	SKIPN AC2		; want a connect, insist upon a PID
+	 JUMPE AC3,BADRPC
+	MOVSI IOS,IO%LIC
+	IORB IOS,DEVIOS(DDB)	; flag locally-initiated connection
+	XCTR XR,[SKIPN 4(UUO)]
+	 JRST DLNRPA		; user doesn't want to dial
+;	JRST DLNRPD
+;DLNRPD
+
+; Dialing code
+
+DLNRPD:	MOVSI IOS,IO%COK	; let's not get CCR from DLPINT here
+	ANDCAB IOS,DEVIOS(DDB)
+	LDB TAC,PUNIT		; hang up line first
+	PUSHJ P,DLNHNG
+	LDB TAC,PUNIT		; clock level has to find the DDB
+	LSH TAC,=12
+	IOR TAC,[$DCWAKE,,HNGWAT*JIFSEC] ; wait for hangup to take effect
+	CLKENQ (TAC)		; plant clk req
+	PUSHJ P,DLWAIT
+	LDB TAC,PUNIT		; re-enable DTR
+	PUSHJ P,DLNPKU
+	SETOM DREP(DDB)
+	MOVSI IOS,IO%R1B	; read a character at I-level
+	IORB IOS,DEVIOS(DDB)
+	MOVEI CHR,"↓"
+	LDB TAC,PUNIT
+	PUSHJ P,DLNTYP		; send an abort
+	PUSHJ P,DLWAIT
+	SKIPGE CHR,DREP(DDB)	; get reply
+	 JRST .-2
+	CAIE CHR,"B"
+	 JRST [	AOS NDLERR(DDB)
+		ADDI CHR,1000	; flag abort failure
+		XCTR XW,[MOVEM CHR,(UUO)]
+		POPJ P,]
+	XCTR XR,[DMOVE AC2,4(UUO)]
+	DMOVEM AC2,DNUM(DDB)
+	XCTR XR,[DMOVE AC2,6(UUO)]
+	DMOVEM AC2,DNUM+2(DDB)
+	SETOM DREP(DDB)
+	PUSHJ P,DLNDIL		; start dialing
+	PUSHJ P,DLWAIT		; wait for dialing to be done
+	SKIPGE CHR,DREP(DDB)	; get reply code
+	 JRST .-2
+	CAIE CHR,"A"		; did dialing win?
+	 JRST [	ADDI CHR,2000	; flag call failure
+		XCTR XW,[MOVEM CHR,(UUO)]
+		POPJ P,]
+	LDB TAC,PUNIT
+	LSH TAC,=12
+	IOR TAC,[$DCWAKE,,DILWAT*JIFSEC] ; wait to let relay cool down
+	CLKENQ (TAC)		; plant clk req
+	PUSHJ P,DLWAIT
+	MOVSI IOS,IO%CCR	; flag carrier came up
+	IORB IOS,DEVIOS(DDB)
+;	JRST DLNRPA
+;DLNRPA DLNRWN BADRPC
+
+; Now send the RPC
+
+DLNRPA:	AOS (P)			; set skip return
+	SKIPG DOWIN(DDB)	; window still open?
+	 PUSHJ P,DLHANG
+	PUSHJ P,MAKPDB
+	 PUSHJ P,DLNBUG
+	MOVEI TAC,%RPC		; RPC type packet
+	DPB TAC,PKTOPC
+	MOVEI TAC,NRPBYT
+	DPB TAC,PKTSIZ
+	XCTR XR,[DMOVE AC2,1(UUO)] ; get PID
+	SKIPN AC2
+	 JUMPE AC3,[	MOVSI IOS,IO%CON
+			IORB IOS,DEVIOS(DDB) ; mark connection open for accept RPC
+			JRST DLNRWN]
+	DMOVEM AC2,DPID(DDB)	; otherwise set PID for pending RPC
+DLNRWN:	DMOVEM AC2,PDBDAT(PDB)	; in any case, set PID in the packet
+	XCTR XR,[MOVE TAC,3(UUO)] ; window size
+	CAIL TAC,WINMIN
+	 CAILE TAC,WINMAX
+	  MOVEI TAC,WINDEF	; user specified ridiculous argument
+	DPB TAC,PKTWNS
+	EXCH TAC,DIWS(DDB)	; DIWS ← new window size
+	SUB TAC,DIWS(DDB)	; TAC ← - # of PDB's added
+	MOVNS TAC		; TAC ← # of PDB's added
+	ADDM TAC,DIWIN(DDB)
+	JRST DLOUTQ
+
+; Here for a bad RPC.  Usually a programming error
+
+BADRPC:	MOVEI TAC,3000
+	XCTR XW,[MOVEM TAC,(UUO)]
+	POPJ P,
+;DLNCLS DLCLS1
+
+; Send CLS (close process connection)
+;	CLOSE chn,
+;	   or
+;	MTAPE chn,block
+;	...
+; block:1
+
+DLNCLS:	MOVSI TAC,IO%CON
+	TDNN TAC,DEVIOS(DDB)	; if there is no connection
+	 JRST [	OFFSCN		; it's easy.  turn off scanner to be safe
+		SETZM DPID(DDB)	; now just flush any remnants of an RPC
+		SETZM DPID+1(DDB)
+		MOVSI IOS,IO%LIC
+		ANDCAB IOS,DEVIOS(DDB)
+		ONSCN
+		POPJ P,]
+	PUSHJ P,DLNFRC		; flush user output
+	SKIPG DOWIN(DDB)	; window still open?
+	 PUSHJ P,DLHANG
+	PUSHJ P,MAKPDB		; get a PDB
+	 PUSHJ P,DLNBUG		; no core at UUO level?
+	MOVEI TAC,%CLS		; CLS type packet
+	DPB TAC,PKTOPC
+	MOVSI IOS,IO%CON
+	ANDCAB IOS,DEVIOS(DDB)	; mark connection as closed (reply clears PID)
+	PUSHJ P,DLOUTQ
+	SKIPE DPID(DDB)
+	 PUSHJ P,DLHANG
+	SKIPE DPID+1(DDB)
+	 PUSHJ P,DLHANG
+DLCLS1:	MOVSI TAC,IO%RDY	; did connection go away?
+	TDNN TAC,DEVIOS(DDB)
+	 POPJ P,
+	SKIPE DOLIST(DDB)	; wait for it to be sent, damnit!
+	 PUSHJ P,DLHANG
+	SKIPE DXLIST(DDB)
+	 PUSHJ P,DLHANG
+	SKIPN DXLIST(DDB)	; a crude, but effective test
+	 SKIPE DOLIST(DDB)
+	  JRST DLCLS1
+	POPJ P,
+;DLNWIN DLNEOF
+
+; Send WIN (set window size)
+;	MTAPE chn,block
+;	...
+; block:2
+;	window size
+
+DLNWIN:	SKIPG DOWIN(DDB)	; window still open?
+	 PUSHJ P,DLHANG
+	PUSHJ P,MAKPDB
+	 PUSHJ P,DLNBUG
+	MOVEI TAC,%WIN		; WIN type packet
+	DPB TAC,PKTOPC
+	XCTR XR,[MOVE TAC,2(UUO)] ; window size
+	CAIL TAC,WINMIN
+	 CAILE TAC,WINMAX
+	  MOVEI TAC,WINDEF	; user specified ridiculous argument
+	DPB TAC,PKTFDA
+	EXCH TAC,DIWS(DDB)	; DIWS ← new window size
+	SUB TAC,DIWS(DDB)	; TAC ← - # of PDB's added
+	MOVNS TAC		; TAC ← # of PDB's added
+	ADDM TAC,DIWIN(DDB)
+	JRST DLOUTQ
+
+; Send EOF (end of file)
+;	MTAPE chn,block
+;	...
+; block:3
+;	Dialnet channel
+
+DLNEOF:	XCTR XR,[MOVE DAT,1(UUO)] ; channel
+	TDNE DAT,[-1,,777760]	; illegal channel?
+	 XCTR XRW,[SETZB DAT,1(UUO)]
+	MOVSI TAC,IO%CON
+	TDNN IOS,DEVIOS(DDB)
+	 JRST [	MOVEI IOS,IOIMPM
+		IORB IOS,DEVIOS(DDB)
+		POPJ P,]
+	PUSHJ P,DLNFRC		; flush output
+	SKIPG DOWIN(DDB)	; window still open?
+	 PUSHJ P,DLHANG
+	PUSHJ P,MAKPDB		; create a new PDB
+	 PUSHJ P,DLNBUG
+	DPB DAT,PKTCHN
+	MOVEI TAC,%EOF		; end of file
+	DPB TAC,PKTOPC
+	JRST DLOUTQ
+;DLNINT DLNFRC DLNFR1
+
+; Send INT (interrupt)
+;	MTAPE chn,block
+;	...
+; block:4
+;	Dialnet channel
+
+DLNINT:	XCTR XR,[MOVE DAT,1(UUO)] ; channel
+	TDNE DAT,[-1,,777760]	; illegal channel?
+	 XCTR XRW,[SETZB DAT,1(UUO)]
+	MOVSI TAC,IO%CON
+	TDNN TAC,DEVIOS(DDB)
+	 JRST [	MOVEI IOS,IOIMPM
+		IORB IOS,DEVIOS(DDB)
+		POPJ P,]
+	SKIPG DOWIN(DDB)	; window still open?
+	 PUSHJ P,DLHANG
+	PUSHJ P,MAKPDB
+	 PUSHJ P,DLNBUG
+	DPB DAT,PKTCHN
+	MOVEI TAC,%INT		; interrupt
+	DPB TAC,PKTOPC
+	JRST DLOUTQ
+
+; Force out a packet
+;	MTAPE chn,block
+;	...
+; block:5
+
+DLNFRC:	SKIPN PDB,UUOPDB(DDB)	; get PDB
+	 POPJ P,		; no PDB, just return
+	SKIPG DOWIN(DDB)	; window still open?
+	 PUSHJ P,DLHANG		; wait or abort if so
+DLNFR1:	SETZM UUOPDB(DDB)	; no longer any "old" PDB
+	MOVEI TAC,NPKBYT-1
+	SKIPLE PDBCNT(PDB)
+	 SUB TAC,PDBCNT(PDB)	; TAC ← # of bytes in this packet -1
+	JUMPL TAC,CLRPDB	; just in case packet is empty
+	DPB TAC,PKTSIZ
+	MOVEI TAC,IO%CLS	; see if it is closing
+	SKIPN DPID(DDB)
+	 SKIPE DPID+1(DDB)
+	  TDNE TAC,DEVIOS(DDB)
+	   JRST CLRPDB
+	JRST DLOUTQ		; output the PDB
+;DLNSTA DLNCWA DLNPRF
+
+; Get Dialnet status
+;	MTAPE chn,block
+;	...
+; block:6
+;	status bits returned here
+;	first 4 bytes of PID
+;	second 4 bytes of PID
+;	input window size
+;	output window size
+;	four words of ASCIZ phone number
+
+DLNSTA:	MOVE IOS,DEVIOS(DDB)	; get status bits
+	XCTR XW,[MOVEM IOS,1(UUO)]
+	DMOVE TAC,DPID(DDB)	; process ID
+	XCTR XW,[DMOVEM TAC,2(UUO)]
+	DMOVE TAC,DIWS(DDB)	; window sizes
+	XCTR XW,[DMOVEM TAC,4(UUO)]
+	DMOVE TAC,DNUM(DDB)	; phone number
+	XCTR XW,[DMOVEM TAC,6(UUO)]
+	DMOVE TAC,DNUM+2(DDB)
+	XCTR XW,[DMOVEM TAC,10(UUO)]
+	POPJ P,
+
+; Wait for connection to open
+;	MTAPE chn,block
+;	 <connection refused>
+;	<connection open>
+;	...
+; block:7
+
+DLNCWA:	MOVSI TAC,IO%CON
+	TDNE TAC,DEVIOS(DDB)	; connection open yet?
+	 JRST CPOPJ1
+	MOVE TAC,DPID(DDB)	; or maybe refused?
+	SKIPN DPID+1(DDB)	; you lose buckeroo
+	 JUMPE TAC,CPOPJ
+	PUSHJ P,DLWAIT
+	JRST DLNCWA
+
+; Get performance statistics
+;	MTAPE chn,block
+;	...
+; block:10
+;	size of block
+;	block of data
+
+DLNPRF:	XCTR XR,[SKIPLE TAC,1(UUO)]
+	 CAILE TAC,DFWC-DFSWC
+	  MOVEI TAC,DFWC-DFSWC	; she gave a crufty size
+	ADDI TAC,2(UUO)		; TAC ← ending address
+	MOVSI TAC1,DFSWC(DDB)
+	HRRI TAC1,2(UUO)	; TAC1 ← source,,destination
+	XCTR XBLTW,[BLT TAC1,(TAC)]
+	POPJ P,
+;DLHANG DLWAIT DCWAKE DLWAKE GETARG SETARG DLOUTQ DLOUQ1
+
+; Random UUO subroutines
+
+; Here for I/O UUO's to hang until the previous instruction skips
+
+DLHANG:	SOS (P)			; point stack at previous instruction
+	SOS (P)
+	JRST DLWAIT		; go into IOWQ
+
+; Here to enter IOWQ.  Preserves PDB, AC2, AC3, & DDB.
+
+DLWAIT:	MOVSI IOS,DEVSBB	; DLN is internally buffered
+	IORB IOS,DEVIOS(DDB)
+	PUSH P,PDB		; preserve PDB and possible pointer AC's
+	PUSH P,AC2
+	PUSH P,AC3
+	PUSHJ P,WSYNC		; wait until I-level says can go
+	POP P,AC3		; restore our AC's
+	POP P,AC2
+	POP P,PDB
+	POPJ P,
+
+; Here to wake up a process in IOWQ.  DCWAKE is the clock queue entry point.
+
+↑DCWAKE:MOVE DDB,DLNUTB(TAC)	; get DDB
+DLWAKE:	MOVE IOS,DEVIOS(DDB)
+	TLZ IOS,DEVSBB		; system buffer no longer busy
+	TLZE IOS,IOW		; was job in I/O wait?
+	 PUSHJ P,STTIOD		; put job into TQ
+	MOVEM IOS,DEVIOS(DDB)
+	POPJ P,
+
+;  Get I/O UUO args.  AC3 ← byte pointer, AC2 ← byte count.  Also checks for
+; writeability.
+
+GETARG:	XCTR XRW,[MOVES AC3,(UUO)] ; AC3 ← user's byte pointer
+	TLNN AC3,7700		; did user specify a size?
+	 TLZA AC3,777737	; nope, flush whatever was there
+	  TLZA AC3,37		; flush index and indirect
+	   TLO AC3,441100	; force 9-bit byte pointer
+	MOVEI AC2,(AC3)		; make sure not hacking protected JOBDAT area
+	CAIG AC2,JOBPFI
+	 JRST ADRERR		; you lose buckeroo!
+	XCTR XRW,[MOVES AC2,1(UUO)] ; AC2 ← byte count
+	POPJ P,
+
+; Set I/O UUO args the way GETARG snarfs them
+
+SETARG:	XCTR XW,[MOVEM AC3,(UUO)] ; return updated args to user
+	XCTR XW,[MOVEM AC2,1(UUO)]
+	POPJ P,
+
+; Here to queue a PDB for output
+
+DLOUTQ:	LDB TAC,PKTOPC		; check opcode
+	JUMPE TAC,DLOUQ1	; knows that %NOP=0
+	CAIE TAC,%ERR
+	 CAIN TAC,%NAK
+	  JRST DLOUQ1		; these don't count against the window
+	SOSGE DOWIN(DDB)	; decrement window
+	 PUSHJ P,DLNBUG		; some loser didn't check!
+DLOUQ1:	MOVEI TAC,DOLIST(DDB)	; start at the beginning
+	OFFSCN
+	HRRZ TAC1,(TAC)		; run down the list until at end
+	JUMPN TAC1,[MOVEI TAC,(TAC1) ↔ JRST .-1]
+	SKIPE DOLIST(DDB)	; unless there is no list
+	 HRLZM TAC,(PDB)	; bind list to new
+	HRRM PDB,(TAC)		; bind new to list
+	PUSHJ P,WRLIST		; start output if necessary
+	ONSCN
+	POPJ P,
+;DLNCLK DLNCL1 DLNCL2
+
+SUBTTL Crock-level
+
+;  This creature is called every so often to paw over all the
+; Dialnet ports and put no-ops on any one that looks idle.  This
+; is to prevent lossage due to dropped acknowledges which might
+; otherwise cause deadly embraces (hug hug).
+
+↑DLNCLK:MOVE TAC,[$DLNCLK,,CLKWAT*JIFSEC] ; requeue the request
+	CLKENQ (TAC)		; plant clk req
+	MOVSI TAC,-DLNNUM
+DLNCL1:	MOVE DDB,DLNUTB(TAC)	; get DDB for this unit
+	OFFSCN
+	MOVE IOS,DEVIOS(DDB)
+	TLNE IOS,IO%IDL		; line should be idle
+	 TLNN IOS,IO%CCR	; and there should be carrier
+	  JRST [ONSCN
+		AOBJN TAC,DLNCL1; otherwise don't consider this port
+		POPJ P,]
+	SKIPE DOLIST(DDB)	; output list had better be empty
+	 PUSHJ P,DLNBUG
+	PUSH P,TAC
+	SKIPN PDB,DXLIST(DDB)	; see if want to resend the top of the pending queue
+	 JRST [	ONSCN
+		PUSHJ P,MAKPDB	; create a no-op
+		 JRST DLNCL2
+		PUSHJ P,DLOUTQ	; queue it for output
+		JRST DLNCL2]
+	AOS NCRTRN(DDB)
+	HRRZ TAC,PDBLNK(PDB)	; get its next
+	SETZM PDBLNK(PDB)	; unlink it from the next
+	SKIPE TAC
+	 HRRZS PDBLNK(TAC)	; unlink this one from the next
+	MOVEM TAC,DXLIST(DDB)	; and remove this from the queue
+	MOVEM PDB,DOLIST(DDB)
+	PUSHJ P,WRLIST		; start output
+	ONSCN
+DLNCL2:	POP P,TAC
+	AOBJN TAC,DLNCL1	; loop through for each DDB
+	POPJ P,
+;RDPCKT RDPCKX RDPDAT RDPLUZ
+
+SUBTTL Input I-level loop
+
+;  Stuff a PDB with an incoming packet, do framing, checksum, and sequence
+; verification.  Entered when an SOP happens.
+
+RDPCKT:	SKIPE PDB,INTPDB(DDB)	; is there a PDB from before?
+	 JRST [	AOS NFRERR(DDB)
+		SETZM (PDB)	; clear what was from before
+		HRLI TAC,(PDB)
+		HRRI TAC,1(PDB)
+		BLT TAC,PDBSIZ-1(PDB)
+		JRST RDPCKX]
+	PUSHJ P,MAKPDB		; get a new PDB
+	 POPJ P,
+	MOVEM PDB,INTPDB(DDB)
+RDPCKX:	MOVEI TAC,1		; initialize checksum
+	MOVEM TAC,PDBCHK(PDB)
+	JSP TAC,DLNICH		; word 1 - packet channel/op code
+	PUSHJ P,CHKBYT
+	DPB CHR,PKTCOP
+	JSP TAC,DLNICH		; word 2 - packet mpx channel/sequence number
+	PUSHJ P,CHKBYT
+	DPB CHR,PKTMSQ
+	JSP TAC,DLNICH		; word 3 - packet reserved byte/acknowledgement
+	PUSHJ P,CHKBYT
+	DPB CHR,PKTRAK
+	JSP TAC,DLNICH		; word 4 - packet size
+	PUSHJ P,CHKBYT
+	DPB CHR,PKTSIZ
+	MOVEM CHR,PDBCNT(PDB)	; packet data area byte count
+	MOVE TAC,PKTDAT		; byte pointer
+	MOVEM TAC,PDBPNT(PDB)
+RDPDAT:	JSP TAC,DLNICH		; data byte
+	PUSHJ P,CHKBYT
+	IDPB CHR,PDBPNT(PDB)
+	SOSL PDBCNT(PDB)	; continue until read all data
+	 JRST RDPDAT
+	MOVEI TAC,600000	; stray bits in checksum
+	ANDCAM TAC,PDBCHK(PDB)	; get flushed here
+	JSP TAC,DLNICH		; packet checksum
+	XORM CHR,PDBCHK(PDB)
+	JSP TAC,DLNICH
+	LSH CHR,=8		; high order 8 bits of checksum
+	XORB CHR,PDBCHK(PDB)
+	MOVSI IOS,IO%EOP
+	SKIPE CHR		; CHR = 0 iff good checksum
+	 AOSA NCKERR(DDB)	; checksum error
+	  IORB IOS,DEVIOS(DDB)	; win, tell RDPDUN it has permission to run
+	JSP TAC,DLNICH		; end of coroutine
+RDPLUZ:	AOS NFRERR(DDB)		; framing error
+	MOVEI TAC,CPOPJ		; ignore further framing errors until we win again
+	MOVEM TAC,DIDS(DDB)
+	SKIPN PDB,INTPDB(DDB)	; which form of lossage is it?
+	 POPJ P,		; garbage when wanted SOP
+	SETZM INTPDB(DDB)	; garbage when wanted EOP, flush the PDB
+	JRST CLRPDB		; otherwise RDPCKT will AOS NFRERR twice
+;RDPDUN RDPSIW RDPFAK RDPCKN RDPNRT
+
+; Here when an EOP received
+
+RDPDUN:	AOS NINPKT(DDB)		; count up one more winner
+	MOVSI IOS,IO%CCR!IO%RDY	; set carrier detect and ready
+	IORB IOS,DEVIOS(DDB)
+	SOSL DIWIN(DDB)		; any space in window?
+	 JRST RDPSIW
+	AOS NDOERR(DDB)
+	LDB TAC,PKTOPC		; get opcode
+	CAIE TAC,%ERR		; let ERR and NAK through
+	 CAIN TAC,%NAK
+	  CAIA
+	   MOVEI TAC,%NOP	; otherwise convert to no-op
+	DPB TAC,PKTOPC
+	LDB TAC,PKTSEQ		; did other side say it was a datagram?
+	JUMPE TAC,RDPSIW	; yes, don't bother telling user
+	SETZ TAC,
+	DPB TAC,PKTSEQ		; make it a datagram now!
+	MOVEI IOS,IO%DTM
+	IORB IOS,DEVIOS(DDB)	; tell user she's losing
+RDPSIW:	MOVEI TAC,RDPLUZ	; mark input idle
+	MOVEM TAC,DIDS(DDB)
+	SETZM INTPDB(DDB)	; remove this PDB from input I-level
+	PUSH P,PDB
+	LDB TAC1,PKTACK		; packet remote guy is acknowledging
+	JUMPE TAC1,RDPCKN	; explicit no-acknowledge
+	SKIPN PDB,DXLIST(DDB)	; check acknowledgement list
+	 JRST RDPCKN
+RDPFAK:	LDB TAC,PKTSEQ
+	CAIE TAC,(TAC1)		; found the one being acknowledged?
+	 JRST [	HRRZ PDB,PDBLNK(PDB) ; nope, try next on the list
+		JUMPN PDB,RDPFAK
+		JRST RDPCKN]
+	HLRZ TAC,PDBLNK(PDB)	; TAC ← previous
+	SKIPN TAC
+	 MOVEI TAC,DXLIST(DDB)	; if no previous, flush the list
+	HLLZS PDBLNK(TAC)
+	HRRZS PDBLNK(PDB)	; complete the amputation
+	PUSHJ P,CLRPDB		; now delete all of these packets
+	AOS DOWIN(DDB)
+	JUMPN PDB,.-2
+RDPCKN:	POP P,PDB
+	LDB TAC,PKTSEQ		; get seq # of this packet
+	JUMPE TAC,RDPPK0	; packet 0 always wins
+	MOVE TAC1,DACK(DDB)	; get expected packet
+	ADDI TAC1,1
+	CAIN TAC1,40		; overflow case
+	 MOVEI TAC1,1
+	CAIN TAC,(TAC1)		; was this the packet we expected?
+	 JRST RDPPAK
+	SUBI TAC,(TAC1)		; sexy modulo 2↑6 comparison (thank you, Dave Moon)
+	TRNE TAC,20		; sorry luv, I have a headache
+	 AOSA NRPERR(DDB)	; redundant packet (too low)
+	  AOSA NSQERR(DDB)	; sequence error (too high)
+	   JRST RDPNOP		; just discard it if we have it already
+	PUSH P,PDB
+	SKIPLE DOWIN(DDB)	; make sure the window is open
+	 PUSHJ P,MAKPDB		; get a PDB to frob
+	  JRST RDPNRT
+	MOVEI TAC,%NAK		; NAK type packet
+	DPB TAC,PKTOPC
+	PUSHJ P,DLOUTQ		; make PDB available for output
+RDPNRT:	POP P,PDB
+	JRST RDPNOP
+;RDPPAK RDPNPK RDPPK0 RDPNOP INTTAB
+
+; Positive acknowledge
+
+RDPPAK:	MOVEM TAC,DACK(DDB)	; remember to acknowledge this one
+	MOVSI IOS,IO%ACN
+	IORB IOS,DEVIOS(DDB)	; note that an acknowledgement is needed
+	PUSH P,PDB
+	TLNE IOS,IO%IDL		; if output is idle, acknowledge it manually
+	 PUSHJ P,MAKPDB		; get an empty PDB (which happens to be a NOP)
+	  JRST RDPNPK		; not idle or no core
+	SKIPE DOLIST(DDB)
+	 PUSHJ P,DLNBUG		; not really idle?
+	MOVEM PDB,DOLIST(DDB)	; create a "list"
+	PUSHJ P,WRLIST		; acknowledge the packet
+RDPNPK:	POP P,PDB
+RDPPK0:	MOVE TAC,PKTDAT		; set up pointer
+	MOVEM TAC,PDBPNT(PDB)
+	LDB TAC,PKTSIZ		; and counter
+	AOS TAC
+	MOVEM TAC,PDBCNT(PDB)
+	LDB TAC,PKTOPC
+	CAIGE TAC,OPMAX		; legal opcode?
+	 JRST @INTTAB(TAC)	; yes, dispatch to appropriate server
+	PUSHJ P,SNDERR
+	 [ASCIZ/Illegal opcode/]
+RDPNOP:	AOS DIWIN(DDB)		; open up the window
+	PUSHJ P,CLRPDB
+	JRST DLWAKE
+
+; I-level opcode dispatch table
+
+INTTAB:	RDPNOP			; %NOP
+	RDPRPC			; %RPC
+	RDPCLS			; %CLS
+	RDPWIN			; %WIN
+	RDPMSG			; %MSG
+	RDPNAK			; %NAK
+	RDPMSG			; %EOF
+	RDPINT			; %INT
+	RDPERR			; %ERR
+
+IFN OPMAX-<.-INTTAB>,<.FATAL INTTAB loses>
+;RDPMSG RDPMS1 RDPWIN RDPWN1 RDPINT
+
+; Incoming message
+
+RDPMSG:	TLNN IOS,IO%CON		; must be connected
+	 JRST [	PUSHJ P,SNDERR
+		 [ASCIZ/MSG, EOF, or INT with no connection/]
+		JRST RDPNOP]
+RDPMS1:	MOVEI TAC,DILIST(DDB)
+	HRRZ TAC1,PDBLNK(TAC)	; run down list
+	JUMPN TAC1,[MOVEI TAC,(TAC1) ↔ JRST .-1]
+	HRRM PDB,PDBLNK(TAC)	; link message at end of list
+	CAIE TAC,DILIST(DDB)	; never link the DDB in!
+	 HRLZM TAC,PDBLNK(PDB)
+	LDB J,PJOBN		; get owner's job #
+	JUMPE J,DLWAKE		; no owner (this shouldn't happen it says here)
+	MOVSI TAC,INTINP	; tell user in INTW to take a look around
+	TDNN TAC,JBTIEN(J)	; job take this int?
+	 JRST DLWAKE
+	IORM TAC,JBTIRQ(J)	; yes, give job the int
+	TDNE TAC,JBTMSK(J)	; any bit masked on?
+	 SETOM INTREQ		; yes, run interrupts
+	JRST DLWAKE
+
+; Set window size
+
+RDPWIN:	LDB TAC,PKTFDA		; get desired window
+RDPWN1:	CAIL TAC,WINMIN		; check for within bounds (here from RPC code)
+	 CAILE TAC,WINMAX
+	  JRST [PUSHJ P,SNDERR
+		 [ASCIZ/Illegal window size/]
+		MOVEI TAC,WINDEF; default
+		JRST .+1]
+	EXCH TAC,DOWS(DDB)	; set the window
+	SUB TAC,DOWS(DDB)
+	MOVNS TAC
+	ADDM TAC,DOWIN(DDB)
+	JRST RDPNOP
+
+; Interrupt
+
+RDPINT:	MOVEI IOS,IO%INT	; set interrupt bit
+	IORB IOS,DEVIOS(DDB)
+	LDB J,PJOBN		; get owner's job #
+	JUMPE J,RDPNOP		; no owner
+	MOVSI TAC,INTINS
+	TDNN TAC,JBTIEN(J)	; job take this int?
+	 JRST RDPNOP
+	IORM TAC,JBTIRQ(J)	; yes, give job the int
+	TDNE TAC,JBTMSK(J)	; any bit masked on?
+	 SETOM INTREQ		; yes, run interrupts
+	JRST RDPNOP
+;RDPNAK REVPDB RDPERR
+
+; Here when a request comes in to requeue the list (ie, a NAK)
+
+RDPNAK:	AOS DIWIN(DDB)
+	AOS NRNERR(DDB)
+	PUSHJ P,CLRPDB
+	SKIPN PDB,DXLIST(DDB)	; get unacknowledged list
+	 JRST DLWAKE
+REVPDB:	MOVSS TAC,PDBLNK(PDB)	; reverse the list (thank you, Guy Steele!)
+	HLRZ PDB,PDBLNK(PDB)	; PDB ← previous(PDB), TAC ← next(PDB)
+	JUMPN PDB,REVPDB
+	SKIPN TAC		; just take a look at this nifty hack!!!
+	 SKIPA PDB,DXLIST(DDB)	; if next(PDB)=0 then PDB ← list
+	  HLRZ PDB,PDBLNK(TAC)	; else PDB ← previous(next(PDB))
+	MOVE TAC1,DXLIST(DDB)	; remember where it ends
+	SETZM DXLIST(DDB)	; remove all traces of pending list
+	SKIPN TAC,DOLIST(DDB)	; is there a list in progress?
+	 JRST [	MOVEM PDB,DOLIST(DDB)
+		PUSHJ P,WRLIST	; start up output
+		JRST DLWAKE]
+	HRLM TAC1,PDBLNK(TAC)	; link requeue list at front of output list
+	HRRM TAC,PDBLNK(TAC1)	; and output list at end of requeue list
+	JRST DLWAKE
+
+; Error
+
+RDPERR:	AOS NRCERR(DDB)
+	PUSH P,DDB		; save DDB and PDB
+	PUSH P,PDB
+	LDB TAC,PUNIT
+	PUSH P,TAC
+	PUSHJ P,DISUSR		; log lossage on the CTY
+	 SIXBIT /DLN/
+	PUSHJ P,DISERR
+	 [ASCIZ/Port /]
+	 DISARG LOC,<-1(P)>
+	 [ASCIZ/: Error received: /]
+	 -1
+	ADJSP P,-1
+	MOVE PDB,(P)
+	SKIPA AC2,PKTDAT	; text of the error
+	 PUSHJ P,DISTYO
+	ILDB CHR,AC2
+	JUMPN CHR,.-2
+	PUSHJ P,DISCRLF
+	POP P,PDB
+	POP P,DDB
+	JRST RDPNOP
+;RDPRPC RDPRP1 RDPCLS RDPCL1
+
+; Open connection
+
+RDPRPC:	TLNE IOS,IO%CON		; is there a connection?
+	 JRST [	PUSHJ P,SNDERR
+		 [ASCIZ/RPC when a connection exists/]
+		JRST RDPNOP]
+	DMOVE AC2,PDBDAT(PDB)	; AC2/AC3 ← PID
+	SKIPN DPID(DDB)		; RPC in progress?
+	 SKIPE DPID+1(DDB)
+	  JRST RDPRP1
+	SKIPN AC2		; must be a connect RPC
+	 JUMPE AC3,[	PUSHJ P,SNDERR
+			 [ASCIZ/Accept RPC with no connect pending/]
+			JRST RDPNOP]
+	DMOVEM AC2,DPID(DDB)
+	PUSHJ P,DLNLGR		; run the logger
+	LDB TAC,PKTWNS		; try for a window argument
+	JUMPE TAC,RDPNOP
+	JRST RDPWN1
+
+; Accept RPC
+
+RDPRP1:	TLNN IOS,IO%LIC		; did we initiate a connection?
+	 JRST [	SETZM DPID(DDB)
+		SETZM DPID+1(DDB)
+		PUSHJ P,SNDERR
+		 [ASCIZ/Illegal duplicate RPC/]
+		JRST RDPNOP]
+	SKIPN AC2		; we initiated it, expect an accept
+	 JUMPE AC3,[	MOVSI IOS,IO%CON
+			IORB IOS,DEVIOS(DDB) ; mark connection open
+			LDB TAC,PKTWNS
+			JUMPE TAC,RDPNOP ; forget it if none
+			JRST RDPWN1]
+	SETZM DPID(DDB) 	; flush PIDs
+	SETZM DPID+1(DDB)
+	PUSHJ P,SNDERR
+	 [ASCIZ/Connect RPC with connect pending/]
+	JRST RDPNOP
+
+; Close connection
+
+RDPCLS:	SETZM DPID(DDB)		; clear PID no matter what
+	SETZM DPID+1(DDB)
+	MOVEI IOS,IO%CLS	; note close coming
+	IORB IOS,DEVIOS(DDB)
+	LDB J,PJOBN
+	JUMPE J,RDPCL1
+	MOVSI TAC,INTIMS	; status change
+	TDNN TAC,JBTIEN(J)
+	 JRST RDPCL1
+	IORM TAC,JBTIRQ(J)
+	TDNE TAC,JBTMSK(J)	; any bit masked on?
+	 SETOM INTREQ		; yes, run interrupts
+RDPCL1:	TLNE IOS,IO%CON		; is connection closing?
+	 JRST RDPMSG		; yes, put it into input list
+	MOVSI IOS,IO%LIC	; forget about "locally initiated connection"
+	ANDCAB IOS,DEVIOS(DDB)
+	JUMPN J,CLRPDB
+	PUSHJ P,CLRPDB		; otherwise forget it
+	JRST DLNRLS		; and do release cruft
+;WRLIST WRPSOP
+
+SUBTTL Output I-level loop
+
+;  Writes packets from the output queue.  Must be called at scanner PI level
+; or with scanner PI's off, because DLNRLS and similar routines may abort a
+; WRLIST in progress, which may only happen while WRLIST is waiting!
+
+WRLIST:	MOVSI IOS,IO%IDL
+	TDNE IOS,DEVIOS(DDB)	; better have been "idle" at this point
+	 SKIPN PDB,DOLIST(DDB)	; get packet to do now
+	  POPJ P,		; not idle or nothing to do
+	ANDCAB IOS,DEVIOS(DDB)	; output I-level active again
+	LDB TAC,PKTSEQ		; if it already has a sequence number (as in
+	JUMPN TAC,WRPSOP	; requeueing), don't generate another!
+	LDB TAC,PKTOPC		; check opcode
+	JUMPE TAC,WRPSOP	; knows that %NOP=0
+	CAIE TAC,%ERR
+	 CAIN TAC,%NAK
+	  JRST WRPSOP		; error and no-op packets don't get numbers
+	AOS CHR,DSEQ(DDB)	; bump packet sequence number
+	CAIN CHR,40
+	 MOVEI CHR,1		; cycle back to 1 on overflow
+	DPB CHR,PKTSEQ
+	MOVEM CHR,DSEQ(DDB)	; in case of wraparound
+WRPSOP:	MOVEI TAC,1		; init checksum
+	MOVEM TAC,PDBCHK(PDB)
+	MOVEI CHR,%DLE		; all packets start with SOP
+	JSP TAC,DLNOC1		; DLNOC1 skips DLE check
+	MOVEI CHR,%STX		; from here on down in channel 5 only
+	JSP TAC,DLNOCH
+	LDB CHR,PKTCOP		; word 1 -- packet channel/op code
+	PUSHJ P,CHKBYT
+	JSP TAC,DLNOCH
+	LDB CHR,PKTMSQ		; word 2 -- packet mpx channel/sequence
+	PUSHJ P,CHKBYT
+	JSP TAC,DLNOCH
+	MOVE CHR,DACK(DDB)	; word 3 -- packet reserved byte/acknowledgement
+	DPB CHR,PKTACK
+	LDB CHR,PKTRAK
+	PUSHJ P,CHKBYT
+	MOVSI IOS,IO%ACN	; note that we've acknowledged one
+	ANDCAB IOS,DEVIOS(DDB)
+	JSP TAC,DLNOCH
+	LDB CHR,PKTSIZ		; word 4 -- packet size -1
+	PUSHJ P,CHKBYT
+	MOVEM CHR,PDBCNT(PDB)
+	JSP TAC,DLNOCH
+	MOVE TAC,PKTDAT		; data area pointer
+	MOVEM TAC,PDBPNT(PDB)
+;	JRST WRPDAT
+;WRPDAT WRPMOR WRPBKU
+
+WRPDAT:	ILDB CHR,PDBPNT(PDB)
+	PUSHJ P,CHKBYT
+	JSP TAC,DLNOCH
+	SOSL PDBCNT(PDB)	; data done?
+	 JRST WRPDAT
+	LDB CHR,[001000,,PDBCHK(PDB)] ; LSB of checksum
+	JSP TAC,DLNOCH
+	LDB CHR,[101000,,PDBCHK(PDB)] ; MSB of checksum
+	JSP TAC,DLNOCH
+	MOVEI CHR,%DLE		; all packets end with EOP
+	JSP TAC,DLNOC1		; DLNOC1 skips DLE check
+	MOVEI CHR,%ETX
+	JSP TAC,DLNOCH
+	AOS NOUPKT(DDB)
+	MOVEI TAC,WRLIST
+	MOVEM TAC,DODS(DDB)
+	MOVSI IOS,IO%IDL
+	IORB IOS,DEVIOS(DDB)	; note output I-level idle
+	HLRZ TAC,PDBLNK(PDB)	; get previous
+	JUMPN TAC,WRPBKU	; oops!  retransmission time!!!
+	SKIPE TAC,PDBLNK(PDB)
+	 HRRZS PDBLNK(TAC)	; unbind the PDB just output from this one
+	MOVEM TAC,DOLIST(DDB)	; make it the current
+	JUMPN TAC,WRPMOR	; skip the extra acknowledgement cruft if more
+	TLNN IOS,IO%ACN		; if an acknowledgement is needed
+	 JRST WRPMOR
+	PUSH P,PDB
+	PUSHJ P,MAKPDB		; get an empty PDB (which happens to be a NOP)
+	 CAIA
+	  MOVEM PDB,DOLIST(DDB)	; queue it, which will send an acking NOP!
+	POP P,PDB
+WRPMOR:	LDB TAC,PKTSEQ
+	JUMPE TAC,[	PUSHJ P,DLWAKE ; wake up user
+			PUSHJ P,CLRPDB ; if not to be acknowledged, delete it
+			JRST WRLIST]
+	MOVE TAC,DXLIST(DDB)	; top of unacknowledged queue
+	HRRZM TAC,PDBLNK(PDB)	; link PDB just output to the top
+	SKIPE TAC
+	 HRLM PDB,PDBLNK(TAC)	; complete the binding
+	MOVEM PDB,DXLIST(DDB)	; and update the unacknowledged queue
+	PUSHJ P,DLWAKE		; wake up user
+	JRST WRLIST
+
+; Here to back up in the list when it's retransmission time
+
+WRPBKU:	MOVE PDB,TAC		; make the previous THE current
+	HLRZ TAC,PDBLNK(PDB)
+	AOS NORPKT(DDB)
+	JUMPN TAC,WRPBKU
+	MOVEM PDB,DOLIST(DDB)	; declare this to be the real start of the list
+	JRST WRLIST
+;DLNICH DLNOCH DLNOC1 DLNDIL DLNLGR CHKBYT
+
+SUBTTL I-level subroutines
+
+; Input a character coroutine
+
+DLNICH:	MOVEM TAC,DIDS(DDB)	; save PC of caller
+	POPJ P,
+
+; Output a character coroutine
+
+DLNOCH:	MOVSI IOS,IO%ODE	; maybe have to do a DLE again?
+	CAIN CHR,%DLE
+	 IORB IOS,DEVIOS(DDB)	; yes, remember that
+DLNOC1:	MOVEM TAC,DODS(DDB)	; save PC of caller
+	LDB TAC,PUNIT		; TAC ← Dialnet unit number
+	JRST DLNTYP
+
+; Here to dial phone number
+
+DLNDIL:	MOVE TAC,DNUM(DDB)	; check for local area code
+	ANDCMI TAC,77777	; mask out low order two bytes
+	CAMN TAC,[LCLARC]
+	 SKIPA TAC,[170700,,DNUM(DDB)] ; point past area code
+	  MOVE TAC,[440700,,DNUM(DDB)] ; pointer to phone number
+	MOVEM TAC,DNUMP(DDB)
+	MOVEI CHR,"α"		; start transaction
+	JSP TAC,DLNOC1
+	ILDB CHR,DNUMP(DDB)	; get phone number byte
+	JUMPN CHR,[JSP TAC,DLNOC1 ↔ JRST .-1]
+	MOVEI CHR,"∂"		; end of buffer
+	JSP TAC,DLNOC1
+	MOVSI IOS,IO%R1B	; prepare to receive reply
+	IORB IOS,DEVIOS(DDB)
+	MOVEI CHR,"β"		; start dialing
+	JSP TAC,DLNOC1
+	POPJ P,
+
+; Fire up the Dialnet logger
+
+DLNLGR:	MOVEI TAC,['DLNLGR' ↔ 'NETSYS' ↔ LUPPRV,,0 ↔ 0]
+	PUSHJ P,FIREUP		; wake up DLNLGR
+	 JRST [	MOVSI TAC,DLNLGR; failed, try again later
+		SYSPIFF
+		IDPB TAC,CLKQ
+		SYSPIN
+		POPJ P,]
+	POPJ P,
+
+; Add a byte to the checksum in the PDB's PDBCHK
+; Algorithm: while CHR do SUM ← (SUM*013215) + CHR;
+;	MOVE CHR,<byte from data stream>
+;	PUSHJ P,CHKBYT
+;	<return>
+; At the beginning of each packet PDBCHK must be initialized to 1.
+
+CHKBYT:	MOVE TAC,PDBCHK(PDB)
+	IMULI TAC,013215	; Dialnet black magic number
+	ADDI TAC,(CHR)
+	HRRZM TAC,PDBCHK(PDB)
+	POPJ P,
+;SNDERR SNDERL SERRET
+
+; Send an error message to the other place.
+;	PUSHJ P,SNDERR
+;	 [ASCIZ/...message.../]
+;	<return>
+
+SNDERR:	LDB TAC,PUNIT		; TAC ← # of port where lossage is happening
+	MOVE TAC1,@(P)		; TAC1 ← addr of error message
+	PUSH P,PDB		; save PDB and DDB
+	PUSH P,DDB
+	PUSH P,TAC		; save unit
+	PUSH P,TAC1		; and string addr
+	PUSHJ P,DISUSR
+	 SIXBIT/DLN/
+	PUSHJ P,DISERR		; log error on CTY before sending it
+	 [ASCIZ/Port /]
+	 DISARG LOC,<-2(P)>
+	 [ASCIZ/: /]
+	 DISARG STR,@-1(P)
+	 -1
+	ADJSP P,-2		; toss away TAC & TAC1
+	PUSHJ P,DISCRLF
+	POP P,DDB		; restore DDB, leave PDB pushed
+	AOS NSNERR(DDB)
+	SKIPLE DOWIN(DDB)	; make sure the window is open
+	 PUSHJ P,MAKPDB		; get a PDB to frob
+	  JRST SERRET
+	MOVEI TAC,%ERR		; error type packet
+	DPB TAC,PKTOPC
+	MOVE TAC1,PKTDAT	; pointer to data area
+	SETZ DAT,
+	HRRZ TAC,@-1(P)		; addr of string
+	TLOA TAC,440700		; make byte pointer
+SNDERL:	 IDPB CHR,TAC1
+	ILDB CHR,TAC		; gobble down character of message
+	SKIPE CHR
+	 AOJA DAT,SNDERL
+	DPB DAT,PKTSIZ
+	PUSHJ P,DLOUTQ		; make PDB available for output
+SERRET:	POP P,PDB		; restore PDB
+	AOS (P)			; skip over error string
+	POPJ P,
+;DLIINT DLOINT
+
+SUBTTL I-level interface with TTYSER
+
+;  Input interrupt; device index in TAC, character in CHR.  I hope you have as
+; much fun reading this routine as I had writing it.
+
+↑DLIINT:SKIPL TAC		; demand a good index
+	 CAIL TAC,DLNNUM	; 0≤index≤DLNNUM-1
+	  JSP TAC1,BADDLU	; bad Dialnet unit
+	MOVE DDB,DLNUTB(TAC)	; get DDB
+	MOVE IOS,DEVIOS(DDB)	; get status bits
+	ANDI CHR,377		; goddamned bagbiting status bits!!
+	TLZE IOS,IO%R1B		; dialing?
+	 JRST [	MOVEM CHR,DREP(DDB) ; yes, skip rest of input processing
+		MOVEM IOS,DEVIOS(DDB)
+		JRST DLWAKE]
+	SKIPN PDB,INTPDB(DDB)	; set up packet pointer
+	 MOVEI PDB,ILLADR	; cause immediate exec page fault if losing
+	TLZE IOS,IO%DLE		; previous character a DLE?
+	 JRST [	TLZE IOS,IO%EOP	; have EOP permission?
+		 CAIE CHR,%ETX	; end of packet
+		  CAIN CHR,%STX	; start of packet
+		   PUSH P,[RDPCKT ↔ RDPDUN]-%STX(CHR) ; knows that ETX = STX +1
+		MOVEM IOS,DEVIOS(DDB) ; set status flags
+		CAIN CHR,%DLE	; quoted DLE?
+		 JRST @DIDS(DDB)
+		POPJ P,]
+	CAIE CHR,%DLE		; if not DLE
+	 TLZA IOS,IO%EOP	; then deny EOP permission
+	  TLOA IOS,IO%DLE	; else set "previous was DLE"
+	   PUSH P,DIDS(DDB)	; else interpret as normal character
+	MOVEM IOS,DEVIOS(DDB)
+	POPJ P,
+
+; Output interrupt; device index in TAC
+
+↑DLOINT:SKIPL TAC		; demand a good index
+	 CAIL TAC,DLNNUM
+	  JSP TAC1,BADDLU
+	MOVE DDB,DLNUTB(TAC)	; get DDB
+	MOVE IOS,DEVIOS(DDB)
+	TLZE IOS,IO%ODE		; time to double a DLE?
+	 JRST [	MOVEM IOS,DEVIOS(DDB) ; yes, flag it done
+		MOVEI CHR,%DLE
+		JRST DLNTYP]	; and skip the coroutine this time around
+	SKIPN PDB,DOLIST(DDB)	; set up packet pointer
+	 MOVEI PDB,ILLADR 	; cause immediate exec page fault if losing
+	JRST @DODS(DDB)		; back to output loop
+;DLPINT DLPCLK DLPIN1 DLPTST
+
+; Pick-up interrupt
+
+↑DLPINT:SKIPL TAC		; demand a good index
+	 CAIL TAC,DLNNUM
+	  JSP TAC1,BADDLU
+	MOVE DDB,DLNUTB(TAC)	; pick up DDB
+	MOVE TAC1,DLNTAB(TAC)	; get DCATAB index+400000 (thank you, Mr. Harvey)
+	MOVE TAC1,DCATAB-400000(TAC1); now get the DCATAB entry
+	TRNE TAC1,DCAPRM	; skip if a VADIC (not permanent) port
+	 JRST DLPIN1		; kludge ports don't get spurious pickups
+	MOVSI IOS,IO%COK	; VADIC modem, ok to light CCR?
+	TDNN IOS,DEVIOS(DDB)
+	 POPJ P,		; no, probably transition into dialer mode
+	LSH TAC,=12		; looks OK, light CCR in CCRWAT seconds if still OK
+	ADD TAC,[$DLPCLK,,CCRWAT*JIFSEC]
+	CLKENQ (TAC)		; plant clk req
+	POPJ P,
+
+; Here CCRWAT seconds later for a VADIC port.  If COK is still on, light CCR
+
+↑DLPCLK:MOVE DDB,DLNUTB(TAC)	; get DDB again
+	MOVSI IOS,IO%COK
+	TDNN IOS,DEVIOS(DDB)	; is COK still on?
+	 POPJ P,
+DLPIN1:	MOVSI IOS,IO%CCR	; here to light CCR for real
+	IORB IOS,DEVIOS(DDB)
+	LSH TAC,=12		; hang up if RDY doesn't come up within timeout
+	ADD TAC,[$DLPTST,,RDYWAT*JIFSEC]
+	CLKENQ (TAC)		; plant clk req
+	POPJ P,
+
+;  Test to see if RDY came up (meaning a good packet came in).  If it didn't
+; the pick-up was probably a glitch or somebody who isn't Dialnet talked to
+; us.
+
+↑DLPTST:MOVE DDB,DLNUTB(TAC)	; get DDB
+	LDB J,PJOBN
+	JUMPN J,CPOPJ		; never hang up if it has an owner
+				; This is useful when debugging a remote
+				; Dialnet process which may not be sending
+				; packets right!!
+	MOVSI IOS,IO%RDY	; have we gotten a packet yet?
+	TDNN IOS,DEVIOS(DDB)
+	 JRST DLNRLS		; no, hang up port, etc.
+	POPJ P,			; otherwise flush request
+;DLHINT DLHIN1
+
+; Hang-up interrupt
+
+↑DLHINT:SKIPL TAC		; demand a good index
+	 CAIL TAC,DLNNUM
+	  JSP TAC1,BADDLU
+	MOVE DDB,DLNUTB(TAC)	; get DDB
+	MOVSI IOS,IO%RDY	; is this a line talking Dialnet?
+	TDNN IOS,DEVIOS(DDB)
+	 POPJ P,		; no, must be a glitch or will get it with timeout
+	MOVSI IOS,IO%COK!IO%RDY!IO%CCR!IO%DLE!IO%EOP!IO%R1B!IO%ACN!IO%ODE!IO%LIC
+	ANDCAB IOS,DEVIOS(DDB)
+	MOVEI IOS,IO%CLS	; note close coming
+	IORB IOS,DEVIOS(DDB)
+	SETZM DPID(DDB)		; clear PID no matter what
+	SETZM DPID+1(DDB)
+	LDB J,PJOBN
+	JUMPE J,DLNRLS		; easy if nobody there
+
+;  If somebody is on this port, do almost everything DLNRLS does except leave
+; the input list alone.
+
+	SKIPE PDB,DOLIST(DDB)	; flush output list
+	 PUSHJ P,FLSPDB
+	SETZM DOLIST(DDB)
+	SKIPE PDB,DXLIST(DDB)	; and pending acknowledgement list
+	 PUSHJ P,FLSPDB
+	SETZM DXLIST(DDB)
+	SKIPE PDB,INTPDB(DDB)	; also any PDB being read into
+	 PUSHJ P,CLRPDB
+	SETZM INTPDB(DDB)
+	MOVEI TAC,WINMIN	; reset output window
+	MOVEM TAC,DOWS(DDB)
+	MOVEM TAC,DOWIN(DDB)
+	MOVEI TAC,RDPLUZ	; reset input interrupt coroutine
+	MOVEM TAC,DIDS(DDB)
+	MOVEI TAC,CPOPJ		; and output interrupt coroutine
+	MOVEM TAC,DODS(DDB)
+	SETZM DSEQ(DDB)
+	MOVSI TAC,INTIMS	; now give user status change interrupt
+	TDNN TAC,JBTIEN(J)
+	 JRST DLHIN1
+	IORM TAC,JBTIRQ(J)
+	TDNE TAC,JBTMSK(J)	; any bit masked on?
+	 SETOM INTREQ		; yes, run interrupts
+DLHIN1:	PUSHJ P,MAKPDB
+	 JRST DLWAKE
+	MOVEI TAC,%CLS		; in case saved in input list
+	DPB TAC,PKTOPC
+	JRST RDPMS1		; now put message in input list
+;DLNBUG BADDLU
+
+SUBTTL Bug traps
+
+; Here to report a Dialnet bug
+;	<bug trap instruction, skip if no bug>
+;	 PUSHJ P,DLNBUG
+; Re-executes the losing instruction
+
+DLNBUG:	SOS (P)			; make it come back to the instruction
+	SOS (P)			; which screwed us, so $P will retry
+	PUSHACS
+	PUSHJ P,DISUSR
+	 SIXBIT/DLN/
+	PUSHJ P,DISERR
+	 [ASCIZ/Dialnet bug trap at /]
+	 DISARG LOC,<-21(P)>
+	 [ASCIZ/.  P points at the losing instruction.
+Find MRC or reload.  /]
+	 -1
+	PUSHJ P,DISFLUSH
+	POPACS
+	JRST DDTCALL
+
+;  Here when TTYSER bit the bag and gave us a bad index, called via
+; JSP TAC1,BADDLU with losing index in TAC.  TTYSER uses this routine
+; to check up on us too.
+
+↑BADDLU:PUSHACS
+	PUSHJ P,DISUSR
+	 SIXBIT/DLN/
+	PUSHJ P,DISERR
+	 [ASCIZ/Illegal Dialnet index /]
+	 DISARG LOC,<-20+TAC(P)>
+	 [ASCIZ/ at /]
+	 DISARG LOC,<-20+TAC1(P)>
+	 [ASCIZ/, called from /]
+	 DISARG LOC,<-21(P)>
+	 -1
+	PUSHJ P,DISCRLF
+	PUSHJ P,DISFLUSH
+	POPACS
+	JRST WDDTCALL
+
+BEND DLNSER
+
+>;IFN DLNNUM

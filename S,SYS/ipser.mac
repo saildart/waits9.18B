@@ -1,0 +1,1980 @@
+COMMENT ⊗   VALID 00034 PAGES
+C REC  PAGE   DESCRIPTION
+C00001 00001
+C00005 00002		title	IPSer
+C00006 00003	\
+C00007 00004		subttl	defintions describing an IP leader  .IpVer .IpTTL IPMax FRGMAX IpLen IpIBHd IpIBuf IpOBuf IpPnt IP%MF
+C00011 00005		subttl	other definitions for IP header  IP%Adr IP%Set IP$Str IP$Rou IPAddr
+C00013 00006		subttl	FDB - fragmentation data block  FDBTO
+C00018 00007		subttl	IpIn - handle an incoming IP message  IpIn IPIn0 IPNCk
+C00022 00008		subttl	now parse options  OptnLp TryNxt OptSkp OptDun Not2Us
+C00024 00009		subttl	rebuild a fragmented message  FDLook FDLoop NoFDB FDBAdd MakeLp FillLp FillL1 FillDn FillD1 MaskLp MaskL1 FDBFnd FrgOne FrgDun ProtLp PrtFnd
+C00036 00010		subttl	returns  BadVer NoLead BadChk IPFlsh BIGFRG IpFFDB StlFrg
+C00038 00011		subttl	Option handlers  OptNum OptCnt OptDis
+C00040 00012		subttl	Option parsing code  OptSSR OptLSR OptRec OptFin OptEnd OptTim OptOvf ChkAdr NoAddr
+C00046 00013		subttl	subroutines to help option parsing	    OptSet OptPos DntFil
+C00049 00014		subttl	protocol definitions  PrtNum PrtCnt PrtHnd
+C00051 00015		subttl	AllFDB  AllFDB
+C00053 00016		subttl	FlsFDB  FlsFDB FlsFD1
+C00055 00017		subttl	IpSec  IPSec IpSec1 IpSecL IpSec2 IpSec3 IpSec4
+C00061 00018		subttl	NxtOBf  NxtObf NxtOB1
+C00064 00019		subttl	IPMake  IpMake
+C00069 00020		subttl	IPHDwn
+C00072 00021		subttl	IPDown
+C00075 00022		subttl	GetID  GetId
+C00076 00023		subttl	ICMP message handling code  ICMPln ICMNLL ICMPIB ICMPOB NxtLBf NxtLvl ICMPPn NxtLPn .icEcR .icDU .idNU .idHU .idPlU .idPoU .idFNC .idSRF .icSQ .icRed .icEch .icTEx .itTTL .itFRT .icPrm .icTim .icTSR .icInf .icInR
+C00081 00024		subttl	ICMPIn - handle an incoming ICMP message  ICMPIn NoData ICMPNC
+C00084 00025		subttl	ICMP returns  NoICLd WrgLen WrgChk TypUnk RelDat
+C00085 00026		subttl	ICMP message type definitions  ICMDis ICMCnt ICMUDf ICMEcR ICMTSR ICMInR ICMAMR
+C00088 00027		subttl	handlers for different ICMP message types  ICMCGT ICMSQ ICMRed ICMRE3 ICMRE4 ICMRE2 ICMRe1 ICMEch ICMCID ICMTEx ICMPrm ICMTim ICMInf ICMAMK
+C00097 00028		subttl	ICMDDB  ICMDDB ICMDD1 ICMDD2
+C00101 00029		subttl	ICMPMk  ICMPMk ICMPCS ICMPFl
+C00105 00030		subttl	RedSnd  RedSn0 RedSnd RedSnL
+C00108 00031		subttl	CutSnd  CutSn0 CutSnd SndRs1
+C00112 00032		subttl	SndNSP  SndNSP
+C00114 00033		subttl	data storage area  FstFdb LstId RcvTim IpOptn IpPDDB
+C00115 00034		$lit
+C00116 ENDMK
+C⊗;
+	title	IPSer
+	subttl	provan
+
+	search	f,s
+NOWAITS<
+	search	NetDef		; get network definitions
+>;NOWAITS
+IFWAITS<SEARCH NETMAC>
+	search	MacTen		; search *after* NetDef
+
+	sall
+
+	$reloc
+	$high
+
+XP	VIPSer,3		; IP version
+comment	\
+
+this module contains the support routines for the internet protocol
+as defined in RFC-791 and support for its companion protocol, the
+internet control message protocol as defined in RFC-792.
+
+\
+	subttl	defintions describing an IP leader ;⊗ .IpVer .IpTTL IPMax FRGMAX IpLen IpIBHd IpIBuf IpOBuf IpPnt IP%MF
+
+; see RFC-791 for details of this header.
+
+.IpVer==4		; version of IP that this module understands
+.IpTTL==MSL		; make MSL the time to live for our packets (1 min.)
+IPMax==:↑d576		; recommended maximum size of IP message
+IFWAITS<
+FRGMAX==↑D576		;Total size of largest fragmented message we can take
+;This was put in when other hosts began sending us large fragmented TCP
+;packets.  They shouldn't do this, and we now send the TCP Maximum Segment
+;Size option to make sure they don't, so FRGMAX is left at 576.  If larger
+;fragments are ever needed (e.g., for UDP), then increase this.  -- JJW 3/84
+>;IFWAITS
+
+IpLen==:5		; number of words in an IP leader (not
+			;  including options).
+
+NOWAITS<			;Data is in CACDAT
+	$low		; define the storage needed
+
+IpIBHd:	block	NBHLen			; header in case ICMP has to send this
+					;  leader back out.
+IpIBuf:	block	IpLen			; words needed for header
+
+; the following block is used and removed under ScnOff.
+IpOBuf:	block	NBHLen+IpLen		; buffer for forming IP leaders
+					;  for output.
+
+>;NOWAITS
+IFWAITS<
+	EXTERN	IPIBHD,IPIBUF,IPOBUF
+>;IFWAITS
+	$high		; back to protected code
+
+IpPnt:	point	8,IpIBuf		; pointer to start loading the
+					;  header block from the stream.
+
+; define the actual header fields.  position is the bit position of the
+;  left most bit.
+;
+; 	name   word  position width
+DefFd.	IPVers,	0,	0,	4	; version of this message's protocol
+DefFd.	IpIHL,	0,	4,	4	; internet header length (32 bit words)
+DefFd.	IPTOS,	0,	8,	8	; type of service
+DefFd.	IPTLen,	0,	16,	16	; total length (8 bit bytes)
+DefFd.	IpFrst,	0,	0,	ful.wd	; entire first word.
+DefFd.	IpId,	1,	0,	16	; identification
+DefFd.	IpFrgF,	1,	18,	14	; fragment information (zero if not
+					;  fragmented)
+	IP%MF==<1←↑d13>		; more fragments after this one if set.
+DefFd.	IpFOff,	1,	19,	13	; fragment offset (8 octets)
+DefFd.	IpTTL,	2,	0,	8	; time to live
+DefFd.	IpProt,	2,	8,	8	; protocol of next level
+DefFd.	IpHChk,	2,	16,	16	; header checksum
+DefFd.	IpSA,	3,	0,	32	; source address
+DefFd.	IpDA,	4,	0,	32	; destination address
+	subttl	other definitions for IP header ;⊗ IP%Adr IP%Set IP$Str IP$Rou IPAddr
+
+; flags in flag field of the time-stamp IP option.  these bits are
+;  not explicitly defined in the protocol, but they agree with the
+;  definitions for this field after we've made sure not to try to
+;  handle values in this field we do not understand.  these flags
+;  are kept in the right half of S while processing a time-stamp option.
+
+	IP%Adr==1			; each timestamp is preceeded
+					;  by an internet address.
+	IP%Set==2			; the internet addresses in the
+					;  option are preset: a host
+					;  should only fill in the
+					;  time-stamp field if it finds
+					;  its host number in the
+					;  internet address field.
+
+; flags found in left half of S put in the left half of S to spot various
+;  conditions which are detected during option processing.
+
+	IP$Str==1b17			; strict routing was indicated.
+					;  targetting MUST be directly
+					;  to the next host in the route
+					;  (next host is already loaded
+					;  into IPDA.)
+	IP$Rou==1b16			; used internally in option
+					;  parsing to distinguich
+					;  between a source route and a
+					;  record route option.
+
+	subttl	FDB - fragmentation data block ;⊗ FDBTO
+
+;++
+;
+;	block containing data to allow a fragmented message to
+;	be reassembled.
+;
+;--
+
+
+;;!------------------------------------|------------------------------------!
+;;!	    last FDB in chain	       |	next FDB in chain	    !
+;;!------------------------------------|------------------------------------!
+;;!			source address of this fragment			    !
+;;!------------------------------------|------------------------------------!
+;;!			destination address of this fragment		    !
+;;!------------------------------------|------------------------------------!
+;;!	protocol of this fragment      |     message ID of this message     !
+;;!------------------------------------|------------------------------------!
+;;!		bit mask: one bit for each 8 byte group, set if		    !
+;;!		this group has arrived.  group 0 is represented		    !
+;;!		by low order bit of the first word.  the number		    !
+;;!		of words in the mask depends on the maximum message	    !
+;;!		size we are prepared to accept.				    !
+;;!------------------------------------|------------------------------------!
+;;!		total length of message in bytes, if known		    !
+;;!------------------------------------|------------------------------------!
+;;!			count of octoctets currently in buffers		    !
+;;!------------------------------------|------------------------------------!
+;;!	 	    trash	       |	pointer to first buffer     !
+;;!------------------------------------|------------------------------------!
+;;!			time to live for this FDB			    !
+;;!------------------------------------|------------------------------------!
+;;!		first word of IP leader (in case of error)		    !
+;;!------------------------------------|------------------------------------!
+;;!	   pointer to IP options       |		unused		    !
+;;!------------------------------------|------------------------------------!
+
+bkini.		; initialize allocation mechanism
+
+BkNxt.	FDBLst,hlf.wd		;(LH) previous FDB in chain
+BkNxt.	FDBNxt,hlf.wd		;(RH) next FDB in chain
+
+BkNxt.	FDBSou			; source address
+BkNxt.	FDBDes			; destination address
+
+BkDef.	FDBFID			; define a word for the ID of the fragment.
+				; the ID contains:
+BkNxt.	FDBPro,hlf.wd		;	in the left half, the message protocol
+BkNxt.	FDBMID,hlf.wd		;	in the right half, the message ID
+
+NOWAITS<
+BkNxt.	FDBMsk,<<IPMax+7>/↑d8>	; first word of bit mask.  one
+				;  bit for each 8 byte group.
+>;NOWAITS
+IFWAITS<
+BkNxt.	FDBMsk,<<FRGMAX+7>/↑d8>	;Enough bits for maximum
+>;IFWAITS
+
+BkNxt.	FDBLen			; total length of message, if known.
+
+BkNxt.	FDBRCt			; number of octoctets actually received.
+
+BkNxt.	FDBMes			; pointer to actual buffer chain.
+BkOff.	FDBMOf			; get offset into block for this, too.
+
+BkNxt.	FDBTTL			; time until we discard the fragments
+				; (decremented in once a second code)
+
+	FDBTO==↑d60		; timeout after one minute.
+
+BkNxt.	FDBFst			; first word of the IP leader.  (needed if
+				;  the reassembly times out for error.)
+BkNxt.	FDBOpt,hlf.wd		; pointer to options with IP leader.
+
+BkEnd.	FDBSiz
+	subttl	IpIn - handle an incoming IP message ;⊗ IpIn IPIn0 IPNCk
+
+
+entry	IpIn	; only load if IMPSer calls for this routine
+
+IFWAITS<	;On entry to IpIn, W points to info block for network
+		;interface this packet came from.
+>;IFWAITS
+IpIn::
+	move	t1,IpPnt		; get pointer to buffer space.
+	movei	t2,IpLen*4		; load the number of bytes to get.
+	stor.	t2,NBHCnt,IPIBHd	; save as byte count, this buffer.
+ifn FtChck,<	; checksumming
+	setz	p3,			; start the checksumming at zero
+>
+	pushj	p,GetLed##		; get the leader and checksum it
+	  jrst	NoLead			; not enough words in the stream.
+	load.	t1,IpVers,IpIBuf	; get the version
+	caie	t1,.IPVer		; is it the current version?
+	  jrst	BadVer			; no.  forget it.
+
+	; now read in the options and hold for later
+	load.	t1,IPIHL,IpIBuf		; get length of header in words
+	subi	t1,IPLen		; get words left to be read in leader
+	jumpe	t1,IPIn0		; no options to read
+	jumpl	t1,NoLead		; we've already read words that
+					;  weren't supposed to be there.
+	lsh	t1,wd2byt		; convert to bytes
+	pushj	p,GetMes##		; read in the options
+	  jrst	NoLead			; message ended too soon.
+	aos	IPOpt##			; saw an option
+
+IPIn0:	movem	t1,IPOptn		; save pointer to options 'til later.
+	skipg	t1			; any options?
+	  movei	t1,IpIBHd		; no.  point at input buffer
+					;  header for last buffer, but
+					;  have no first buffer.
+	hrrm	t1,ABfLst(f)		; save last buffer of assembled stream.
+	hlrz	p1,t1			; get just first buffer number
+	stor.	p1,NBHNxt,IpIBHd	; link to IP in case ICMP has
+					;  to fire this back out.
+ifn FtChck,<	; doing checksumming
+	load.	t1,IPHChk,IpIBuf	; get the checksum from the leader
+	jumpe	t1,IPNCk		; this guy doesn't do checksums
+
+	; bear in mind that the checksum we now have in P3 has, along with
+	;  all the right stuff, its one's complement.  therefore, what
+	;  we really have is <checksum> + -<checksum>, which is 0.
+	;  further, since <checksum> has some bit on (otherwise the
+	;  sender isn't checksuming and we wouldn't be here), it can be
+	;  shown that the brand of one's complement 0 we must have is
+	;  the version with all 1's.  if that's what we have, we're ok.
+	;  if not, the checksum failed.
+	hrrzs	p3			; get just the checksum
+	caie	p3,<1←↑d16>-1		; magic, as explained above
+	  jrst	BadChk			; checksum failed
+
+IPNCk:	; here to skip over the checksum checks because sender is not
+	;  checksumming.
+>
+	subttl	now parse options ;⊗ OptnLp TryNxt OptSkp OptDun Not2Us
+
+
+	setzb	p3,s			; clear count register and flags
+OptnLp:	pushj	p,NxtByt##		; get next option
+	  jrst	OptDun			; no more
+	hrlzi	t4,-OptCnt		; point at options
+TryNxt:	camn	t1,OptNum(t4)		; is this the right option?
+	  jrst	@OptDis(t4)		; yes.  jump to the processing routine
+	aobjn	t4,TryNxt		; try the next option.
+
+	aos	IPEUOp##		; we don't understand this option.
+OptSkp:	pushj	p,OptFls##		; flush the option
+	  jrst	OptDun			; all done.
+	jrst	OptnLp			; and try the next option
+
+OptDun:
+	load.	t1,IpDA,IpIBuf		; get destination address
+NOWAITS<
+	came	t1,IPAddr##		; is it us?  (option parsing could
+					;  have changed it, or it was always
+					;  addressed to someone else.)
+>;NOWAITS
+IFWAITS<
+	CAME T1,NI.IPA##(W)		;Compare with addr for input network
+>;IFWAITS
+	  Not2Us==IpFlsh		; implement this later
+	  jrst	Not2Us			; no.  do whatever needs doing.
+					;  (i.e., retarget and send it.)
+	subttl	rebuild a fragmented message ;⊗ FDLook FDLoop NoFDB FDBAdd MakeLp FillLp FillL1 FillDn FillD1 MaskLp MaskL1 FDBFnd FrgOne FrgDun ProtLp PrtFnd
+
+
+	load.	t1,IpTLen,IpIBuf	; get total length of message
+	load.	t2,IpIHL,IpIBuf		; and length of this header
+	lsh	t2,wd2byt		; convert from words to bytes
+	sub	t1,t2			; get the length of the data
+	movem	t1,MsgLen(f)		; save this as the length of
+					;  the message.
+	load.	t1,IpSA,IpIBuf		; get source address
+	load.	t2,IpDA,IpIBuf		; and destination address
+	load.	t3,IpID,IpIBuf		; get ID
+	load.	t4,IpProt,IpIBuf	; get protocol
+	hrl	t3,t4			; put protocol and ID together
+
+	skipn	p1,FstFDB		; get first FDB.
+	  jrst	NoFDB			; none there.
+FDLook:	cam.	t3,FDBFID,(p1),n	; is it this message?
+	 cam.	t1,FDBSou,(p1),e	; is this our source?
+	  jrst	FDLoop			; no.  try next FDB.
+	cam.	t2,FDBDes,(p1),n	; and our destination?
+	  jrst	FDBFnd			; this is our FDB
+FDLoop:	load.	p1,FDBNxt,(p1)		; get next FDB in chain
+	jumpn	p1,FDLook		; and see if that's what we want.
+
+NoFDB:	; no FDB found for this message.
+	load.	t4,IpFrgF,IpIBuf	; get the fragmentation field
+	jumpe	t4,FrgDun		; if not fragmented, just proceed
+
+	aos	IPFrag##		; count another fragmented message
+
+	pushj	p,AllFDB		; get a free FDB in P1.
+	  jrst	IPFlsh			; can't get one.
+
+	stor.	t1,FDBSou,(p1)		; save the source in the FDB
+	stor.	t2,FDBDes,(p1)		; save the destination, too.
+	stor.	t3,FDBFID,(p1)		; save the ID/protocol
+	load.	t1,IPFrst,IpIBuf	; get first word
+	stor.	t1,FDBFst,(p1)		; save in FDB in case we time out
+					;  and have to send the IP leader back
+	move	t1,IPOptn		; get options pointer
+	stor.	t1,FDBOpt,(p1)		; save that, too.
+FDBAdd:	load.	p2,IPFOff,IpIBuf	; get just the fragment offset
+	lsh	p2,Oct2by		; convert to 8 bit bytes
+	move	t1,MsgLen(f)		; get the length of this packet
+	add	t1,p2			; add on the fragment's offset
+NOWAITS<
+	caile	t1,IPMax		; is it too large for us?
+	  jrst	IpFFDB			; yes.  flush it all.
+>;NOWAITS
+IFWAITS<
+	CAILE T1,FRGMAX		;Is it too large for us?
+	 JRST BIGFRG		;Yes, flush it all
+>;IFWAITS
+	trnn	t4,IP%MF		; is this the last fragment?
+	  stor.	t1,FDBLen,(p1)		; yes.  store total length in FDB
+
+	; check to see if there are enough buffers allocated
+	idivi	p2,NBfByt		; P2 = buffer number.
+					; P3 = bytes in buffer before fragment
+	movei	t4,FDBMOf(p1)		; point at message buffer area
+MakeLp:	pushj	p,NxtOBf		; check next buffer, allocate
+					;  if we must
+	  jrst	IpFFDB			; not enough buffers.  flush it all.
+	sojge	p2,MakeLp		; allocate as many as we need
+					;  to start.
+
+	; now transfer bytes from input stream to fragment buffer
+	move	p2,p3			; copy of bytes used in this buffer
+	lsh	p2,byt2wd		; change to words used
+	addi	p2,NBHLen(t4)		; point to the word to be filled
+	hrli	p2,(point 8,)		; and make it a pointer.
+	subi	p3,NBfByt		; convert to negative number of
+					;  bytes still allowed in buffer.
+	push	p,t4			; save current target buffer
+
+FillLp:	jsp	p4,(p4)			; get next byte from input stream
+	  jrst	FillDn			; nothing left.  all done filling.
+	aojle	p3,FillL1		; there's still room here?
+	pop	p,t4			; get back current buffer
+	pushj	p,NxtOBf		; get the next buffer
+	  jrst	IpFFDB			; no free buffers.  flush fragment.
+	push	p,t4			; save new current back on the stack.
+	movei	p2,NBHLen(t4)		; point at first data word
+	hrli	p2,(point 8,)		; make it an ILDB byte pointer
+	movni	p3,<NBfByt-1>		; reset count
+FillL1:	idpb	t1,p2			; dump in next slot
+	jrst	FillLp			; and loop until filled
+
+
+FillDn:	pop	p,t4			; get T4 back for the last time
+	load.	t1,FDBLen,(p1)		; get the length
+	jumpe	t1,FillD1		; haven't seen last fragment yet.
+	load.	t2,NBHNxt,(t4)		; get a pointer to the next buffer.
+	jumpn	t2,FillD1		; this is not the last buffer
+	idivi	t1,NBfByt		; compute number of bytes in
+					;  last buffer into t2.
+	skipn	t2			; zero really means "full"
+	  movei	t2,NBfByt		; indicate "full"
+	stor.	t2,NBHCnt,(t4)		; save count in buffer header.
+
+FillD1:	; now set all the bits in the mask which we just copied in.
+	move	t4,MsgLen(f)		; get the length of this one again
+	addi	t4,7			; make sure we round up
+	lsh	t4,-Oct2By		; how many groups of 8 bytes?
+	load.	t1,IpFOff,IpIBuf	; recall the offset start
+	idivi	t1,ful.wd		; which bit in which word of
+					;  the map?
+	movei	t3,1			; low order bit for first octoctet
+	lsh	t3,(t2)			; shift into the correct position
+	addi	t1,(p1)			; point into this FDB
+	load.	t2,FDBMsk,(t1)		; get the word we're working on
+MaskLp:	tdon	t2,t3			; set the bit in the word
+	  incr.	,FDBRCt,(p1)		; count this uncounted thingy.
+	lsh	t3,1			; next bit
+	jumpn	t3,MaskL1		; still bits to set before i die
+	movei	t3,1			; reset for first octet, next word
+	stor.	t2,FDBMsk,(t1)		; save this word with bits set
+	aos	t1			; move along to next word
+	load.	t2,FDBMsk,(t1)		; retrieve the next mask
+MaskL1:	sojg	t4,MaskLp		; loop to set all bits
+	stor.	t2,FDBMsk,(t1)		; save the last mask we worked on.
+
+	skip.	t1,FDBLen,(p1),n	; do we know how long it is yet?
+	  jrst	StlFrg			; no.  can't be done yet.
+	addi	t1,7			; round up octoctets
+	lsh	t1,-Oct2By		; divide by 8 to get octoctets
+	cam.	t1,FDBRCt,(p1),le	; and have we got that many yet?
+	  jrst	StlFrg			; no.  not done yet.  just return.
+
+	aos	IPFDun##		; fragmented message fully rebuilt.
+
+	movei	p4,InByte##		; input from buffers which are already
+					;  in 32 bit words.
+	setzm	IBfBC(f)		; zero byte count: start fresh.
+	load.	t1,FDBMes,(p1)		; get the buffer.
+	hrrom	t1,IBfThs(f)		; save as current buffer, untouched.
+	zero.	t1,FDBMes,(p1)		; now detach it from the FDB.
+	load.	t1,FDBLen,(p1)		; get total length of message.
+	movem	t1,MsgLen(f)		; copy into DDB
+	jrst	FrgOne			; fragment is reassembled, and
+					;  we just specified how to
+					;  read bytes, so delete the
+					;  FDB and continue.
+
+FDBFnd:	load.	t4,IpFrgF,IpIBuf	; get frag field
+	jumpn	t4,FDBAdd		; if this is fragmented, add it in.
+FrgOne:	pushj	p,FlsFDB		; throw out existing FDB: we just
+					;  got the entire message at once.
+
+FrgDun:	; here when we have a completed message to pass on.
+	load.	t1,IPSA,IpIBuf		; get the source address
+	movem	t1,RmtAdr(f)		; that's where it came from
+	load.	t1,IPDA,IpIBuf		; get our address
+	movem	t1,LclAdr(f)		; that's the destination
+	load.	t1,IPTOS,IpIBuf		; get the type of service required.
+	movem	t1,SerTyp(f)		; remember it.
+	load.	t1,IPProt,IpIBuf	; get the protocol into t1
+	movem	t1,Protcl(f)		; save that correctly for later, too.
+	hrlzi	t4,-PrtCnt		; set negative counts of protocols
+ProtLp:	camn	t1,PrtNum(t4)		; is this the correct protocol module?
+	  jrst	PrtFnd			; found the proper protocol
+	aobjn	t4,ProtLp		; loop over all protocols
+
+	aos	IPEPrt##		; count seeing a protocol we
+					;  didn't understand.
+	setzm	IpOptn			; the options will get flushed when
+					;  the ICMP message is built.
+	movei	t1,.icDU		; destination unreachable
+	movei	t2,.idPlU		; protocol unreachable
+	scnoff				; no interrupts allowed
+	pushj	p,RedSn0		; send out an ICMP telling him
+					;  we don't do that protocol.
+	pjrst	sonppj##		; interupts on and go home.
+
+
+PrtFnd:	pushj	p,@PrtHnd(t4)		; yes. call the protocol
+					;  handler for that protocol.
+	jrst	IpFlsh			; clear the IP options.
+	subttl	returns ;⊗ BadVer NoLead BadChk IPFlsh BIGFRG IpFFDB StlFrg
+
+; error returns before IP options are read in.
+BadVer:	; IP version number was not the one we support
+	aosa	IPEVer##		; count version error and skip
+NoLead:	; not enough words for a leader
+	  aos	IPELed##		; count IP leader error
+	popj	p,			; no other clean up needed
+
+; various returns after IP options have been read in.
+BadChk:	  aos	IPEChk##		; count checksum error
+
+IPFlsh:	; ending without error
+	skipe	t1,IpOptn		; any undeleted options?
+	  pushj	p,RelBuf##		; yes, delete them.
+	setzm	IpOptn			; make sure options are flushed.
+	popj	p,			; nothing smart yet, just a bad return
+
+
+; here to flush an FDB and leave incoming processing.
+IFWAITS<
+BIGFRG:	AOS IPEFTL##		;Count fragments too large
+>;IFWAITS
+IpFFDB:	pushj	p,FlsFDB		; flush the FDB
+	jrst	IpFlsh			; now clean up and return.
+
+; here after adding to a fragmented buffer without completing the buffer.
+StlFrg:	movei	t1,FDBTO		; get the timeout time
+	stor.	t1,FDBTTL,(p1)		; reset it
+	load.	t1,FDBOpt,(p1)		; get the options for this fragment
+	camn	t1,IpOptn		; the options for we're about to delete?
+	  setzm	IpOptn			; yes.  don't do it, masked man!
+	jrst	IPFlsh			; and leave
+	subttl	Option handlers ;⊗ OptNum OptCnt OptDis
+
+; first define dispatch information for all of them.
+;  each option has a call on the macro OPT which takes two arguments:
+;	1. the option number, in decimal
+;	2. the option handling routine.  should not use P1-P4.
+define	Options,
+    <
+	opt	(  0,OptDun)		; end of option list (stop processing)
+	opt	(  1,OptnLp)		; no-op (do nothing)
+	opt	(130,OptSkp)		; security option (ignore for now)
+	opt	(131,OptLSR)		; loose source and record route
+	opt	(137,OptSSR)		; strict source and record route
+	opt	(  7,OptRec)		; record route
+	opt	(136,OptSkp)		; stream identifier (skip over it)
+	opt	( 68,OptTim)		; internet time stamp
+    >
+
+
+; now define the table of option numbers
+define	opt( number,dispat ),<	↑d'number  > ; just a number for each entry.
+
+OptNum:	Options				; expand options
+OptCnt==.-OptNum			; get a count of number of options
+
+
+; and the dispatch vector
+define	opt( number,dispat ),<	z  'dispat  >	; dispatch routine
+
+OptDis:	Options				; expand the options again
+	subttl	Option parsing code ;⊗ OptSSR OptLSR OptRec OptFin OptEnd OptTim OptOvf ChkAdr NoAddr
+
+
+OptSSR:			; strict source and record route
+	txo	s,IP$Str		; remember we saw strict routing.
+	; fall into loose code.
+OptLSR:			; loose source and record route
+	load.	t1,IPDA,IPIBuf		; get the IP's destination
+NOWAITS<
+	came	t1,IPAddr##		; is this us?
+>;NOWAITS
+IFWAITS<
+	CAME T1,NI.IPA##(W)
+>;IFWAITS
+	  jrst	OptFls			; no.  just skip this option.
+	txoa	s,IP$Rou		; remember to route this
+					;  message to next host in
+					;  source route.
+OptRec:	  txz	s,IP$Rou		; just recording route: don't
+					;  save a new source we think
+					;  we found.
+	pushj	p,OptSet		; set up length, etc., in
+					;  standard form.
+	  jrst	OptDun			; ran out of option space.
+	pushj	p,OptPos		; position for our entry
+	  jrst	OptnLp			; some end of stream that means
+					;  we don't enter an entry.
+NOWAITS<
+	move	t1,IPAddr##		; get our address
+>;NOWAITS
+IFWAITS<
+	MOVE T1,NI.IPA##(W)
+>;IFWAITS
+	pushj	p,RplWrd##		; replace this word in the
+					;  input stream.
+	  ;<not enough bytes.  discard and reply with ICMP>
+	  jrst	OptDun			; until implemented
+	movei	t2,4			; four bytes more to account for.
+	txze	s,IP$Rout		; supposed to be routing?
+	  stor.	t1,IpDA,IPIBuf		; yes: store the word read as the
+					;  new destination.
+	; fall into finishing code
+
+; here with T2 = bytes in rewritten fields, T3 with bytes left in
+;	option (INCLUDING rewritten fields) and T4 an LDB pointer
+;	to pointer byte.	
+OptFin:	ldb	t1,t4			; get the pointer byte
+	add	t1,t2			; point past the next address
+	dpb	t1,t4			; store that back in place
+OptEnd:	move	t1,t3			; get the number of bytes left
+					;  to be read in this option.
+	sub	t1,t2			; take into account fields we
+					;  just wrote over.
+	pushj	p,NxtFls##		; skip them
+	  jrst	OptDun			; not enough.  all done.
+	jrst	OptnLp			; keep parsing.
+
+OptTim:			; internet time stamp
+	pushj	p,OptSet		; read length word.
+	  jrst	OptDun			; ran out of space.
+	pushj	p,NxtByt##		; read in overflow field and flags
+	  jrst	OptDun			; end of options hit.  done.
+	push	p,p2			; save pointer to overflow
+					;  field in case we need it later.
+	hrrz	s,t1			; save flags (and overflow field) in S.
+	sos	t2			; one less to read to position
+	sos	t3			; one less to read in option
+	pushj	p,OptPos		; position for the field we're after.
+	  jrst	OptOvf			; not enough bytes.  we need to
+					;  increment overflow field.
+		OptOvf==OptnLp		; don't do anything for now
+	pop	p,(p)			; we won't need the overflow field.
+	setz	t2,			; no bytes rewritten so far.
+	txnn	s,IP%Adr		; flags say this has internet
+					;  addresses with times?
+	  jrst	NoAddr			; no.  skip address handling
+	addi	t2,4			; four bytes are going to be passed
+	txne	s,IP%Set		; addresses are preset?
+	  jrst	ChkAdr			; yes: just check address, don't
+					;  rewrite it.
+NOWAITS<
+	move	t1,IPAddr##		; get our address
+>;NOWAITS
+IFWAITS<
+	MOVE T1,NI.IPA##(W)
+>;IFWAITS
+	pushj	p,RplWrd##		; put that in place, get the word read					;  value read.
+	  ;<error.  discard and answer with ICMP>
+	  jrst	OptDun			; until implemented
+	jrst	NoAddr			; rejoin checking code
+
+ChkAdr:	pushj	p,NxtWrd##		; read the internet address
+					;  from stream.
+	  ;<error>
+	  jrst	OptDun			; until implemented
+NOWAITS<
+	came	t1,IPAddr##		; is it our address?
+>;NOWAITS
+IFWAITS<
+	CAME T1,NI.IPA##(W)
+>;IFWAITS
+	  jrst	OptEnd			; no.  we do nothing for this option
+
+NoAddr:	pushj	p,MilTim##		; get time since midnight in
+					;  milliseconds.
+	pushj	p,RplWrd##		; put that in place
+	  ;<error.  discard and respond with ICMP>
+	  jrst	OptDun			; until implemented
+	addi	t2,4			; four more bytes rewritten
+	jrst	OptFin			; update pointer byte and go
+					;  for next option.
+	subttl	subroutines to help option parsing	   ;⊗ OptSet OptPos DntFil
+
+; set up routine for reading a standard option type.
+; returns with
+;	T2 = number of bytes to read from here to get to field
+;		"pointer" points to.
+;	T3 = number of bytes left to be read in this option
+;	T4 = LDB pointer to pointer field, in case we need to INCR it later.
+OptSet:
+	pushj	p,NxtByt##		; read the length
+	  popj	p,			; not there.  all done.
+	movei	t3,-3(t1)		; save length in "safe" place,
+					;  accounting for type, length
+					;  and pointer bytes.
+	pushj	p,NxtByt##		; get pointer
+	  popj	p,			; can't.  give up.
+	move	t4,p2			; save LDP pointer to pointer value.
+	movei	t2,-4(t1)		; make this the number of bytes
+					;  to read to get to our place.
+	pjrst	cpopj1##		; skip return.
+
+; position ourselves to read the field we are being pointed at.
+; call with P1-P3 and T2-T4 set up as they are on return from OptSet.
+OptPos:
+	camg	t3,t2			; does it point past end of the
+					;  option?
+	  jrst	DntFil			; yes.  can't fill anything in
+	sub	t3,t2			; figure how much will be left after
+					;  we read up to our position.
+	move	t1,t2			; position number of bytes to read.
+	pjrst	NxtFls##		; skip up to the beginning of
+					;  the field we're pointed at
+					;  and return.
+
+DntFil:	move	t1,t3			; number of bytes 'til end of option.
+	pushj	p,NxtFls##		; flush that many bytes
+	  popj	p,			; not enough bytes
+	popj	p,			; enough bytes, but we still
+					;  don't have room.
+	subttl	protocol definitions ;⊗ PrtNum PrtCnt PrtHnd
+
+
+; define all the protocols we're prepared to handle.
+; each definition is a call on the macro Prot with two
+; arguments: the protocol number (in decimal) and the routine to call
+; when a message of this protocol comes in.
+define	Prots,
+    <
+	prot	( 1,ICMPIn )		; handle ICMP messages
+	prot	( 6,TCPIn## )		; handle TCP messages
+IFWAITS<
+	prot	(17,UDPIn## )		; handle UDP
+>;IFWAITS
+    >
+
+; now define the table of protocol numbers
+define	prot(number,routine),<	↑d'number  >	; just put down the number
+PrtNum:	Prots
+PrtCnt==.-PrtNum			; get the count of protocols.
+
+; define the dispatch table
+define	prot(number,routine),<	z 'routine >	; define the routine
+PrtHnd:	Prots
+	subttl	AllFDB ;⊗ AllFDB
+
+;++
+; Functional description:
+;
+;	allocate an FDB from IMP buffers
+;
+;
+; Calling sequence:
+;
+;		pushj	p,AllFDB
+;		  <return here if no buffer available>
+;		<return here with buffer in P1 and linked into FDB chain>
+;
+; Input parameters:
+;
+;	none.
+;
+; Output parameters:
+;
+;	P1 - new buffer.
+;
+; Implicit inputs:
+;
+;	FDB chain values.
+;
+; Implicit outputs:
+;
+;	FDB block entries.
+;
+; Routine value:
+;
+;	returns non-skip if there is no buffer to be had.
+;
+; Side effects:
+;
+;	allocates a buffer.
+;--
+
+AllFDB:	pushj	p,savt##		; get all T registers
+	pushj	p,BufGet##		; get a fresh buffer.
+	  popj	p,			; ACK!  can't get one.
+	move	p1,t1			; position results for return
+	move	t1,FstFDB		; get the first FDB in chain.
+	stor.	t1,FDBNxt,(p1)		; link the old first to this one.
+	movem	p1,FstFDB		; and make us the first.
+	stor.	p1,FDBLst,(t1)		; make us the previous for the next.
+	movei	t1,FDBTO		; get time out value
+	stor.	t1,FDBTTL,(p1)		; and save that, too.
+	jrst	cpopj1##		; and give a good return.
+	subttl	FlsFDB ;⊗ FlsFDB FlsFD1
+
+;++
+; Functional description:
+;
+;	return the given FDB and all buffers linked to this FDB to the
+;	free buffer chain.
+;
+;
+; Calling sequence:
+;
+;		move	p1,FDB
+;		pushj	p,FlsFDB
+;		<always returns here>
+;
+; Input parameters:
+;
+;	P1 - points to FDB to be discarded.
+;
+; Output parameters:
+;
+;	none.
+;
+; Implicit inputs:
+;
+;	data in FDB.
+;
+; Implicit outputs:
+;
+;	FDB chain.
+;
+; Routine value:
+;
+;	none.
+;
+; Side effects:
+;
+;	discard FDB and all attached buffers.  closes up FDB chain.
+;--
+
+FlsFDB:	load.	t1,FDBMes,(p1)		; get buffers
+	pushj	p,RelBuf##		; discard entire chain of buffers.
+	load.	t1,FDBOpt,(p1)		; get options
+	came	t1,IPOptn		; is it the current options?
+	  pushj	p,RelBuf##		; no.  won't be handled later.
+	load.	t1,FDBNxt,(p1)		; get next FDB in chain.
+	load.	t2,FDBLst,(p1)		; get previous FDB in chain
+	jumpe	t2,[			; is there a FDB before to me?
+		 movem	t1,FstFDB	; no.  the next is now first.
+		 jrst	FlsFD1		; continue.
+		]
+	stor.	t1,FDBNxt,(t2)		; follower now follows predecessor.
+FlsFD1:	skipe	t1			; if there is a next buffer....
+	  stor.	t2,FDBLst,(t1)		; ...its "last" should be updated.
+	move	t1,p1			; point at this FDB
+	pjrst	BufRel##		; release it.
+	subttl	IpSec ;⊗ IPSec IpSec1 IpSecL IpSec2 IpSec3 IpSec4
+
+;++
+; Functional description:
+;
+;	once a second code for IP.  it checks for time outs in
+;	the fragmentation reassembly chain.
+;
+;
+; Calling sequence:
+;
+;		move	t1,<0 to do timeout check, -1 to flush all>
+;		scnoff
+;		pushj	p,IpSec		; once a second
+;		<always return here>
+;
+; Input parameters:
+;
+;	t1 - if 0, IPSEC will decr the timeout field of the FDB and
+;		delete any FDBs that have been around too long.  if
+;		t1 is -1, all FDBs are flushed.
+;
+; Output parameters:
+;
+;	none.
+;
+; Implicit inputs:
+;
+;	FstFdb and the fragmentation chain.
+;
+; Implicit outputs:
+;
+;	none.
+;
+; Routine value:
+;
+;	none.
+;
+; Side effects:
+;
+;	make delete fragment blocks from the fragment chain.
+;--
+
+
+IPSec::	pushj	p,save2##		; get two register
+	setzm	IpOptn			; i can definitely say that there
+					;  are no "current" IP options.
+	move	p2,t1			; save arg in one of them
+	move	p1,FstFdb		; get first FDB in chain
+IpSec1:	jumpe	p1,cpopj##		; return if end of chain
+	jumpl	p2,IpSec3		; always delete if flushing
+	decr.	,FDBTTL,(p1),le		; count one more second.  expired?
+	  jrst	IpSec4			; no.  don't flush
+	load.	t1,FDBMsk,(p1)		; get first word of mask
+	trnn	t1,1			; first 8 bytes in yet?
+	  jrst	IpSec3			; no.  don't send an ICMP error
+					;  because we haven't got the
+					;  next level's leader.
+	push	p,f			; protect F
+	setzm	IpPDDB+PDBTop		; zero first word of pseudo-DDB
+	move	f,[ xwd	IpPDDB+PDBTop,IpPDDB+PDBTop+1 ]	; BLT pointer
+	blt	f,IpPDDB+PDBBot		; clear entire DDB
+	movei	f,IpPDDB		; point at hypothetical start
+	load.	t1,FDBSou,(p1)		; get the source of this fragment
+	stor.	t1,IpSA,IpIBuf		; save back in IP input leader
+	movem	t1,RmtAdr(f)		; that's where we're sending the error
+	pushj	p,Target##		; try to get an arpa address.
+	  jrst	IpSec2			; can't get there.  just flush
+	movem	t1,NetAdr(f)		; save that for ARPA handler.
+IFWAITS<
+	MOVEM W,NETWRK(F)	;Save network interface
+>;IFWAITS
+	setzm	SndNxt(f)		; clear these two entries so
+	setzm	SndLst(f)		;  this message isn't retransmitted.
+	load.	t1,FDBDes,(p1)		; get destination address
+	stor.	t1,IpDA,IpIBuf		; back to IP leader
+	movem	t1,LclAdr(f)		; that's also the local address
+	load.	t1,FDBMID,(p1)		; get message ID
+	stor.	t1,IpID,IpIBuf		; back, back!
+	load.	t1,FDBPro,(p1)		; and protocol
+	stor.	t1,IpProt,IpIBuf	; put it back in, too.
+	load.	t1,FDBFst,(p1)		; and finally the first word
+	stor.	t1,IPFrst,IpIBuf	;  so the protocol and length are right.
+	load.	t1,FDBOpt,(p1)		; get options pointer
+	stor.	t1,NBHNxt,IpIBHd	; into the next for this
+	movei	t1,IpLen*4		; bytes in prime header
+	stor.	t1,NBHCnt,IpIBHd	; save in place
+	movei	t1,IpIBHd		; point at input leader
+IpSecL:	move	t2,t1			; remember this buffer
+	load.	t1,NBHNxt,(t2)		; get next buffer
+	jumpn	t1,IpSecL		; loop until done.
+	load.	t1,FDBMes,(p1)		; get message pointer
+	stor.	t1,NBHNxt,(t2)		; link this to the current
+					;  input leader.
+	zero.	t1,FDBMes,(p1)		; don't let FlsFDB delete message.
+	movei	t1,.icTEx		; time exceeded
+	movei	t2,.itFRT		; fragment reassembly time,
+					;  that is.
+	pushj	p,CutSn0		; cut down message and send it
+
+IpSec2:	pop	p,f			; restore F
+IpSec3:	load.	t1,FDBNxt,(p1)		; get the next FDB in the chain
+	push	p,t1			; save over the flush
+	pushj	p,FlsFDB		; flush this FDB
+	pop	p,p1			; recall the next FDB
+	jrst	IPSec1			; loop
+
+IpSec4:	load.	p1,FDBNxt,(p1)		; get the next one
+	jrst	IpSec1			; and loop
+	subttl	NxtOBf ;⊗ NxtObf NxtOB1
+
+;++
+; Functional description:
+;
+;	get the next buffer for output.  if none allocated, allocate
+;	one and link it to the last.
+;
+;
+; Calling sequence:
+;
+;		move	t4,<pointer to current buffer header>
+;		pushj	p,NxtOBf
+;		  <return here if a buffer was needed, but none available>
+;		<return here with T4 containing pointer to next buffer>
+;
+; Input parameters:
+;
+;	T4 - pointer to current buffer header.  this can point to the
+;		FDBMes word.
+;
+; Output parameters:
+;
+;	T4 - pointer to next buffer
+;
+; Implicit inputs:
+;
+;	buffer stream.
+;
+; Implicit outputs:
+;
+;	buffer stream.
+;
+; Routine value:
+;
+;	returns non-skip if it needed to allocate a buffer, but there
+;	were none available.
+;
+; Side effects:
+;
+;	may link another buffer on to the stream.
+;	clobbers T2 and T3.
+;--
+
+NxtObf:	push	p,t1			; get a scratch
+
+	load.	t1,NBHNxt,(t4)		; get next buffer pointer
+	jumpn	t1,NxtOB1		; there's one there, so go to it
+	pushj	p,BufGet##		; allocate a buffer
+	  pjrst	tpopj##			; none available.  take error return.
+	stor.	t1,NBHNxt,(t4)		; link up to last buffer
+	movei	t2,NbfByt		; make the previous buffer full
+	stor.	t2,NBHCnt,(t4)		; ...
+NxtOB1:	move	t4,t1			; position for return
+	pjrst	tpopj1##		; good return
+	subttl	IPMake ;⊗ IpMake
+
+;++
+; Functional description:
+;
+;	get a fresh buffer and put an IP leader (in 32 bit format)
+;	into it.  then link the buffer to the beginning of the
+;	current output stream.  then send this message down to
+;	1822 level (IMPSER) to get it fired off.
+;
+;
+; Calling sequence:
+;
+;		move	f,DDB
+;		pushj	p,IpMake
+;		<always returns here>
+;
+; Input parameters:
+;
+;	f - DDB for connection
+;
+; Output parameters:
+;
+;	none.
+;
+; Implicit inputs:
+;
+;	data in DDB
+;
+; Implicit outputs:
+;
+;	data in DDB
+;
+; Routine value:
+;
+;	none.
+;
+; Side effects:
+;
+;	adds a buffer to the beginning of the current output stream.
+;--
+
+
+IpMake::
+	setzm	IPOBuf+NBHLen		; clear first word of leader
+	move	t1,[IPOBuf+NBHLen,,IPOBuf+NBHLen+1]	; set up blt pointer
+	blt	t1,IPOBuf+IPLen+NBHLen-1; clear out leader.
+
+	movei	t1,IPOBuf		; point at this header
+	exch	t1,OBfFst(f)		; make us first and get old first.
+	stor.	t1,NBHNxt,IpOBuf	; link old first to us.
+	movei	t1,.IpVer		; load the version up
+	stor.	t1,IpVers,NBHLen+IpOBuf	; store that in place
+	movei	t2,IPLen		; get length (will need to compute
+					;  this when we perform options.)
+	stor.	t2,IPIHL,NBHLen+IpOBuf	; save that.
+	lsh	t2,Wd2Byt		; convert from words to bytes
+	stor.	t2,NBHCnt,IpOBuf	; save byte count for this buffer
+	move	t1,t2			; put in T1 (save T2 for checksumming)
+	addb	t1,OBfByt(f)		; get a grand total in bytes.
+	stor.	t1,IPTLen,NBHLen+IpOBuf	; save that in place
+	pushj	p,GetID			; choose an ID for this message
+	stor.	t1,IPID,NBHLen+IpOBuf	; and put it in the leader
+	movei	t1,.IpTTL		; get the standard time to live
+	stor.	t1,IpTTL,NBHLen+IpOBuf	; save that
+	move	t1,Protcl(f)		; get next level protocol from DDB
+	stor.	t1,IPProt,NBHLen+IpOBuf	; and save it
+	move	t1,LclAdr(f)		; get our address
+	stor.	t1,IPSA,NBHLen+IpOBuf	; save it.
+	move	t1,RmtAdr(f)		; get his address
+	stor.	t1,IPDA,NBHLen+IpOBuf	; and save it, too.
+
+	; one would add OPTIONS around here somewhere.
+
+	setz	p3,			; clear checksum word
+ifn FtChck,<	; doing checksums?
+	move	t1,[point 16,NBHLen+IpOBuf]; point at the leader
+	; length in bytes is already in T2
+	pushj	p,CSmWds##		; checksum them all
+	txc	p3,msk.hw		; send one's complement of the sum
+	txnn	p3,msk.hw		; if zero, make it...
+	  movei	p3,msk.hw		; ...the zero with all bits on
+>
+	stor.	p3,IpHChk,NBHLen+IpOBuf	; save it.
+
+	movei	t1,.lnkip		; get our "link" number to tell
+					;  1822 level that that's who
+					;  we are.
+NOWAITS<
+	pjrst	ImpMak##		; and call IMP level processing
+					;  to send it off.
+>;NOWAITS
+IFWAITS<
+	SKIPN W,NETWRK(F)	;Network interface for this DDB
+	PUSHJ P,IMPBUG##
+	PJRST @NI.MAK##(W)	;Prepare and send the packet
+>;IFWAITS
+	subttl	IPHDwn
+
+;++
+; Functional description:
+;
+;	fix up routing tables due to a host down message.
+;
+;
+; Calling sequence:
+;
+;		move	t1,<local net address>
+;		pushj	p,IpHDwn
+;		<always return here>
+;
+; Input parameters:
+;
+;	t1 - local network address of the host just spotted as down.
+;
+; Output parameters:
+;
+;	none.
+;
+; Implicit inputs:
+;
+;	host gateway table and current prime gateway
+;
+; Implicit outputs:
+;
+;	current prime gateway
+;
+; Routine value:
+;
+;	none.
+;
+; Side effects:
+;
+;	will change the prime gateway if this host is the prime gateway.
+;	(it really should do lots lots more, but this is all i'm prepared
+;	to deal with.)
+;--
+
+
+IpHDwn::
+	push	p,t1			; preserve t1
+NOWAITS<
+	came	t1,@PrGate		; is this the current prime?
+	  pjrst	tpopj##			; no.
+	aos	t1,PrGate		; move to next prime
+	caig	t1,GatEnd##		; beyond the last one?
+	  pjrst	tpopj##			; no.  ok.
+	movei	t1,GatTbl##		; move back to first
+	movem	t1,PrGate		; set it
+>;NOWAITS
+IFWAITS<
+	CAME T1,@NI.PGW##(W)	;Current primary gtwy for this interface?
+	 JRST TPOPJ##		;No
+	AOS T1,NI.PGW##(W)	;Make next gateway primary
+	SUB T1,NI.GTW##(W)	;Check for wraparound
+	CAMGE T1,NI.GTN##(W)
+	 JRST TPOPJ##
+	MOVE T1,NI.GTW##(W)	;Go back to first in list
+	MOVEM T1,NI.PGW##(W)
+	;JJW 10/86 - What we should really do is use ICMP echoes to
+	;detect when primary gateway comes back up.
+>;IFWAITS
+	pjrst	tpopj##			; and go.
+	subttl	IPDown
+
+;++
+; Functional description:
+;
+;	handle a DDB that just received a "host down" message from the
+;	local net.  we try to retarget, but if the retarget doesn't change
+;	things, we skip return.
+;
+;
+; Calling sequence:
+;
+;		move	f,DDB
+;		pushj	p,IpDown
+;		  <return here if retargeted>
+;		<return here if connection must be flushed>
+;
+; Input parameters:
+;
+;	f - DDB for connection
+;
+; Output parameters:
+;
+;	none.
+;
+; Implicit inputs:
+;
+;	data in DDB
+;
+; Implicit outputs:
+;
+;	data in DDB
+;
+; Routine value:
+;
+;	returns non-skip if the DDB has been patched up, else returns
+;	skip to indicate that the connection is no longer good.
+;
+; Side effects:
+;
+;	if another target is found, the retransmit queue is corrected.
+;--
+
+
+IpDown::
+	move	t1,RmtAdr(f)		; get the IP address we're after
+	pushj	p,Target##		; target it
+	  pjrst	cpopj1##		; can't get there.  flush connection.
+	camn	t1,NetAdr(f)		; is this any different?
+	  pjrst	cpopj1##		; nope.  no othr way to get there.
+	movem	t1,NetAdr(f)		; remember new address
+IFWAITS<
+	MOVEM W,NETWRK(F)	;And new network interface
+	POPJ P,
+>;IFWAITS
+NOWAITS<			;No FIXRTQ for WAITS (see RETFIX in TCPSER)
+	pjrst	FixRTQ##		; got a new way.  fix
+					;  retransmission queue to fire
+					;  at T1 and return non-skip.
+>;NOWAITS
+	subttl	GetID ;⊗ GetId
+
+;++
+; Functional description:
+;
+;	get an ID number for some outgoing IP message
+;
+;
+; Calling sequence:
+;
+;		pushj	p,GetID
+;		<always returns here, ID in T1>
+;
+; Input parameters:
+;
+;	none.
+;
+; Output parameters:
+;
+;	T1 - an ID
+;
+; Implicit inputs:
+;
+;	none.
+;
+; Implicit outputs:
+;
+;	none.
+;
+; Routine value:
+;
+;	none.
+;
+; Side effects:
+;
+;	updates ID number so we don't get the same number twice.
+;--
+
+
+GetId:	aos	t1,LstID		; incr it and retrieve it.
+	popj	p,			; and return
+	subttl	ICMP message handling code ;⊗ ICMPln ICMNLL ICMPIB ICMPOB NxtLBf NxtLvl ICMPPn NxtLPn .icEcR .icDU .idNU .idHU .idPlU .idPoU .idFNC .idSRF .icSQ .icRed .icEch .icTEx .itTTL .itFRT .icPrm .icTim .icTSR .icInf .icInR
+
+
+ICMPln==2		; number of words in an ICMP leader.
+ICMNLL==↑d8		; number of bytes of the next level's leader with
+			;  an ICMP reply message
+
+NOWAITS<			;Data is in CACDAT
+	$low		; define the storage needed
+
+ICMPIB:	block	ICMPLn			; words needed for header
+
+; the following block is used and removed under ScnOff.
+ICMPOB:	xwd	ICMPLn*4,0		; pseudo leader in case needed
+	block	ICMPLn			; buffer for forming ICMP leaders
+					;  for output.
+
+NxtLBf:	xwd	ICMNLL,0		; number of bytes here.
+NxtLvl:	block	ICMNLL/4		; space for 64 bit of leader
+					;  for the next level protocol
+					;  if needed for ICMP message.
+
+>;NOWAITS
+IFWAITS<
+	EXTERN	ICMPIB,ICMPOB,NXTLBF,NXTLVL
+	INTERN	ICMPLN,ICMNLL		;Make LOADER check consistency
+>;IFWAITS
+	$high		; back to protected code
+
+ICMPPn:	point	8,ICMPIB		; pointer to start loading the
+					;  header block from the stream.
+NxtLPn:	point	8,NxtLvl		; pointer to storage area for
+					;  "next level" leader.
+
+; define the actual header fields.  position is the bit position of the
+;  left most bit.
+;
+; 	name   word  position width
+DefFd.	ICMPTp,	0,	0,	8	; type of message
+DefFd.	ICMPCd,	0,	8,	8	; code field
+DefFd.	ICMPCs,	0,	16,	16	; checksum
+DefFd.	ICMP2d,	1,	0,	36	; second word, in case it
+					;  should be zeroed.
+DefFd.	ICMPPt,	1,	0,	8	; pointer (parameter problem message)
+DefFd.	ICMPGA,	1,	0,	32	; gateway address (redirect message)
+DefFd.	ICMPID,	1,	0,	16	; identifier (echo, time, info)
+DefFd.	ICMPSq,	1,	16,	16	; sequence (echo, time, info)
+
+; words in the data part of the leader.
+DefFd.	ICMPOT,	0,	0,	32	; originate timestamp (time)
+DefFd.	ICMPRT,	1,	0,	32	; receive timestamp (time)
+DefFd.	ICMPTT,	2,	0,	32	; transmit timestamp (time)
+
+
+; types of ICMP messages
+	.icEcR==↑d0		; echo reply
+	.icDU==↑d3		; destination unreachable
+		.idNU==↑d0	; network unreachable
+		.idHU==↑d1	; host unreachable
+		.idPlU==↑d2	; protocol unreachable
+		.idPoU==↑d3	; port unreachable
+		.idFNC==↑d4	; fragments needed but can't fragment (DF set)
+		.idSRF==↑d5	; source route failed.
+	.icSQ==↑d4		; source quench
+	.icRed==↑d5		; redirect
+	.icEch==↑d8		; echo
+	.icTEx==↑d11		; time exceeded
+		.itTTL==↑d0	; time to live expired
+		.itFRT==↑d1	; fragment reassembly time expired
+	.icPrm==↑d12		; parameter problem
+	.icTim==↑d13		; timestamp
+	.icTSR==↑d14		; timestamp reply
+	.icInf==↑d15		; information request
+	.icInR==↑d16		; information reply
+	subttl	ICMPIn - handle an incoming ICMP message ;⊗ ICMPIn NoData ICMPNC
+
+
+ICMPIn:
+	pushj	p,MilTim##		; get time (in case timestamp)
+	movem	t1,RcvTim		; save it
+ifn FtChck,<	; checksumming
+	setz	p3,			; start the checksumming at zero
+>
+	move	t1,ICMPPn		; get pointer to buffer space.
+	movei	t2,ICMPLn*4		; load the number of bytes to get.
+	pushj	p,GetLed##		; get the leader and checksum it
+	  jrst	NoICLd			; not enough data for the IP leader.
+
+	setz	p1,			; remember the lack of a data buffer.
+	move	t1,MsgLen(f)		; get total IP length
+	subi	t1,ICMPLn*4		; subtract leaders info
+	jumple	t1,NoData		; skip this if nothing to read
+	pushj	p,GetMes##		; read in data
+	  jrst	WrgLen			; not enough data.  wrong length
+	move	p1,t1			; remember the buffer stream
+NoData:	
+ifn FtChck,<	; doing checksumming
+	load.	t1,ICMPCS,ICMPIB	; get the checksum from the leader
+	jumpe	t1,ICMPNC		; this guy doesn't do checksums
+
+	; bear in mind that the checksum we now have in P3 has, along with
+	;  all the right stuff, its one's complement.  therefore, what
+	;  we really have is <checksum> + -<checksum>, which is 0.
+	;  further, since <checksum> has some bit on (otherwise the
+	;  sender isn't checksuming and we wouldn't be here), it can be
+	;  shown that the brand of one's complement 0 we must have is
+	;  the version with all 1's.  if that's what we have, we're ok.
+	;  if not, the checksum failed.
+	hrrzs	p3			; get just the checksum
+	caie	p3,<1←↑d16>-1		; magic, as explained above
+	  jrst	WrgChk			; checksum failed
+
+ICMPNC:	; here to skip over the checksum checks because sender is not
+	;  checksumming.
+>
+
+	load.	t1,ICMPTp,ICMPIB	; get type
+	cail	t1,ICMCnt		; is it in the range we know?
+	  jrst	TypUnk			; no.  count error, etc.
+	aos	ICMTyp##(t1)		; count this ICMP message type
+					;  for GETTABs.
+	jrst	@ICMDis(t1)		; yes.  dispatch to it.
+	subttl	ICMP returns ;⊗ NoICLd WrgLen WrgChk TypUnk RelDat
+
+
+NoICLd:	aosa	ICMNLd##		; not enough to get a leader
+WrgLen:	  aos	ICMDEr##		; IP length was shorter than
+					;  data read in.
+	popj	p,			; and return
+
+WrgChk:	aosa	ICMChk##		; wrong checksum.  count it.
+TypUnk:	  aos	ICMUnT##		; count unknown type
+RelDat:	hlrz	t1,p1			; get pointer at data
+	pjrst	RelBuf##		; release buffers
+	subttl	ICMP message type definitions ;⊗ ICMDis ICMCnt ICMUDf ICMEcR ICMTSR ICMInR ICMAMR
+
+
+; dispatch vector for ICMP message types
+ICMDis:
+	ICMEcR		;(0) echo reply
+	ICMUDf		;(1) undefined
+	ICMUDf		;(2) undefined
+	ICMCGT		;(3) destination unreachable (can't get there).
+	ICMSQ		;(4) source quench
+	ICMRed		;(5) redirect message
+	ICMUDf		;(6) undefined
+	ICMUDf		;(7) undefined
+	ICMEch		;(8) echo
+	ICMUDf		;(9) undefined
+	ICMUDf		;(10) undefined
+	ICMTEx		;(11) time exceeded
+	ICMPrm		;(12) parameter problems
+	ICMTim		;(13) timestamp
+	ICMTSR		;(14) timestamp reply
+	ICMInf		;(15) information request
+	ICMInR		;(16) information reply
+IFWAITS<
+	ICMAMK		;(17) address mask request
+	ICMAMR		;(18) address mask reply
+>;IFWAITS
+
+ICMCnt==.-ICMDis	; number of types supported
+
+ifg ICMCnt - ICMLen,<	; make sure NetSub has room to remember
+			;	 the number of message types we may
+			;	 have.
+printx ? ICMLen (from NetDef.MAC) must be greater than or equal to ICMCnt
+>
+
+ICMUDf==RelDat		; do nothing for undefined messages
+ICMEcR==RelDat		; don't send echo messages, so can't get a reply
+ICMTSR==RelDat		; don't send timestamps, so ignore replies.
+ICMInR==RelDat		; don't send info request messages, so can't get
+			;  replies to them.
+IFWAITS<
+ICMAMR==RELDAT		;Don't send address mask requests, so can't get replies
+>;IFWAITS
+	subttl	handlers for different ICMP message types ;⊗ ICMCGT ICMSQ ICMRed ICMRE3 ICMRE4 ICMRE2 ICMRe1 ICMEch ICMCID ICMTEx ICMPrm ICMTim ICMInf ICMAMK
+
+
+; destination unreachable.  update our tables
+ICMCGT:
+	pushj	p,ICMDDB		; get the DDB that fired off
+					;  this message.
+	  jrst	RelDat			; i don't think i sent this mesage.
+IFWAITS<
+	;JJW - These often indicate transient gateway problems, so ignore
+	;them for established TCP connections (allow higher levels to time
+	;out or decide what to do).
+	MOVE T1,STATE(F)	;Get state
+	CAIL T1,S%ESTB##	;Established or better?
+	JRST RELDAT		;Yes, ignore ICMP
+>;IFWAITS
+	push	p,TTyLin(f)		; remember line control bits.
+	pushj	p,DDBFls##		; flush all data haning off the ddb,
+					;  disconnect ttys, etc.
+	load.	t1,ICMPCd,ICMPIB	; get the code that tells us
+					;  what is is we can't reach.
+	hrrom	t1,State(f)		; and put in the state word as negative.
+					;  (this makes the "state" change).
+IFWAITS<
+	PUSHJ P,IMSINT##		;Set up state-change interrupt
+>;IFWAITS
+	pushj	p,ImpWak##		; wake up job if needed
+	pop	p,t1			; get back the old line control bits
+NOWAITS<
+	tlne	t1,TTyJob		; was this a server?
+>;NOWAITS
+IFWAITS<
+	TLNE T1,TTYJB		;Was this an IMP TTY?
+>;IFWAITS
+	  pushj	p,DDbRel##		; yes.  flush the DDB altogether.
+					;  (server may not be running a
+					;   program that will know what
+					;   to do.)
+	jrst	RelDat			; and return buffer and self
+
+; source quench.  try to cut down data rate.
+ICMSQ:	; just ignore until we think of something clever to do.
+	jrst	RelDat			; and return
+
+; redirect.  update all our DDBs that talk to this host so that NetAdr
+;		is as indicated.
+ICMRed:
+	pushj	p,ICMDDB		; get the DDB that sent this
+	  jrst	ICMRe1			; not a DDB.  do what we can
+	load.	t1,ICMPGA,ICMPIB	; get the internet gateway address.
+NOWAITS<
+	txz	t1,NetMsk		; this guy claims it's on our network
+>;NOWAITS
+IFWAITS<
+	MOVE T2,T1		;Make a copy
+	AND T2,NI.NSM##(W)	;Mask to get net and subnet
+	CAMN T2,NI.NSN##(W)	;Should equal our net and subnet
+	JRST ICMRE2		;Good, it does
+	LOAD. T2,IPSA,IPIBUF	;Bad.  See who did this
+	SETZ T3,
+ICMRE3:	CAML T3,ICMBDP##	;End of current list of bad gateways?
+	JRST ICMRE4		;Yes, this is a new one
+	CAMN T2,ICMBDG##(T3)	;Is this gateway on list?
+	JRST ICMRE1		;Yes, suppress error message
+	AOJA T3,ICMRE3		;Keep checking
+	
+ICMRE4:	CAIL T3,ICMBDN##	;Is list full?
+	JRST ICMRE1		;Yes, don't print anything
+	MOVEM T2,ICMBDG##(T3)	;Put gateway in list
+	AOS ICMBDP##
+	PUSHACS
+	PUSHJ P,DISUSR##	;Print time of new CTY message
+	 SIXBIT/ICMP/
+	PUSHJ P,DISERR##
+	 [ASCIZ/Improper redirect from host /]
+	 DISARG IPA,<T2-20(P)>
+	 [ASCIZ/ for address /]
+	 DISARG IPA,<RMTADR(F)>
+	 [ASCIZ/.
+Current target = /]
+	 DISARG IPA,<NETADR(F)>
+	 [ASCIZ/, new address = /]
+	 DISARG IPA,<T1-20(P)>
+	 [ASCIZ/.
+/]
+	 -1
+	POPACS
+	JRST ICMRE1		;Ignore the redirect
+
+ICMRE2:
+>;IFWAITS
+	movem	t1,NetAdr(f)		; so use this.
+NOWAITS<			;No FIXRTQ for WAITS (see RETFIX in TCPSER)
+	pushj	p,FixRTQ##		; correct anything we can in
+					;  the retransmission queue.
+>;NOWAITS
+
+ICMRe1:	; should update targetting tables
+	jrst	RelDat			; and return
+
+; echo.  turn into an echo reply
+ICMEch:
+NOWAITS<
+	move	t1,p1			; point at data
+>;NOWAITS
+IFWAITS<			;Fix TOPS-10 bug
+	hlrz	t1,p1			; point at data
+>;IFWAITS
+	movei	t2,.icEcR		; type is echo reply
+	setz	t3,			; code is 0
+
+; here to copy the ID over and call ICMPMk.  clobbers P3.
+ICMCID:	load.	p3,ICMP2d,ICMPIB	; get ID, etc., from incoming
+	scnoff				; no interrupts allowed here
+	stor.	p3,ICMP2d,ICMPOB+NBHLen	; and put it in outgoing.
+	pushj	p,ICMPMk		; try to send it and return.
+	pjrst	sonppj##		; interrupts on again and go
+
+; time exceeded.  probably can't do anything
+ICMTEx:
+	jrst	RelDat			; and return
+
+; parameter problem.  try to save info for later analysys.
+ICMPrm:
+	jrst	RelDat			; and return
+
+; time stamp.  create reply.
+ICMTim:
+	move	t1,RcvTim		; get time this packet was received
+	stor.	t1,ICMPRT,NBHLen(p1)	; save in buffer
+	pushj	p,MilTim##		; get millisecond time since midnight
+	stor.	t1,ICMPTT,NBHLen(p1)	; save that as last time we saw it
+	move	t1,p1			; point at buffer
+	movei	t2,.icTSR		; timestamp reply message
+	setz	t3,			; code 0
+	jrst	ICMCID			; set ID word and send it
+
+; information request.  supply answer
+ICMInf:
+	move	t1,RmtAdr(f)		; get address of incoming
+NOWAITS<
+	move	t2,IpAddr##		; get our address
+	movem	t2,LclAdr(f)		; make that our address
+	andx	t2,NetMsk		; clear all but network from it.
+	txnn	t1,NetMsk		; is there a network in request?
+	  tdo	t1,t2			; no.  assume it's ours
+>;NOWAITS
+IFWAITS<
+	MOVE T2,NI.IPA##(W)	;Get our address on this interface
+	MOVEM T2,LCLADR(F)	;Make that our address
+	TDNN T1,NI.NTM##(W)	;Is there a network in request?
+	TDO T1,NI.NTN##(W)	;No.  Assume it's ours
+>;IFWAITS
+	movem	t1,RmtAdr(f)		; put back fully specified host.
+	setzb	t1,t3			; no data to send, code 0
+	movei	t2,.icInR		; type is info reply.
+	pushj	p,ICMCID		; copy ID and send message
+	jrst	RelDat			; return any errorneous data.
+
+IFWAITS<
+;Address mask request.  Send reply.
+ICMAMK:	JRST RELDAT		;Need to write this code
+>;IFWAITS
+	subttl	ICMDDB ;⊗ ICMDDB ICMDD1 ICMDD2
+
+;++
+; Functional description:
+;
+;	look at an incoming ICMP message with a IP/TCP leader
+;	following it and track down the DDB this is aimed at.
+;
+;
+; Calling sequence:
+;
+;		move	P1,<first buffer of IP/TCP leader>
+;		pushj	p,ICMDDB
+;		  <returns here is no such DDB exists>
+;		<here with DDB pointed to by F>
+;
+; Input parameters:
+;
+;	P1 - pointer the the first buffer of the IP and TCP headers.
+;
+; Output parameters:
+;
+;	F - pointer to DDB this message applies to.
+;
+; Implicit inputs:
+;
+;	none.
+;
+; Implicit outputs:
+;
+;	none.
+;
+; Routine value:
+;
+;	returns non-skip if no such DDB exists.
+;
+; Side effects:
+;
+;	none.
+;--
+
+
+ICMDDB:	pushj	p,save1##		; make sure P1 comes through ok.
+	load.	t1,IPDA,NBHLen(p1)	; get the address the message
+					;  was being sent to.
+	load.	t4,IPProt,NBHLen(p1)	; and get the protocol being used.
+	load.	t2,IpIHL,NBHLen(p1)	; get the length of the IP leader.
+	addi	t2,StdPrt		; add on the offset to the port word.
+					; (this is zero, but might as
+					;  well be complete.)
+	lsh	t2,wd2byt		; convert to bytes
+ICMDD1:	load.	t3,NBHCnt,(p1)		; get the byte count for this buffer
+	camge	t2,t3			; is there that much in this buffer?
+	  jrst	ICMDD2			; yes.  the TCP leader starts
+					;  in this buffer.
+	sub	t2,t3			; remove that amount from the count.
+	load.	p1,NBHNxt,(p1)		; link on to next buffer
+	jumpn	p1,ICMDD1		; loop if another buffer
+	popj	p,			; else we couldn't find the DDB
+					;  because there's an error in
+					;  the ICMP message.  clear
+					;  stack and return.
+
+ICMDD2:	lsh	t2,byt2wd		; covert back to word count
+	addi	p1,NBHLen(t2)		; point at port word of next level's
+					;  leader.
+	load.	t2,StdDP,(p1)		; get the destination port.
+	load.	t3,StdSP,(p1)		; and the port it was send from
+					;  (our local port).
+	pjrst	FndDDB##		; go try to find that DDB.
+	subttl	ICMPMk ;⊗ ICMPMk ICMPCS ICMPFl
+
+;++
+; Functional description:
+;
+;	prepare a ICMP message and call IP to send it.
+;
+;
+; Calling sequence:
+;
+;		move	f,DDB
+;		move	t1,<message data, or zero if no additional data>
+;		move	t2,<ICMP message type>
+;		move	t3,<ICMP message code>
+;		ScnOff
+;		pushj	p,ICMPMk	; second word of ICMP leader
+;					;  (in ICMPOB) already setup
+;		<akways returns here>
+;
+; Input parameters:
+;
+;	f - DDB for connection, usually a pseudo DDB since this is usually
+;		in response to an arrivign IP message.
+;	t1 - pointer to first buffer in the data to be sent, or zero if
+;		no addtitional data is to be sent.
+;	t2 - ICMP message type for message
+;	t3 - ICMP code for message
+;
+; Output parameters:
+;
+;	none.
+;
+; Implicit inputs:
+;
+;	data in DDB
+;
+; Implicit outputs:
+;
+;	data in DDB
+;
+; Routine value:
+;
+;	none.
+;
+; Side effects:
+;
+;	none.
+;--
+
+
+ICMPMk:
+	stor.	t2,ICMPTp,ICMPOB+NBHLen	; store the type
+	stor.	t3,ICMPCd,ICMPOB+NBHLen	; and the code
+	stor.	t1,NBHNxt,ICMPOB	; link next buffer
+	movei	t3,ICMPOB		; point at this leader space
+	movem	t3,OBfFst(f)		; make this the first buffer.
+
+	setzb	p3,OBfByt(f)		; clear checksum and byte count
+	stor.	p3,ICMPCS,ICMPOB+NBHLen	; set checksum to zero in order
+					;  to checksum (or to indicate
+					;  that we aren't checksumming).
+
+ifn FtChck,<	; if we're checksumming
+ICMPCS:	load.	t2,NBHCnt,(t3)		; get the byte counts in this buffer
+	addm	t2,OBfByt(f)		; increase byte count enough
+	move	t1,[point 16,NBHLen(t3)]	; and point to data
+	pushj	p,CSmWds##		; checksum this buffer
+	load.	t3,NBHNxt,(t3)		; get next buffer in chain
+	jumpn	t3,ICMPCS		; another buffer to do.
+
+	txc	p3,msk.hw		; send one's complement of the sum
+	txnn	p3,msk.hw		; if zero, make it...
+	  movei	p3,msk.hw		; ...the zero with all bits on
+	stor.	p3,ICMPCS,ICMPOB+NBHLen	; set checksum correctly.
+> ; end of IFN FtChchk
+
+	pushj	p,OutPre##		; enough buffer space for message?
+	  jrst	ICMPFl			; no.  forget it.
+
+	push	p,Protcl(f)		; save protocol (can't think of
+					;  an instance where this will
+					;  be important, but be careful.)
+	movei	t1,.ipicm		; load ICMP's protocol
+	movem	t1,Protcl(f)		; make this the protocol
+	pushj	p,IpMake		; link up and send
+	pop	p,Protcl(f)		; restore old protocol
+
+	popj	p,			; return to caller
+
+ICMPFl:
+	setz	t1,			; clear first buffer pointer
+	exch	t1,OBfFst(f)		; get/clear prepared stream
+	pushj	p,RelBuf##		; flush it
+	popj	p,			; go.
+	subttl	RedSnd ;⊗ RedSn0 RedSnd RedSnL
+
+;++
+; Functional description:
+;
+;	read in two words (first 64 bits of next level leader, if any),
+;	link to IP leader and send out an ICMP message with this as data.
+;
+;
+; Calling sequence:
+;
+;		move	f,DDB
+;		move	t1,<ICMP type>
+;		move	t2,<ICMP code>
+;		move	p4,<input byte getter>
+;		pushj	p,RedSnd	; 2nd word of ICMP message already set
+;			or
+;		pusgj	p,RedSn0	; 2nd word of ICMP should be 0
+;		<always returns here>
+;
+; Input parameters:
+;
+;	F - DDB
+;	T1 - type for ICMP message
+;	T2 - code for ICMP message
+;	P4 - coroutine for getting bytes from input stream.
+;
+; Output parameters:
+;
+;	none.
+;
+; Implicit inputs:
+;
+;	DDB, IPIBuf.
+;
+; Implicit outputs:
+;
+;	none.
+;
+; Routine value:
+;
+;	none.
+;
+; Side effects:
+;
+;	tries to put an ICMP message on the output stream.
+;	read bytes from P4 bytes stream, possibly discarding buffer.
+;	clobbers P3.
+;
+;--
+
+RedSn0:	zero.	,ICMP2d,ICMPOB+NBHLen	; zero 2nd word of ICMP leader.
+RedSnd:
+	push	p,t1			; save 1st arg
+	push	p,t2			; save 2nd arg
+	movei	t1,ICMNLL		; length we need
+	move	t2,NxtLPn		; pointer to storage for it
+	pushj	p,GetLed##		; get the leader
+	  jrst	SndRs1			; not enough bytes.  make sure
+					;  not to link up.
+	skipa	t2,[IPIBHd]		; point at IP input ledaer buffer.
+RedSnL:	  move	t2,t1			; save this buffer pointer
+	load.	t1,NBHNxt,(t2)		; get next buffer
+	jumpn	t1,RedSnL		; loop until no next buffer
+
+	movei	t1,NxtLBf		; point at buffer for next
+					;  level leader.
+	stor.	t1,NBHNxt,(t2)		; link it up to this buffer
+
+	jrst	SndRs1			; go get args back from stack
+					;  and send message off.
+	subttl	CutSnd ;⊗ CutSn0 CutSnd SndRs1
+
+;++
+; Functional description:
+;
+;	send an error response to some IP message with next level leader
+;	and message already read in.  follows buffers
+;	connected to IP input leader to find next level protocol,
+;	cuts next level (TCP only at this writing) to only first
+;	64 bits of leader, and sends an ICMP reply with these leaders
+;	as data.
+;
+;
+; Calling sequence:
+;
+;		move	f,DDB
+;		move	t1,<ICMP message type>
+;		move	t2,<ICMP message code>
+;		pushj	p,CutSnd	; second word of ICMP leader
+;					;  (in ICMPOB) already setup
+;		<always returns here>
+;
+; Input parameters:
+;
+;	f - DDB
+;	T1 - type for ICMP message
+;	T2 - code for ICMP message
+;
+; Output parameters:
+;
+;	none.
+;
+; Implicit inputs:
+;
+;	2nd word of ICMP blocks should be set as desired.
+;
+; Implicit outputs:
+;
+;	none
+;
+; Routine value:
+;
+;	none.
+;
+; Side effects:
+;
+;	puts an ICMP message on the output queue.
+;	clobbers T1, T2, T3 and T4.
+;--
+
+
+CutSn0:	zero.	,ICMP2d,ICMPOB+NBHLen	; clear second word of ICMP message
+CutSnd:	push	p,t1			; preserve arg
+	push	p,t2			; and arg
+	load.	t1,IPIHL,IPIBuf		; get length of leader
+	lsh	t1,wd2byt		; convert to bytes
+	addi	t1,ICMNLL		; add in the amount we're supposed
+					;  to provide from the next level.
+	movei	t2,IPIBHd		; point at input stream
+	pushj	p,SkpByt##		; skip those bytes
+	jumpe	t2,SndRs1		; not enough for next level leader
+	stor.	t1,NBHCnt,(t2)		; set the count to the amount we
+					;  needed from this buffer.
+	load.	t1,NBHNxt,(t2)		; get next buffer in stream
+	zero.	,NBHNxt,(t2)		; clear that pointer
+	pushj	p,RelBuf##		; discard the rest of the stream.
+
+; here to point at IP leader and get args back from stack.  called also
+;	from RedSnd.
+SndRs1:	movei	t1,IPIBHd		; point at beginning of data
+	pop	p,t3			; get 2nd arg back (was in T2)
+	pop	p,t2			; get 1st arg back (was in T1)
+	pjrst	ICMPMk			; send it and return
+	subttl	SndNSP ;⊗ SndNSP
+
+;++
+; Functional description:
+;
+;	send a message to the sender of the current message saying
+;	"no such port".
+;
+;
+; Calling sequence:
+;
+;		move	f,<ddb>
+;		pushj	p,SndNSP
+;
+; Input parameters:
+;
+;	F - DDB.
+;
+; Output parameters:
+;
+;	none.
+;
+; Implicit inputs:
+;
+;	DDB.  IPIBuf.
+;
+; Implicit outputs:
+;
+;	none.
+;
+; Routine value:
+;
+;	none.
+;
+; Side effects:
+;
+;	tries to put a no such port ICMP message on the output queue.
+;--
+
+
+SndNSP::
+	setzm	IpOptn			; we may flush incoming IP options
+					;  when we build ICMP message, so
+					;  make sure to clear the pointer.
+	movei	t1,.icDU		; destination unreachable type
+	movei	t2,.idPoU		; port unreachable code
+	pjrst	CutSn0			; fire off the response.
+	subttl	data storage area ;⊗ FstFdb LstId RcvTim IpOptn IpPDDB
+
+NOWAITS<			;Data is in CACDAT
+	$low
+
+FstFdb:	0		; first FDB in system chain.
+LstId:	0		; last IP ID given.
+RcvTim:	0		; time the latest ICMP message was received.
+IpOptn:	0		; incoming IP options point if option buffers
+			;  have not yet been deleted.
+PrGate::GatTbl##	; address of network address of current prime gateway.
+
+IpPDDB=.-PDBTop		; define hypothetical start of our pseudo DDB
+	block	PDBBot-PDBTop+1	; number of words we really use
+
+>;NOWAITS
+IFWAITS<
+	EXTERN	FSTFDB,LSTID,RCVTIM,IPOPTN,IPPDDB
+>;IFWAITS
+	$high
+	$lit
+	end
