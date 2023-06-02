@@ -1,0 +1,1017 @@
+COMMENT ⊗   VALID 00017 PAGES
+C REC  PAGE   DESCRIPTION
+C00001 00001
+C00004 00002	TITLE RSKINI  History
+C00009 00003	Overview of RH filesystem structure
+C00016 00004	Program parameters & definitions  TSTINI A B C D P PDLEN RECSIZ PAGSIZ NRECPG NRECTK NTRKCY NUMCYL BLKSIZ NRECTK NTRKCY NUMCYL BLKSIZ NRECTK NTRKCY NUMCYL BLKSIZ NSWCYL NSWCYL NSWCYL NSWCYL STRTAB NUPSTR STRNAM STRTAB NUPSTR STRNAM BADMAX NPPCYL BLKCYL RECCYL NRECUN BLKSTR SATSIZ FSWCYL FSWCYL SATLOC MFDLOC SATLOC SATNXT SATNX2 SATNX3 SATNX4 SATNX5 SATNX6 SATNX7 SATNX8 MFDLOC PDLIST BUFFER BUFADR MTREAD RDIOW RDSEC MTWRIT WTIOW WTSEC BLKBLK BLKREC BLKCMD BLKFCN BLKIOW BLKSEC MFDSIZ MFDBCN
+C00027 00005	Basic I/O subroutines  CLRCYL CLRCY1 CLRBLK WRTBLK REDBLK WRTBLK REDBLK BLKLP BLKLP1 BLKLP2
+C00031 00006	Disk address manipulations  BLK2RC REC2BK R2BERR REC2B1 DSKADR DSKAER MRKRNG MRKRN1 MRKRNB USEREC USEBLK CPOPJ REUSE USEOUT FREBLK REFRE BITTAB
+C00037 00007	Write home block, bat block & backup home block on one unit  HBLEN WONE
+C00040 00008	T1 read home block from logical unit 0  T.1 OK
+C00041 00009	T2 write home blocks  T.2 STPLP WHBGO WHBGO1
+C00043 00010	T3 Write empty MFD  T.3 MFDLF1 MFDLF2
+C00048 00011	T4 Read RP06 looking for bad spots  T4 T41
+C00049 00012	SATWRT write SAT   SATCLR clear SAT  SATCLR SATCL2 SWPMRK SWPMR1 SATWRT SATWR1 SATWR2 SATWR3
+C00053 00013	Main program  START STARTX NOOPEN LOSE
+C00055 00014	Miscellaneous....  DECOUT PRCHUN PRSTRN
+C00056 00015	Prototype Home blocks and BAT blocks  PROTOH H.SID H.LUN H.REC H.RECN PROTOB B.RECN
+C00058 00016	Prototype SAT Table  SATTAB DSKUSE LSTBLK SATID SATCHK BADCNT BADCHK BADTRK NXTSAT IDSAT DTIME DDATE P1OFF P2OFF SATBIT BADTAB BADLEN
+C00061 00017	Prototype MFD  MFDBLK MFDLEN
+C00063 ENDMK
+C⊗;
+TITLE RSKINI ;⊗ History
+
+;Program to initialize the primary RH filesystem structure.
+
+Comment ⊗ History
+
+Summer 83 REG	Initial implementation.
+	    . MFD is stored on unit 0 preceding swap space.
+	    . SAT is stored on unit 0 following swap space.
+	    . MFD is allocated blocks, but its retrieval indicates
+	      length 0.  RSKCOP will modify to correct length.
+28 Aug 85 ME	Changes for recovery from RP07 disaster:
+	    . Number of cylinders per disk reduced from =630 to =629.
+	    . BAT blocks not written.  (Preserved from disk formatter.)
+	    . SAT moved to logical unit 1, MFD still on 0 but after swap
+	      space.  When UFDs are created, [1,3] and [SPL,SYS] will go
+	      on units 2 and 1 to spread out frequently referenced UFDs.
+	    . Bad block list in SAT extended, ECC block list removed.
+	      Initial bad block list (translated manually from BAT blocks)
+	      is entered in SAT.
+	    . MFD is created as a large file filled with zeroes since
+	      new UFDs are added by system this time, not RSKCOP.  Its
+	      blocks are non-contiguous, to improve performance.
+29 Aug 85 JJW	Documented the above and put further comments throughout
+	        the program.
+21 Oct 85 JJW	Changed physical channel and unit numbers for new drive
+	        configuration.
+06 Nov 85 ME	Added FTTEST switch which compiles this program as TSTINI,
+	        which initializes RP07(s) as a test structure with NO SWAPPING
+	        SPACE, for testing the drive(s) (or using it/them as a fixed
+	        UDP-type structure).
+		Under FTTEST, be sure to specify the structure name you want,
+	        at STRNAM and the channel number(s)/unit number(s) at STRTAB.
+07 Nov 85 ME	Changed structure name that we initialize with from RSK to TSK,
+		to avoid having to format the old drives to clear the old SATIDs.
+		This means the system needs to be changed too, at least at
+		RILSS1+2 in DSKSER.  Over time, we can probably alternate
+		between RSK and TSK.  Removed bad blocks from list at
+		BADTAB, since they were on the now-defunct drive.
+24 Mar 86 ME	Changed structure name back to RSK.
+09 Sep 87 ME	Added FTSWAP, FTBADX, FTRP06 for RP06 bootable back with
+		swapping space and some bad cyls (440-450, inclusive).
+14 Sep 87 ME	Fixed calculation of RECCYL (records/cylinder) to match
+		that used by system, which only counts those records up
+		to the last whole page boundary on each cylinder (only
+		affects RP06 format, supposedly).  Fixed bug in CLRCYL,
+		"-1" was causing clearing of backup HOM block.
+
+History: enter changes above this line.
+
+⊗; end of comment
+
+;Overview of RH filesystem structure
+
+COMMENT $
+
+The SAIL filesystem consists of three RP07 disks arranged as follows:
+
+ Cyl	  Logical Unit 0	   Logical Unit 1	    Logical Unit 2
+      +---+---------------+    +---+---------------+    +---+---------------+
+   0. |H/B|               |    |H/B|               |    |H/B|               |
+      +---+               |    +---+               |    +---+               |
+      |                   |    |                   |    |                   |
+      |                   |    |                   |    |                   |
+      |                   |    |                   |    |                   |
+      |                   |    |                   |    |                   |
+      |                   |    |                   |    |                   |
+      |                   |    |                   |    |                   |
+      |                   |    |                   |    |                   |
+      |                   |    |                   |    |                   |
+      +-------------------+    +-------------------+    +-------------------+
+ 309. |                   |    |                   |    |                   |
+      |     SWAP SPACE    |    |     SWAP SPACE    |    |    SWAP SPACE     |
+      |                   |    |                   |    |                   |
+      +-----+-------------+    +---+---------------+    +-------------------+
+ 319. | MFD |             |    |SAT|               |    |                   |
+      +-----+             |    +---+               |    |                   |
+      |                   |    |                   |    |                   |
+      |                   |    |                   |    |                   |
+      |                   |    |                   |    |                   |
+      |                   |    |                   |    |                   |
+      |                   |    |                   |    |                   |
+      |                   |    |                   |    |                   |
+      |                   |    |                   |    |                   |
+ 628. |                   |    |                   |    |                   |
+      +-------------------+    +-------------------+    +-------------------+
+
+(All of the constants discussed on this page are defined symbolically in
+the program, but are presented as numbers here for ease of understanding.)
+
+There are actually =632 cylinders on an RP07, but the last three are used
+by maintenance diagnostics.  (DEC claims only two cylinders are so used,
+but the diagnostic has been observed to use cylinders =629, =630 and =631.)
+
+Each cylinder contains =32 tracks, and each track contains =43 records of
+=128 words.  A filesystem block is nine consecutive records, consisting of
+one retrieval and eight data records.  A block may cross a track boundary
+onto the next track in the same cylinder (this causes no wasted disk cycles
+on an RP07), but may not cross a cylinder boundary.  Several records at the
+end of each cylinder are ununsed.
+
+The MFD is part of the filesystem, and may be extended into any free
+blocks when the existing space overflows.  In the region shown above, the
+MFD is actually allocated non-contiguously, in order to improve access
+time.  The SAT is a contiguous set of records not organized into blocks,
+and is fixed in size.  Swap space also is not organized into blocks, and
+uses all the records on the cylinders it occupies.  The areas marked "H/B"
+above contain Home blocks and BAT blocks written by the disk formatter or
+by this program.
+
+Record numbers can be either absolute, giving the physical channel and unit
+number of a drive and the record number relative to the start of that unit,
+or structure-relative, in which the set of records on the three units is
+treated as a single sequence.  (The maintenance cylinders do not exist for
+the purpose of this computation.)
+
+All pointers within the file system are relative record numbers, except
+for some SAT information which is expressed using block numbers.  Block
+numbers are also a sequence spanning the entire structure, including the
+non-filesystem area (swapping space) but not the maintenance area or the
+unused records at the end of each cylinder.
+
+$	;end of comment
+;Program parameters & definitions ;⊗ TSTINI A B C D P PDLEN RECSIZ PAGSIZ NRECPG NRECTK NTRKCY NUMCYL BLKSIZ NRECTK NTRKCY NUMCYL BLKSIZ NRECTK NTRKCY NUMCYL BLKSIZ NSWCYL NSWCYL NSWCYL NSWCYL STRTAB NUPSTR STRNAM STRTAB NUPSTR STRNAM BADMAX NPPCYL BLKCYL RECCYL NRECUN BLKSTR SATSIZ FSWCYL FSWCYL SATLOC MFDLOC SATLOC SATNXT SATNX2 SATNX3 SATNX4 SATNX5 SATNX6 SATNX7 SATNX8 MFDLOC PDLIST BUFFER BUFADR MTREAD RDIOW RDSEC MTWRIT WTIOW WTSEC BLKBLK BLKREC BLKCMD BLKFCN BLKIOW BLKSEC MFDSIZ MFDBCN
+
+IFNDEF FTTEST,<FTTEST←←1>	;non-zero for initializing 1-unit structure
+    IFNDEF FTSWAP,<FTSWAP←←1>	;under FTTEST, non-zero iff swap space 
+IFNDEF FTRP06,<FTRP06←←1>	;non-zero for RP06, else RP07 characteristics
+    IFNDEF BOOT06,<BOOT06←←1>	;non-zero for funny RP06 parameters for boot pack
+IFNDEF FTBADX,<FTBADX←←1>	;non-zero if bad cyls to be included in swapping area
+
+IFN FTTEST,<
+PRINTS "
+	TSTINI: initialize one-unit structure
+
+"
+>;IFN FTTEST
+
+A=1
+B=2
+C=3
+D=4
+
+P=17
+
+OPDEF	CALL	[PUSHJ P,]
+OPDEF	RET	[POPJ P,]
+
+PDLEN==100
+
+
+;Physical Parameters
+RECSIZ== 200			;number of words per record
+PAGSIZ== 1000			;number of words per page
+NRECPG== PAGSIZ/RECSIZ		;number of records per page
+
+IFE FTRP06,<
+;RP07 physical parameters
+NRECTK== =43			;number of records per track
+NTRKCY== =32			;number of tracks per cylinder
+NUMCYL== =629			;number of cylinders (not counting maintenance area)
+BLKSIZ== =9			;number of records per block, including 1 rtvl rec
+>;IFE FTRP06
+
+IFN FTRP06,<
+IFE BOOT06,<
+;Real RP06 physical parameters
+NRECTK== =20			;number of records per track
+NTRKCY== =19			;number of tracks per cylinder
+NUMCYL== =815			;number of cylinders (not counting maintenance area)
+BLKSIZ== =10			;number of records per block, including 1 rtvl rec
+>;IFE BOOT06
+IFN BOOT06,<
+;Special RP06 parameters to allow RP07 BOOT to be used, wastes space on RP06 pack
+NRECTK== =18			;number of records per track
+NTRKCY== =19			;number of tracks per cylinder
+NUMCYL== =815			;number of cylinders (not counting maintenance area)
+BLKSIZ== =9			;number of records per block, including 1 rtvl rec
+>;IFN BOOT06
+>;IFN FTRP06
+
+;Parameters that allow some choice...
+IFE FTTEST,<
+NSWCYL== =10			;number of cylinders PER UNIT for swapping
+>;IFE FTTEST
+IFN FTTEST,<
+IFN FTSWAP,<
+NSWCYL== =50			;swapping space on single-unit test structure
+>;IFN FTSWAP
+IFE FTSWAP,<
+NSWCYL== 0			;no swapping space on single-unit test structure
+>;IFE FTSWAP
+IFN FTBADX,<
+NSWCYL==NSWCYL+11		;add 11 extra swapping cyls at bad spot
+>;IFN FTBADX
+>;IFN FTTEST
+
+;Define the structure (you choose where, what size).  The PCHUN macro
+;defines a physical channel and unit number for a drive.
+DEFINE PCHUN(CH,UN)<BYTE(1)1(3)CH,UN(29)0>
+IFE FTTEST,<
+STRTAB:	PCHUN(0,1)		;Location of logical unit 0
+	PCHUN(1,3)		;Location of logical unit 1
+	PCHUN(1,5)		;Location of logical unit 2
+NUPSTR==.-STRTAB		;Number of units in primary RH structure
+STRNAM=='RSK   '		;Structure name (SATID)
+>;IFE FTTEST
+
+IFN FTTEST,<
+STRTAB:	PCHUN(0,2)		;Locaton of the single unit
+NUPSTR==.-STRTAB		;Number of units in primary RH structure
+STRNAM=='WAITS5'		;name of structure to initialize on the single drive
+>;IFN FTTEST
+
+;BADMAX==12		;Sat SIZE parameters
+;ECCTKS==42		;Sat SIZE parameters
+;As of Aug 85, the bad block list in the SAT extends into what used to be the
+;ECC block list.  The ECC block list no longer exists.
+BADMAX==54		;Sat SIZE parameters (no ECC block list)
+
+;Things that depend on the above....
+
+NPPCYL== NRECTK*NTRKCY/NRECPG		;number of pages per cylinder
+BLKCYL== <NPPCYL*NRECPG>/BLKSIZ		;number of blocks per cylinder
+;BLKCYL== <NRECTK*NTRKCY>/BLKSIZ	;Number of blocks per cylinder
+					;blocks may split over tracks, not over cyl
+RECCYL== NRECPG*NPPCYL			;number of records per cylinder
+;RECCYL== NRECTK*NTRKCY			;number of records per cylinder
+NRECUN== RECCYL*NUMCYL			;number of records per unit
+BLKSTR== <BLKCYL*NUMCYL*NUPSTR>		;Number of blocks in structure
+SATSIZ== <<<<BLKSTR+=35>/=36>+RECSIZ-1>/RECSIZ>+1  ;number of records in SAT
+IFE FTBADX,<
+;Put swapping space dead center on each unit.
+FSWCYL== <NUMCYL-NSWCYL>/2		;first swapping cylinder
+>;IFE FTBADX
+IFN FTBADX,<
+;Put swapping space just before bad cylinders.
+FSWCYL== 450-NSWCYL+1			;first swapping cylinder (440-450 bad)
+>;IFN FTBADX
+IFG <NUPSTR-1>,< ;Normal SAT/MFD placement for multiple unit structure.
+;Put SAT on unit 1 after swapping space.
+SATLOC== NRECUN+<FSWCYL+NSWCYL>*RECCYL	;record number of start of SAT
+;SATLOC== NRECUN+<FSWCYL+NSWCYL>*<NRECTK*NTRKCYL> ;record number of start of SAT
+;Put MFD on unit 0 after swapping space.
+MFDLOC== <FSWCYL+NSWCYL>*RECCYL		;record number of start of MFD
+;MFDLOC== <FSWCYL+NSWCYL>*<NRECTK*NTRKCYL> ;record number of start of MFD
+>;IFG NUPSTR-1
+IFLE <NUPSTR-1>,< ;Use this SAT/MFD placement if only one unit.
+SATLOC== <FSWCYL+NSWCYL>*RECCYL		;record number of start of SAT
+;SATLOC== <FSWCYL+NSWCYL>*<NRECTK*NTRKCYL> ;record number of start of SAT
+;Now we make the MFD follow the SAT, in the first available normal filesystem block
+SATNXT== SATLOC + SATSIZ + BLKSIZ	;nbr of a record in block beyond SAT
+SATNX2== SATNXT / RECCYL		;find block number: this is cyl number
+SATNX3== SATNX2 * BLKCYL		;block number of start of cyl
+SATNX4== SATNXT ∂ RECCYL		;remainder: record within cyl
+SATNX5== SATNX4 / BLKSIZ		;block within cylinder
+SATNX6== SATNX3 + SATNX5		;block number of interest
+SATNX7== SATNX6 / BLKCYL		;cyl number of interest
+SATNX8== SATNX6 ∂ BLKCYL		;(remainder) block within cyl
+MFDLOC== SATNX7 * RECCYL + SATNX8 * BLKSIZ ;record number of start of MFD
+>;IFLE NUPSTR-1
+
+;Above puts (assuming multiple drives):
+;	the swapping space dead center on each drive
+;	MFD immediately after swapping space on drive 0
+;	SAT immediately after swapping space on drive 1
+;
+;To spread frequently referenced blocks among the drives, we should put the
+;[1,3] UFD on drive 2 and the [SPL,SYS] UFD on drive 1.  (UFD placement is
+;not done in this program, however, except for the MFD.)
+
+;Variables
+
+PDLIST:	BLOCK	PDLEN
+BUFFER:	BLOCK	2000
+BUFADR:	0
+
+
+MTREAD:	'GODMOD'
+	1			;1=read
+RDIOW:	0			;fill in iowd
+RDSEC:	400000,,0		;Absolute chan 0, unit 0, sector 0
+
+
+MTWRIT:	'GODMOD'
+	2			;2=write
+WTIOW:	0			;fill in iowd
+WTSEC:	400000,,0		;Absolute chan 0, unit 0, sector 0
+
+
+BLKBLK:	BLOCK	BLKSIZ*RECSIZ
+BLKREC:	0			;number of records read or written thus far
+BLKCMD:	'GODMOD'
+BLKFCN:	0			;1 if by read; 2 if by write
+BLKIOW:	0
+BLKSEC:	0
+
+MFDSIZ:	0
+MFDBCN:	0
+;Basic I/O subroutines ;⊗ CLRCYL CLRCY1 CLRBLK WRTBLK REDBLK WRTBLK REDBLK BLKLP BLKLP1 BLKLP2
+
+
+CLRCYL:	OUTSTR	[ASCIZ/Now clearing the balance of the first two cylinders
+of logical unit zero.
+/]
+	HRRZ	A,H.REC
+	ADDI	A,BLKSIZ	;-1	;;really want number of next block
+	IDIVI	A,BLKSIZ		;BN of first B after BackUp home block
+	MOVEM	A,SAVBLK#		;Save starting sector
+	PUSHJ	P,CLRBLK
+CLRCY1:	MOVE	A,SAVBLK
+	PUSHJ	P,BLK2RC		;convert to a record number
+	ADD	A,STRTAB		;make absolute address for logical unit 0
+	PUSHJ	P,WRTBLK		;clear block
+	AOS	A,SAVBLK
+	CAIGE	A,2*BLKCYL
+	JRST	CLRCY1
+	JRST	OK
+
+CLRBLK:	SETZM	BLKBLK
+	MOVE	A,[BLKBLK,,BLKBLK+1]
+	BLT	A,BLKBLK+<BLKSIZ*RECSIZ>-1
+	RET
+
+;Read or write an entire block 
+;Call with BLKBLK contains the data, A is the disk address
+
+WRTBLK:	SKIPA	B,[2]
+REDBLK:	MOVEI	B,1
+	MOVEM	B,BLKFCN
+	MOVEM	A,BLKSEC
+	MOVE	A,[IOWD <RECSIZ*BLKSIZ>,BLKBLK]
+	MOVEM	A,BLKIOW
+	MTAPE	0,BLKCMD
+	 CALL	LOSE
+	RET
+
+REPEAT 0,<
+;Read or write an entire block (by pages)
+;Call with BLKBLK contains the data, A is the disk address
+
+WRTBLK:	SKIPA	B,[2]
+REDBLK:	MOVEI	B,1
+	MOVEM	B,BLKFCN
+	MOVEM	A,BLKSEC
+	SETZM	BLKREC
+BLKLP:	MOVE	A,BLKREC	;rn of next record to move in this block
+	CAIL	A,BLKSIZ
+	RET			;must be done
+	ADDI	A,NRECPG	;proposed length of transfer
+	CAIL	A,BLKSIZ	;but this is the limit
+	MOVEI	A,BLKSIZ	;if exceeded, stop here.
+	SUB	A,BLKREC	;A←number of records to move this time.
+	PUSH	P,A		;save it.
+	IMULI	A,RECSIZ	;number of words to move
+	MOVN	B,A
+	HRLM	B,BLKIOW
+	HRRZ	B,BUFADR
+	SUBI	B,1
+	HRRM	B,BLKIOW
+	MOVE	B,A		;Copy word count for BLT
+	MOVE	A,BLKREC
+	IMULI	A,RECSIZ
+	ADDI	A,BLKBLK
+	HRLZ	A,A
+	HRR	A,BUFADR
+	MOVE	C,BLKFCN
+	CAIE	C,2		;are we writing?
+	JRST	BLKLP1		;no.  this is a read.
+	ADDI	B,(A)		;computing ending address of blt
+	BLT	A,-1(B)		;copy the data to the page buffer
+	MTAPE	0,BLKCMD
+	 CALL	LOSE
+	JRST	BLKLP2
+
+BLKLP1:	MTAPE	0,BLKCMD	;Read the data
+	 CALL	LOSE
+	MOVS	A,A
+	ADDI	B,(A)		;compute ending address of BLT
+	BLT	A,-1(B)		;Copy data from page buffer to BLKBLK
+BLKLP2:	POP	P,A
+	ADDM	A,BLKSEC	;advance to next record
+	ADDM	A,BLKREC
+	JRST	BLKLP
+>;REPEAT 0
+
+OPDEF	BREAD	[PUSHJ P,REDBLK]	;call with A set up to record #
+OPDEF	BWRITE	[PUSHJ P,WRTBLK]	;Call with A set up to record #
+;Disk address manipulations ;⊗ BLK2RC REC2BK R2BERR REC2B1 DSKADR DSKAER MRKRNG MRKRN1 MRKRNB USEREC USEBLK CPOPJ REUSE USEOUT FREBLK REFRE BITTAB
+
+;SAT table works on block numbers.  EVERYTHING else works on record numbers.
+;(That is, pointers in retrieval are record numbers).  Hence
+;	BLK2RC	converts a block number to a record number
+;	REC2BK	converts a record number to a block number
+
+BLK2RC:	IDIVI	A,BLKCYL	;quotient is the number of cylinders
+	IMULI	A,RECCYL	;times number of records per cylinder
+	IMULI	B,BLKSIZ	;in-cyl blk number * number of rec/block
+	ADD	A,B
+	RET
+
+REC2BK:	PUSH	P,C
+	IDIVI	A,RECCYL	;cylinder number in A; relative rec num in B
+	IMULI	A,BLKCYL	;block number to cylinder origin
+	IDIVI	B,BLKSIZ	;relative block number in B; better be zero in C
+	JUMPN	C,R2BERR	;bad record number was given!
+	ADD	A,B
+	POP	P,C
+	RET
+
+R2BERR:	OUTSTR	[ASCIZ/REC2BK - record number to block number conversion
+was called with a bum argument.
+/]
+	CALL	LOSE
+
+;Convert arbitrary record to the block number that contains record.
+;unlike REC2BK, this one doesn't complain when the given record isn't
+;at the block origin.
+REC2B1:	PUSH	P,C
+	IDIVI	A,RECCYL		;Quotient is CYL num in structure
+	IMULI	A,BLKCYL		;Product is BN of first B in CYL
+	IDIVI	B,BLKSIZ		;Quotient is BN of B containing R
+	ADD	A,B
+	POP	P,C
+	RET
+
+;DSKADR - translate a record number to PCHUN + logical record number
+DSKADR:	IDIV	A,[NRECUN]	;A←unit; B←record address
+	CAIL	A,NUPSTR
+	JRST	DSKAER
+	MOVE	A,STRTAB(A)
+	DPB	B,[POINT 29,A,35]
+	RET
+
+DSKAER:	OUTSTR	[ASCIZ/Disk address out of range at DSKADR
+/]
+	CALL	LOSE
+
+
+;Mark a range of records
+;call w/ A = first record to mark
+;        B = last record (inclusive) to mark.
+MRKRNG:	PUSH	P,B			;save last record number
+	CALL	REC2B1			;Convert first RN to first BN to mark
+	EXCH	A,(P)			;First BN to stack
+	CALL	REC2B1			;Convert last RN to last BN to mark
+MRKRN1:	PUSH	P,A
+	CALL	USEBLK			;Consume a block
+	POP	P,A
+	CAMLE	A,(P)			;Are we done yet?
+	SOJA	A,MRKRN1		;no.  count down.
+	POP	P,(P)
+	RET
+
+;Mark a range of blocks.  A=first blk; B=last block, inclusive
+MRKRNB:	PUSH	P,B
+	EXCH	A,(P)
+	JRST	MRKRN1
+
+;Mark a block in use in the SAT.  Call with A/record address of block.
+USEREC:	PUSH P,A
+	PUSH P,B
+	CALL REC2BK
+	CALL USEBLK
+	POP P,B
+	POP P,A
+	POPJ P,
+
+USEBLK:	CAML	A,[BLKSTR]		;test for in range
+	JRST	USEOUT			;horrible error
+	IDIVI	A,=36			;convert A=word, B=bit number
+	MOVE	B,BITTAB(B)
+	TDNN	B,SATBIT(A)
+	JRST	REUSE			;remark
+	ANDCAM	B,SATBIT(A)
+	XORM	B,SATCHK
+	AOS	DSKUSE
+CPOPJ:	RET
+
+REUSE:	OUTSTR	[ASCIZ/Reuse.  Examine or continue.
+/]
+	HALT	CPOPJ
+
+USEOUT:	OUTSTR	[ASCIZ/Block number out of range at USEBLK or FREBLK
+/]
+	CALL	LOSE
+
+FREBLK:	CAML	A,[BLKSTR]		;test for in range
+	JRST	USEOUT			;horrible error
+	IDIVI	A,=36			;convert A=word, B=bit number
+	MOVE	B,BITTAB(B)
+	TDNE	B,SATBIT(A)
+	JRST	REFRE			;refree
+	IORM	B,SATBIT(A)
+	XORM	B,SATCHK
+	SOS	DSKUSE
+	RET
+
+REFRE:	OUTSTR	[ASCIZ/ReFree.  Examine or continue.
+/]
+	HALT	CPOPJ
+
+BITTAB:	400000,,0
+	200000,,
+	100000,,
+	 40000,,
+	 20000,,
+	 10000,,
+	  4000,,
+	  2000,,
+	  1000,,
+	   400,,
+	   200,,
+	   100,,
+	    40,,
+	    20,,
+	    10,,
+	     4,,
+	     2,,
+	     1,,
+		400000
+		200000
+		100000
+		 40000
+		 20000
+		 10000
+		  4000
+		  2000
+		  1000
+		   400
+		   200
+		   100
+		    40
+		    20
+		    10
+		     4
+		     2
+		     1
+;Write home block, bat block & backup home block on one unit ;⊗ HBLEN WONE
+
+;Call With A/ PCHUN
+;	   D/ Logical unit (right half)
+
+HBLEN←←200	;number of words to write to write out the Home Blocks.
+		;make it 400 if you also want to write out the BAT blocks
+		;We assume each BAT block follows corresponding Home block.
+
+WONE:	MOVEM	A,WTSEC		;Store the physical channel & unit address
+	MOVE	A,[12,,1]	;backup,,this one
+	MOVEM	A,H.REC
+	HRRZM	A,H.RECN	;Here
+	AOS	A
+	HRRZM	A,B.RECN	;address of bat block
+	MOVSI	A,NUPSTR	;Number of units in structure
+	HRR	A,D		;Logical unit number of this unit
+	MOVEM	A,H.LUN		;Store in home block
+	MOVE	A,H.RECN
+	DPB	A,[POINT 29,WTSEC,35]
+	MOVSI	A,PROTOH
+	HRR	A,BUFADR
+	MOVEI	B,377(A)
+	BLT	A,(B)
+	MOVSI	A,-HBLEN	;This write MAY includes the primary bat block
+	HRR	A,BUFADR
+	SUBI	A,1
+	MOVEM	A,WTIOW
+	MTAPE	0,MTWRIT
+	CALL	LOSE
+	MOVSS	A,H.REC		;Swap to address the backup home block
+	HRRZM	A,H.RECN	;address of backup hb
+	AOS	A
+	HRRZM	A,B.RECN	;address of backup bat block
+	MOVE	A,H.RECN
+	DPB	A,[POINT 29,WTSEC,35]
+	MOVSI	A,PROTOH
+	HRR	A,BUFADR
+	MOVEI	B,377(A)
+	BLT	A,(B)
+	MOVSI	A,-HBLEN	;write backup HB and MAYBE BB
+	HRR	A,BUFADR
+	SUBI	A,1
+	MOVEM	A,WTIOW
+	MTAPE	0,MTWRIT
+	CALL	LOSE
+	RET
+;T1 read home block from logical unit 0 ;⊗ T.1 OK
+
+T.1:	OUTSTR	[ASCIZ/Test one.  Read first page of logical unit 0 (according to my STRTAB).
+/]
+	MOVSI	A,-PAGSIZ
+	HRR	A,BUFADR
+	SUBI	A,1
+	MOVEM	A,RDIOW
+	MOVE	A,STRTAB	;get absolute phys address of logical unit 0
+	MOVEM	A,RDSEC
+	MTAPE	0,MTREAD	;read some unit's first page (incl. home block)
+	 CALL	LOSE
+	MOVE	A,BUFADR
+	MOVS	A,RECSIZ(A)
+	CAIE	A,'HOM'
+	CALL	LOSE		;bad data?
+OK:	OUTSTR	[ASCIZ/[OK]
+/]
+	RET
+;T2 write home blocks ;⊗ T.2 STPLP WHBGO WHBGO1
+
+T.2:	OUTSTR	[ASCIZ/
+You are now about to write home blocks for a structure
+composed of /]
+	MOVEI	A,NUPSTR
+	CALL	DECOUT
+	OUTSTR	[ASCIZ/ RP0x disks located at /]
+	MOVSI	D,-NUPSTR
+STPLP:	MOVE	A,STRTAB(D)
+	CALL	PRCHUN
+	AOBJN	D,STPLP
+	OUTSTR	[ASCIZ/
+
+Type continue if you dare!
+/]
+	HALT	.+1
+	OUTSTR	[ASCIZ/Type continue if you really dare!
+/]
+	HALT	.+1
+WHBGO:	MOVSI	D,-NUPSTR
+WHBGO1:	MOVE	A,STRTAB(D)
+	CALL	PRCHUN
+	OUTSTR	[ASCIZ/ ... /]
+	MOVE	A,STRTAB(D)
+	CALL	WONE
+	OUTSTR	[ASCIZ/ [OK]
+/]
+	HRRZ	A,D			;unit number
+	IMUL	A,[NRecUn]		;first record on this unit
+	MOVE	B,A
+	ADDI	A,1
+	ADDI	B,12
+	CALL	MRKRNG			;mark this range of records in use in SAT
+	AOBJN	D,WHBGO1
+	OUTSTR	[ASCIZ/All units /]
+	JRST	OK
+;T3 Write empty MFD ;⊗ T.3 MFDLF1 MFDLF2
+
+T.3:
+repeat 1,<
+	;Aug 85: we create space for =2000 UFD entries, enough to hold
+	;existing =1776 UFDs plus room for expansion without extending
+	;MFD into random block addresses.
+IFE FTTEST,<
+	MOVE A,[=2000*=16]		;words allowed in MFD, for =2000 entries
+>;IFE FTTEST
+IFN FTTEST,<	;just a test structure, no giant MFD
+	MOVE A,[=200*=16]		;words allowed in MFD, for =200 entries
+>;IFN FTTEST
+	MOVEM A,MFDSIZ
+	MOVEM A,MFDLEN			;set length of MFD as a file
+>;repeat 1
+repeat 0,<
+	;Sep 83: we create the MFD big enough to hold the directories
+	;currently on DSK.
+	MOVEI	A,17
+	MOVSI	B,'DSK'
+	MOVEI	C,0
+	OPEN	1,A
+	CALL	LOSE
+	MOVE	A,['  1  1']
+	MOVEM	A,MFDBLK
+	MOVSI	B,'UFD'
+	MOVEM	B,MFDBLK+1
+	MOVEI	C,0
+	MOVE	D,A
+	MOVEM	D,MFDBLK+3
+	LOOKUP	1,A
+	CALL	LOSE
+	MOVEM	C,MFDBLK+2		;protection & mode word
+	MOVSS	D
+	MOVNM	D,MFDSIZ
+>;repeat 0
+	MOVE	A,MFDSIZ
+	OUTSTR	[ASCIZ/The main DSK MFD is /]
+	CALL	DECOUT
+repeat 1,<
+	OUTSTR	[ASCIZ/ words long.
+The new MFD we write will have above actual file length, all zeroes.
+/]
+>;repeat 1
+repeat 0,<
+	OUTSTR	[ASCIZ/ words long.
+The new MFD we write will have length zero, but it will have sufficent
+blocks allocated to accomodate this size.
+/]
+>;repeat 0
+	MOVE	A,MFDSIZ
+	ADDI	A,<RECSIZ*<BLKSIZ-1>>-1
+	IDIVI	A,<RECSIZ*<BLKSIZ-1>>
+	MOVEM	A,MFDBCN		;MFD Block count.
+
+	OUTSTR	[ASCIZ/Writing MFD /]
+	DATE	A,
+	HRRM	A,MFDBLK+1			;15 bits of date
+	DPB	A,[POINT 12,MFDBLK+2,35]	;12 bits of date
+	LSH	A,-=12
+	DPB	A,[POINT 3,MFDBLK+1,20]		;high part of date in protection wd
+	MOVN	D,MFDBCN			;-number of blocks in MFD
+	HRLZ	D,D
+	HRRI	D,MFDBLK+20
+	MOVE	A,[MFDLOC]			;Get the disk address
+	CALL	REC2BK				;Convert to a block number
+	PUSH	P,A				;save block # on stack
+MFDLF1:	MOVE	A,(P)
+	CALL	BLK2RC
+	MOVEM	A,(D)
+	AOS (P)			;advance to next block
+	AOS (P)			;allocate every other block
+	AOBJN	D,MFDLF1
+	ADJSP	P,-1
+	CALL	CLRBLK
+	MOVE	A,[MFDBLK,,BLKBLK]
+	BLT	A,BLKBLK+RECSIZ-1	;copy retrieval into data block
+	MOVN	D,MFDBCN		;-number of blocks in MFD
+	HRLZ	D,D
+	HRRI	D,MFDBLK+20
+MFDLF2:	MOVE	A,(D)
+	CALL USEREC		;mark block in use in SAT
+	CALL	DSKADR		;convert to Physical Address
+	OUTSTR	[ASCIZ/ . /]
+	CALL	WRTBLK		;write BLKBLK, which is MFD retrieval
+	AOBJN	D,MFDLF2
+repeat 0,< ; can't use this for dis-contiguous MFD blocks, and it's buggy anyway
+	MOVE	A,[MFDLOC]
+	MOVE	B,A
+;Here we add a block count to a record number!!!  BUG!
+	ADD	B,MFDBCN
+	SUBI	B,1
+	CALL	MRKRNG			;mark in SAT
+>;repeat 0
+	JRST	OK
+;T4 Read RP06 looking for bad spots ;⊗ T4 T41
+
+repeat 0,<			;More buggy code
+T4:	OUTSTR	[ASCIZ/Reading (0,0) /]
+	MOVE	A,[PCHUN(0,0)]
+	MOVEM	A,RDSEC				;Start here
+T41:	DPB	A,[POINT 29,RDSEC,35]
+	MTAPE	MTREAD
+	CALL	LOSE
+	LDB	A,[POINT 29,RDSEC,35]
+	ADDI	A,4
+;JJW 8/85: shouldn't the numbers below all be decimal?  (And shouldn't
+;they be defined symbolically?)
+	CAMGE	A,[=815*19*20]			;record count on pack
+	JRST	T41
+	POPJ	P,
+>;repeat 0
+;SATWRT write SAT;   SATCLR clear SAT ;⊗ SATCLR SATCL2 SWPMRK SWPMR1 SATWRT SATWR1 SATWR2 SATWR3
+
+SATCLR:	SETZM	SATTAB			;clear first part of SAT
+	MOVE	A,[SATTAB,,SATTAB+1]
+	BLT	A,SATBIT-1
+	SETOM	SATBIT			;mark all blocks free (bits on in SAT)
+	MOVE	A,[SATBIT,,SATBIT+1]
+	BLT	A,SATBIT+RECSIZ*<SATSIZ-1>-1
+	MOVEI A,BADLEN		;number of bad blocks
+	JUMPE A,SATCL2		;maybe none
+	CAILE A,BADMAX
+	MOVEI A,BADMAX		;this is the most bad blocks you can have
+	MOVE B,[BADTAB,,BADTRK]	;want to copy table into SAT
+	BLT B,BADTRK-1(A)	;copy table
+	MOVEM A,BADCNT		;remember how many there are, in SAT
+SATCL2:	MOVE	A,[STRNAM]
+	MOVEM	A,SATID
+	MOVE	A,['SATID ']
+	MOVEM	A,IDSAT
+	RET
+
+
+SWPMRK:	MOVSI	D,-NUPSTR		;for each unit
+SWPMR1:	HRRZ	A,D
+	IMULI	A,NUMCYL		;cylinder number of first C in unit
+	ADDI	A,FSWCYL		;first cyl for swap on this unit
+	MOVE	B,A
+	ADDI	B,NSWCYL		;first cyl beyond swap space on Unit
+	IMULI	A,BLKCYL		;convert cyl num to blk num
+	IMULI	B,BLKCYL		;ditto for blk num beyond swap space
+	SUBI	B,1			;this is last blk for swapping on U
+	CALL	MRKRNB
+	AOBJN	D,SWPMR1
+	RET
+	
+SATWRT:	OUTSTR	[ASCIZ/SAT Write ... /]
+	CALL	SWPMRK			;mark the swapping space
+	MOVE	A,[SATLOC]		;RN of SAT origin
+	MOVE	B,A
+	ADDI	B,SATSIZ-1		;RN of last SAT record
+	CALL	MRKRNG			;mark this in the SAT too
+SATWR1:	DATE	A,
+	TIMER	B,
+	DATE	C,
+	CAME	A,C
+	JRST	SATWR1			;loop until the time on the same date.
+	MOVEM	A,DDATE
+	MOVEM	B,DTIME
+	PUSH	P,[0]			;relative record number to write next
+SATWR2:	CALL	CLRBLK			;clear blkblk
+	POP	P,A			;RN of next R to write
+	CAIL	A,SATSIZ		;done enough yet?
+	JRST	SATWR3			;yes.  done.
+	MOVE	B,A
+	ADDI	B,BLKSIZ		;could write this many recs
+	CAILE	B,SATSIZ
+	MOVEI	B,SATSIZ		;but we must stop here
+	PUSH	P,B			;save RN of next R to write
+	SUB	B,A			;B= number of records to write
+	MOVE	C,[SATLOC]
+	ADD	C,A			;Disk RN of next record to write
+	IMULI	A,RECSIZ
+	MOVSI	A,SATTAB(A)		;A (left) ← origin of blt
+	HRRI	A,BLKBLK
+	IMULI	B,RECSIZ
+	BLT	A,BLKBLK-1(B)
+	MOVE	A,C
+	CALL	DSKADR			;convert to Physical Address
+	OUTSTR	[ASCIZ/./]
+	CALL	WRTBLK			;write BLKBLK
+	JRST	SATWR2
+
+SATWR3:	JRST	OK
+;Main program ;⊗ START STARTX NOOPEN LOSE
+
+START:	RESET
+IFN FTTEST,<
+	OUTSTR	[ASCIZ/This is a 1-unit structure initializer.
+
+/]
+>;IFN FTTEST
+	MOVE	P,[IOWD PDLEN,PDLIST]
+	SETZ	A,
+	GETPRV	A,			;GET MY CURRENT PRIVS
+	TLO	A,200020		;OR IN THE PRIVS I NEED
+	SETPRV	A,			;GET THEM
+	TLNE	A,200020
+	JRST	STARTX			;GOT THEM ALL...A.O.K.
+	OUTSTR	[ASCIZ /Can't enable needed privileges.
+/]
+	HALT	.+1
+	JRST	START
+
+
+STARTX:	MOVEI	A,17
+	MOVSI	B,'RSK'
+	MOVEI	C,0
+	OPEN	0,A
+	CALL	NOOPEN
+	MOVEI	A,BUFFER
+	TRZE	A,777		;clear word in page bits, skip at a pg boundary
+	ADDI	A,1000		;not at a boundary get to next page
+	MOVEM	A,BUFADR
+	CALL	SATCLR
+	CALL	T.1		;read first page of (0,0)
+	CALL	T.2		;Write home
+	CALL	T.3		;Write MFD
+	CALL	SATWRT
+	CALL	CLRCYL
+
+	EXIT
+
+NOOPEN:	OUTSTR	[ASCIZ/OPEN failed
+/]
+LOSE:	OUTSTR	[ASCIZ/Lost it!
+/]
+	HALT	.
+
+
+;Miscellaneous.... ;⊗ DECOUT PRCHUN PRSTRN
+
+DECOUT:	IDIVI	A,=10
+	PUSH	P,B
+	SKIPE	A
+	CALL	DECOUT
+	POP	P,A
+	ADDI	A,"0"
+	OUTCHR	A
+	RET
+
+PRCHUN:	JUMPGE	A,PRSTRN
+	PUSH	P,A
+	OUTCHR	["("]
+	LDB	A,[POINT 3,(P),3]
+	CALL	DECOUT
+	OUTCHR	[","]
+	LDB	A,[POINT 3,(P),6]
+	CALL	DECOUT
+	POP	P,A
+	OUTSTR	[ASCIZ/) /]
+	RET
+
+
+PRSTRN:	OUTSTR	[ASCIZ/Not ready for Structure-relative address at PRSTRN/]
+	CALL	LOSE
+	RET
+	
+;Prototype Home blocks and BAT blocks ;⊗ PROTOH H.SID H.LUN H.REC H.RECN PROTOB B.RECN
+
+PROTOH:	SIXBIT	/HOM/		;This is a home block
+	0
+	0
+H.SID:	STRNAM		       	;Structure ID
+H.LUN:	NUPSTR,,0   		;number of units,,Unit number
+H.REC:	1,,12			;Address of this block,,Address of Backup
+	NPPCYL*NSWCYL		;# of swapping pages on this UNIT 
+	FSWCYL			;Number of the first cylinder for swapping
+	MFDLOC   		;record number of start of MFD
+	SATLOC	   		;record number of start of the SAT
+	SATSIZ			;Size of the SAT in records
+	NRECUN   		;number of records in this unit
+	NUPSTR*NUMCYL		;number of cylinders in this structure
+	0			;media ID?
+Repeat 172-16+1,<0>
+	Byte(2)0(8)" "," "(2)0(8)"A","W"
+	Byte(2)0(8)"T","I"(2)0(8)" ","S"
+	Byte(2)0(8)" "," "(2)0(8)" "," "
+	707070   		;Homeblock "password"
+H.RECN:	1			;Current record number
+IFN PROTOH+200-.<.FATAL LOSE BIG>
+PROTOB:	SIXBIT	/BAT/		;BAT block, must follow Home block for WONE
+	777606,,4
+        550000   
+repeat 175-3+1,<0>
+	606060   		;bat block password
+B.RECN:	2			;record number of bat block
+IFN PROTOB+200-.<.FATAL LOSE BIG>
+;Prototype SAT Table ;⊗ SATTAB DSKUSE LSTBLK SATID SATCHK BADCNT BADCHK BADTRK NXTSAT IDSAT DTIME DDATE P1OFF P2OFF SATBIT BADTAB BADLEN
+
+SATTAB:	
+DSKUSE::0			;number of blocks used on disk
+LSTBLK::0			;BN of the last B assigned
+SATID::	STRNAM			;Name of this structure
+SATCHK::0          		;XOR CHECKSUM OF SAT BITS BELOW
+BADCNT::0    			;NO. OF BAD TRACKS IN TABLE BELOW.
+BADCHK::0			;CHECK SUM OF TABLE. (computed by system)
+BADTRK::BLOCK	BADMAX		;Table of Block numbers of bad blocks
+;ECCTRK::BLOCK	ECCTKS		;TABLE OF MARGINAL (DF ECC) TRACKS
+NXTSAT::0			;Not used: TRACK NUMBER OF SECOND SAT TRACK
+IDSAT::	'SATID '		;Contains 'SATID ' for new disks
+DTIME::	0			;time of last SAT write.
+DDATE::	0			;date of last SAT WRITE
+P1OFF::	0
+P2OFF::	0
+	0
+	BLOCK	RECSIZ-<.-SATTAB>	;Fill to one record.
+SATBIT::BLOCK	RECSIZ*<SATSIZ-1>	;LOCATION OF THE BIT TABLE ITSELF
+
+PRINTX Got any bad blocks that should be listed here?
+;Initial bad block list
+BADTAB:
+repeat 0,< ; on now-dead drive 2
+IFE FTTEST,<	;these are on real disk, not on one-unit test structure
+	3,,367565		;Logical unit 1, cyl =34, track =23
+	3,,367576		;(6 blocks altogether)
+	3,,367607
+	3,,367620
+	3,,367631
+	3,,367642
+	3,,372325		;Logical unit 1, cyl =35, track =23
+	3,,372336		;(6 blocks altogether)
+	3,,372347
+	3,,372360
+	3,,372371
+	3,,372402
+>;IFE FTTEST
+>;repeat 0
+BADLEN←←.-BADTAB
+;Prototype MFD ;⊗ MFDBLK MFDLEN
+
+MFDBLK:	'  1  1'
+	'UFD',,0		;high date & date filled in
+	155740,,0		;protection & mode plus date & time filled in
+	'  1  1'
+	MFDLOC			;rec num of the first block of this file.
+MFDLEN::0			;Length of this file in words
+	0			;reference date and count
+	0			;dump date word
+	1			;DGRP1R first record number in this group
+	0			;rec number of the first block of next group
+	STRNAM			;DSATID
+	0			;DQINFO
+	0			;DQINF1
+	0			;DQINF2
+	0			;DQINF3
+	0			;DOFFST record offset
+IFN MFDBLK+20-.<.FATAL RETRIEVAL DEFINITIONS WRONG>
+	MFDLOC			;Record number of first record in group
+	BLOCK RECSIZ-21		;Fill block with zero.
+IFN MFDBLK+RECSIZ-.<.FATAL SOMETHING>
+
+	END	START
